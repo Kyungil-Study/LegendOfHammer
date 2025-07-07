@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BattleEventManager : MonoBehaviour
+
+
+public class BattleEventManager : MonoSingleton<BattleEventManager>
 {
     // Start is called before the first frame update
     void Start()

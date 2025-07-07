@@ -4,12 +4,10 @@ public class TSVLoaderSample : MonoBehaviour
 {
     public class SampleData
     {
-        public string Category { get; set; }
-        public string Key { get; set; }
-        public string Kor { get; set; }
+        public int IntData { get; set; }
+        public string StringData1 { get; set; }
+        public string StringData2 { get; set; }
     }
-    
-    
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -20,15 +18,14 @@ public class TSVLoaderSample : MonoBehaviour
         //Application.streamingAssetsPath
         //Application.persistentDataPath
         
-        
-        TSVLoader.LoadTableAsync<SampleData>("DialogTable", true).ContinueWith(
+        TSVLoader.LoadTableAsync<SampleData>("test_table", true).ContinueWith(
                 (taskResult) =>
             {
                 var list = taskResult.Result;
 
                 foreach (var sampleData in list)
                 {
-                    Debug.Log($"Category : {sampleData.Category}, Key : {sampleData.Key}, Kor : {sampleData.Kor}");
+                    Debug.Log($"Category : {sampleData.IntData}, Key : {sampleData.StringData1}, Kor : {sampleData.StringData2}");
                 }
             }
         );
