@@ -7,13 +7,14 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using UnityEngine;
 
+
 public static class TSVLoader
 {
     private static readonly CsvConfiguration TsvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
     {
         Delimiter = "\t",
         Mode = CsvMode.NoEscape,
-        HasHeaderRecord = true,
+        HasHeaderRecord = false,
         MissingFieldFound = null,
         HeaderValidated = null,
     };
@@ -39,6 +40,10 @@ public static class TSVLoader
         try
         {
             using var reader = new StreamReader(filePath);
+            // 첫 번째 줄(1행) 스킵 (데이터 사용처에 대한 설명)
+            await reader.ReadLineAsync();
+            // 두 번째 줄(2행) 스킵 (데이터 타입에 대한 설명)
+            await reader.ReadLineAsync();
             using var csv = new CsvReader(reader, TsvConfig);
 
             var records = new List<T>();
@@ -46,7 +51,6 @@ public static class TSVLoader
             {
                 records.Add(record);
             }
-
             return records;
         }
         catch (Exception ex)
