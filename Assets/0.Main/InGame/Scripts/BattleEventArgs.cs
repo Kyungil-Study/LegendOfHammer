@@ -9,8 +9,11 @@ public class BattleEventArgs : System.EventArgs
 
 public class StartBattleEventArgs : BattleEventArgs
 {
-    public StartBattleEventArgs()
+    public int StageIndex { get; private set; }
+    
+    public StartBattleEventArgs(int stageIndex)
     {
+        this.StageIndex = stageIndex;
     }
 }
 
