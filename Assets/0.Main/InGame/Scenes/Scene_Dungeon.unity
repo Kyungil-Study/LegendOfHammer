@@ -170,10 +170,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4133092472130525199, guid: aaa160931bddeea4e9a2975bbb51a54e, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6054395728682833670, guid: aaa160931bddeea4e9a2975bbb51a54e, type: 3}
       propertyPath: m_Name
       value: BattleStage
@@ -299,28 +295,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8015743650478422896, guid: cb7f568d296739141874983fa6d2c03d, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2466077357554511735}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cb7f568d296739141874983fa6d2c03d, type: 3}
---- !u!1 &2466077357554511734 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8015743650478422896, guid: cb7f568d296739141874983fa6d2c03d, type: 3}
-  m_PrefabInstance: {fileID: 2466077357554511733}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2466077357554511735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2466077357554511734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3380768c582997f41b7fda6a7ab1e040, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &3143145693073960546
 PrefabInstance:
   m_ObjectHideFlags: 0
