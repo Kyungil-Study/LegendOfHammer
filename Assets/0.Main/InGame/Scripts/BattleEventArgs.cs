@@ -9,27 +9,39 @@ public class BattleEventArgs : System.EventArgs
 
 public class StartBattleEventArgs : BattleEventArgs
 {
-    public Player player;
-    public Monster monster;
-
-    public StartBattleEventArgs(Player player, Monster monster)
+    public StartBattleEventArgs()
     {
-        this.player = player;
-        this.monster = monster;
     }
 }
 
 public class EndBattleEventArgs : BattleEventArgs
 {
-    public Player player;
-    public Monster monster;
-    public bool isVictory;
-
-    public EndBattleEventArgs(Player player, Monster monster, bool isVictory)
+    public bool IsVictory { get; private set; }
+    public EndBattleEventArgs( bool isVictory)
     {
-        this.player = player;
-        this.monster = monster;
-        this.isVictory = isVictory;
+        this.IsVictory = isVictory;
     }
 }
 
+public class TakeDamageEventArgs : BattleEventArgs
+{
+    public IBattleCharacter Attacker {get; set;}
+    public IBattleCharacter Target {get; set; }
+    public int Damage {get;set; }
+    public TakeDamageEventArgs(IBattleCharacter attacker, IBattleCharacter target, int damage)
+    {
+        this.Attacker = attacker;
+        this.Target = target;
+        this.Damage = damage;
+    }
+}
+
+public class DeathEventArgs : BattleEventArgs
+{
+    public IBattleCharacter Target { get; private set; }
+
+    public DeathEventArgs(IBattleCharacter target)
+    {
+        this.Target = target;
+    }
+}
