@@ -39,6 +39,16 @@ public class TakeDamageEventArgs : BattleEventArgs
     }
 }
 
+public class AliveMonsterEventArgs : BattleEventArgs
+{
+    public IBattleCharacter Monster { get; private set; }
+
+    public AliveMonsterEventArgs(IBattleCharacter monster)
+    {
+        this.Monster = monster;
+    }
+}
+
 public class DeathEventArgs : BattleEventArgs
 {
     public IBattleCharacter Target { get; private set; }

@@ -15,6 +15,12 @@ public class StageManager : MonoBehaviour
     {
         tilemapRenderers = GetComponentsInChildren<TilemapRenderer>();
         BattleEventManager.Instance.Callbacks.OnStartBattle += StartGame;
+        BattleEventManager.Instance.Callbacks.OnEndBattle += EndGame;
+    }
+
+    private void EndGame(EndBattleEventArgs args)
+    {
+        pageScroller.enabled = false;
     }
 
     private void StartGame(StartBattleEventArgs startEventArgs)
