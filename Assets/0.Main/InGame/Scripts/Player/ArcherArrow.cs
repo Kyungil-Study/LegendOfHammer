@@ -2,20 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Searcher;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ArcherArrow : MonoBehaviour
 {
     private bool mb_IsFired = false;
-    public int damage = 10;
+    [HideInInspector] public int damage = 10;
     private Vector3 m_TargetDirection;
-    private float m_Speed = 1f;
+    [Range(0, 10)] public float speed = 1f;
     private float m_LifeTime = 5f;
 
     private void Update()
     {
         if (mb_IsFired)
         {
-            transform.Translate(m_TargetDirection * (m_Speed * Time.deltaTime));
+            transform.Translate(m_TargetDirection * (speed * Time.deltaTime));
         }
         
         m_LifeTime -= Time.deltaTime;

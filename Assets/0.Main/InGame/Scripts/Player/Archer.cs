@@ -24,7 +24,7 @@ public class Archer : Hero
 
     public override void Attack()
     {
-        var arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, arrowSpawnPoint.rotation);
+        ArcherArrow arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, arrowSpawnPoint.rotation);
         arrow.Fire();
     }
 }
