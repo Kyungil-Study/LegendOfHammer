@@ -8,6 +8,7 @@ public class BattleManager : MonoSingleton<BattleManager>
 {
     public int StageIndex = 0;
     [SerializeField] private Player player;
+    [SerializeField] private Boss boss; // Assuming boss is of type IBattleCharacter
     
     [Header("전투 시간 세팅")]
     [SerializeField] private float battleDuration = 120f; // 2 minutes
@@ -33,6 +34,11 @@ public class BattleManager : MonoSingleton<BattleManager>
         {
             Debug.Log("Player has died. Ending game.");
             EndGame(false);
+        }
+        else if(args.Target.Equals(boss))
+        {
+            Debug.Log($"Boss Monster has died.");
+            EndGame(true);
         }
     }
 
