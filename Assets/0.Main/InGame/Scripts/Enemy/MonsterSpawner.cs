@@ -13,6 +13,8 @@ public class MonsterSpawner : MonoBehaviour
     [SerializeField] float spawnInterval = 5f; // Time in seconds between spawns
     [SerializeField] private float eliteSpawnInterval = 40;
     [SerializeField] private float bossSpawnInterval = 100;
+    
+    [SerializeField] private Transform[] spawnPoints; // Maximum number of monsters allowed on screen
     // Start is called before the first frame update
     
     Coroutine spawnCoroutine;
