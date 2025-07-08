@@ -26,7 +26,7 @@ public class Audience : MonoBehaviour
         var animatorOverrideController = new AnimatorOverrideController(animator.runtimeAnimatorController);
         animatorOverrideController.name = "AudienceOverrideController";
         var clipIndex = Random.Range(0, audienceAnimation.Length);
-        Debug.Log($"clip Index : " + clipIndex);
+        //Debug.Log($"clip Index : " + clipIndex);
         
         animatorOverrideController["Audience_Idle"] = audienceAnimation[clipIndex];
         animator.runtimeAnimatorController = animatorOverrideController;
@@ -34,7 +34,7 @@ public class Audience : MonoBehaviour
         
         spriteRenderer = GetComponent<SpriteRenderer>();
         var sortingOrder = Random.Range(SortingOrderMin, SortingOrderMax);
-        Debug.Log($"Sorting Order : {sortingOrder}");
+        //Debug.Log($"Sorting Order : {sortingOrder}");
         spriteRenderer.sortingOrder = sortingOrder;
     }
 }
