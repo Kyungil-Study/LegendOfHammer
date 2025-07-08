@@ -9,8 +9,11 @@ public class BattleEventArgs : System.EventArgs
 
 public class StartBattleEventArgs : BattleEventArgs
 {
-    public StartBattleEventArgs()
+    public int StageIndex { get; private set; }
+    
+    public StartBattleEventArgs(int stageIndex)
     {
+        this.StageIndex = stageIndex;
     }
 }
 
@@ -36,6 +39,16 @@ public class TakeDamageEventArgs : BattleEventArgs
     }
 }
 
+public class AliveMonsterEventArgs : BattleEventArgs
+{
+    public IBattleCharacter Monster { get; private set; }
+
+    public AliveMonsterEventArgs(IBattleCharacter monster)
+    {
+        this.Monster = monster;
+    }
+}
+
 public class DeathEventArgs : BattleEventArgs
 {
     public IBattleCharacter Target { get; private set; }
@@ -43,5 +56,13 @@ public class DeathEventArgs : BattleEventArgs
     public DeathEventArgs(IBattleCharacter target)
     {
         this.Target = target;
+    }
+}
+
+
+public class NextPageEventArgs : BattleEventArgs
+{
+    public NextPageEventArgs()
+    {
     }
 }

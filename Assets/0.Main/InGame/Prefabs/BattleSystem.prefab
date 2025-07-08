@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcb0000e577ec8445b7ce1a66dfd0a44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pageScroller: {fileID: 0}
+  StageIndex: 1
 --- !u!114 &8717433775386799482
 MonoBehaviour:
   m_ObjectHideFlags: 0
