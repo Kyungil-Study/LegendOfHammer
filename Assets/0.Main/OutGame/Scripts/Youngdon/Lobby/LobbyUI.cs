@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-public class LobbyDebug : MonoBehaviour
+public class LobbyUI : MonoBehaviour
 {
     [Header("User Info")]
     public TMP_Text userIdText;
