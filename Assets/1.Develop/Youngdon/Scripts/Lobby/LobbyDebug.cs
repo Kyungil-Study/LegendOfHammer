@@ -1,13 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class LobbyDebug : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [Header("User Info")]
+    public TMP_Text userIdText;
+    public TMP_Text nicknameText;
+
+    [Header("Stage Info")]
+    public TMP_Text currentStageText;
+    public TMP_Text maxStageText;
+
+    private void Start()
     {
-        Debug.Log($"[로비] UserID: {UserData.Instance.UserID}");
-        Debug.Log($"[로비] Nickname: {UserData.Instance.Nickname}");
+        // User 정보 세팅
+        userIdText.text = $"UserID: {UserData.Instance.UserID}";
+        nicknameText.text = $"Nickname: {UserData.Instance.Nickname}";
+
+        // Stage 정보 세팅
+        if (StageData.Instance != null)
+        {
+            currentStageText.text = $"CurStage: {StageData.Instance.CurrentStage}";
+            maxStageText.text = $"MaxStage: {StageData.Instance.MaxStage}";
+        }
+        else
+        {
+            currentStageText.text = "CurStage: 1";
+            maxStageText.text = "MaxStage: 1";
+        }
     }
 }
