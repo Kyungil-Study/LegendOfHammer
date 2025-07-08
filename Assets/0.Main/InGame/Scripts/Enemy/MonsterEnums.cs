@@ -12,6 +12,7 @@ public enum EnemyMovementType
 {
     Direct,
     Wave,
+    Chase
 }
 
 public enum EnemySpawnPatternType
