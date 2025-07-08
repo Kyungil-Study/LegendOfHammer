@@ -11,23 +11,19 @@ public class Warrior : Hero
     public float chargeKnockbackDistance = 1f;
     public bool isCharging = false;
     
-    protected override void Attack()
-    {
-        
-    }
-
     // TODO: Implement Warrior's specific damage calculation logic.
-    protected override int CalculateDamage()
+    protected override int CalculateDamage(bool isCritical = false)
     {
         return 0;
     }
     
-    public void ChargeAttack(Vector3 direction, float distance)
+    public void ChargeAttack(Vector3 direction)
     {
         isCharging = true;
         
-        Vector3 endPosition = transform.position + direction.normalized * distance;
+        Vector3 endPosition = transform.position + direction.normalized * chargeDistance;
         StartCoroutine(ChargeCoroutine(endPosition));
+        ApplyCooldown();
     }
 
     private IEnumerator ChargeCoroutine(Vector3 endPosition)
@@ -41,6 +37,8 @@ public class Warrior : Hero
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+
+        isCharging = false;
     }
     
     // TODO: Implement charge knockback and damage
