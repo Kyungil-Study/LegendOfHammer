@@ -270,7 +270,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8739326971891113749, guid: 809dd6705b55cc14a9e20fddeec89088, type: 3}
       propertyPath: m_Name
-      value: LoginUi
+      value: LoginUI
       objectReference: {fileID: 0}
     - target: {fileID: 9143870055650760944, guid: 809dd6705b55cc14a9e20fddeec89088, type: 3}
       propertyPath: m_LocalPosition.x
