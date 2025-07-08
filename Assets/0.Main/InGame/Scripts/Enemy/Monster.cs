@@ -19,4 +19,6 @@ public class Monster : MonoBehaviour, IBattleCharacter
     {
         transform.position += Vector3.down * (moveSpeed * Time.deltaTime);
     }
+
+    public void TakeDamage(TakeDamageEventArgs eventArgs) { }
 }
