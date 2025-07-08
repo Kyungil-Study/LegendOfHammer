@@ -58,3 +58,11 @@ public class DeathEventArgs : BattleEventArgs
         this.Target = target;
     }
 }
+
+
+public class NextPageEventArgs : BattleEventArgs
+{
+    public NextPageEventArgs()
+    {
+    }
+}
