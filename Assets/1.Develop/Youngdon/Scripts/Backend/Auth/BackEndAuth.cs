@@ -36,6 +36,9 @@ public class BackEndAuth : MonoBehaviour
     #region 회원가입 및 로그인
     private void OnGuestLogin()
     {
+        // 게스트 로그인 테스트용으로 추가해둠
+        Backend.BMember.DeleteGuestInfo();
+        
         var bro = Backend.BMember.GuestLogin();
         if (bro.IsSuccess())
         {
