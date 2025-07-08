@@ -12,6 +12,10 @@ public class BattleEventManager : MonoSingleton<BattleEventManager>
         public Action<StartBattleEventArgs> OnStartBattle;
         public Action<EndBattleEventArgs> OnEndBattle;
         public Action<TakeDamageEventArgs> OnTakeDamage;
+        public Action<AliveMonsterEventArgs> OnAliveMonster;
+        public Action<DeathEventArgs> OnDeath;
+        public Action<NextPageEventArgs> OnNextPage;
+        
     }
     public EventCallbacks Callbacks { get; private set; } = new EventCallbacks();
 
@@ -28,6 +32,22 @@ public class BattleEventManager : MonoSingleton<BattleEventManager>
         else if(eventArgs is TakeDamageEventArgs damageEvent)
         {
             Callbacks.OnTakeDamage?.Invoke(damageEvent);
+        }
+        else if(eventArgs is AliveMonsterEventArgs aliveMonsterEvent)
+        {
+            Callbacks.OnAliveMonster?.Invoke(aliveMonsterEvent);
+        }
+        else if(eventArgs is DeathEventArgs deathEvent)
+        {
+            Callbacks.OnDeath?.Invoke(deathEvent);
+        }
+        else if (eventArgs is NextPageEventArgs nextPageEvent)
+        {
+            Callbacks.OnNextPage?.Invoke(nextPageEvent);
+        }
+        else
+        {
+            Debug.LogWarning($"[BattleEventManager] Unhandled event type: {eventArgs.GetType().Name}");
         }
     }
 }
