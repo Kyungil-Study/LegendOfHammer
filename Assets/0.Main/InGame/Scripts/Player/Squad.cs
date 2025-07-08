@@ -19,7 +19,7 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
                 _currentHealth = Mathf.Clamp(value, 0, MaxHealth);
                 if (_currentHealth == 0)
                 {
-                    // TODO: Death
+                    Squad.Instance.Die();
                 }
             }
         }
@@ -29,17 +29,22 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
         [field:SerializeField] public float CriticalChance { get; set; } = 0;
         [field:SerializeField] public float CriticalDamage { get; set; } = 1.5f;
         [field:SerializeField] public int BonusDamagePerHit { get; set; } = 0;
-        [field:SerializeField] public float BonusEffectCoefficient { get; set; } = 0;
-        [field:SerializeField] public float TakeDamageCoefficient { get; set; } = 1;
-        [field:SerializeField] public float FinalDamageCoefficient { get; set; } = 1;
+        [field:SerializeField] public float BonusEffectFactor { get; set; } = 0;
+        [field:SerializeField] public float TakeDamageFactor { get; set; } = 1;
+        [field:SerializeField] public float FinalDamageFactor { get; set; } = 1;
     }
 
     [Range(0,10)] public const float BASE_MOVE_SPEED = 1f;
 
     public SquadStats stats = new SquadStats();
-    
+
     public void TakeDamage(TakeDamageEventArgs eventArgs)
     {
         stats.CurrentHealth -= eventArgs.Damage;
+    }
+
+    private void Die()
+    {
+        BattleEventManager.Instance.CallEvent(new DeathEventArgs(this));
     }
 }

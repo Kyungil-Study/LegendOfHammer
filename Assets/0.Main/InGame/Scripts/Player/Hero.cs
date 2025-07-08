@@ -4,14 +4,20 @@ using UnityEngine;
 
 public abstract class Hero : MonoBehaviour
 {
+    protected Squad.SquadStats baseStats;
     public int attackDamage;
     public float attackPerSec;
     private float m_AttackCooldown;
     protected bool bAutoFire = true;
-    
-    protected abstract void Attack();
-    protected abstract int CalculateDamage();
-    
+
+    protected virtual void Attack() { }
+    protected abstract int CalculateDamage(bool isCritical = false);
+
+    private void Awake()
+    {
+        baseStats = Squad.Instance.stats;
+    }
+
     private void Update()
     {
         m_AttackCooldown -= Time.deltaTime;
@@ -22,7 +28,7 @@ public abstract class Hero : MonoBehaviour
         }
     }
     
-    private void ApplyCooldown()
+    protected void ApplyCooldown()
     {
         m_AttackCooldown = 1 / attackPerSec;
     }

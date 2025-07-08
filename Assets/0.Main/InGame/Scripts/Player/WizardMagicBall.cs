@@ -6,6 +6,11 @@ public class WizardMagicBall : HeroProjectile
 {
     public float explosionRadius = 1f;
     
+    protected override void Hit(IBattleCharacter target)
+    {
+        Explode(transform.position, explosionRadius);
+    }
+    
     private void Explode(Vector3 position, float radius)
     {
         List<Monster> enemies = BattleManager.GetAllEnemyInRadius(position, radius);
@@ -20,10 +25,5 @@ public class WizardMagicBall : HeroProjectile
         }
         // TODO: Play explosion effect here
         Destroy(gameObject);
-    }
-
-    protected override void Hit(IBattleCharacter target)
-    {
-        Explode(transform.position, explosionRadius);
     }
 }

@@ -92,14 +92,5 @@ public abstract class HeroProjectile : MonoBehaviour
         }
     }
 
-    protected virtual void Hit(IBattleCharacter target)
-    {
-        TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(
-            Squad.Instance,
-            target,
-            damage
-        );
-        BattleEventManager.Instance.CallEvent(eventArgs);
-        Destroy(gameObject);
-    }
+    protected abstract void Hit(IBattleCharacter target);
 }
