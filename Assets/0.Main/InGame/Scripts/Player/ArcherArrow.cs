@@ -4,58 +4,10 @@ using UnityEditor.Searcher;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class ArcherArrow : MonoBehaviour
+public class ArcherArrow : HeroProjectile
 {
-    private bool mb_IsFired = false;
-    [HideInInspector] public int damage = 10;
-    private Vector3 m_TargetDirection;
-    [Range(0, 10)] public float speed = 1f;
-    private float m_LifeTime = 5f;
-
-    private void Update()
-    {
-        if (mb_IsFired)
-        {
-            transform.Translate(m_TargetDirection * (speed * Time.deltaTime));
-        }
-        
-        m_LifeTime -= Time.deltaTime;
-        if (m_LifeTime <= 0)
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    public void Fire()
-    {
-        var target = FindTarget();
-        if (target != null)
-        {
-            m_TargetDirection = target.transform.position - transform.position;
-            m_TargetDirection.Normalize();
-        }
-        else
-        {
-            m_TargetDirection = Vector3.up;
-        }
-
-        mb_IsFired = true;
-    }
-
-    private GameObject FindTarget()
-    {
-        // TODO: Implement target finding logic and return the target Monster.
-        return null;
-    }
-
-    private void OnHit(IBattleCharacter target)
-    {
-        TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(
-            Squad.Instance,
-            target, 
-            damage
-        );
-        BattleEventManager.Instance.CallEvent(eventArgs);
-        Destroy(gameObject);
-    }
+    // TODO: Find strongest enemy
+    // 1보스
+    // 2엘리트
+    // 3가까운
 }

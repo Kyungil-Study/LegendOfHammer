@@ -27,6 +27,7 @@ public class BattleEventManager : MonoSingleton<BattleEventManager>
         }
         else if(eventArgs is TakeDamageEventArgs damageEvent)
         {
+            damageEvent.Target.TakeDamage(damageEvent);
             Callbacks.OnTakeDamage?.Invoke(damageEvent);
         }
     }

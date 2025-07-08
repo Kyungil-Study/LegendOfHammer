@@ -80,17 +80,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats:
-    currentHealth: 100
-    maxHealth: 100
-    attackSpeed: 1
-    moveSpeed: 1
-    criticalChance: 0
-    criticalDamage: 1.5
-    bonusDamagePerHit: 0
-    bonusEffectCoefficient: 0
-    takeDamageCoefficient: 1
-    finalDamageCoefficient: 1
-  warrior: {fileID: 0}
+    <MaxHealth>k__BackingField: 100
+    <AttackSpeed>k__BackingField: 1
+    <MoveSpeed>k__BackingField: 1
+    <CriticalChance>k__BackingField: 0
+    <CriticalDamage>k__BackingField: 1.5
+    <BonusDamagePerHit>k__BackingField: 0
+    <BonusEffectCoefficient>k__BackingField: 0
+    <TakeDamageCoefficient>k__BackingField: 1
+    <FinalDamageCoefficient>k__BackingField: 1
 --- !u!114 &461206688830858048
 MonoBehaviour:
   m_ObjectHideFlags: 0

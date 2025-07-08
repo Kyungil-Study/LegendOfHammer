@@ -15,4 +15,8 @@ public class Monster : MonoBehaviour , IBattleCharacter
     {
         
     }
+
+    public void TakeDamage(TakeDamageEventArgs eventArgs)
+    {
+    }
 }
