@@ -20,7 +20,7 @@ public class SquadController : MonoBehaviour
                 Vector3 dir = Input.touches[0].position - m_TouchStartPosition;
                 dir.Normalize();
 
-                squad.transform.position += dir * (squad.stats.moveSpeed * Time.deltaTime);
+                squad.transform.position += dir * (Squad.BASE_MOVE_SPEED * squad.stats.MoveSpeed * Time.deltaTime);
             }
         }
     }

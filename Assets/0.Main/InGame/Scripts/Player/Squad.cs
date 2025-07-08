@@ -1,50 +1,45 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Squad : MonoSingleton<Squad>, IBattleCharacter
 {
-    /// <summary>
-    /// <para>스탯마다 기준이 0, 1 이라 불편함<br />
-    /// 기존 값을 대체하는냐 기존 값에 더해지냐</para>
-    /// </summary>
+    // 스탯마다 기준이 0, 1 이라 불편함
+    // 기존 값을 대체하는냐 기존 값에 더해지냐
     [System.Serializable]
     public class SquadStats
     {
-        public int currentHealth;
-        public int maxHealth;
-        public float attackSpeed = 1;
-        public float moveSpeed = 1;
-        public float criticalChance = 0;
-        public float criticalDamage = 1.5f;
-        public int bonusDamagePerHit = 0;
-        public float bonusEffectCoefficient = 0;
-        public float takeDamageCoefficient = 1;
-        public float finalDamageCoefficient = 1;
-    }
-
-    public SquadStats stats = new SquadStats();
-    public Warrior warrior;
-
-    public void TakeDamage(IBattleCharacter damageFrom, int damage)
-    {
-        TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(
-            damageFrom,
-            this,
-            damage
-        );
-        BattleEventManager.Instance.CallEvent(eventArgs);
-    }
-
-    // TODO: UNDONE
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.TryGetComponent(out IBattleCharacter enemy))
+        private int _currentHealth;
+        public int CurrentHealth
         {
-            if (warrior.isCharging)
+            get => _currentHealth;
+            set
             {
-                
+                _currentHealth = Mathf.Clamp(value, 0, MaxHealth);
+                if (_currentHealth == 0)
+                {
+                    // TODO: Death
+                }
             }
         }
+        [field:SerializeField] public int MaxHealth { get; set; }
+        [field:SerializeField] public float AttackSpeed { get; set; } = 1;
+        [field:SerializeField] public float MoveSpeed { get; set; } = 1;
+        [field:SerializeField] public float CriticalChance { get; set; } = 0;
+        [field:SerializeField] public float CriticalDamage { get; set; } = 1.5f;
+        [field:SerializeField] public int BonusDamagePerHit { get; set; } = 0;
+        [field:SerializeField] public float BonusEffectCoefficient { get; set; } = 0;
+        [field:SerializeField] public float TakeDamageCoefficient { get; set; } = 1;
+        [field:SerializeField] public float FinalDamageCoefficient { get; set; } = 1;
+    }
+
+    [Range(0,10)] public const float BASE_MOVE_SPEED = 1f;
+
+    public SquadStats stats = new SquadStats();
+    
+    public void TakeDamage(TakeDamageEventArgs eventArgs)
+    {
+        stats.CurrentHealth -= eventArgs.Damage;
     }
 }
