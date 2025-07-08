@@ -14,6 +14,7 @@ public class BattleEventManager : MonoSingleton<BattleEventManager>
         public Action<TakeDamageEventArgs> OnTakeDamage;
         public Action<AliveMonsterEventArgs> OnAliveMonster;
         public Action<DeathEventArgs> OnDeath;
+        public Action<NextPageEventArgs> OnNextPage;
         
     }
     public EventCallbacks Callbacks { get; private set; } = new EventCallbacks();
@@ -39,6 +40,10 @@ public class BattleEventManager : MonoSingleton<BattleEventManager>
         else if(eventArgs is DeathEventArgs deathEvent)
         {
             Callbacks.OnDeath?.Invoke(deathEvent);
+        }
+        else if (eventArgs is NextPageEventArgs nextPageEvent)
+        {
+            Callbacks.OnNextPage?.Invoke(nextPageEvent);
         }
         else
         {
