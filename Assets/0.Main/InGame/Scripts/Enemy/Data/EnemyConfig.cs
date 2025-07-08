@@ -33,23 +33,35 @@ public class EnemyConfig
     public int         FirstAppearStage;
 
     // ID 하나로 Rank/Type/AtkType 채워주는 편의 팩토리
-    public static EnemyConfig FromCsvLine(string csvLine)
+    public static EnemyConfig? FromCsvLine(string csvLine)
     {
-        var columns = csvLine.Split(',');
-        int id = int.Parse(columns[0]);
+        var cols = csvLine.Split(',');
+        if (int.TryParse(cols[0].Trim(), out var id) == false) return null;
 
-        var config = new EnemyConfig
+        if (!int.TryParse(cols[4].Trim(), out var hp))           // HP
+            return null;
+        if (!int.TryParse(cols[5].Trim(), out var atkPower))     // AtkPower
+            return null;
+        if (!float.TryParse(cols[6].Trim(), out var moveSpeed))  // MoveSpeed
+            return null;
+        if (!int.TryParse(cols[7].Trim(), out var chaseInc))     // ChasingIncrease
+            return null;
+        if (!int.TryParse(cols[8].Trim(), out var firstStage))   // FirstAppearStage
+            return null;
+
+        // 3) ID 디코딩
+        var cfg = new EnemyConfig
         {
             EnemyID          = id,
             Rank             = (EnemyRank)(id / 10000),
             Type             = (EnemyType)((id / 1000) % 10),
             AtkType          = (EnemyAttackType)(id % 1000),
-            HP               = int.Parse(columns[4]),
-            AtkPower         = int.Parse(columns[5]),
-            MoveSpeed        = float.Parse(columns[6]),
-            ChasingIncrease  = int.Parse(columns[7]),
-            FirstAppearStage = int.Parse(columns[8]),
+            HP               = hp,
+            AtkPower         = atkPower,
+            MoveSpeed        = moveSpeed,
+            ChasingIncrease  = chaseInc,
+            FirstAppearStage = firstStage,
         };
-        return config;
+        return cfg;
     }
 }
