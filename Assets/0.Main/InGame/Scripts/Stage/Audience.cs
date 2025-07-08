@@ -17,4 +17,8 @@ public class Audience : MonoBehaviour
     {
         
     }
+
+    public void TakeDamage(TakeDamageEventArgs eventArgs)
+    {
+    }
 }
