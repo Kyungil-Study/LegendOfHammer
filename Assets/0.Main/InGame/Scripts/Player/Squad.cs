@@ -24,4 +24,27 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
     }
 
     public SquadStats stats = new SquadStats();
+    public Warrior warrior;
+
+    public void TakeDamage(IBattleCharacter damageFrom, int damage)
+    {
+        TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(
+            damageFrom,
+            this,
+            damage
+        );
+        BattleEventManager.Instance.CallEvent(eventArgs);
+    }
+
+    // TODO: UNDONE
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.TryGetComponent(out IBattleCharacter enemy))
+        {
+            if (warrior.isCharging)
+            {
+                
+            }
+        }
+    }
 }

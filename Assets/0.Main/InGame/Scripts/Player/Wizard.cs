@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class Archer : Hero
+public class Wizard : Hero
 {
     public Transform projectileSpawnPoint;
-    public ArcherArrow projectilePrefab;
-    
+    public WizardMagicBall projectilePrefab;
+
     protected override void Attack()
     {
-        ArcherArrow projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
+        WizardMagicBall projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
         projectile.damage = CalculateDamage();
         projectile.Fire();
     }
 
-    // TODO: Implement Archer's specific damage calculation logic.
+    // TODO: Implement Wizard's specific damage calculation logic.
     protected override int CalculateDamage()
     {
         return 0;

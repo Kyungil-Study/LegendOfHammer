@@ -112,6 +112,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3292731646057753534}
+  - component: {fileID: 3228702557338661824}
   m_Layer: 0
   m_Name: Warrior
   m_TagString: Untagged
@@ -135,6 +136,21 @@ Transform:
   - {fileID: 5256962366742529878}
   m_Father: {fileID: 1431376549722415704}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3228702557338661824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4162765866251096358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63b4dd7d165a75247ae7661d77995944, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackDamage: 0
+  attackPerSec: 0
+  knockbackDistance: 1
 --- !u!1 &5635584663710108001
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,7 +178,7 @@ Transform:
   m_GameObject: {fileID: 5635584663710108001}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -404,11 +420,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a01ae529d9e3e584f998266c5d9cff95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackDamage: 0
-  attackPerSec: 0
-  attackCooldown: 0
-  arrowSpawnPoint: {fileID: 386511076734694341}
-  arrowPrefab: {fileID: 2213334373689080831, guid: 06e33e6d1b33be646a96d05a5b3f79ed, type: 3}
+  attackDamage: 250
+  attackPerSec: 2
+  projectileSpawnPoint: {fileID: 386511076734694341}
+  projectilePrefab: {fileID: 2213334373689080831, guid: 06e33e6d1b33be646a96d05a5b3f79ed, type: 3}
 --- !u!1 &8141340970950317135
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,7 +451,7 @@ Transform:
   m_GameObject: {fileID: 8141340970950317135}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -524,6 +539,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7523279484514845190}
+  - component: {fileID: 8187177615337158848}
   m_Layer: 0
   m_Name: Wizard
   m_TagString: Untagged
@@ -547,6 +563,22 @@ Transform:
   - {fileID: 2844217813709663506}
   m_Father: {fileID: 1431376549722415704}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8187177615337158848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8327677478353647336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3adce5ac45099fb4babe269bc38b2cc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackDamage: 0
+  attackPerSec: 0
+  projectileSpawnPoint: {fileID: 0}
+  projectilePrefab: {fileID: 0}
 --- !u!1 &9132952128616439255
 GameObject:
   m_ObjectHideFlags: 0
