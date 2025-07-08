@@ -61,7 +61,7 @@ public class BackendManager : MonoBehaviour
         
         // [추가] chartId의 차트 정보 불러오기
         // [변경 필요] '파일 ID'을 '뒤끝 콘솔 > 차트 관리 > 아이템차트'에서 등록한 차트의 파일 ID값으로 변경해주세요.
-        BackendChart.Instance.ChartGet("63584"); // [추가] chartId의 차트 정보 불러오기
+        BackendChart.Instance.ChartGet("192078"); // [추가] chartId의 차트 정보 불러오기
         
         #endregion
         
