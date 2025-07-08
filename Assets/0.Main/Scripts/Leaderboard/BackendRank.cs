@@ -25,7 +25,7 @@ public class BackendRank
     public void RankInsert(int score)
     {
         // [변경 필요] '복사한 UUID 값'을 '뒤끝 콘솔 > 랭킹 관리'에서 생성한 랭킹의 UUID값으로 변경해주세요.  
-        string rankUUID = "복사한 UUID 값"; // 예시 : "4088f640-693e-11ed-ad29-ad8f0c3d4c70"
+        string rankUUID = "0197e841-bc00-7df9-98de-3a1c9b985d7b"; // 예시 : "4088f640-693e-11ed-ad29-ad8f0c3d4c70"
 
         string tableName = "USER_DATA";
         string rowInDate = string.Empty;
@@ -83,7 +83,7 @@ public class BackendRank
 
     public void RankGet()
     {
-        string rankUUID = "복사한 UUID 값"; // 예시 : "4088f640-693e-11ed-ad29-ad8f0c3d4c70"
+        string rankUUID = "0197e841-bc00-7df9-98de-3a1c9b985d7b"; // 예시 : "4088f640-693e-11ed-ad29-ad8f0c3d4c70"
         var bro = Backend.URank.User.GetRankList(rankUUID);
 
         if (bro.IsSuccess() == false)
