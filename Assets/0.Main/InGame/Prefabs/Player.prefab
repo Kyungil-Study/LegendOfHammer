@@ -80,8 +80,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats:
-    currentHealth: 0
-    maxHealth: 0
+    currentHealth: 100
+    maxHealth: 100
     attackSpeed: 1
     moveSpeed: 1
     criticalChance: 0
@@ -90,6 +90,7 @@ MonoBehaviour:
     bonusEffectCoefficient: 0
     takeDamageCoefficient: 1
     finalDamageCoefficient: 1
+  warrior: {fileID: 0}
 --- !u!114 &461206688830858048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,7 +151,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackDamage: 0
   attackPerSec: 0
-  knockbackDistance: 1
+  chargeDistance: 2
+  chargeDuration: 0.2
+  chargeKnockbackDistance: 1
+  isCharging: 0
 --- !u!1 &5635584663710108001
 GameObject:
   m_ObjectHideFlags: 0
