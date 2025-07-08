@@ -19,8 +19,7 @@ public class Audience : MonoBehaviour
     {
         transform.localScale = Vector3.one * Random.Range(ScaleMin, ScaleMax);
         
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.sortingOrder = Random.Range(SortingOrderMin, SortingOrderMax);
+        
         
         animator = GetComponent<Animator>();
         
@@ -32,5 +31,10 @@ public class Audience : MonoBehaviour
         animatorOverrideController["Audience_Idle"] = audienceAnimation[clipIndex];
         animator.runtimeAnimatorController = animatorOverrideController;
         animator.Play("Audience_Idle", 0, Random.Range(0f, 1f));
+        
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        var sortingOrder = Random.Range(SortingOrderMin, SortingOrderMax);
+        Debug.Log($"Sorting Order : {sortingOrder}");
+        spriteRenderer.sortingOrder = sortingOrder;
     }
 }
