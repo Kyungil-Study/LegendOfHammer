@@ -20,14 +20,12 @@ public class MonsterSpawner : MonoBehaviour
     Coroutine spawnCoroutine;
     Coroutine spawnEliteCoroutine;
     Coroutine spawnBossCoroutine;
-
-
+    
     private void Awake()
     {
         var callbacks = BattleEventManager.Instance.Callbacks;
         callbacks.OnStartBattle += StartGame;
         callbacks.OnEndBattle += EndGame;
-        
     }
 
     private void EndGame(EndBattleEventArgs args)
@@ -37,14 +35,12 @@ public class MonsterSpawner : MonoBehaviour
         StopCoroutine(spawnBossCoroutine);
     }
 
-
     void StartGame(StartBattleEventArgs args)
     {
         spawnCoroutine = StartCoroutine(SpawnMonster_Coroutine());
         spawnEliteCoroutine = StartCoroutine(SpawnEliteMonster_Coroutine());
         spawnBossCoroutine = StartCoroutine(SpawnBossMonster_Coroutine());
     }
-    
     
     IEnumerator SpawnMonster_Coroutine()
     {
@@ -53,7 +49,6 @@ public class MonsterSpawner : MonoBehaviour
             Monster newMonster = Instantiate(monsterPrefab, transform.position, Quaternion.identity);
             yield return new WaitForSeconds(spawnInterval);
         }
-        
     }
     
     IEnumerator SpawnEliteMonster_Coroutine()
@@ -71,5 +66,4 @@ public class MonsterSpawner : MonoBehaviour
         // Example of spawning a boss monster
         Boss newBossMonster = Instantiate(bossMonsterPrefab, transform.position, Quaternion.identity);
     }
-   
 }
