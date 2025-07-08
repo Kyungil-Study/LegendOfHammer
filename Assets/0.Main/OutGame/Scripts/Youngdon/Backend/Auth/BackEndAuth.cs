@@ -35,7 +35,7 @@ public class BackEndAuth : MonoBehaviour
     // [흐름] 기존 게스트 정보 삭제 → 로그인 시도 → 성공 시 UserData에 저장 및 씬 전환
     private void OnGuestLogin()
     {
-        Backend.BMember.DeleteGuestInfo();  // [주의] 게스트 로그인 전에 기존 정보 삭제
+         Backend.BMember.DeleteGuestInfo();  // [주의] 게스트 로그인 전에 기존 정보 삭제
         var bro = Backend.BMember.GuestLogin();
 
         if (bro.IsSuccess())
