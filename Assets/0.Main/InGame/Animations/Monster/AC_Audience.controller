@@ -51,7 +51,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Bear_Animation
+  m_Name: Audience_Idle
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -64,7 +64,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 9211ac6bf910282488d2880bfbd869ed, type: 2}
+  m_Motion: {fileID: 7400000, guid: 17040235f0038f84eac183e3e6f3f789, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
