@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 4418080554944881935}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.7597017, y: 0.98452437, z: 0.45847338}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -120,8 +120,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audienceAnimation:
-  - {fileID: 0}
+  - {fileID: 7400000, guid: 40e1d67f75e9b7845828af50e865e9d6, type: 2}
+  - {fileID: 7400000, guid: 087312862b422cc4cb21e44844b3be07, type: 2}
+  - {fileID: 7400000, guid: 36aa87f86d5a0a44f89a12bc1b94d94a, type: 2}
+  - {fileID: 7400000, guid: e272bf485008c6040bcd2da0524c2f9e, type: 2}
+  - {fileID: 7400000, guid: 9211ac6bf910282488d2880bfbd869ed, type: 2}
   ScaleMin: 3
   ScaleMax: 5
-  SortingOrderMin: 1000
-  SortingOrderMax: 2000
+  SortingOrderMin: 2000
+  SortingOrderMax: 3000
