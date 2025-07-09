@@ -32,7 +32,6 @@ public class BackEndAuth : MonoBehaviour
     }
 
     // [기능] 게스트 로그인 처리
-    // [흐름] 기존 게스트 정보 삭제 → 로그인 시도 → 성공 시 UserData에 저장 및 씬 전환
     private void OnGuestLogin()
     {
          Backend.BMember.DeleteGuestInfo();  // [주의] 게스트 로그인 전에 기존 정보 삭제
@@ -53,6 +52,10 @@ public class BackEndAuth : MonoBehaviour
 
             // [기능] 씬 전환 (인덱스 1번: 로비 씬 등)
             SceneManager.LoadScene(1);
+            BackendGameData.Instance.InitalizeStage();
+            BackendGameData.Instance.GetStage();
+            BackendGameData.Instance.ClearStage();
+            BackendGameData.Instance.UpdateStage();
         }
         else
         {
