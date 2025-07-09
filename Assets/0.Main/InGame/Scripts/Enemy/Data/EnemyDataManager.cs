@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 public class EnemyDataManager : MonoBehaviour
 {
     public static EnemyDataManager Instance { get; private set; }
-    public Dictionary<int, EnemyData> Records { get; private set; }
+    public Dictionary<EnemyID, EnemyData> Records { get; private set; }
 
     async void Awake()
     {
@@ -28,10 +28,9 @@ public class EnemyDataManager : MonoBehaviour
 
         foreach (var it in list)
         {
-            Debug.Log($"{it.Atk_Power} {it.Movement_Pattern}" );
-            
+            Debug.Log($"{it.Is_Ranged} // {it.Is_Ranged == true} // {it.Movement_Pattern}" );
         }
         Records = list.ToDictionary(recode => recode.Enemy_ID);
-        Debug.Log($"[EnemyData] 데이터 로드 성공 // 총 : {Records.Count}");
+        Debug.Log($"[EnemyData] 데이터 로드 성공 // 모든 행 개수 : {Records.Count}");
     }
 }
