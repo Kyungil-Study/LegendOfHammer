@@ -30,7 +30,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
     private float flyStartY;
     
     private float mMoveSpeed;
-    private float mAttackPower;
+    private int   mAttackPower;
     private int   mMaxHP;
     private int   mCurrentHP;
     
@@ -84,10 +84,28 @@ public class Monster : MonoBehaviour, IBattleCharacter
         }
         
         // 플레이어 레이어 체크
-        if (testPlayerLayerMask == (testPlayerLayerMask | (1 << collision.gameObject.layer)))
+        int bit = 1 << collision.gameObject.layer;
+        if ((testPlayerLayerMask.value & bit) == 0)
         {
-            Debug.Log("플레이어 충돌");
-            // TODO: 플레이어 데미지 이벤트 호출
+            return;
+        }
+
+        Debug.Log("플레이어 충돌 시 데미지 처리");
+        
+        var player = collision.GetComponent<IBattleCharacter>();
+        
+        if (player != null)
+        {
+            BattleEventManager.Instance.CallEvent
+            (
+                new TakeDamageEventArgs
+                (
+                    attacker: this,
+                    target: player,
+                    damage: mAttackPower
+                )
+            );
+            Debug.Log($"플레이어 받은 데미지 : {mAttackPower}");
         }
     }
 
