@@ -10,10 +10,6 @@ public class BattleManager : MonoSingleton<BattleManager>
     [SerializeField] private Player player;
     [SerializeField] private Boss boss; // Assuming boss is of type IBattleCharacter
     
-    [Header("전투 시간 세팅")]
-    [SerializeField] private float battleDuration = 120f; // 2 minutes
-    private float battleStartTime = 0f;
-    
     [Header("추격 게이지 세팅")]
     [SerializeField] private float chaseGuageDecreaseRate = 0.5f; // Increase rate per second
     [SerializeField] private float chaseIncreaseRate = 1f; // Increase rate when monster is through clear zone
@@ -53,8 +49,6 @@ public class BattleManager : MonoSingleton<BattleManager>
 
     public void StartGame()
     {
-        battleStartTime = Time.time;
-        
         StartBattleEventArgs startEventArgs = new StartBattleEventArgs(StageIndex);
         
         BattleEventManager.Instance.CallEvent(startEventArgs);
@@ -70,19 +64,6 @@ public class BattleManager : MonoSingleton<BattleManager>
         if (Input.GetKeyDown(KeyCode.Space))
         {
             StartGame();
-        }
-        
-        float battleElapsedTime = Time.time - battleStartTime;
-        if (battleElapsedTime >= battleDuration)
-        {
-            battleElapsedTime = Time.time - battleStartTime;
-
-            // Check if the battle duration has been reached
-            if (battleElapsedTime >= battleDuration)
-            {
-                EndGame(true);
-                return;
-            }
         }
         
         chaseGuage -= chaseGuageDecreaseRate * Time.deltaTime;
