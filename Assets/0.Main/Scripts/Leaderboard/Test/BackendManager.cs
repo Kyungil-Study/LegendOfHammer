@@ -6,7 +6,7 @@ using BackEnd;
 
 public class BackendManager : MonoBehaviour
 {
-    void Start()
+    void Awake()
     {
         var bro = Backend.Initialize(); // 뒤끝 초기화
 
