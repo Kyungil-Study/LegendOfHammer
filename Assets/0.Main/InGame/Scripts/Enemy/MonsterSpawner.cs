@@ -13,6 +13,7 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
     [SerializeField] EliteMonster eliteMonsterPrefab;
     [SerializeField] Boss bossMonsterPrefab;
     
+    [SerializeField] GameObject TestPlayer; // For testing purposes, remove later
     [Header("Spawn Points Reference")]
     [SerializeField] private Transform[] spawnPoints; // Maximum number of monsters allowed on screen
     [SerializeField] private Transform midSpawnPoints; // Maximum number of monsters allowed on screen
@@ -69,6 +70,7 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
         {
             case EnemyRankType.Normal:
                 Monster newMonster = Instantiate(monsterPrefab, position, Quaternion.identity);
+                newMonster.GetComponent<Monster>().SetPlayer(TestPlayer);   // For testing purposes, remove later
                 break;
             case EnemyRankType.Elite:
                 EliteMonster newEliteMonster = Instantiate(eliteMonsterPrefab, position, Quaternion.identity);

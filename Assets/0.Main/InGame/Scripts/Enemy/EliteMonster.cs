@@ -15,4 +15,9 @@ public class EliteMonster : MonoBehaviour , IBattleCharacter
     {
         
     }
+
+    public void TakeDamage(TakeDamageEventArgs eventArgs)
+    {
+        throw new System.NotImplementedException();
+    }
 }
