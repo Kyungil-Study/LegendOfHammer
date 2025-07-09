@@ -22,6 +22,6 @@ public class Wizard : Hero
     protected override int CalculateDamage(bool isCritical = false)
     {
         float critFactor = isCritical ? baseStats.CriticalDamage : 1f;
-        return (int)(((attackDamage * critFactor) + baseStats.BonusDamagePerHit) * baseStats.FinalDamageFactor);
+        return (int)(((baseAttackDamage * critFactor) + baseStats.BonusDamagePerHit) * baseStats.FinalDamageFactor);
     }
 }

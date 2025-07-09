@@ -11,10 +11,12 @@ public class Warrior : Hero
     public float chargeKnockbackDistance = 1f;
     public bool isCharging = false;
     
-    // TODO: Implement Warrior's specific damage calculation logic.
+    // 전사 돌진 피해량
+    // [{(전사 기본 공격 피해량 x 치명타 피해량) + 타격 당 데미지} x 받는 피해량 증가] x 최종 데미지 증가
     protected override int CalculateDamage(bool isCritical = false)
     {
-        return 0;
+        float critFactor = isCritical ? baseStats.CriticalDamage : 1f;
+        return (int)(((baseAttackDamage * critFactor) + baseStats.BonusDamagePerHit) * baseStats.FinalDamageFactor);
     }
     
     public void ChargeAttack(Vector3 direction)
