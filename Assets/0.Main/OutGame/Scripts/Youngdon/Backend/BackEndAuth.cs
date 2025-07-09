@@ -47,8 +47,8 @@ public class BackEndAuth : MonoBehaviour
         UserData.Instance.SetUser(guestId, "Guest");
 
         // 로그인 후 항상 스테이지 정보 불러오기
-        BackendGameData.Instance.InitalizeStage();
-        BackendGameData.Instance.GetStage();
+        BackendStageGameData.Instance.InitalizeStage();
+        BackendStageGameData.Instance.GetStage();
 
         SceneManager.LoadScene(1);
     }
@@ -80,7 +80,7 @@ public class BackEndAuth : MonoBehaviour
                 // [기능] UserData에 ID, 닉네임 저장
                 UserData.Instance.SetUser(id, nick);
             }
-            BackendGameData.Instance.GetStage();
+            BackendStageGameData.Instance.GetStage();
             // [기능] 로그인 후 씬 전환
             SceneManager.LoadScene(1);
         }
@@ -109,7 +109,7 @@ public class BackEndAuth : MonoBehaviour
                 Debug.Log("닉네임 설정 성공");
 
                 // [기능] 닉네임 설정 성공 시 자동 로그인 실행
-                BackendGameData.Instance.InitalizeStage();
+                BackendStageGameData.Instance.InitalizeStage();
                 OnCustomLogin();
             }
             else
