@@ -25,7 +25,7 @@ public static class TSVLoader
     /// <typeparam name="T"> 매핑할 클래스 타입 (public getter/setter 필수)</typeparam>
     /// <param name="tableName"> 파일 이름 (확장자 제외)</param>
     /// <returns> 파싱된 데이터 리스트</returns>
-    public static async Task<List<T>> LoadTableAsync<T>(string tableName, bool isStreamingAssetPath = false)
+    public static async Task<List<T>> LoadTableAsync<T>(string tableName, bool isStreamingAssetPath = true)
     {
         string basePath = isStreamingAssetPath ? Application.streamingAssetsPath : Application.persistentDataPath;
         string folderPath = Path.Combine(basePath, "Table");
