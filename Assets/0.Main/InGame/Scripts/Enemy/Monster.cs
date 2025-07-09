@@ -15,8 +15,10 @@ public class Monster : MonoBehaviour, IBattleCharacter
     [Tooltip("플레이어 레이어 마스크")]
     [SerializeField] private LayerMask testPlayerLayerMask;
     
-    [Header("투사체")]
+    [Header("투사체")] [Tooltip("투사체 프리팹, 속도")]
     [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private float projectileSpeed = 5f;
+    private float projectileDamage;
     
     [Header("지그재그")] [Tooltip("zigzagAmplitude: 진동폭, zigzagFrequency: 주기")]
     [SerializeField] private float zigzagAmplitude = 1f;
@@ -31,6 +33,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
     [Header("체공형")] [Tooltip("하강 후 멈출 거리 설정")]
     [SerializeField] private float distanceToStop = 3f;
     private float flyStartY;
+    private bool hasStoppedFlying;
     
     [Header("쉴드")] [Tooltip("쉴드 거리")]
     [SerializeField] private float shieldDistance = 1f;
@@ -224,19 +227,48 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 break;
             case EnemyAttackPattern.Sniper:
                 // 사격 시간 (3초) 마다 투사체 발사
+                StartCoroutine(SniperAttackLoop());
                 break;
             case EnemyAttackPattern.Spread:
                 // 몬스터 전방 기준 45도 3갈래 3연발(0.2초 간격)로 발사
                 // 탄은 탄막 속도로 등속 직선 이동
                 // 몬스터와 플레이어 캐릭터의 상대적 위치에 따라 좌우 분사 방향 결정
+                StartCoroutine(FireProjectiles
+                (
+                    count:    3,
+                    interval: 0.2f,
+                    aim: i =>
+                    {
+                        // 플레이어가 왼쪽이면 +, 오른쪽이면 −
+                        bool isLeft = testPlayer.transform.position.x < transform.position.x;
+                        float[] angles = isLeft ? new[] {0f, 27.5f, 45f} : new[] {0f, -27.5f, -45f};
+                        // forward = 하강 방향(Vector2.down)
+                        return SetAngle(Vector2.down, angles[i]);
+                    }
+                ));
                 break;
             case EnemyAttackPattern.Radial:
                 // 몬스터 생성 후 사격 시간(3초) 마다 탄막 발사
                 // 몬스터 기준 시계 12개 방향으로 발사 (원형)
+                StartCoroutine(RadialAttackLoop());
                 break;
             case EnemyAttackPattern.Flying:
                 // 정지 후 사격 시간(1초) 마다 탄막 발사
                 // 전장의 중선(파란선)을 지나는 무작위 방향으로 탄 1발 발사
+                if (hasStoppedFlying == false && HasFinishedFlying())
+                {
+                    hasStoppedFlying = true;
+                    StartCoroutine(FireProjectiles(
+                        count:    1,
+                        interval: 0f,
+                        aim: i =>
+                        {
+                            // 0° 기준 오른쪽 → 랜덤 ±90°
+                            float angle = Random.Range(-45f, 45f);
+                            return SetAngle(Vector2.right, angle);
+                        }
+                    ));
+                }
                 break;
             default:
                 break;
@@ -262,7 +294,81 @@ public class Monster : MonoBehaviour, IBattleCharacter
         Destroy(gameObject);
     }
     
-    // Chase 형태에서 감지 범위
+    // 발사 공통 메서드
+    private IEnumerator FireProjectiles(int count, float interval, System.Func<int, Vector2> aim)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            var obj = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+            var proj= obj.GetComponent<Projectile>();
+            proj.Initialize
+            (
+                dir:      aim(i),
+                speed:    projectileSpeed,
+                damage:   (int)mAttackPower,
+                mask:     testPlayerLayerMask,
+                attacker: this
+            );
+            
+            if (interval > 0f)
+            {
+                yield return new WaitForSeconds(interval);
+            }
+            else
+            {
+                yield return null;
+            }
+        }
+    }
+    
+    private IEnumerator SniperAttackLoop()
+    {
+        while (true)
+        {
+            yield return FireProjectiles
+            (
+                count:    3,
+                interval: 0.15f,
+                aim: i => (testPlayer.transform.position - transform.position).normalized
+            );
+            yield return new WaitForSeconds(3f);
+        }
+    }
+    
+    // Radial 전용: 12방향 → 3초마다 발사
+    private IEnumerator RadialAttackLoop()
+    {
+        while (true)
+        {
+            yield return FireProjectiles
+            (
+                count:    12,
+                interval: 0f,
+                aim: i =>
+                {
+                    float angle = i * 30f; // 360/12 = 30
+                    return SetAngle(Vector2.down, angle);
+                }
+            );
+            yield return new WaitForSeconds(3f);
+        }
+    }
+
+    private bool HasFinishedFlying()
+    {
+        // ex) y 위치가 목표 이하일 때
+        float traveled = flyStartY - transform.position.y;
+        return traveled >= distanceToStop;
+    }
+
+    private Vector2 SetAngle(Vector2 vector, float degrees)
+    {
+        float rad = degrees * Mathf.Deg2Rad;
+        float cx = Mathf.Cos(rad), sx = Mathf.Sin(rad);
+        return new Vector2(vector.x * cx - vector.y * sx, vector.x * sx + vector.y * cx);
+    }
+    
+    // Chase, Shield 감지 범위
     void OnDrawGizmosSelected()
     {
         if (mMovementPattern == EnemyMovementPattern.Chase)
