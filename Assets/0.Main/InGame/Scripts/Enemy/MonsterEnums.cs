@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EnemyRankType
+{
+    Normal,
+    Elite,
+    Boss
+}
+
 public enum EnemyAttackType
 {
     Melee,
