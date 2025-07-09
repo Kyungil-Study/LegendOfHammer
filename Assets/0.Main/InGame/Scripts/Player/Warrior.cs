@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Warrior : Hero
 {
@@ -62,7 +60,7 @@ public class Warrior : Hero
         m_HitMonsters.Add(monster);
         TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(squad, monster, Damage);
         BattleEventManager.Instance.CallEvent(eventArgs);
-        ChargeKnockback(monster);
+        // TODO: monster.Knockback(Vector3 direction, float distance);
     }
 
     private void ChargeKnockback(Monster monster)
