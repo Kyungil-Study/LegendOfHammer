@@ -32,13 +32,13 @@ public abstract class HeroProjectile : MonoBehaviour
     
     private void SetSpeed()
     {
-        m_Speed = Squad.BASE_MOVE_SPEED * speed;
+        m_Speed = Squad.STANDARD_DISTANCE * speed;
     }
     
     public void SetSpeed(float newSpeed)
     {
         speed = newSpeed;
-        m_Speed = Squad.BASE_MOVE_SPEED * speed;
+        m_Speed = Squad.STANDARD_DISTANCE * speed;
     }
 
     public void Fire()

@@ -71,7 +71,7 @@ public class SquadController : MonoBehaviour
 
                 if (dir.magnitude > m_LeverThreshold)
                 {
-                    squad.transform.position += dir * (Squad.BASE_MOVE_SPEED * squad.stats.MoveSpeed * Time.deltaTime);
+                    squad.transform.position += dir * (Squad.STANDARD_DISTANCE * squad.stats.MoveSpeed * Time.deltaTime);
                 }
             }
         }
