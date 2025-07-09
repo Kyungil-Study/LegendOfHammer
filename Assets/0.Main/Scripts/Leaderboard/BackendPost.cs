@@ -93,7 +93,7 @@ public class BackendPost
     {
         var bro = Backend.UPost.GetPostList(postType);
         
-        string chartName = "아이템 차트";
+        string chartName = "랭킹 보상 차트1";
 
         if (bro.IsSuccess() == false)
         {
