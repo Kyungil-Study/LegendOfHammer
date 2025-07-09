@@ -19,17 +19,17 @@ public class Stage
     }
 }
 
-public class BackendGameData
+public class BackendStageGameData
 {
-    private static BackendGameData _instance = null;
+    private static BackendStageGameData _instance = null;
 
-    public static BackendGameData Instance
+    public static BackendStageGameData Instance
     {
         get
         {
             if (_instance == null)
             {
-                _instance = new BackendGameData();
+                _instance = new BackendStageGameData();
             }
             return _instance;
         }
