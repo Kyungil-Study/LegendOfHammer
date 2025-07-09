@@ -28,7 +28,7 @@ public class EnemyDataManager : MonoBehaviour
 
         foreach (var it in list)
         {
-            Debug.Log($"{it.Is_Ranged} // {it.Is_Ranged == true} // {it.Movement_Pattern}" );
+            Debug.Log($"{it.Is_Ranged} // {it.Is_Ranged == true} // {it.EnemyMovementPattern}" );
         }
         Records = list.ToDictionary(recode => recode.Enemy_ID);
         Debug.Log($"[EnemyData] 데이터 로드 성공 // 모든 행 개수 : {Records.Count}");
