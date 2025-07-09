@@ -7,7 +7,9 @@ public class Monster : MonoBehaviour, IBattleCharacter
     [Header("데이터 연동")]
     [Tooltip("몬스터 유형 체크")] 
     [SerializeField] private EnemyID enemyID;
-
+    
+    public EnemyID EnemyID { get { return enemyID;} set { enemyID = value; } } // todo: 종류별 Prefab생성해서 관리하도록 수정필요. 수정 후 제거
+    
     [Header("플레이어 테스트")]
     [Tooltip("추적/충돌할 플레이어 오브젝트")]
     public GameObject testPlayer;
