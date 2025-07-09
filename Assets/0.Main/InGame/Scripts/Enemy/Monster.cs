@@ -8,29 +8,48 @@ public class Monster : MonoBehaviour, IBattleCharacter
     [Tooltip("몬스터 유형 체크")] 
     [SerializeField] private EnemyID enemyID;
 
-    [Header("테스트 플레이어")]
-    [SerializeField] private LayerMask testPlayer;
+    [Header("플레이어 테스트")]
+    [Tooltip("추적/충돌할 플레이어 오브젝트")]
+    [SerializeField] private GameObject testPlayer;
+    [Tooltip("플레이어 레이어 마스크")]
+    [SerializeField] private LayerMask testPlayerLayerMask;
     
     [Header("투사체")]
     [SerializeField] private GameObject projectilePrefab;
+    
+    [Header("지그재그")]
+    [SerializeField] private float zigzagAmplitude = 1f;
+    [SerializeField] private float zigzagFrequency = 2f;
 
     private float mMoveSpeed;
+    private float mAttackPower;
     private int   mMaxHP;
     private int   mCurrentHP;
     
     private EnemyMovementPattern mMovementPattern;
     private EnemyAttackPattern   mAttackPattern;
     
+    // 지그재그용
+    private float initialX;
+    private float zigzagTime;
+    
+    // 자폭용
+    private bool isSuiciding;
+    
     void Start()
     {
         var data = EnemyDataManager.Instance.Records[enemyID];
         
         mMoveSpeed       = data.Move_Speed;
+        mAttackPower     = data.Atk_Power;
         mMaxHP           = data.HP ?? 0;
         mCurrentHP       = mMaxHP;
         
         mMovementPattern = data.EnemyMovementPattern;
         mAttackPattern   = data.Atk_Pattern;
+        
+        // 지그재그 초기 X 좌표 저장
+        initialX = transform.position.x;
     }
 
     void Update()
@@ -53,7 +72,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
         }
         
         // 플레이어 레이어 체크
-        if (testPlayer == (testPlayer | (1 << collision.gameObject.layer)))
+        if (testPlayerLayerMask == (testPlayerLayerMask | (1 << collision.gameObject.layer)))
         {
             Debug.Log("플레이어 충돌");
             // TODO: 플레이어 데미지 이벤트 호출
@@ -63,6 +82,11 @@ public class Monster : MonoBehaviour, IBattleCharacter
     // 몬스터 이동 로직
     public void OnMove(EnemyMovementPattern movementType) 
     {
+        if (isSuiciding)
+        {
+            return;
+        }
+        
         switch (movementType)
         {
             case EnemyMovementPattern.Straight:
@@ -71,9 +95,26 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 break;
             case EnemyMovementPattern.Zigzag:
                 // 지그재그 이동 : 진동폭 만큼 좌우로 움직이며 등속 직선 이동 (하강)
+                zigzagTime += Time.deltaTime;
+                float x = initialX + Mathf.Sin(zigzagTime * zigzagFrequency) * zigzagAmplitude;
+                float y = transform.position.y - mMoveSpeed * Time.deltaTime;
+                transform.position = new Vector2(x, y);
                 break;
             case EnemyMovementPattern.Chase:
                 // 추적 이동 : 플레이어 추적 -> 일정 트리거 범위에서 멈추고 폭발 (이건 OnAttack서 처리)
+                // 플레이어 추적, 없으면 하강
+                if (testPlayer != null)
+                {
+                    transform.position = Vector2.MoveTowards(
+                        transform.position,
+                        testPlayer.gameObject.transform.position,
+                        mMoveSpeed * Time.deltaTime
+                    );
+                }
+                else
+                {
+                    transform.position += Vector3.down * (mMoveSpeed * Time.deltaTime);
+                }
                 break;
             case EnemyMovementPattern.Flying:
                 // 체공형 : OnAttack 시 멈춰서 발사
