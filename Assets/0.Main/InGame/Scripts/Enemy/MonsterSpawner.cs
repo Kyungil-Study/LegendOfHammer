@@ -10,6 +10,8 @@ public class MonsterSpawner : MonoBehaviour
     [SerializeField] EliteMonster eliteMonsterPrefab;
     [SerializeField] Boss bossMonsterPrefab;
     
+    [SerializeField] GameObject TestPlayer; // For testing purposes, remove later
+    
     [SerializeField] float spawnInterval = 5f; // Time in seconds between spawns
     [SerializeField] private float eliteSpawnInterval = 40;
     [SerializeField] private float bossSpawnInterval = 100;
@@ -47,6 +49,7 @@ public class MonsterSpawner : MonoBehaviour
         while (gameObject.activeInHierarchy)
         {
             Monster newMonster = Instantiate(monsterPrefab, transform.position, Quaternion.identity);
+            newMonster.GetComponent<Monster>().SetPlayer(TestPlayer);   // For testing purposes, remove later
             yield return new WaitForSeconds(spawnInterval);
         }
     }
