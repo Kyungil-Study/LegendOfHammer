@@ -30,6 +30,9 @@ public static class TSVLoader
         string basePath = isStreamingAssetPath ? Application.streamingAssetsPath : Application.persistentDataPath;
         string folderPath = Path.Combine(basePath, "Table");
         string filePath = Path.Combine(folderPath, tableName + ".tsv");
+        
+        Debug.Log(Application.streamingAssetsPath);
+        Debug.Log(File.Exists(filePath));
 
         if (File.Exists(filePath) == false)
         {
