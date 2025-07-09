@@ -5,7 +5,7 @@ using UnityEngine;
 // 뒤끝 SDK namespace 추가
 using BackEnd;
 
-public class UserData
+public class UserData2
 {
     public int level = 1;
     public float atk = 3.5f;
@@ -55,7 +55,7 @@ public class BackendGameData
         }
     }
 
-    public static UserData userData;
+    public static UserData2 userData;
 
     private string gameDataRowInDate = string.Empty;
 
@@ -63,7 +63,7 @@ public class BackendGameData
     {
         if (userData == null)
         {
-            userData = new UserData();
+            userData = new UserData2();
         }
 
         Debug.Log("데이터를 초기화합니다.");
@@ -124,7 +124,7 @@ public class BackendGameData
             {
                 gameDataRowInDate = gameDataJson[0]["inDate"].ToString(); //불러온 게임 정보의 고유값입니다.  
 
-                userData = new UserData();
+                userData = new UserData2();
 
                 userData.level = int.Parse(gameDataJson[0]["level"].ToString());
                 userData.atk = float.Parse(gameDataJson[0]["atk"].ToString());
