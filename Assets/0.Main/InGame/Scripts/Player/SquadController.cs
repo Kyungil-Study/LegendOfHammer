@@ -35,10 +35,11 @@ public class SquadController : MonoBehaviour
     {
         if (Input.touchCount > 0)
         {
-            var touchPosition = m_Camera.ScreenToWorldPoint(Input.touches[0].position);
+            Touch touch = Input.touches[0];
+            var touchPosition = m_Camera.ScreenToWorldPoint(touch.position);
             touchPosition.z = 0;
             
-            if (Input.touches[0].phase == TouchPhase.Began)
+            if (touch.phase == TouchPhase.Began)
             {
                 m_TouchStartPosition = touchPosition;
                 lever.transform.position = touchPosition;
@@ -54,13 +55,17 @@ public class SquadController : MonoBehaviour
                     m_LastTapTime = Time.time;
                 }
             }
+            else if (touch.phase == TouchPhase.Ended)
+            {
+                innerCircle.transform.position = lever.transform.position;
+            }
             else
             {
                 Vector3 dir = touchPosition - m_TouchStartPosition;
                 
                 dir = dir.normalized * Mathf.InverseLerp(0, m_LeverRadius, dir.magnitude);
                 
-                innerCircle.transform.position = outerCircle.transform.position + dir * m_LeverRadius;
+                innerCircle.transform.position = lever.transform.position + dir * m_LeverRadius;
 
                 if (dir.magnitude > m_LeverThreshold)
                 {
