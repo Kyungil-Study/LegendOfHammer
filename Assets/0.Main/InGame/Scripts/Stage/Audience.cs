@@ -37,4 +37,8 @@ public class Audience : MonoBehaviour
         //Debug.Log($"Sorting Order : {sortingOrder}");
         spriteRenderer.sortingOrder = sortingOrder;
     }
+
+    public void TakeDamage(TakeDamageEventArgs eventArgs)
+    {
+    }
 }

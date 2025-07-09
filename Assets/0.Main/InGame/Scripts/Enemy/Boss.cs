@@ -15,4 +15,9 @@ public class Boss : MonoBehaviour , IBattleCharacter
     {
         
     }
+
+    public void TakeDamage(TakeDamageEventArgs eventArgs)
+    {
+        throw new System.NotImplementedException();
+    }
 }
