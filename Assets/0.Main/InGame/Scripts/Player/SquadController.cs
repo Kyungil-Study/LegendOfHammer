@@ -15,11 +15,11 @@ public class SquadController : MonoBehaviour
     private float m_LastTapTime;
     
     public GameObject lever;
-    private float m_LeverRadius;
-    private float m_LeverThreshold;
     public SpriteRenderer outerCircle;
     public SpriteRenderer middleCircle;
     public GameObject innerCircle;
+    private float m_LeverRadius;
+    private float m_LeverThreshold;
 
     private void Start()
     {
@@ -40,13 +40,16 @@ public class SquadController : MonoBehaviour
             
             if (touch.phase == TouchPhase.Began)
             {
-                m_TouchStartPosition = touchPosition;
-                lever.transform.position = touchPosition;
+                if (Vector2.Distance(touchPosition, lever.transform.position) > m_LeverRadius)
+                {
+                    m_TouchStartPosition = touchPosition;
+                    lever.transform.position = touchPosition;
+                }
                 
                 // Check for multi-tap
                 if (m_LastTapTime + multiTapGap > Time.time)
                 {
-                    Vector3 direction = touchPosition - warrior.transform.position;
+                    Vector3 direction = touchPosition - lever.transform.position;
                     warrior.ChargeAttack(direction);
                 }
                 else
