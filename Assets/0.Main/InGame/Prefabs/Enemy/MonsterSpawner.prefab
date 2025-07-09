@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 947774683552868182}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.8, y: 2.74, z: 0}
+  m_LocalPosition: {x: -2.01, y: 5.99, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -76,13 +76,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: befdaa2a0050e5b439e9b57a3393ded3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnPatternTableSao: {fileID: 11400000, guid: 89d96262c07931d4b9a3698716afb265, type: 2}
   monsterPrefab: {fileID: 7494431464099580550, guid: cb7f568d296739141874983fa6d2c03d, type: 3}
   eliteMonsterPrefab: {fileID: 6751229596582898055, guid: 1e82f95e356b86b4c9b32946a77caa13, type: 3}
   bossMonsterPrefab: {fileID: 3627491764740283123, guid: 1a4d21a69128dc344a5ed6fdc039638f, type: 3}
-  spawnInterval: 5
-  eliteSpawnInterval: 40
-  bossSpawnInterval: 100
-  spawnPoints: []
+  spawnPoints:
+  - {fileID: 57902397338766103}
+  - {fileID: 229348489126502845}
+  - {fileID: 4562884616346416316}
+  midSpawnPoints: {fileID: 229348489126502845}
 --- !u!1 &3430082036272000575
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,7 +110,7 @@ Transform:
   m_GameObject: {fileID: 3430082036272000575}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.24, y: 2.74, z: 0}
+  m_LocalPosition: {x: 1.03, y: 6.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -139,7 +141,7 @@ Transform:
   m_GameObject: {fileID: 5041294341715359169}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.28, y: 2.73, z: 0}
+  m_LocalPosition: {x: -0.46, y: 6.03, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -169,8 +171,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6760005866518348373}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.19187188, y: 3.2232606, z: 0.06837095}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
