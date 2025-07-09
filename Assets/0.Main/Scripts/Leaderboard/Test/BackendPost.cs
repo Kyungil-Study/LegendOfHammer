@@ -91,6 +91,8 @@ public class BackendPost
 
     public void PostListGet(PostType postType)
     {
+        _postList.Clear(); // 👉 우편 목록 초기화 (중요)
+
         var bro = Backend.UPost.GetPostList(postType);
         
         string chartName = "랭킹 보상 차트1";
@@ -246,5 +248,10 @@ public class BackendPost
         }
 
         BackendGameData.Instance.GameDataUpdate();
+    }
+    
+    public List<Post> GetPostList()
+    {
+        return _postList;
     }
 }
