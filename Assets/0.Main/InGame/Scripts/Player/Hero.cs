@@ -7,7 +7,7 @@ public abstract class Hero : MonoBehaviour
     protected Squad.SquadStats baseStats;
     public int attackDamage;
     public float attackPerSec;
-    private float m_AttackCooldown;
+    protected float attackCooldown;
     protected bool bAutoFire = true;
 
     protected virtual void Attack() { }
@@ -20,8 +20,8 @@ public abstract class Hero : MonoBehaviour
 
     private void Update()
     {
-        m_AttackCooldown -= Time.deltaTime;
-        if (bAutoFire && m_AttackCooldown <= 0)
+        attackCooldown -= Time.deltaTime;
+        if (bAutoFire && attackCooldown <= 0)
         {
             Attack();
             ApplyCooldown();
@@ -30,6 +30,6 @@ public abstract class Hero : MonoBehaviour
     
     protected void ApplyCooldown()
     {
-        m_AttackCooldown = 1 / attackPerSec;
+        attackCooldown = 1 / attackPerSec;
     }
 }

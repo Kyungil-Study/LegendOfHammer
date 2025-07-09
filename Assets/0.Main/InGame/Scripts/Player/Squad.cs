@@ -34,7 +34,7 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
         [field:SerializeField] public float FinalDamageFactor { get; set; } = 1;
     }
 
-    [Range(0,10)] public const float BASE_MOVE_SPEED = 1f;
+    [Range(0,10)] public const float BASE_MOVE_SPEED = 3f;
 
     public SquadStats stats = new SquadStats();
 

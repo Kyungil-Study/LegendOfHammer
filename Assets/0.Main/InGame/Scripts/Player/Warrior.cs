@@ -19,9 +19,14 @@ public class Warrior : Hero
     
     public void ChargeAttack(Vector3 direction)
     {
+        // if(attackCooldown > 0 || isCharging)
+        // {
+        //     return;
+        // }
+        
         isCharging = true;
         
-        Vector3 endPosition = transform.position + direction.normalized * chargeDistance;
+        Vector3 endPosition = transform.position + direction.normalized * (Squad.BASE_MOVE_SPEED * baseStats.MoveSpeed * chargeDistance);
         StartCoroutine(ChargeCoroutine(endPosition));
         ApplyCooldown();
     }
