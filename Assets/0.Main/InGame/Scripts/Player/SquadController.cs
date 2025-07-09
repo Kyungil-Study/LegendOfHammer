@@ -7,6 +7,7 @@ using UnityEngine;
 public class SquadController : MonoBehaviour
 {
     public Squad squad;
+    public Rigidbody2D squadRigidbody;
     public Warrior warrior;
     private Vector3 m_TouchStartPosition;
     
@@ -21,6 +22,9 @@ public class SquadController : MonoBehaviour
     private float m_LeverRadius;
     private float m_LeverThreshold;
 
+    public Transform min;
+    public Transform max;
+    
     private void Start()
     {
         m_Camera = Camera.main;
@@ -29,7 +33,7 @@ public class SquadController : MonoBehaviour
         float middleRadius = (middleCircle.bounds.size / 2).x;
         m_LeverThreshold = middleRadius / m_LeverRadius;
     }
-
+    
     private void Update()
     {
         if (Input.touchCount > 0)
@@ -75,5 +79,13 @@ public class SquadController : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void LateUpdate()
+    {
+        float x = Mathf.Clamp(squad.transform.position.x, min.position.x, max.position.x);
+        float y = Mathf.Clamp(squad.transform.position.y, min.position.y, max.position.y);
+        
+        squad.transform.position = new Vector3(x, y, squad.transform.position.z);
     }
 }
