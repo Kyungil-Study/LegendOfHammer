@@ -1,0 +1,24 @@
+적 유닛 ID (Enemy_ID)	적 등급 (Enemy_Rank)	적 타입(원거리 여부) (Is_Ranged)	적 유닛 이름 (Enemy_Unit_Name)	이동 패턴 (Movement_Pattern)	공격 패턴 (Atk_Pattern)	체력 (HP)	공격력 (Atk_Power)	이동속도 (Move_Speed)	추격 게이지 증가량 (Chasing_Increase)	최초 등장 스테이지 (First_Appear_Stage)
+int	enum	bool	string	enum	string	int	int	float	int	int
+11001	Normal	FALSE	Straight	Straignt	Normal		10	0.8	5	1
+21001	Elite	FALSE	Straight	Straignt	Normal		20	0.6	20	1
+31001	Boss	FALSE	Straight	Straignt	Normal		30	0.4	50	1
+11002	Normal	FALSE	Zigzag	Zigzag	Normal		10	0.8	5	2
+21002	Elite	FALSE	Zigzag	Zigzag	Normal		20	0.6	20	2
+31002	Boss	FALSE	Zigzag	Zigzag	Normal		30	0.4	50	2
+11003	Normal	FALSE	Suicide	Chase	Suicide		25	1	0	11
+11005	Normal	FALSE	Runner	Straignt	Normal		7	1.05	4	3
+21005	Elite	FALSE	Runner	Straignt	Normal		14	0.8	16	3
+31005	Boss	FALSE	Runner	Straignt	Normal		21	0.6	40	3
+11004	Normal	FALSE	Shield	Straignt	Shield		10	0.8	5	10
+21004	Elite	FALSE	Shield	Straignt	Shield		20	0.6	20	10
+31004	Boss	FALSE	Shield	Straignt	Shield		30	0.4	50	10
+12006	Normal	TRUE	Sniper	Straignt	Sniper		10	0.8	5	5
+22006	Elite	TRUE	Sniper	Straignt	Sniper		20	0.6	20	5
+32006	Boss	TRUE	Sniper	Straignt	Sniper		30	0.4	50	5
+12007	Normal	TRUE	Spread	Straignt	Spread		10	0.8	5	7
+22007	Elite	TRUE	Spread	Straignt	Spread		20	0.6	20	7
+32007	Boss	TRUE	Spread	Straignt	Spread		30	0.4	50	7
+22008	Elite	TRUE	Radial	Straignt	Radial		20	0.6	20	14
+32008	Boss	TRUE	Radial	Straignt	Radial		30	0.4	50	14
+12009	Normal	TRUE	Flying	Flying	Flying		10	0.8	5	8

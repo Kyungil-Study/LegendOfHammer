@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 public class EnemyDataManager : MonoBehaviour
 {
     public static EnemyDataManager Instance { get; private set; }
-    public Dictionary<int, EnemyRecord> Records { get; private set; }
+    public Dictionary<int, EnemyData> Records { get; private set; }
 
     async void Awake()
     {
@@ -18,7 +18,7 @@ public class EnemyDataManager : MonoBehaviour
 
     private async Task LoadTable()
     {
-        var list = await TSVLoader.LoadTableAsync<EnemyRecord>("EnemyUnitType", true);
+        var list = await TSVLoader.LoadTableAsync<EnemyData>("EnemyUnitType", true);
         if (list == null)
         {
             Debug.LogError("[EnemyDataManager] 데이터 로딩 실패!");
