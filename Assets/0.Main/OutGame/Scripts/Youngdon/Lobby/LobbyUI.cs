@@ -14,19 +14,52 @@ public class LobbyUI : MonoBehaviour
     private void Start()
     {
         // User 정보 세팅
-        userIdText.text = $"UserID: {UserData.Instance.UserID}";
-        nicknameText.text = $"Nickname: {UserData.Instance.Nickname}";
+        userIdText.text     = $"UserID: {UserData.Instance.UserID}";
+        nicknameText.text   = $"Nickname: {UserData.Instance.Nickname}";
+        
+        // 시작 시 서버에서 스테이지 정보 가져오기
+        BackendStageGameData.Instance.GetStage();
+        RefreshStageUI();
+    }
 
-        // Stage 정보 세팅
-        if (StageData.Instance != null)
+    private void Update()
+    {
+        // C 키 누르면 다음 스테이지로
+        if (Input.GetKeyDown(KeyCode.C))
         {
-            currentStageText.text = $"CurStage: {StageData.Instance.CurrentStage}";
-            maxStageText.text = $"MaxStage: {StageData.Instance.MaxStage}";
+            TestNextStage();
+            Debug.Log("C pressed → NextStage()");
         }
-        else
+
+        // U 키 누르면 서버에 업데이트
+        if (Input.GetKeyDown(KeyCode.U))
         {
-            currentStageText.text = "CurStage: 1";
-            maxStageText.text = "MaxStage: 1";
+            TestUpdateDataToBackend();
+            Debug.Log("U pressed → UpdateStage()");
         }
+
+        // R 키 누르면 UI 새로 고침
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            RefreshStageUI();
+            Debug.Log("R pressed → RefreshStageUI()");
+        }
+    }
+
+    public void RefreshStageUI()
+    {
+        var stage = BackendStageGameData.stage;
+        currentStageText.text = $"CurStage: {stage.Currentstage}";
+        maxStageText.text     = $"MaxStage: {stage.Maxstage}";
+    }
+
+    public void TestNextStage()
+    {
+        BackendStageGameData.Instance.NextStage();
+    }
+
+    public void TestUpdateDataToBackend()
+    {
+        BackendStageGameData.Instance.UpdateStage();
     }
 }
