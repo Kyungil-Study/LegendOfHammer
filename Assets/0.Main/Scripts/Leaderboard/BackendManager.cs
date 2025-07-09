@@ -70,13 +70,13 @@ public class BackendManager : MonoBehaviour
         Debug.Log("----------우편----------");
 
         // 우편 리스트를 불러와 우편의 정보와 inDate값들을 로컬에 저장합니다.  
-        BackendPost.Instance.PostListGet(PostType.Admin);
+        BackendPost.Instance.PostListGet(PostType.Rank);
 
         // 저장된 우편의 위치를 읽어 우편을 수령합니다. 여기서 index는 우편의 순서. 0이면 제일 윗 우편, 1이면 그 다음 우편
-        BackendPost.Instance.PostReceive(PostType.Admin, 0);
+        BackendPost.Instance.PostReceive(PostType.Rank, 0);
 
         // 조회된 모든 우편을 수령합니다.  
-        BackendPost.Instance.PostReceiveAll(PostType.Admin);
+        BackendPost.Instance.PostReceiveAll(PostType.Rank);
         
         #endregion
         

@@ -1,0 +1,12 @@
+ID	Product	Product_Type	Name	Product_Image_ID	Check_Product_Availabili	Piece	Currency	Number	Sale_Period
+Int	Enum	Enum	String	Int	Bool	Int	Enum	Int	Int
+1	0 : 파괴 방지권	0 : 재판매	파괴 방지권	90005	TRUE	10000	0	5	7
+1	1 : 고블킹	0 : 재판매	고블킹	90006	TRUE	50000	0	3	7
+1	2 : 시바	0 : 재판매	시바	90007	TRUE	50000	0	3	7
+1	3 : 버니버니버니	0 : 재판매	버니버니버니	90008	TRUE	50000	0	3	7
+1	4 : 따꼼이	0 : 재판매	따꼼이	90009	TRUE	50000	0	3	7
+1	5 : 마피아 꼬끼오	0 : 재판매	마피아 꼬끼오	90010	TRUE	50000	0	3	7
+1	6 : 골드 던전 열쇠	0 : 재판매	골드 던전 열쇠	90011	TRUE	30000	0	2	7
+1	7 : 룬 던전 열쇠	0 : 재판매	룬 던전 열쇠	90012	TRUE	30000	0	2	7
+1	8 : 정령의 축복 소환권 X	1 : 한정	정령의 축복 소환권 X	90013	TRUE	500000	0	1	0
+1	9 : 광고 제거 7일 이용권	1 : 한정	광고 제거 7일 이용권	90014	TRUE	500000	0	1	0
