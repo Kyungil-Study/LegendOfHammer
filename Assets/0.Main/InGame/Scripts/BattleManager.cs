@@ -8,11 +8,6 @@ public class BattleManager : MonoSingleton<BattleManager>
 {
     public int StageIndex = 0;
     [SerializeField] private Squad player;
-    [SerializeField] private Boss boss; // Assuming boss is of type IBattleCharacter
-    
-    [Header("전투 시간 세팅")]
-    [SerializeField] private float battleDuration = 120f; // 2 minutes
-    private float battleStartTime = 0f;
     
     [Header("추격 게이지 세팅")]
     [SerializeField] private float chaseGuageDecreaseRate = 0.5f; // Increase rate per second
@@ -35,10 +30,15 @@ public class BattleManager : MonoSingleton<BattleManager>
             Debug.Log("Player has died. Ending game.");
             EndGame(false);
         }
-        else if(args.Target as Boss)
+        else if(args.Target is Monster monster)
         {
-            Debug.Log($"Boss Monster has died.");
-            EndGame(true);
+            var id = monster.EnemyID;
+            var data = EnemyDataManager.Instance.Records[id];
+            if( data.Enemy_Rank.Equals(EnemySpawnRankType.Boss))
+            {
+                Debug.Log($"Boss Monster has died.");
+                EndGame(true);
+            }
         }
     }
 
@@ -53,8 +53,6 @@ public class BattleManager : MonoSingleton<BattleManager>
 
     public void StartGame()
     {
-        battleStartTime = Time.time;
-        
         StartBattleEventArgs startEventArgs = new StartBattleEventArgs(StageIndex);
         
         BattleEventManager.Instance.CallEvent(startEventArgs);
@@ -70,19 +68,6 @@ public class BattleManager : MonoSingleton<BattleManager>
         if (Input.GetKeyDown(KeyCode.Space))
         {
             StartGame();
-        }
-        
-        float battleElapsedTime = Time.time - battleStartTime;
-        if (battleElapsedTime >= battleDuration)
-        {
-            battleElapsedTime = Time.time - battleStartTime;
-
-            // Check if the battle duration has been reached
-            if (battleElapsedTime >= battleDuration)
-            {
-                EndGame(true);
-                return;
-            }
         }
         
         chaseGuage -= chaseGuageDecreaseRate * Time.deltaTime;
