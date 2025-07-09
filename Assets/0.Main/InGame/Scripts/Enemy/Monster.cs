@@ -32,6 +32,9 @@ public class Monster : MonoBehaviour, IBattleCharacter
     [SerializeField] private float distanceToStop = 3f;
     private float flyStartY;
     
+    [Header("쉴드")] [Tooltip("쉴드 거리")]
+    [SerializeField] private float shieldDistance = 1f;
+    
     private float mMoveSpeed;
     private int   mAttackPower;
     private int   mMaxHP;
@@ -44,8 +47,9 @@ public class Monster : MonoBehaviour, IBattleCharacter
     private float initialX;
     private float zigzagTime;
     
-    // 자폭용
-    private bool isSuiciding;
+    // 추적, 자폭용
+    private bool isDetected;
+    private bool isSuicide;
 
     public void SetPlayer(GameObject player) => testPlayer = player;
     
@@ -75,7 +79,31 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
     public void TakeDamage(TakeDamageEventArgs eventArgs)
     {
-        mCurrentHP -= eventArgs.Damage;
+        int damage = eventArgs.Damage;
+
+        // Shield 패턴일 때 반감처리
+        if (mAttackPattern == EnemyAttackPattern.Shield)
+        {
+            if (eventArgs.Attacker is MonoBehaviour mono)
+            {
+                Vector2 attackerPos = mono.transform.position;
+                Vector2 myPos       = transform.position;
+                Vector2 hitDir = (attackerPos - myPos).normalized;
+                Vector2 forward = Vector2.down;
+
+                float dot = Vector2.Dot(forward, hitDir);
+                
+                if (dot >= Mathf.Cos(45f * Mathf.Deg2Rad)
+                    && Vector2.Distance(attackerPos, myPos) <= shieldDistance)
+                {
+                    damage = Mathf.CeilToInt(damage * 0.5f);
+                    // 나중에 확인할 수 있도록, 플레이어 -> 적 공격 시 로그로
+                    Debug.Log($"Shield 반감 적용: 원래 데미지 : {eventArgs.Damage} // 적용 데미지 : {damage}");
+                }
+            }
+        }
+
+        mCurrentHP -= damage;
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -115,7 +143,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
     // 몬스터 이동 로직
     public void OnMove(EnemyMovementPattern movementType) 
     {
-        if (isSuiciding)
+        if (isDetected)
         {
             return;
         }
@@ -140,7 +168,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 
                 if (hits.Length > 0)
                 {
-                    isSuiciding = true;
+                    isDetected = true;
                     // TODO: 폭발 준비 (OnAttack에서 처리)
                     break;
                 }
@@ -185,13 +213,14 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 break;
             case EnemyAttackPattern.Suicide:
                 // 플레이어 도달 시 일정 시간 후 폭발, 얘만 일반 공격으로 충돌 시 데미지 입히지 않음
-                if (isSuiciding)
+                if (isDetected && isSuicide == false)
                 {
+                    isSuicide = true;        
                     StartCoroutine(OnSuicide());
                 }
                 break;
             case EnemyAttackPattern.Shield:
-                // 전방 90도 범위 플레이어 공격 반감, 벡터 내적 활용할 계획 
+                // 공격 패턴이 아니라서, TakeDamage()에서 반감 로직 구현함
                 break;
             case EnemyAttackPattern.Sniper:
                 // 사격 시간 (3초) 마다 투사체 발사
@@ -242,6 +271,34 @@ public class Monster : MonoBehaviour, IBattleCharacter
             Gizmos.DrawWireSphere(transform.position, detectRange);
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, attackRange);
+        }
+        
+        // Shield 원뿔 범위 시각화
+        if (mAttackPattern == EnemyAttackPattern.Shield)
+        {
+            Gizmos.color = Color.blue;
+            Vector3 origin = transform.position;
+            
+            float halfAngle = 45f; // 90° 원뿔의 절반
+            int segments = 20; // 호(arc) 분할 수
+
+            Vector3 forward = Vector3.down;
+            Vector3 leftDir = Quaternion.Euler(0, 0, halfAngle) * forward;
+            Vector3 rightDir = Quaternion.Euler(0, 0, -halfAngle) * forward;
+
+            Gizmos.DrawLine(origin, origin + forward * shieldDistance);
+            Gizmos.DrawLine(origin, origin + leftDir * shieldDistance);
+            Gizmos.DrawLine(origin, origin + rightDir * shieldDistance);
+
+            Vector3 prevPoint = origin + leftDir * shieldDistance;
+            for (int i = 1; i <= segments; i++)
+            {
+                float angle = halfAngle - (i * (halfAngle * 2) / segments);
+                Vector3 dir = Quaternion.Euler(0, 0, angle) * forward;
+                Vector3 nextPoint = origin + dir * shieldDistance;
+                Gizmos.DrawLine(prevPoint, nextPoint);
+                prevPoint = nextPoint;
+            }
         }
     }
 }

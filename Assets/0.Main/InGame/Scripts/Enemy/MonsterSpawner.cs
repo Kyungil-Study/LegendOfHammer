@@ -18,7 +18,7 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
     [SerializeField] private Transform[] spawnPoints; // Maximum number of monsters allowed on screen
     [SerializeField] private Transform midSpawnPoints; // Maximum number of monsters allowed on screen
     // Start is called before the first frame update
-    [SerializeField] bool isTestMode = false; // For testing purposes, remove later
+    
     [SerializeField] Monster TestEnemyPrefab; // todo : 테스트용, 나중에 지우기 For testing purposes, remove later
     List<StageWave> stageWaves = new List<StageWave>();
     Queue<StageWave> stageWavesQueue = new Queue<StageWave>();
@@ -36,7 +36,8 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             // 테스트용, 나중에 지우기
-            isTestMode = true;
+            Monster testMonster = Instantiate(TestEnemyPrefab, midSpawnPoints);
+            testMonster.GetComponent<Monster>().SetPlayer(TestPlayer);
         }
     }
 

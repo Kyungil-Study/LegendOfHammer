@@ -215,7 +215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3380768c582997f41b7fda6a7ab1e040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyID: 11003
+  enemyID: 11004
   testPlayer: {fileID: 0}
   testPlayerLayerMask:
     serializedVersion: 2
@@ -228,3 +228,4 @@ MonoBehaviour:
   attackRange: 0.75
   explosionPrefab: {fileID: 6111301031846871093, guid: 9a3809abee10ab54188078ab046f1168, type: 3}
   distanceToStop: 3
+  shieldDistance: 1
