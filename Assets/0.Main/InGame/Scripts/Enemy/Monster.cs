@@ -20,9 +20,10 @@ public class Monster : MonoBehaviour, IBattleCharacter
     [SerializeField] private float zigzagAmplitude = 1f;
     [SerializeField] private float zigzagFrequency = 2f;
 
-    [Header("자폭")]
-    [SerializeField] private float suicideDelay = 1f;
+    [Header("자폭")] [Tooltip("자폭 딜레이, 탐지 범위, 데미지 처리 범위, 폭발 이펙트 설정")]
+    [SerializeField] private float suicideDelay = 2f;
     [SerializeField] private float detectRange = 0.5f;
+    [SerializeField] private float attackRange = 0.75f;
     [SerializeField] private GameObject explosionPrefab;
     
     [Header("체공형")] [Tooltip("하강 후 멈출 거리 설정")]
@@ -89,7 +90,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
         {
             return;
         }
-
+        
         Debug.Log("플레이어 충돌 시 데미지 처리");
         
         var player = collision.GetComponent<IBattleCharacter>();
@@ -182,6 +183,10 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 break;
             case EnemyAttackPattern.Suicide:
                 // 플레이어 도달 시 일정 시간 후 폭발, 얘만 일반 공격으로 충돌 시 데미지 입히지 않음
+                if (isSuiciding)
+                {
+                    StartCoroutine(OnSuicide());
+                }
                 break;
             case EnemyAttackPattern.Shield:
                 // 전방 90도 범위 플레이어 공격 반감, 벡터 내적 활용할 계획 
@@ -207,6 +212,25 @@ public class Monster : MonoBehaviour, IBattleCharacter
         }
     }
     
+    IEnumerator OnSuicide()
+    {
+        // 추가 : 반짝반짝 거리게 Fade 처리
+        yield return new WaitForSeconds(suicideDelay);
+
+        var expObj = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        var explosion = expObj.GetComponent<EnemyExplosion>();
+
+        explosion.Initialize
+        (
+            attacker: this,
+            damage:   mAttackPower,
+            radius:   attackRange,
+            mask:     testPlayerLayerMask
+        );
+
+        Destroy(gameObject);
+    }
+    
     // Chase 형태에서 감지 범위
     void OnDrawGizmosSelected()
     {
@@ -214,6 +238,8 @@ public class Monster : MonoBehaviour, IBattleCharacter
         {
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(transform.position, detectRange);
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, attackRange);
         }
     }
 }
