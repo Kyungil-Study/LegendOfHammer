@@ -10,7 +10,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
     [Header("플레이어 테스트")]
     [Tooltip("추적/충돌할 플레이어 오브젝트")]
-    [SerializeField] private GameObject testPlayer;
+    public GameObject testPlayer;
     [Tooltip("플레이어 레이어 마스크")]
     [SerializeField] private LayerMask testPlayerLayerMask;
     
@@ -21,6 +21,11 @@ public class Monster : MonoBehaviour, IBattleCharacter
     [SerializeField] private float zigzagAmplitude = 1f;
     [SerializeField] private float zigzagFrequency = 2f;
 
+    [Header("자폭")]
+    [SerializeField] private float suicideDelay = 1f;
+    [SerializeField] private float detectRange = 2f;
+    [SerializeField] private GameObject explosionPrefab;
+    
     private float mMoveSpeed;
     private float mAttackPower;
     private int   mMaxHP;
@@ -35,6 +40,8 @@ public class Monster : MonoBehaviour, IBattleCharacter
     
     // 자폭용
     private bool isSuiciding;
+
+    public void SetPlayer(GameObject player) => testPlayer = player;
     
     void Start()
     {
@@ -107,7 +114,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 {
                     transform.position = Vector2.MoveTowards(
                         transform.position,
-                        testPlayer.gameObject.transform.position,
+                        testPlayer.transform.position,
                         mMoveSpeed * Time.deltaTime
                     );
                 }
