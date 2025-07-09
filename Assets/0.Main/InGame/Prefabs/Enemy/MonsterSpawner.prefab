@@ -81,7 +81,9 @@ MonoBehaviour:
   eliteMonsterPrefab: {fileID: 6751229596582898055, guid: 1e82f95e356b86b4c9b32946a77caa13, type: 3}
   bossMonsterPrefab: {fileID: 3627491764740283123, guid: 1a4d21a69128dc344a5ed6fdc039638f, type: 3}
   spawnPoints:
-  - {fileID: 0}
+  - {fileID: 57902397338766103}
+  - {fileID: 229348489126502845}
+  - {fileID: 4562884616346416316}
   midSpawnPoints: {fileID: 229348489126502845}
 --- !u!1 &3430082036272000575
 GameObject:
