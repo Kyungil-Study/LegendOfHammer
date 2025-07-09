@@ -11,7 +11,7 @@ public class Wizard : Hero
     protected override void Attack()
     {
         WizardMagicBall projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
-        projectile.damage = CalculateDamage();
+        projectile.damage = Damage;
         projectile.Fire();
     }
 
