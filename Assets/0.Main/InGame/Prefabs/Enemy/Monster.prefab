@@ -225,5 +225,6 @@ MonoBehaviour:
   zigzagFrequency: 2
   suicideDelay: 1
   detectRange: 0.5
-  explosionPrefab: {fileID: 0}
+  attackRange: 0.75
+  explosionPrefab: {fileID: 6111301031846871093, guid: 9a3809abee10ab54188078ab046f1168, type: 3}
   distanceToStop: 3
