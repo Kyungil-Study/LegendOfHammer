@@ -28,7 +28,6 @@ public class SquadController : MonoBehaviour
         m_LeverRadius = (outerCircle.bounds.size / 2).x;
         float middleRadius = (middleCircle.bounds.size / 2).x;
         m_LeverThreshold = middleRadius / m_LeverRadius;
-        Debug.Log($"{middleRadius} / {m_LeverRadius} = {m_LeverThreshold}");
     }
 
     private void Update()
