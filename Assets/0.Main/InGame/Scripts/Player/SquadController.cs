@@ -1,33 +1,52 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 
 public class SquadController : MonoBehaviour
 {
     public Squad squad;
     public Warrior warrior;
-    private Vector2 m_TouchStartPosition;
-
+    private Vector3 m_TouchStartPosition;
+    
+    private Camera m_Camera;
     public float multiTapGap = 0.2f;
     private float m_LastTapTime;
     
-    private void Awake()
+    public GameObject lever;
+    private float m_LeverRadius;
+    private float m_LeverThreshold;
+    public SpriteRenderer outerCircle;
+    public SpriteRenderer middleCircle;
+    public GameObject innerCircle;
+
+    private void Start()
     {
-        squad = GetComponent<Squad>();
+        m_Camera = Camera.main;
+
+        m_LeverRadius = (outerCircle.bounds.size / 2).x;
+        float middleRadius = (middleCircle.bounds.size / 2).x;
+        m_LeverThreshold = middleRadius / m_LeverRadius;
+        Debug.Log($"{middleRadius} / {m_LeverRadius} = {m_LeverThreshold}");
     }
-    
+
     private void Update()
     {
         if (Input.touchCount > 0)
         {
+            var touchPosition = m_Camera.ScreenToWorldPoint(Input.touches[0].position);
+            touchPosition.z = 0;
+            
             if (Input.touches[0].phase == TouchPhase.Began)
             {
-                m_TouchStartPosition = Input.touches[0].position;
+                m_TouchStartPosition = touchPosition;
+                lever.transform.position = touchPosition;
                 
                 // Check for multi-tap
                 if (m_LastTapTime + multiTapGap > Time.time)
                 {
-                    Vector3 direction = (Vector3)Input.touches[0].position - transform.position;
+                    Vector3 direction = touchPosition - warrior.transform.position;
                     warrior.ChargeAttack(direction);
                 }
                 else
@@ -37,10 +56,16 @@ public class SquadController : MonoBehaviour
             }
             else
             {
-                Vector3 dir = Input.touches[0].position - m_TouchStartPosition;
-                dir.Normalize();
+                Vector3 dir = touchPosition - m_TouchStartPosition;
+                
+                dir = dir.normalized * Mathf.InverseLerp(0, m_LeverRadius, dir.magnitude);
+                
+                innerCircle.transform.position = outerCircle.transform.position + dir * m_LeverRadius;
 
-                squad.transform.position += dir * (Squad.BASE_MOVE_SPEED * squad.stats.MoveSpeed * Time.deltaTime);
+                if (dir.magnitude > m_LeverThreshold)
+                {
+                    squad.transform.position += dir * (Squad.BASE_MOVE_SPEED * squad.stats.MoveSpeed * Time.deltaTime);
+                }
             }
         }
     }

@@ -23,6 +23,5 @@ public class Wizard : Hero
     {
         float critFactor = isCritical ? baseStats.CriticalDamage : 1f;
         return (int)(((attackDamage * critFactor) + baseStats.BonusDamagePerHit) * baseStats.FinalDamageFactor);
-        return 0;
     }
 }
