@@ -18,6 +18,7 @@ public class EnemyDataManager : MonoBehaviour
 
     private async Task LoadTable()
     {
+        // 추후 isStreamingAssetPath를 true로 설정할 예정
         var list = await TSVLoader.LoadTableAsync<EnemyData>("EnemyData", true);
         
         if (list == null)

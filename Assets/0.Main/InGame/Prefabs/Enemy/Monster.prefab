@@ -224,5 +224,6 @@ MonoBehaviour:
   zigzagAmplitude: 1
   zigzagFrequency: 2
   suicideDelay: 1
-  detectRange: 2
+  detectRange: 0.5
   explosionPrefab: {fileID: 0}
+  distanceToStop: 3
