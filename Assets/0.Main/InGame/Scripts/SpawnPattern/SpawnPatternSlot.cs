@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class SpawnPatternSlot : MonoBehaviour
 {
-    [SerializeField] private EnemyRankType rankType;
-    public EnemyRankType RankType => rankType;
-    [SerializeField] private EnemyAttackType attackType;
-    public EnemyAttackType AttackType => attackType;
+    [FormerlySerializedAs("rankType")] [SerializeField] private EnemySpawnRankType spawnRankType;
+    public EnemySpawnRankType SpawnRankType => spawnRankType;
+    [FormerlySerializedAs("attackType")] [SerializeField] private EnemySpawnAttackType spawnAttackType;
+    public EnemySpawnAttackType SpawnAttackType => spawnAttackType;
 }
