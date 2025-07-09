@@ -189,6 +189,28 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7671370072490716944, guid: 73798cc60413fee44ae9296eef78dd2f, type: 3}
   m_PrefabInstance: {fileID: 6210483196017484764}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2020863946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2020863942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66f9d93e0532f7a4fa63041757787ba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stats:
+    <MaxHealth>k__BackingField: 0
+    <AttackSpeed>k__BackingField: 1
+    <MoveSpeed>k__BackingField: 1
+    <CriticalChance>k__BackingField: 0
+    <CriticalDamage>k__BackingField: 1.5
+    <BonusDamagePerHit>k__BackingField: 0
+    <BonusEffectFactor>k__BackingField: 0
+    <TakeDamageFactor>k__BackingField: 1
+    <FinalDamageFactor>k__BackingField: 1
 --- !u!1001 &1781639699784681340
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -568,7 +590,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7671370072490716944, guid: 73798cc60413fee44ae9296eef78dd2f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2020863946}
   m_SourcePrefab: {fileID: 100100000, guid: 73798cc60413fee44ae9296eef78dd2f, type: 3}
 --- !u!1001 &6437492127328306458
 PrefabInstance:
