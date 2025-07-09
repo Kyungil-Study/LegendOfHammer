@@ -26,6 +26,7 @@ public class BackendManager : MonoBehaviour
     // 동기 함수를 비동기에서 호출하게 해주는 함수(유니티 UI 접근 불가)
     void Test()
     {
+        //BackendLogin.Instance.CustomSignUp("user1","1234");
         BackendLogin.Instance.CustomLogin("user1", "1234"); // 뒤끝 로그인 함수
 
         #region 게임 데이터
