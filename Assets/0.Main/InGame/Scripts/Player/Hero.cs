@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public abstract class Hero : MonoBehaviour
 {
     protected Squad squad;
     protected Squad.SquadStats baseStats;
-    public int attackDamage;
+    public int baseAttackDamage;
     public float attackPerSec;
     protected float attackCooldown;
     protected bool bAutoFire = true;

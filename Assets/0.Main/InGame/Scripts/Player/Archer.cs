@@ -20,7 +20,7 @@ public class Archer : Hero
     protected override int CalculateDamage(bool isCritical = false)
     {
         float critFactor = isCritical ? baseStats.CriticalDamage : 1f;
-        return (int)(((attackDamage * critFactor) + baseStats.BonusDamagePerHit + (attackDamage * GetArcheryBonusEffectFactor()) * baseStats.FinalDamageFactor));
+        return (int)(((baseAttackDamage * critFactor) + baseStats.BonusDamagePerHit + (baseAttackDamage * GetArcheryBonusEffectFactor()) * baseStats.FinalDamageFactor));
     }
 
     // TODO: 증강에 의한 추가 계수
