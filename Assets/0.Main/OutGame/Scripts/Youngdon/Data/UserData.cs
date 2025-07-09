@@ -29,10 +29,6 @@ public class UserData : MonoBehaviour
     {
         UserID = userId;
         Nickname = nickname;
-        
-        // 초기화 예시 (임시값)
-      //   if (StageData.Instance != null)
-      //       StageData.Instance.SetStageData(1, 1);  // 또는 불러온 값
     }
 
     private void Awake()

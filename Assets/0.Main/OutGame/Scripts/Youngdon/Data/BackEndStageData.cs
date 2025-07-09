@@ -37,6 +37,7 @@ public class BackendGameData
 
     public static Stage stage;
 
+    // 스테이지 초기화
     public void InitalizeStage()
     {
         if (stage == null)
@@ -62,6 +63,7 @@ public class BackendGameData
         }
     }
 
+    // 뒤끝에서 유저의 스테이지 정보를 불러오는 메서드
     public void GetStage()
     {
         Debug.Log("'STAGE_DATA' 테이블의 데이터를 조회하는 함수를 호출합니다.");
@@ -82,12 +84,22 @@ public class BackendGameData
             }
         }
     }
-
-    public void ClearStage()
+    
+    // 스테이지 클리어 했을때
+    public void NextStage()
     {
         stage.Currentstage += 1;
+        stage.Maxstage += 1;
     }
 
+    // 랭킹 시스템 도입후 사용
+    public void ResetStage()
+    {
+        stage.Currentstage = 1;
+        stage.Maxstage = 1;
+    }
+
+    // 로컬에서 뒤끝으로 쏴주는 메서드
     public void UpdateStage()
     {
         if(stage == null) {
