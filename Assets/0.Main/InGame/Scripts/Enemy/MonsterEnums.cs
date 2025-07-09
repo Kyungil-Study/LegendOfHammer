@@ -2,24 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EnemyRankType
+public enum EnemySpawnRankType
 {
     Normal,
     Elite,
     Boss
 }
 
-public enum EnemyAttackType
+public enum EnemySpawnAttackType
 {
     Melee,
     Range,
-}
-
-public enum EnemyMovementType
-{
-    Direct,
-    Wave,
-    Chase
 }
 
 public enum EnemySpawnPatternType

@@ -47,6 +47,7 @@ public class StageManager : MonoBehaviour
                 {
                     stageWavesQueue.Enqueue(wave);
                 }
+                Debug.Log($" [StageManager] Stage waves loaded successfully. Total waves: {stageWavesQueue.Count}");
             }
         );
     }
