@@ -8,7 +8,8 @@ public class Monster : MonoBehaviour, IBattleCharacter
     [Tooltip("몬스터 유형 체크")] 
     [SerializeField] private EnemyID enemyID;
     
-    public EnemyID EnemyID { get { return enemyID;} set { enemyID = value; } } // todo: 종류별 Prefab생성해서 관리하도록 수정필요. 수정 후 제거
+    // todo: 종류별 Prefab생성해서 관리하도록 수정필요. 수정 후 제거
+    public EnemyID EnemyID { get { return enemyID;} set { enemyID = value; } } 
     
     [Header("플레이어 테스트")] [Tooltip("추적/충돌할 플레이어 오브젝트")]
     public GameObject testPlayer;
@@ -18,7 +19,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
     [Header("투사체")] [Tooltip("투사체 프리팹, 속도")]
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private float projectileSpeed = 5f;
-    private float projectileDamage;
+    private float mProjectileDamage;
     
     [Header("지그재그")] [Tooltip("zigzagAmplitude: 진동폭, zigzagFrequency: 주기")]
     [SerializeField] private float zigzagAmplitude = 1f;
@@ -32,8 +33,8 @@ public class Monster : MonoBehaviour, IBattleCharacter
     
     [Header("체공형")] [Tooltip("하강 후 멈출 거리 설정")]
     [SerializeField] private float distanceToStop = 3f;
-    private float flyStartY;
-    private bool hasStoppedFlying;
+    private float mFlyStartY;
+    private bool mHasStoppedFlying;
     
     [Header("쉴드")] [Tooltip("쉴드 거리")]
     [SerializeField] private float shieldDistance = 1f;
@@ -47,12 +48,12 @@ public class Monster : MonoBehaviour, IBattleCharacter
     private EnemyAttackPattern   mAttackPattern;
     
     // 지그재그용
-    private float initialX;
-    private float zigzagTime;
+    private float mInitialX;
+    private float mZigzagTime;
     
     // 추적, 자폭용
-    private bool isDetected;
-    private bool isSuicide;
+    private bool mIsDetected;
+    private bool mIsSuicide;
 
     public void SetPlayer(GameObject player) => testPlayer = player;
     
@@ -68,10 +69,8 @@ public class Monster : MonoBehaviour, IBattleCharacter
         mMovementPattern = data.EnemyMovementPattern;
         mAttackPattern   = data.Atk_Pattern;
         
-        // 지그재그 초기 X 좌표 저장
-        initialX = transform.position.x;
-        // 체공형 초기 Y 좌표 저장
-        flyStartY = transform.position.y;
+        mInitialX = transform.position.x; // 지그재그 초기 X 좌표 저장
+        mFlyStartY = transform.position.y; // 체공형 초기 Y 좌표 저장
     }
 
     void Update()
@@ -146,21 +145,19 @@ public class Monster : MonoBehaviour, IBattleCharacter
     // 몬스터 이동 로직
     public void OnMove(EnemyMovementPattern movementType) 
     {
-        if (isDetected)
+        if (mIsDetected)
         {
             return;
         }
         
         switch (movementType)
         {
-            case EnemyMovementPattern.Straight:
-                // 등속 직선 이동 (하강)
+            case EnemyMovementPattern.Straight: // 등속 직선 이동 (하강)
                 transform.position += Vector3.down * (mMoveSpeed * Time.deltaTime);
                 break;
-            case EnemyMovementPattern.Zigzag:
-                // 지그재그 이동 : 진동폭 만큼 좌우로 움직이며 등속 직선 이동 (하강)
-                zigzagTime += Time.deltaTime;
-                float x = initialX + Mathf.Sin(zigzagTime * zigzagFrequency) * zigzagAmplitude;
+            case EnemyMovementPattern.Zigzag: // 지그재그 이동 : 진동폭 만큼 좌우로 움직이며 등속 직선 이동 (하강)
+                mZigzagTime += Time.deltaTime;
+                float x = mInitialX + Mathf.Sin(mZigzagTime * zigzagFrequency) * zigzagAmplitude;
                 float y = transform.position.y - mMoveSpeed * Time.deltaTime;
                 transform.position = new Vector2(x, y);
                 break;
@@ -171,7 +168,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 
                 if (hits.Length > 0)
                 {
-                    isDetected = true;
+                    mIsDetected = true;
                     // TODO: 폭발 준비 (OnAttack에서 처리)
                     break;
                 }
@@ -195,13 +192,11 @@ public class Monster : MonoBehaviour, IBattleCharacter
             case EnemyMovementPattern.Flying:
                 // 체공형 : OnAttack 시 멈춰서 발사
                 // 전장 하단으로 이동 → distanceToStop 이하 도달 시 멈춤, 멈추면 발사 시작
-                float traveled = flyStartY - transform.position.y;
+                float traveled = mFlyStartY - transform.position.y;
                 if (traveled < distanceToStop)
                 {
                     transform.position += Vector3.down * (mMoveSpeed * Time.deltaTime);
                 }
-                break;
-            default:
                 break;
         }
     }
@@ -216,9 +211,9 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 break;
             case EnemyAttackPattern.Suicide:
                 // 플레이어 도달 시 일정 시간 후 폭발, 얘만 일반 공격으로 충돌 시 데미지 입히지 않음
-                if (isDetected && isSuicide == false)
+                if (mIsDetected && mIsSuicide == false)
                 {
-                    isSuicide = true;        
+                    mIsSuicide = true;        
                     StartCoroutine(OnSuicide());
                 }
                 break;
@@ -226,26 +221,14 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 // 공격 패턴이 아니라서, TakeDamage()에서 반감 로직 구현함
                 break;
             case EnemyAttackPattern.Sniper:
-                // 사격 시간 (3초) 마다 투사체 발사
+                // 사격 시간 (3초) 마다 투사체 3연발(0.15초 간격)로 플레이어 방향으로 발사
                 StartCoroutine(SniperAttackLoop());
                 break;
             case EnemyAttackPattern.Spread:
                 // 몬스터 전방 기준 45도 3갈래 3연발(0.2초 간격)로 발사
                 // 탄은 탄막 속도로 등속 직선 이동
                 // 몬스터와 플레이어 캐릭터의 상대적 위치에 따라 좌우 분사 방향 결정
-                StartCoroutine(FireProjectiles
-                (
-                    count:    3,
-                    interval: 0.2f,
-                    aim: i =>
-                    {
-                        // 플레이어가 왼쪽이면 +, 오른쪽이면 −
-                        bool isLeft = testPlayer.transform.position.x < transform.position.x;
-                        float[] angles = isLeft ? new[] {0f, 27.5f, 45f} : new[] {0f, -27.5f, -45f};
-                        // forward = 하강 방향(Vector2.down)
-                        return SetAngle(Vector2.down, angles[i]);
-                    }
-                ));
+                StartCoroutine(SpreadAttackLoop());
                 break;
             case EnemyAttackPattern.Radial:
                 // 몬스터 생성 후 사격 시간(3초) 마다 탄막 발사
@@ -255,9 +238,9 @@ public class Monster : MonoBehaviour, IBattleCharacter
             case EnemyAttackPattern.Flying:
                 // 정지 후 사격 시간(1초) 마다 탄막 발사
                 // 전장의 중선(파란선)을 지나는 무작위 방향으로 탄 1발 발사
-                if (hasStoppedFlying == false && HasFinishedFlying())
+                if (mHasStoppedFlying == false && HasFinishedFlying())
                 {
-                    hasStoppedFlying = true;
+                    mHasStoppedFlying = true;
                     StartCoroutine(FireProjectiles(
                         count:    1,
                         interval: 0f,
@@ -269,8 +252,6 @@ public class Monster : MonoBehaviour, IBattleCharacter
                         }
                     ));
                 }
-                break;
-            default:
                 break;
         }
     }
@@ -335,6 +316,26 @@ public class Monster : MonoBehaviour, IBattleCharacter
         }
     }
     
+    private IEnumerator SpreadAttackLoop()
+    {
+        while (true)
+        {
+            yield return FireProjectiles
+            (
+                count:    3,
+                interval: 0.2f,
+                aim: i =>
+                {
+                    // 플레이어가 왼쪽이면 +, 오른쪽이면 −
+                    bool isLeft = testPlayer.transform.position.x < transform.position.x;
+                    float[] angles = isLeft ? new[] {0f, 27.5f, 45f} : new[] {0f, -27.5f, -45f};
+                    return SetAngle(Vector2.down, angles[i]);
+                }
+            );
+            yield return new WaitForSeconds(3f);
+        }
+    }
+    
     // Radial 전용: 12방향 → 3초마다 발사
     private IEnumerator RadialAttackLoop()
     {
@@ -357,7 +358,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
     private bool HasFinishedFlying()
     {
         // ex) y 위치가 목표 이하일 때
-        float traveled = flyStartY - transform.position.y;
+        float traveled = mFlyStartY - transform.position.y;
         return traveled >= distanceToStop;
     }
 
