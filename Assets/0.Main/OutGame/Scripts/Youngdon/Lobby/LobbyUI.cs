@@ -17,16 +17,16 @@ public class LobbyUI : MonoBehaviour
         userIdText.text = $"UserID: {UserData.Instance.UserID}";
         nicknameText.text = $"Nickname: {UserData.Instance.Nickname}";
 
-        // Stage 정보 세팅
-        if (StageData.Instance != null)
-        {
-            currentStageText.text = $"CurStage: {StageData.Instance.CurrentStage}";
-            maxStageText.text = $"MaxStage: {StageData.Instance.MaxStage}";
-        }
-        else
-        {
-            currentStageText.text = "CurStage: 1";
-            maxStageText.text = "MaxStage: 1";
-        }
+      //  // Stage 정보 세팅
+      //  if (StageData.Instance != null)
+      //  {
+      //      currentStageText.text = $"CurStage: {StageData.Instance.CurrentStage}";
+      //      maxStageText.text = $"MaxStage: {StageData.Instance.MaxStage}";
+      //  }
+      //  else
+      //  {
+      //      currentStageText.text = "CurStage: 1";
+      //      maxStageText.text = "MaxStage: 1";
+      //  }
     }
 }
