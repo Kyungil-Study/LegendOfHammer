@@ -116,8 +116,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7613585881291570754}
   - component: {fileID: 319402234662238148}
-  - component: {fileID: 4364333249900037650}
+  - component: {fileID: 3874214853159092470}
   - component: {fileID: 7494431464099580550}
+  - component: {fileID: 5546129984101200141}
   m_Layer: 0
   m_Name: Monster
   m_TagString: Untagged
@@ -168,8 +169,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!58 &4364333249900037650
-CircleCollider2D:
+--- !u!61 &3874214853159092470
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -201,8 +202,18 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!114 &7494431464099580550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,7 +226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3380768c582997f41b7fda6a7ab1e040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyID: 11002
+  enemyID: 11001
   testPlayer: {fileID: 0}
   testPlayerLayerMask:
     serializedVersion: 2
@@ -233,3 +244,16 @@ MonoBehaviour:
   shieldDistance: 1
   knockbackForce: 2.5
   knockbackDuration: 0.2
+--- !u!114 &5546129984101200141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8015743650478422896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12b88cfb524a69443a26f832ad1fb503, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  model: {fileID: 8212737276976261949}
