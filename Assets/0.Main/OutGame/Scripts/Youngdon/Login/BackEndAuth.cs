@@ -12,7 +12,7 @@ public class BackEndAuth : MonoBehaviour
     [Header("Buttons")]
     public Button customLoginButton, guestLoginButton, signUpButton;
 
-    private void Start()
+    private void Awake()
     {
         // [기능] 뒤끝 SDK 초기화
         var initBro = Backend.Initialize();

@@ -15,7 +15,7 @@ public class BattleEventManager : MonoSingleton<BattleEventManager>
         public Action<AliveMonsterEventArgs> OnAliveMonster;
         public Action<DeathEventArgs> OnDeath;
         public Action<NextPageEventArgs> OnNextPage;
-        
+        public Action<ChargeCollisionArgs> OnChargeCollision; // 충돌 시 이벤트 처리하기
     }
     public EventCallbacks Callbacks { get; private set; } = new EventCallbacks();
 
@@ -45,6 +45,10 @@ public class BattleEventManager : MonoSingleton<BattleEventManager>
         else if (eventArgs is NextPageEventArgs nextPageEvent)
         {
             Callbacks.OnNextPage?.Invoke(nextPageEvent);
+        }
+        else if (eventArgs is ChargeCollisionArgs chargeCollisionEvent)
+        {
+            Callbacks.OnChargeCollision?.Invoke(chargeCollisionEvent);
         }
         else
         {

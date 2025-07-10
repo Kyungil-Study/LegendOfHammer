@@ -66,3 +66,15 @@ public class NextPageEventArgs : BattleEventArgs
     {
     }
 }
+
+public class ChargeCollisionArgs : BattleEventArgs
+{
+    public IBattleCharacter Attacker { get; private set; }
+    public IBattleCharacter Target { get; private set; }
+
+    public ChargeCollisionArgs(IBattleCharacter attacker, IBattleCharacter target)
+    {
+        this.Attacker = attacker;
+        this.Target = target;
+    }
+}
