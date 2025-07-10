@@ -28,6 +28,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
     [Header("지그재그")] [Tooltip("zigzagAmplitude: 진동폭, zigzagFrequency: 주기")]
     [SerializeField] private float zigzagAmplitude = 1f;
     [SerializeField] private float zigzagFrequency = 2f;
+    private int zigzagDir = 1;
 
     [Header("자폭")] [Tooltip("자폭 딜레이, 탐지 범위, 데미지 처리 범위, 폭발 이펙트 설정")]
     [SerializeField] private float suicideDelay = 2f;
@@ -144,12 +145,12 @@ public class Monster : MonoBehaviour, IBattleCharacter
             if (eventArgs.Attacker is MonoBehaviour mono)
             {
                 Vector2 attackerPos = mono.transform.position;
-                Vector2 myPos       = transform.position;
+                Vector2 myPos = transform.position;
                 Vector2 hitDir = (attackerPos - myPos).normalized;
                 Vector2 forward = Vector2.down;
 
                 float dot = Vector2.Dot(forward, hitDir);
-                
+
                 if (dot >= Mathf.Cos(45f * Mathf.Deg2Rad)
                     && Vector2.Distance(attackerPos, myPos) <= shieldDistance)
                 {
@@ -161,15 +162,17 @@ public class Monster : MonoBehaviour, IBattleCharacter
         }
 
         mCurrentHP -= damage;
-    }
-
-    void OnDeath()
-    {
+        
         if (mCurrentHP <= 0) // HP 깎여 사망시
         {
-            BattleEventManager.Instance.CallEvent(new DeathEventArgs(this));
-            Destroy(gameObject);
+            OnDeath();
         }
+    }
+
+    public void OnDeath()
+    {
+        BattleEventManager.Instance.CallEvent(new DeathEventArgs(this)); 
+        Destroy(gameObject);
     }
     
     void OnTriggerEnter2D(Collider2D collision)
@@ -178,6 +181,13 @@ public class Monster : MonoBehaviour, IBattleCharacter
         if (mAttackPattern == EnemyAttackPattern.Suicide)
         {
             return;
+        }
+        
+        // Border Object 충돌 시, 지그재그 처리하기
+        if (mMovementPattern == EnemyMovementPattern.Zigzag && collision.gameObject.layer == 8)
+        {
+            // 위상 반전: sin(ωt) -> sin(ωt + π)
+            mZigzagTime += Mathf.PI / zigzagFrequency;
         }
         
         // 플레이어 레이어 체크
@@ -400,8 +410,8 @@ public class Monster : MonoBehaviour, IBattleCharacter
         {
             bool isLeft = testPlayer.transform.position.x < transform.position.x;
             float[] angles = isLeft
-                ? new[] {  0f, -27.5f, -45f }  // 왼쪽: 0°, –27.5°, –45°
-                : new[] {  0f,  27.5f,  45f }; // 오른쪽: 0°, +27.5°, +45°
+                ? new[] {  0f, -27.5f, -45f } 
+                : new[] {  0f,  27.5f,  45f };
             
             Debug.Log($"Spread: isLeft={isLeft}, angles=[{angles[0]}, {angles[1]}, {angles[2]}]");
             
@@ -437,17 +447,28 @@ public class Monster : MonoBehaviour, IBattleCharacter
     {
         while (true)
         {
+            // 중간선 위 랜덤 위치
+            float range = Random.Range(0f, 1f);
+            Vector2 target = Vector2.Lerp
+            (
+                MapManager.Instance.MidLeft.position,
+                MapManager.Instance.MidRight.position,
+                range
+            );
+
+            // 발사 방향
+            Vector2 dir = (target - (Vector2)transform.position).normalized;
+
+            // 한 발 발사
             yield return FireProjectiles
             (
                 count:    1,
                 interval: 0f,
-                aim: i =>
-                {
-                    float angle = Random.Range(-90f, 90f);  // 전방 180도 기준으로 아래로 랜덤 각도로 발사
-                    return SetAngle(Vector2.down, angle);
-                }
+                aim: i => dir
             );
-            yield return new WaitForSeconds(1f);    // 얘만 1초 (FireInterval 에디터에서 수정하던지)
+
+            // 대기, 얘만 1초 (나중에 기획 쪽 수정 필요 : fireInterval)
+            yield return new WaitForSeconds(1f);
         }
     }
     
