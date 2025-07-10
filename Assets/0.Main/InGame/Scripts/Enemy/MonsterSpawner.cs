@@ -19,7 +19,8 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
     [SerializeField] private Transform midSpawnPoints; // Maximum number of monsters allowed on screen
     // Start is called before the first frame update
     
-    [SerializeField] Monster TestEnemyPrefab; // todo : 테스트용, 나중에 지우기 For testing purposes, remove later
+    // todo : 테스트용 플레이어 참조, 나중에 지우기 For testing purposes, remove later
+    [SerializeField] Monster TestEnemyPrefab; 
     List<StageWave> stageWaves = new List<StageWave>();
     Queue<StageWave> stageWavesQueue = new Queue<StageWave>();
     
