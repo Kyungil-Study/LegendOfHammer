@@ -102,6 +102,8 @@ public class ArcherAugment : Augment
 {
     public int ID { get; set; }
     public string Name { get; set; }
+    
+    public int NextAugmentID { get; set; }
     public int Level { get; set; }
     public float AttackSpeedIncreasedRate { get; set; }
     public float SmallArrowAttackRatio { get; set; }
