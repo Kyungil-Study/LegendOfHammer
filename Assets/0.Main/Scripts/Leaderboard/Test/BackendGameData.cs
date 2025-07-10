@@ -7,33 +7,19 @@ using BackEnd;
 
 public class UserData2
 {
-    // public int level = 1;
-    // public float atk = 3.5f;
-    // public string info = string.Empty;
     public Dictionary<string, int> inventory = new Dictionary<string, int>();
-    //public List<string> equipment = new List<string>();
 
     // 데이터를 디버깅하기 위한 함수입니다.(Debug.Log(UserData);)
     public override string ToString()
     {
         StringBuilder result = new StringBuilder();
 
-        // result.AppendLine($"level : {level}");
-        // result.AppendLine($"atk : {atk}");
-        // result.AppendLine($"info : {info}");
-
         result.AppendLine($"inventory");
         foreach (var itemKey in inventory.Keys)
         {
             result.AppendLine($"| {itemKey} : {inventory[itemKey]}개");
         }
-
-        // result.AppendLine($"equipment");
-        // foreach (var equip in equipment)
-        // {
-        //     result.AppendLine($"| {equip}");
-        // }
-
+        
         return result.ToString();
     }
 }
@@ -67,20 +53,8 @@ public class BackendGameData
         }
 
         Debug.Log("데이터를 초기화합니다.");
-        // userData.level = 1;
-        // userData.atk = 3.5f;
-        // userData.info = "친추는 언제나 환영입니다.";
-        //
-        // userData.equipment.Add("전사의 투구");
-        // userData.equipment.Add("강철 갑옷");
-        // userData.equipment.Add("헤르메스의 군화");
-
         Debug.Log("뒤끝 업데이트 목록에 해당 데이터들을 추가합니다.");
         Param param = new Param();
-        // param.Add("level", userData.level);
-        // param.Add("atk", userData.atk);
-        // param.Add("info", userData.info);
-        // param.Add("equipment", userData.equipment);
         param.Add("inventory", userData.inventory);
 
 
