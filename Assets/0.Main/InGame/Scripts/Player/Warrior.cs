@@ -1,20 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Warrior : Hero
 {
     public float chargeDistance = 2f;
     public float chargeDuration = 0.2f;
+    private float ChargeSpeed => Squad.STANDARD_DISTANCE * chargeDistance / chargeDuration;
     public float chargeKnockbackDistance = 1f;
     public bool isCharging = false;
+    private Vector3 m_ChargeDirection;
     
-    // TODO: Implement Warrior's specific damage calculation logic.
+    // 전사 돌진 피해량
+    // [{(전사 기본 공격 피해량 x 치명타 피해량) + 타격 당 데미지} x 받는 피해량 증가] x 최종 데미지 증가
     protected override int CalculateDamage(bool isCritical = false)
     {
-        return 0;
+        float critFactor = isCritical ? baseStats.CriticalDamage : 1f;
+        return (int)(((baseAttackDamage * critFactor) + baseStats.BonusDamagePerHit) * baseStats.FinalDamageFactor);
     }
     
     public void ChargeAttack(Vector3 direction)
@@ -25,8 +27,9 @@ public class Warrior : Hero
         // }
         
         isCharging = true;
+        m_ChargeDirection = direction.normalized;
         
-        Vector3 endPosition = transform.position + direction.normalized * (Squad.BASE_MOVE_SPEED * baseStats.MoveSpeed * chargeDistance);
+        Vector3 endPosition = squad.transform.position + direction.normalized * (Squad.STANDARD_DISTANCE * chargeDistance);
         StartCoroutine(ChargeCoroutine(endPosition));
         ApplyCooldown();
     }
@@ -38,13 +41,44 @@ public class Warrior : Hero
         while (elapsedTime < chargeDuration)
         {
             float t = elapsedTime / chargeDuration;
-            transform.position = Vector3.Lerp(startPosition, endPosition, t);
+            squad.transform.position = Vector3.Lerp(startPosition, endPosition, t);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
+        m_HitMonsters.Clear();
         isCharging = false;
     }
-    
-    // TODO: Implement charge knockback and damage
+
+    private List<Monster> m_HitMonsters = new List<Monster>();
+    public void Impact(Monster monster)
+    {
+        if (m_HitMonsters.Contains(monster))
+        {
+            return;
+        }
+        m_HitMonsters.Add(monster);
+        TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(squad, monster, Damage);
+        BattleEventManager.Instance.CallEvent(eventArgs);
+        // TODO: monster.Knockback(Vector3 direction, float distance);
+    }
+
+    private void ChargeKnockback(Monster monster)
+    {
+        StartCoroutine(KnockbackCoroutine());
+        IEnumerator KnockbackCoroutine()
+        {
+            Vector3 startPosition = monster.transform.position;
+            Vector3 endPosition = monster.transform.position + m_ChargeDirection * Squad.STANDARD_DISTANCE;
+            float elapsedTime = 0f;
+            float duration = chargeDuration * 0.5f;
+            while (elapsedTime < duration)
+            {
+                float t = elapsedTime / duration;
+                transform.position = Vector3.Lerp(startPosition, endPosition, t);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+        }
+    }
 }

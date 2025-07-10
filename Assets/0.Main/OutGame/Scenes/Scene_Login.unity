@@ -244,30 +244,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2215743344411397799, guid: 809dd6705b55cc14a9e20fddeec89088, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 2336081816402312271, guid: 809dd6705b55cc14a9e20fddeec89088, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 2359413530974723799, guid: 809dd6705b55cc14a9e20fddeec89088, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 3738029808346386039, guid: 809dd6705b55cc14a9e20fddeec89088, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 4118470739103195232, guid: 809dd6705b55cc14a9e20fddeec89088, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 5509719870573522321, guid: 809dd6705b55cc14a9e20fddeec89088, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 200
-      objectReference: {fileID: 0}
     - target: {fileID: 8739326971891113749, guid: 809dd6705b55cc14a9e20fddeec89088, type: 3}
       propertyPath: m_Name
       value: LoginUI
@@ -313,8 +289,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 6591515123404682681, guid: 809dd6705b55cc14a9e20fddeec89088, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 809dd6705b55cc14a9e20fddeec89088, type: 3}
