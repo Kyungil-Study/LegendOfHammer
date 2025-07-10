@@ -102,7 +102,8 @@ public class BackendStageGameData
     // 로컬에서 뒤끝으로 쏴주는 메서드
     public void UpdateStage()
     {
-        if(stage == null) {
+        if(stage == null)
+        {
             Debug.LogError("데이터가 존재하지 않습니다. Initialize 혹은 Get을 통해 데이터를 생성해주세요.");
             return;
         }
