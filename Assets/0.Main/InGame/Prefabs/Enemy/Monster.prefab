@@ -230,3 +230,4 @@ MonoBehaviour:
   explosionPrefab: {fileID: 6111301031846871093, guid: 9a3809abee10ab54188078ab046f1168, type: 3}
   distanceToStop: 3
   shieldDistance: 1
+  fireInterval: 3
