@@ -20,7 +20,7 @@ public class BackendManager : MonoBehaviour
             Debug.LogError("초기화 실패 : " + bro); // 실패일 경우 statusCode 400대 에러 발생
         }
 
-        Test();
+        //Test();
     }
 
     // 동기 함수를 비동기에서 호출하게 해주는 함수(유니티 UI 접근 불가)
@@ -52,7 +52,7 @@ public class BackendManager : MonoBehaviour
         Debug.Log("----------랭킹----------");
         
         BackendRank.Instance.RankInsert(100); // [추가] 랭킹 등록하기 함수
-        BackendRank.Instance.RankGet(); // [추가] 랭킹 불러오기 함수
+        //BackendRank.Instance.RankGet(); // [추가] 랭킹 불러오기 함수
         
         #endregion
         

@@ -81,6 +81,7 @@ public class LobbyUI : MonoBehaviour
     // 뒤끝 연동 디버그용 메서드
     public void TestUpdateDataToBackend()
     {
+        BackendRank.Instance.RankInsert(BackendStageGameData.stage.Maxstage);
         BackendStageGameData.Instance.UpdateStage();
     }
     
