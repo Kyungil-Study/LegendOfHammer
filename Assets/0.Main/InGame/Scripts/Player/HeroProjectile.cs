@@ -49,6 +49,9 @@ public abstract class HeroProjectile : MonoBehaviour
 
     protected virtual void SetDirection()
     {
+            m_TargetDirection = Vector3.up;
+            return;
+            // TODO: Remove test code
         var target = FindTarget();
         if (target != null)
         {
