@@ -8,13 +8,13 @@ public class MonsterScale : MonoBehaviour
     [Header("몬스터 모델 오브젝트 연결 (자식)")]
     [SerializeField] private Transform model;
 
-    private SpriteRenderer    spriteRenderer;
-    private BoxCollider2D  Collider;
+    private SpriteRenderer mSpriteRenderer;
+    private BoxCollider2D  mCollider;
 
     private void Awake()
     {
-        spriteRenderer = model.GetComponent<SpriteRenderer>();
-        Collider = GetComponent<BoxCollider2D>();
+        mSpriteRenderer = model.GetComponent<SpriteRenderer>();
+        mCollider = GetComponent<BoxCollider2D>();
     }
 
     private void Start()
@@ -30,14 +30,25 @@ public class MonsterScale : MonoBehaviour
             default:              pixelSize =  72; break;
         }
 
-        float origPixels = spriteRenderer.sprite.rect.width;
+        float origPixels = mSpriteRenderer.sprite.rect.width;
         float scaleFactor = pixelSize / origPixels;
         model.localScale = Vector3.one * scaleFactor;
 
-        Vector2 size = spriteRenderer.bounds.size;
+        // 2) TextureRect에서 투명 제외된 실제 이미지 크기(px)
+        Rect texRect   = mSpriteRenderer.sprite.textureRect;
+        float ppu      = mSpriteRenderer.sprite.pixelsPerUnit;
+        float w_local  = texRect.width  / ppu;  // 로컬(unscaled) 너비
+        float h_local  = texRect.height / ppu;  // 로컬(unscaled) 높이
+
+        // 3) BoxCollider2D 사이즈 = 로컬 크기에 스케일 곱하기
+        mCollider.size = new Vector2(w_local * scaleFactor, h_local * scaleFactor);
+
+        Vector2 pivotLocal = (mSpriteRenderer.sprite.pivot / ppu) - new Vector2(w_local, h_local) * 0.5f;
         
-        // spriteRenderer.bounds.size.x 는 '모델.localScale' 이 적용된 월드 너비
-        Collider.size   = size;
-        Collider.offset = spriteRenderer.bounds.center - (Vector3)transform.position;
+        // 4) Pivot(0~pixels) → 로컬 좌표 기준 offset 계산
+        //    pivot(픽셀) / ppu  → 로컬좌표
+        //    -(w_local/2, h_local/2) → bottom-left 기준에서 중앙정렬
+        Vector2 modelPos2D = new Vector2(model.localPosition.x, model.localPosition.y);
+        mCollider.offset    = modelPos2D + pivotLocal * scaleFactor;
     }
 }
