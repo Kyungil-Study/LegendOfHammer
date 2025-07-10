@@ -28,6 +28,9 @@ public class BackEndAuth : MonoBehaviour
         {
             Debug.LogError("뒤끝 초기화 실패: " + initBro);
         }
+        // 비밀번호 가리기용
+        pwInput.contentType = TMP_InputField.ContentType.Password;
+        pwInput.ForceLabelUpdate();
     }
 
     // [기능] 게스트 로그인 처리
@@ -49,6 +52,9 @@ public class BackEndAuth : MonoBehaviour
         // 로그인 후 항상 스테이지 정보 불러오기
         BackendStageGameData.Instance.InitalizeStage();
         BackendStageGameData.Instance.GetStage();
+        BackendAugmentData.Instance.InitalizeAugmentData();
+        BackendAugmentData.Instance.GetAugmentData();
+        
 
         SceneManager.LoadScene(1);
     }
@@ -81,6 +87,7 @@ public class BackEndAuth : MonoBehaviour
                 UserData.Instance.SetUser(id, nick);
             }
             BackendStageGameData.Instance.GetStage();
+            BackendAugmentData.Instance.GetAugmentData();
             // [기능] 로그인 후 씬 전환
             SceneManager.LoadScene(1);
         }
@@ -110,6 +117,7 @@ public class BackEndAuth : MonoBehaviour
 
                 // [기능] 닉네임 설정 성공 시 자동 로그인 실행
                 BackendStageGameData.Instance.InitalizeStage();
+                BackendAugmentData.Instance.InitalizeAugmentData();
                 OnCustomLogin();
             }
             else
