@@ -30,7 +30,7 @@ public class PostUIManager : MonoBehaviour
             Invoke(nameof(ReloadCurrentTab), 0.1f); // 약간의 딜레이 후 UI 갱신
         });
 
-        LoadPostTab(PostType.Rank); // 기본은 랭크 우편
+        LoadPostTab(PostType.Admin); // 기본은 랭크 우편
     }
 
     private void LoadPostTab(PostType type)
