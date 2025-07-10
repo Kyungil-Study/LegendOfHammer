@@ -37,7 +37,7 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             // 테스트용, 나중에 지우기
-            Monster testMonster = Instantiate(TestEnemyPrefab, midSpawnPoints);
+            Monster testMonster = Instantiate(TestEnemyPrefab, spawnPoints[0]);
             testMonster.GetComponent<Monster>().SetPlayer(TestPlayer);
         }
     }
