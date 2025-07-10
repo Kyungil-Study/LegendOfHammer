@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Serialization;
 
 public class ItemSlotUI : MonoBehaviour
 {
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI priceText;
-    public TextMeshProUGUI salePeriodText;
+    [FormerlySerializedAs("salePeriodText")] public TextMeshProUGUI MaxCountText;
     public Image productImage;
     public Button buyButton;
     public GameObject soldOutOverlay;
@@ -22,7 +23,7 @@ public class ItemSlotUI : MonoBehaviour
 
         nameText.text = data.Name;
         priceText.text = $"{data.Piece}원";
-        salePeriodText.text = $"{data.Number}";
+        MaxCountText.text = $"{data.Number}";
 
         var sprite = Resources.Load<Sprite>($"MarketIcons/{data.Product_Image_ID}");
         if (sprite != null) productImage.sprite = sprite;

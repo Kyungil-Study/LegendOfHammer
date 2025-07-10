@@ -244,6 +244,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1295721089514115612, guid: 809dd6705b55cc14a9e20fddeec89088, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1295721089514115612, guid: 809dd6705b55cc14a9e20fddeec89088, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 400
+      objectReference: {fileID: 0}
+    - target: {fileID: 1295721089514115612, guid: 809dd6705b55cc14a9e20fddeec89088, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 225
+      objectReference: {fileID: 0}
     - target: {fileID: 8739326971891113749, guid: 809dd6705b55cc14a9e20fddeec89088, type: 3}
       propertyPath: m_Name
       value: LoginUI

@@ -52,7 +52,7 @@ public class BackendManager : MonoBehaviour
         Debug.Log("----------랭킹----------");
         
         BackendRank.Instance.RankInsert(100); // [추가] 랭킹 등록하기 함수
-        BackendRank.Instance.RankGet(); // [추가] 랭킹 불러오기 함수
+        //BackendRank.Instance.RankGet(); // [추가] 랭킹 불러오기 함수
         
         #endregion
         

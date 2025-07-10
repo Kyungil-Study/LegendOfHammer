@@ -25,7 +25,7 @@ public class BackendRank
     public void RankInsert(int score)
     {
         // [변경 필요] '복사한 UUID 값'을 '뒤끝 콘솔 > 랭킹 관리'에서 생성한 랭킹의 UUID값으로 변경해주세요.  
-        string rankUUID = "0197e8d4-c6f5-7553-8cf7-4d8a27a53e58"; // 예시 : "4088f640-693e-11ed-ad29-ad8f0c3d4c70"
+        string rankUUID = "0197f331-b9e4-7254-93f5-b70549c6ed31"; // 예시 : "4088f640-693e-11ed-ad29-ad8f0c3d4c70"
 
         string tableName = "STAGE_DATA";
         string rowInDate = string.Empty;
@@ -71,8 +71,7 @@ public class BackendRank
         // 추출된 rowIndate를 가진 데이터에 param값으로 수정을 진행하고 랭킹에 데이터를 업데이트합니다.  
         Debug.Log("랭킹 삽입을 시도합니다.");
         var rankBro = Backend.URank.User.UpdateUserScore(rankUUID, tableName, rowInDate, param);
-        Backend.URank.User.UpdateUserScore("0197e8d5-1296-7520-8d26-e36ef8bc2345", tableName, rowInDate, param);
-        Backend.URank.User.UpdateUserScore("0197e8d5-89f4-7c56-a96d-b25a896f0f4e", tableName, rowInDate, param);
+        Backend.URank.User.UpdateUserScore("0197f332-475d-76e0-ba8d-7855d3691f71", tableName, rowInDate, param);
 
         if (rankBro.IsSuccess() == false)
         {
@@ -83,32 +82,32 @@ public class BackendRank
         Debug.Log("랭킹 삽입에 성공했습니다. : " + rankBro);
     }
 
-    public void RankGet()
-    {
-        string rankUUID = "0197e8d4-c6f5-7553-8cf7-4d8a27a53e58"; // 예시 : "4088f640-693e-11ed-ad29-ad8f0c3d4c70"
-        var bro = Backend.URank.User.GetRankList(rankUUID);
-
-        if (bro.IsSuccess() == false)
-        {
-            Debug.LogError("랭킹 조회중 오류가 발생했습니다. : " + bro);
-            return;
-        }
-
-        Debug.Log("랭킹 조회에 성공했습니다. : " + bro);
-
-        Debug.Log("총 랭킹 등록 유저 수 : " + bro.GetFlattenJSON()["totalCount"].ToString());
-
-        foreach (LitJson.JsonData jsonData in bro.FlattenRows())
-        {
-            StringBuilder info = new StringBuilder();
-
-            info.AppendLine("순위 : " + jsonData["rank"].ToString());
-            info.AppendLine("닉네임 : " + jsonData["nickname"].ToString());
-            info.AppendLine("점수 : " + jsonData["score"].ToString());
-            info.AppendLine("gamerInDate : " + jsonData["gamerInDate"].ToString());
-            info.AppendLine("정렬번호 : " + jsonData["index"].ToString());
-            info.AppendLine();
-            Debug.Log(info);
-        }
-    }
+    // public void RankGet()
+    // {
+    //     string rankUUID = "0197f331-b9e4-7254-93f5-b70549c6ed31"; // 예시 : "4088f640-693e-11ed-ad29-ad8f0c3d4c70"
+    //     var bro = Backend.URank.User.GetRankList(rankUUID);
+    //
+    //     if (bro.IsSuccess() == false)
+    //     {
+    //         Debug.LogError("랭킹 조회중 오류가 발생했습니다. : " + bro);
+    //         return;
+    //     }
+    //
+    //     Debug.Log("랭킹 조회에 성공했습니다. : " + bro);
+    //
+    //     Debug.Log("총 랭킹 등록 유저 수 : " + bro.GetFlattenJSON()["totalCount"].ToString());
+    //
+    //     foreach (LitJson.JsonData jsonData in bro.FlattenRows())
+    //     {
+    //         StringBuilder info = new StringBuilder();
+    //
+    //         info.AppendLine("순위 : " + jsonData["rank"].ToString());
+    //         info.AppendLine("닉네임 : " + jsonData["nickname"].ToString());
+    //         info.AppendLine("점수 : " + jsonData["score"].ToString());
+    //         info.AppendLine("gamerInDate : " + jsonData["gamerInDate"].ToString());
+    //         info.AppendLine("정렬번호 : " + jsonData["index"].ToString());
+    //         info.AppendLine();
+    //         Debug.Log(info);
+    //     }
+    // }
 }
