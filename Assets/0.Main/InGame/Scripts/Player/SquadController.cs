@@ -7,6 +7,7 @@ using UnityEngine;
 public class SquadController : MonoBehaviour
 {
     public Squad squad;
+    public Rigidbody2D squadRigidbody;
     public Warrior warrior;
     private Vector3 m_TouchStartPosition;
     
@@ -15,12 +16,15 @@ public class SquadController : MonoBehaviour
     private float m_LastTapTime;
     
     public GameObject lever;
-    private float m_LeverRadius;
-    private float m_LeverThreshold;
     public SpriteRenderer outerCircle;
     public SpriteRenderer middleCircle;
     public GameObject innerCircle;
+    private float m_LeverRadius;
+    private float m_LeverThreshold;
 
+    public Transform min;
+    public Transform max;
+    
     private void Start()
     {
         m_Camera = Camera.main;
@@ -29,7 +33,7 @@ public class SquadController : MonoBehaviour
         float middleRadius = (middleCircle.bounds.size / 2).x;
         m_LeverThreshold = middleRadius / m_LeverRadius;
     }
-
+    
     private void Update()
     {
         if (Input.touchCount > 0)
@@ -40,13 +44,16 @@ public class SquadController : MonoBehaviour
             
             if (touch.phase == TouchPhase.Began)
             {
-                m_TouchStartPosition = touchPosition;
-                lever.transform.position = touchPosition;
+                if (Vector2.Distance(touchPosition, lever.transform.position) > m_LeverRadius)
+                {
+                    m_TouchStartPosition = touchPosition;
+                    lever.transform.position = touchPosition;
+                }
                 
                 // Check for multi-tap
                 if (m_LastTapTime + multiTapGap > Time.time)
                 {
-                    Vector3 direction = touchPosition - warrior.transform.position;
+                    Vector3 direction = touchPosition - lever.transform.position;
                     warrior.ChargeAttack(direction);
                 }
                 else
@@ -68,9 +75,17 @@ public class SquadController : MonoBehaviour
 
                 if (dir.magnitude > m_LeverThreshold)
                 {
-                    squad.transform.position += dir * (Squad.BASE_MOVE_SPEED * squad.stats.MoveSpeed * Time.deltaTime);
+                    squad.transform.position += dir * (Squad.STANDARD_DISTANCE * squad.stats.MoveSpeed * Time.deltaTime);
                 }
             }
         }
+    }
+
+    private void LateUpdate()
+    {
+        float x = Mathf.Clamp(squad.transform.position.x, min.position.x, max.position.x);
+        float y = Mathf.Clamp(squad.transform.position.y, min.position.y, max.position.y);
+        
+        squad.transform.position = new Vector3(x, y, squad.transform.position.z);
     }
 }

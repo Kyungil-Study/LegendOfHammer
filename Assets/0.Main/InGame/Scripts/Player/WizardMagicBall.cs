@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class WizardMagicBall : HeroProjectile
 {
+    public GameObject explosionEffectPrefab;
     public float explosionRadius = 1f;
     
-    protected override void Hit(IBattleCharacter target)
+    protected override void Hit(Monster target)
     {
-        Explode(transform.position, explosionRadius);
+        Explode(target.transform.position, explosionRadius);
     }
     
     private void Explode(Vector3 position, float radius)
@@ -23,7 +24,7 @@ public class WizardMagicBall : HeroProjectile
             );
             BattleEventManager.Instance.CallEvent(eventArgs);
         }
-        // TODO: Play explosion effect here
+        Destroy(Instantiate(explosionEffectPrefab, position, Quaternion.identity),2f);
         Destroy(gameObject);
     }
 }
