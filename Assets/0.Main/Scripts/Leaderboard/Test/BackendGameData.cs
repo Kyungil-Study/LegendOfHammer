@@ -158,11 +158,59 @@ public class BackendGameData
     }
 
     // 게임 정보 수정하기
+    // public void GameDataUpdate()
+    // {
+    //     if (userData == null)
+    //     {
+    //         Debug.LogError("서버에서 다운받거나 새로 삽입한 데이터가 존재하지 않습니다. Insert 혹은 Get을 통해 데이터를 생성해주세요.");
+    //         return;
+    //     }
+    //
+    //     Param param = new Param();
+    //     param.Add("level", userData.level);
+    //     param.Add("atk", userData.atk);
+    //     param.Add("info", userData.info);
+    //     param.Add("equipment", userData.equipment);
+    //     param.Add("inventory", userData.inventory);
+    //
+    //     BackendReturnObject bro = null;
+    //
+    //     if (string.IsNullOrEmpty(gameDataRowInDate))
+    //     {
+    //         Debug.Log("내 제일 최신 게임 정보 데이터 수정을 요청합니다.");
+    //
+    //         bro = Backend.GameData.Update("USER_DATA", new Where(), param);
+    //         //Backend.GameData.Update("USER_DATA", userData.inDate(), param);
+    //
+    //     }
+    //     else
+    //     {
+    //         Debug.Log($"{gameDataRowInDate}의 게임 정보 데이터 수정을 요청합니다.");
+    //
+    //         bro = Backend.GameData.UpdateV2("USER_DATA", gameDataRowInDate, Backend.UserInDate, param);
+    //     }
+    //
+    //     if (bro.IsSuccess())
+    //     {
+    //         Debug.Log("게임 정보 데이터 수정에 성공했습니다. : " + bro);
+    //     }
+    //     else
+    //     {
+    //         Debug.LogError("게임 정보 데이터 수정에 실패했습니다. : " + bro);
+    //     }
+    // }
+    
     public void GameDataUpdate()
     {
         if (userData == null)
         {
-            Debug.LogError("서버에서 다운받거나 새로 삽입한 데이터가 존재하지 않습니다. Insert 혹은 Get을 통해 데이터를 생성해주세요.");
+            Debug.LogError("userData가 null입니다. Insert 혹은 Get 이후에 호출해주세요.");
+            return;
+        }
+
+        if (string.IsNullOrEmpty(gameDataRowInDate))
+        {
+            Debug.LogError("gameDataRowInDate가 비어 있습니다. Get 또는 Insert 이후에 설정되어야 합니다.");
             return;
         }
 
@@ -173,20 +221,8 @@ public class BackendGameData
         param.Add("equipment", userData.equipment);
         param.Add("inventory", userData.inventory);
 
-        BackendReturnObject bro = null;
-
-        if (string.IsNullOrEmpty(gameDataRowInDate))
-        {
-            Debug.Log("내 제일 최신 게임 정보 데이터 수정을 요청합니다.");
-
-            bro = Backend.GameData.Update("USER_DATA", new Where(), param);
-        }
-        else
-        {
-            Debug.Log($"{gameDataRowInDate}의 게임 정보 데이터 수정을 요청합니다.");
-
-            bro = Backend.GameData.UpdateV2("USER_DATA", gameDataRowInDate, Backend.UserInDate, param);
-        }
+        Debug.Log($"{gameDataRowInDate}의 게임 정보 데이터 수정을 요청합니다.");
+        var bro = Backend.GameData.UpdateV2("USER_DATA", gameDataRowInDate, Backend.UserInDate, param);
 
         if (bro.IsSuccess())
         {
@@ -197,4 +233,5 @@ public class BackendGameData
             Debug.LogError("게임 정보 데이터 수정에 실패했습니다. : " + bro);
         }
     }
+
 }

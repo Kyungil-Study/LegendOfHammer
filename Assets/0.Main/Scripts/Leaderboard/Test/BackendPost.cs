@@ -62,9 +62,21 @@ public class BackendPost
 
     public void SavePostToLocal(LitJson.JsonData item)
     {
+        if (BackendGameData.userData == null)
+        {
+            Debug.LogWarning("userData가 null입니다. 새로 초기화합니다.");
+            BackendGameData.userData = new UserData2();
+        }
+
+        if (BackendGameData.userData.inventory == null)
+        {
+            BackendGameData.userData.inventory = new Dictionary<string, int>();
+        }
+
+        
         foreach (LitJson.JsonData itemJson in item)
         {
-            if (itemJson["item"].ContainsKey("itemType"))
+            if (itemJson.ContainsKey("item") && itemJson["item"] != null && itemJson["item"].ContainsKey("itemType"))
             {
                 int itemId = int.Parse(itemJson["item"]["itemId"].ToString());
                 string itemType = itemJson["item"]["itemType"].ToString();

@@ -1,5 +1,8 @@
+using System;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LobbyUI : MonoBehaviour
 {
@@ -10,6 +13,13 @@ public class LobbyUI : MonoBehaviour
     [Header("Stage Info")]
     public TMP_Text currentStageText;
     public TMP_Text maxStageText;
+
+    public Button playButton;
+
+    private void Awake()
+    {
+        playButton.onClick.AddListener(GoDungeonScene);
+    }
 
     private void Start()
     {
@@ -53,13 +63,25 @@ public class LobbyUI : MonoBehaviour
         maxStageText.text     = $"MaxStage: {stage.Maxstage}";
     }
 
+    public void GoDungeonScene()
+    {
+        BackendStageGameData.Instance.UpdateStage();
+        SceneManager.LoadScene(2);
+    }
+    private void OnDestroy()
+    {
+        playButton.onClick.RemoveListener(GoDungeonScene);
+    }
+
+    // 뒤끝 연동 디버그용 메서드
     public void TestNextStage()
     {
         BackendStageGameData.Instance.NextStage();
     }
-
+    // 뒤끝 연동 디버그용 메서드
     public void TestUpdateDataToBackend()
     {
         BackendStageGameData.Instance.UpdateStage();
     }
+    
 }
