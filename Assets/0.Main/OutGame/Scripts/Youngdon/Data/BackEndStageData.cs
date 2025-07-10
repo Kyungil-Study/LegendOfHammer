@@ -19,6 +19,14 @@ public class Stage
     }
 }
 
+public class BakendAugmentData
+{
+    private string commonAugmentData;
+    private string warriorAugmentData;
+    private string wizardAugmentData;
+    private string archerAugmentData;
+}
+
 public class BackendStageGameData
 {
     private static BackendStageGameData _instance = null;

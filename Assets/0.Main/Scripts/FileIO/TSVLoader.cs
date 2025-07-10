@@ -10,6 +10,15 @@ using UnityEngine;
 
 public static class TSVLoader
 {
+    /*private static readonly CsvConfiguration TsvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
+    {
+        Delimiter = "\t",
+        Mode = CsvMode.NoEscape,
+        HasHeaderRecord = false,
+        MissingFieldFound = null,
+        HeaderValidated = null,
+    };*/
+    
     private static readonly CsvConfiguration TsvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
     {
         Delimiter = "\t",
@@ -18,6 +27,7 @@ public static class TSVLoader
         MissingFieldFound = null,
         HeaderValidated = null,
     };
+
 
     /// <summary>
     /// Application.persistentDataPath/Table 폴더에서 주어진 테이블 이름의 TSV 파일을 읽어 List<T>로 반환합니다.

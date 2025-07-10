@@ -179,6 +179,27 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aaa160931bddeea4e9a2975bbb51a54e, type: 3}
+--- !u!1 &1159458546 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6550951116769050463, guid: 9b6497d8629c8584e9bd47014ab35057, type: 3}
+  m_PrefabInstance: {fileID: 2592231389398617725}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1159458547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1159458546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 387e0e7342b656449a7df18ecb406d2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  commonAugmentPath: Augment/CommonAugment
+  archerAugmentPath: Augment/ArcherAugment
+  warriorAugmentPath: Augment/WarriorAugment
+  wizardAugmentPath: Augment/WizardAugment
 --- !u!4 &1853970717 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2844217813709663506, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
@@ -345,6 +366,38 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2621846425627449073, guid: 9b6497d8629c8584e9bd47014ab35057, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2621846425627449073, guid: 9b6497d8629c8584e9bd47014ab35057, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2621846425627449073, guid: 9b6497d8629c8584e9bd47014ab35057, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2621846425627449073, guid: 9b6497d8629c8584e9bd47014ab35057, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5465037996787640971, guid: 9b6497d8629c8584e9bd47014ab35057, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5465037996787640971, guid: 9b6497d8629c8584e9bd47014ab35057, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5465037996787640971, guid: 9b6497d8629c8584e9bd47014ab35057, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5465037996787640971, guid: 9b6497d8629c8584e9bd47014ab35057, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6550951116769050463, guid: 9b6497d8629c8584e9bd47014ab35057, type: 3}
       propertyPath: m_Name
       value: Augment
@@ -389,10 +442,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8462529894385433241, guid: 9b6497d8629c8584e9bd47014ab35057, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462529894385433241, guid: 9b6497d8629c8584e9bd47014ab35057, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462529894385433241, guid: 9b6497d8629c8584e9bd47014ab35057, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8462529894385433241, guid: 9b6497d8629c8584e9bd47014ab35057, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6550951116769050463, guid: 9b6497d8629c8584e9bd47014ab35057, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1159458547}
   m_SourcePrefab: {fileID: 100100000, guid: 9b6497d8629c8584e9bd47014ab35057, type: 3}
 --- !u!1001 &3143145693073960546
 PrefabInstance:

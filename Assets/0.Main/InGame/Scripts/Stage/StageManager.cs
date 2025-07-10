@@ -35,7 +35,7 @@ public class StageManager : MonoBehaviour
                 {
                     var stageWave = new StageWave(stageWaveTSV);
                     stageWaves.Add(stageWave);
-                    Debug.Log(stageWave);
+                    //Debug.Log(stageWave);
                 }
                 
                 stageWaves.Sort( (stageWave1, stageWave2) => 
