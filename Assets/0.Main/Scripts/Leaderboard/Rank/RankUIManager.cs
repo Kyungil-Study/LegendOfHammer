@@ -22,7 +22,7 @@ public class RankUIManager : MonoBehaviour
 
     IEnumerator LoadRankList()
     {
-        var bro = Backend.URank.User.GetRankList("0197e8d4-c6f5-7553-8cf7-4d8a27a53e58");
+        var bro = Backend.URank.User.GetRankList("0197f331-b9e4-7254-93f5-b70549c6ed31");
 
         if (bro.IsSuccess() == false)
         {
