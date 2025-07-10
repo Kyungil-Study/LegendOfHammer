@@ -8,7 +8,19 @@ public class Warrior : Hero
     public float chargeDuration = 0.2f;
     private float ChargeSpeed => Squad.STANDARD_DISTANCE * chargeDistance / chargeDuration;
     public float chargeKnockbackDistance = 1f;
-    public bool isCharging = false;
+    private bool _isCharging = false;
+    public bool IsCharging
+    {
+        get => _isCharging;
+        set
+        {
+            _isCharging = value;
+            if (_isCharging == false)
+            {
+                m_HitMonsters.Clear();
+            }
+        }
+    }
     private Vector3 m_ChargeDirection;
     
     // 전사 돌진 피해량
@@ -21,12 +33,14 @@ public class Warrior : Hero
     
     public void ChargeAttack(Vector3 direction)
     {
+        // TODO: Remove comments to apply cooldown
+        
         // if(attackCooldown > 0 || isCharging)
         // {
         //     return;
         // }
         
-        isCharging = true;
+        IsCharging = true;
         m_ChargeDirection = direction.normalized;
         
         Vector3 endPosition = squad.transform.position + direction.normalized * (Squad.STANDARD_DISTANCE * chargeDistance);
@@ -46,8 +60,7 @@ public class Warrior : Hero
             yield return null;
         }
 
-        m_HitMonsters.Clear();
-        isCharging = false;
+        IsCharging = false;
     }
 
     private List<Monster> m_HitMonsters = new List<Monster>();
@@ -63,22 +76,23 @@ public class Warrior : Hero
         // TODO: monster.Knockback(Vector3 direction, float distance);
     }
 
-    private void ChargeKnockback(Monster monster)
-    {
-        StartCoroutine(KnockbackCoroutine());
-        IEnumerator KnockbackCoroutine()
-        {
-            Vector3 startPosition = monster.transform.position;
-            Vector3 endPosition = monster.transform.position + m_ChargeDirection * Squad.STANDARD_DISTANCE;
-            float elapsedTime = 0f;
-            float duration = chargeDuration * 0.5f;
-            while (elapsedTime < duration)
-            {
-                float t = elapsedTime / duration;
-                transform.position = Vector3.Lerp(startPosition, endPosition, t);
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-        }
-    }
+    // 몬스터 넉백은 몬스터 쪽에서 처리하기로 함
+    // private void ChargeKnockback(Monster monster)
+    // {
+    //     StartCoroutine(KnockbackCoroutine());
+    //     IEnumerator KnockbackCoroutine()
+    //     {
+    //         Vector3 startPosition = monster.transform.position;
+    //         Vector3 endPosition = monster.transform.position + m_ChargeDirection * Squad.STANDARD_DISTANCE;
+    //         float elapsedTime = 0f;
+    //         float duration = chargeDuration * 0.5f;
+    //         while (elapsedTime < duration)
+    //         {
+    //             float t = elapsedTime / duration;
+    //             transform.position = Vector3.Lerp(startPosition, endPosition, t);
+    //             elapsedTime += Time.deltaTime;
+    //             yield return null;
+    //         }
+    //     }
+    // }
 }
