@@ -156,6 +156,8 @@ public class Monster : MonoBehaviour, IBattleCharacter
             }
         }
 
+        Debug.Log($"TakeDamage 호출 : 받은 데미지 ? => {damage}");
+        
         mCurrentHP -= damage;
         
         if (mCurrentHP <= 0) // HP가 줄어서 사망했을 경우
