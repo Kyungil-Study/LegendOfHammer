@@ -197,6 +197,10 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 {
                     transform.position += Vector3.down * (mMoveSpeed * Time.deltaTime);
                 }
+                else
+                {
+                    mHasStoppedFlying = true;
+                }
                 break;
         }
     }
@@ -250,19 +254,10 @@ public class Monster : MonoBehaviour, IBattleCharacter
             case EnemyAttackPattern.Flying:
                 // 정지 후 사격 시간(1초) 마다 탄막 발사
                 // 전장의 중선(파란선)을 지나는 무작위 방향으로 탄 1발 발사
-                if (mHasStoppedFlying == false && HasFinishedFlying())
+                if (mHasStoppedFlying && isFirng == false)
                 {
-                    mHasStoppedFlying = true;
-                    StartCoroutine(FireProjectiles(
-                        count:    1,
-                        interval: 0f,
-                        aim: i =>
-                        {
-                            // 0° 기준 오른쪽 → 랜덤 ±90°
-                            float angle = Random.Range(-45f, 45f);
-                            return SetAngle(Vector2.right, angle);
-                        }
-                    ));
+                    isFirng = true;
+                    StartCoroutine(FlyingAttackLoop());
                 }
                 break;
         }
@@ -287,6 +282,16 @@ public class Monster : MonoBehaviour, IBattleCharacter
         Destroy(gameObject);
     }
     
+    private bool isFirng = false;
+    [SerializeField] private float fireInterval = 3f;
+    
+    private Vector2 SetAngle(Vector2 vector, float degrees)
+    {
+        float rad = degrees * Mathf.Deg2Rad;
+        float cx = Mathf.Cos(rad), sx = Mathf.Sin(rad);
+        return new Vector2(vector.x * cx - vector.y * sx, vector.x * sx + vector.y * cx);
+    }
+
     private IEnumerator FireProjectiles(int count, float interval, System.Func<int, Vector2> aim)
     {
         for (int i = 0; i < count; i++)
@@ -312,9 +317,6 @@ public class Monster : MonoBehaviour, IBattleCharacter
             }
         }
     }
-
-    private bool isFirng = false;
-    [SerializeField] private float fireInterval = 3f;
     
     private IEnumerator SniperAttackLoop()
     {
@@ -370,18 +372,23 @@ public class Monster : MonoBehaviour, IBattleCharacter
         }
     }
 
-    private bool HasFinishedFlying()
+    private IEnumerator FlyingAttackLoop()
     {
-        // ex) y 위치가 목표 이하일 때
-        float traveled = mFlyStartY - transform.position.y;
-        return traveled >= distanceToStop;
-    }
-
-    private Vector2 SetAngle(Vector2 vector, float degrees)
-    {
-        float rad = degrees * Mathf.Deg2Rad;
-        float cx = Mathf.Cos(rad), sx = Mathf.Sin(rad);
-        return new Vector2(vector.x * cx - vector.y * sx, vector.x * sx + vector.y * cx);
+        while (true)
+        {
+            yield return FireProjectiles
+            (
+                count:    1,
+                interval: 0f,
+                aim: i =>
+                {
+                    // 전장의 중선(파란선)을 지나는 무작위 방향으로 탄 1발 발사
+                    float angle = Random.Range(-90f, 90f);
+                    return SetAngle(Vector2.down, angle);
+                }
+            );
+            yield return new WaitForSeconds(1f);    // 얘만 1초 (FireInterval 에디터에서 수정하던지)
+        }
     }
     
     // Chase, Shield 감지 범위
