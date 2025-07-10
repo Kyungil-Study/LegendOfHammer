@@ -95,5 +95,5 @@ public abstract class HeroProjectile : MonoBehaviour
         }
     }
 
-    protected abstract void Hit(IBattleCharacter target);
+    protected abstract void Hit(Monster target);
 }
