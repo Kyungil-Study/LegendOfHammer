@@ -76,12 +76,6 @@ public class Monster : MonoBehaviour, IBattleCharacter
     void Update()
     {
         OnMove(mMovementPattern);
-        
-        if (mAttackPattern == EnemyAttackPattern.Spread)
-        {
-            IsPlayerRightOrLeft();
-        }
-        
         OnAttack(mAttackPattern);
     }
 
@@ -336,27 +330,22 @@ public class Monster : MonoBehaviour, IBattleCharacter
         }
     }
     
-    bool isLeft = false;
-    
-    private bool IsPlayerRightOrLeft()
-    {
-        return testPlayer.transform.position.x < transform.position.x;
-    }
-    
     private IEnumerator SpreadAttackLoop()
     {
         while (true)
         {
+            bool isLeft = testPlayer.transform.position.x < transform.position.x;
+            float[] angles = isLeft
+                ? new[] {  0f, -27.5f, -45f }  // 왼쪽: 0°, –27.5°, –45°
+                : new[] {  0f,  27.5f,  45f }; // 오른쪽: 0°, +27.5°, +45°
+            
+            Debug.Log($"Spread: isLeft={isLeft}, angles=[{angles[0]}, {angles[1]}, {angles[2]}]");
+            
             yield return FireProjectiles
             (
                 count:    3,
                 interval: 0.2f,
-                aim: i =>
-                {
-                    // 플레이어가 왼쪽이면 +, 오른쪽이면 −
-                    float[] angles = isLeft ? new[] {0f, 27.5f, 45f} : new[] {0f, -27.5f, -45f};
-                    return SetAngle(Vector2.down, angles[i]);
-                }
+                aim: i => SetAngle(Vector2.down, angles[i])
             );
             yield return new WaitForSeconds(fireInterval);
         }
@@ -373,7 +362,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 interval: 0f,
                 aim: i =>
                 {
-                    float angle = i * 30f; // 360/12 = 30
+                    float angle = i * 30f;
                     return SetAngle(Vector2.down, angle);
                 }
             );
