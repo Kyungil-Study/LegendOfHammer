@@ -2,11 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EnemyMovementType
+public enum EnemySpawnRankType
 {
-    Direct,
-    Wave,
-    Chase
+    Normal,
+    Elite,
+    Boss
+}
+
+public enum EnemySpawnAttackType
+{
+    Melee,
+    Range,
 }
 
 public enum EnemySpawnPatternType
@@ -14,6 +20,7 @@ public enum EnemySpawnPatternType
     Normal_Three_A,
     Normal_Three_B,
     Normal_Three_C,
+    Normal_Three_D,
     
     Normal_Four_A,
     Normal_Four_B,

@@ -7,9 +7,10 @@ public class Monster : MonoBehaviour, IBattleCharacter
     [Header("데이터 연동")]
     [Tooltip("몬스터 유형 체크")] 
     [SerializeField] private EnemyID enemyID;
-
-    [Header("플레이어 테스트")]
-    [Tooltip("추적/충돌할 플레이어 오브젝트")]
+    
+    public EnemyID EnemyID { get { return enemyID;} set { enemyID = value; } } // todo: 종류별 Prefab생성해서 관리하도록 수정필요. 수정 후 제거
+    
+    [Header("플레이어 테스트")] [Tooltip("추적/충돌할 플레이어 오브젝트")]
     public GameObject testPlayer;
     [Tooltip("플레이어 레이어 마스크")]
     [SerializeField] private LayerMask testPlayerLayerMask;
@@ -17,17 +18,22 @@ public class Monster : MonoBehaviour, IBattleCharacter
     [Header("투사체")]
     [SerializeField] private GameObject projectilePrefab;
     
-    [Header("지그재그")]
+    [Header("지그재그")] [Tooltip("zigzagAmplitude: 진동폭, zigzagFrequency: 주기")]
     [SerializeField] private float zigzagAmplitude = 1f;
     [SerializeField] private float zigzagFrequency = 2f;
 
-    [Header("자폭")]
-    [SerializeField] private float suicideDelay = 1f;
-    [SerializeField] private float detectRange = 2f;
+    [Header("자폭")] [Tooltip("자폭 딜레이, 탐지 범위, 데미지 처리 범위, 폭발 이펙트 설정")]
+    [SerializeField] private float suicideDelay = 2f;
+    [SerializeField] private float detectRange = 0.5f;
+    [SerializeField] private float attackRange = 0.75f;
     [SerializeField] private GameObject explosionPrefab;
     
+    [Header("체공형")] [Tooltip("하강 후 멈출 거리 설정")]
+    [SerializeField] private float distanceToStop = 3f;
+    private float flyStartY;
+    
     private float mMoveSpeed;
-    private float mAttackPower;
+    private int   mAttackPower;
     private int   mMaxHP;
     private int   mCurrentHP;
     
@@ -57,6 +63,8 @@ public class Monster : MonoBehaviour, IBattleCharacter
         
         // 지그재그 초기 X 좌표 저장
         initialX = transform.position.x;
+        // 체공형 초기 Y 좌표 저장
+        flyStartY = transform.position.y;
     }
 
     void Update()
@@ -79,10 +87,28 @@ public class Monster : MonoBehaviour, IBattleCharacter
         }
         
         // 플레이어 레이어 체크
-        if (testPlayerLayerMask == (testPlayerLayerMask | (1 << collision.gameObject.layer)))
+        int bit = 1 << collision.gameObject.layer;
+        if ((testPlayerLayerMask.value & bit) == 0)
         {
-            Debug.Log("플레이어 충돌");
-            // TODO: 플레이어 데미지 이벤트 호출
+            return;
+        }
+        
+        Debug.Log("플레이어 충돌 시 데미지 처리");
+        
+        var player = collision.GetComponent<IBattleCharacter>();
+        
+        if (player != null)
+        {
+            BattleEventManager.Instance.CallEvent
+            (
+                new TakeDamageEventArgs
+                (
+                    attacker: this,
+                    target: player,
+                    damage: mAttackPower
+                )
+            );
+            Debug.Log($"플레이어 받은 데미지 : {mAttackPower}");
         }
     }
 
@@ -110,6 +136,15 @@ public class Monster : MonoBehaviour, IBattleCharacter
             case EnemyMovementPattern.Chase:
                 // 추적 이동 : 플레이어 추적 -> 일정 트리거 범위에서 멈추고 폭발 (이건 OnAttack서 처리)
                 // 플레이어 추적, 없으면 하강
+                var hits = Physics2D.OverlapCircleAll(transform.position, detectRange, testPlayerLayerMask);
+                
+                if (hits.Length > 0)
+                {
+                    isSuiciding = true;
+                    // TODO: 폭발 준비 (OnAttack에서 처리)
+                    break;
+                }
+                
                 if (testPlayer != null)
                 {
                     transform.position = Vector2.MoveTowards(
@@ -118,13 +153,22 @@ public class Monster : MonoBehaviour, IBattleCharacter
                         mMoveSpeed * Time.deltaTime
                     );
                 }
+                
                 else
                 {
                     transform.position += Vector3.down * (mMoveSpeed * Time.deltaTime);
                 }
+                
                 break;
+
             case EnemyMovementPattern.Flying:
                 // 체공형 : OnAttack 시 멈춰서 발사
+                // 전장 하단으로 이동 → distanceToStop 이하 도달 시 멈춤, 멈추면 발사 시작
+                float traveled = flyStartY - transform.position.y;
+                if (traveled < distanceToStop)
+                {
+                    transform.position += Vector3.down * (mMoveSpeed * Time.deltaTime);
+                }
                 break;
             default:
                 break;
@@ -141,6 +185,10 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 break;
             case EnemyAttackPattern.Suicide:
                 // 플레이어 도달 시 일정 시간 후 폭발, 얘만 일반 공격으로 충돌 시 데미지 입히지 않음
+                if (isSuiciding)
+                {
+                    StartCoroutine(OnSuicide());
+                }
                 break;
             case EnemyAttackPattern.Shield:
                 // 전방 90도 범위 플레이어 공격 반감, 벡터 내적 활용할 계획 
@@ -163,6 +211,37 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 break;
             default:
                 break;
+        }
+    }
+    
+    IEnumerator OnSuicide()
+    {
+        // 추가 : 반짝반짝 거리게 Fade 처리
+        yield return new WaitForSeconds(suicideDelay);
+
+        var expObj = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        var explosion = expObj.GetComponent<EnemyExplosion>();
+
+        explosion.Initialize
+        (
+            attacker: this,
+            damage:   mAttackPower,
+            radius:   attackRange,
+            mask:     testPlayerLayerMask
+        );
+
+        Destroy(gameObject);
+    }
+    
+    // Chase 형태에서 감지 범위
+    void OnDrawGizmosSelected()
+    {
+        if (mMovementPattern == EnemyMovementPattern.Chase)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(transform.position, detectRange);
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, attackRange);
         }
     }
 }
