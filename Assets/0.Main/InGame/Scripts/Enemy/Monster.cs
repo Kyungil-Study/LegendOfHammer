@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Monster : MonoBehaviour, IBattleCharacter
 {
@@ -41,6 +43,12 @@ public class Monster : MonoBehaviour, IBattleCharacter
     [Header("쉴드")] [Tooltip("쉴드 거리")]
     [SerializeField] private float shieldDistance = 1f;
     
+    [Header("넉백 설정")] [Tooltip("넉백 세기, 지속 시간")]
+    [SerializeField] private float knockbackForce    = 2.5f;    // 넉백 세기
+    [SerializeField] private float knockbackDuration = 0.2f;  // 넉백 지속 시간
+
+    private Rigidbody2D rigid;
+    
     private float mMoveSpeed;
     private int   mAttackPower;
     private int   mMaxHP;
@@ -58,6 +66,51 @@ public class Monster : MonoBehaviour, IBattleCharacter
     private bool mIsSuicide;
 
     public void SetPlayer(GameObject player) => testPlayer = player;
+
+    void Awake()
+    {
+        rigid = GetComponent<Rigidbody2D>();
+    }
+
+    void OnEnable()
+    {
+        BattleEventManager.Instance.Callbacks.OnChargeCollision += OnChargeCollision;
+    }
+
+    void OnDisable()
+    {
+        BattleEventManager.Instance.Callbacks.OnChargeCollision -= OnChargeCollision;
+    }
+    
+    private void OnChargeCollision(ChargeCollisionArgs args)
+    {
+        if (ReferenceEquals(args.Target, this) == false) return;
+
+        StartCoroutine(ApplyKnockback(args));
+    }
+
+    // 넉백 관련 코드, 나중에 테스트 해볼 필요 있음
+    private IEnumerator ApplyKnockback(ChargeCollisionArgs args)
+    {
+        var attackerMb = args.Attacker as MonoBehaviour;
+        if (attackerMb == null)
+        {
+            Debug.Log("넉백 에러, 코드 수정 필요");
+            yield break;
+        }
+
+        Vector2 dir = ((Vector2)transform.position - (Vector2)attackerMb.transform.position).normalized;
+        float timer = 0f;
+
+        while (timer < knockbackDuration)
+        {
+            rigid.velocity = dir * knockbackForce;
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        rigid.velocity = Vector2.zero;
+    }
     
     void Start()
     {
