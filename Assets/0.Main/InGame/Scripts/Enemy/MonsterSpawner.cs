@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -17,7 +18,8 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
     [SerializeField] private Transform[] spawnPoints; // Maximum number of monsters allowed on screen
     [SerializeField] private Transform midSpawnPoints; // Maximum number of monsters allowed on screen
     // Start is called before the first frame update
-    
+    [SerializeField] bool isTestMode = false; // For testing purposes, remove later
+    [SerializeField] Monster TestEnemyPrefab; // todo : 테스트용, 나중에 지우기 For testing purposes, remove later
     List<StageWave> stageWaves = new List<StageWave>();
     Queue<StageWave> stageWavesQueue = new Queue<StageWave>();
     
@@ -27,6 +29,15 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
         callbacks.OnStartBattle += StartGame;
         callbacks.OnEndBattle += EndGame;
         spawnPatternTableSao.Resolve();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            // 테스트용, 나중에 지우기
+            isTestMode = true;
+        }
     }
 
     private void EndGame(EndBattleEventArgs args)
@@ -84,9 +95,14 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
         }
         
         // todo: 몬스터 ID 세팅을 prefab 변경으로 수정
-        Monster newMonster = Instantiate(monsterPrefab, position, Quaternion.identity);
+        Monster newMonster = Instantiate(TestEnemyPrefab, position, Quaternion.identity);
         newMonster.EnemyID = filteredRecords[UnityEngine.Random.Range(0, filteredRecords.Count)].Enemy_ID;
-        newMonster.GetComponent<Monster>().SetPlayer(TestPlayer);   // For testing purposes, remove later
+        newMonster.GetComponent<Monster>().SetPlayer(TestPlayer);
+        
+        // Monster newMonster = Instantiate(TestEnemyPrefab, position, Quaternion.identity);
+        // todo: 테스트용, 병합 시 각주처리 제거하고 EnemyID 맞게 Instantiate하기 !!
+        // newMonster.EnemyID = filteredRecords[UnityEngine.Random.Range(0, filteredRecords.Count)].Enemy_ID;
+        // newMonster.GetComponent<Monster>().SetPlayer(TestPlayer);   // For testing purposes, remove later
       
         
     }
