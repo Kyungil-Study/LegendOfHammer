@@ -20,7 +20,7 @@ public class BackendManager : MonoBehaviour
             Debug.LogError("초기화 실패 : " + bro); // 실패일 경우 statusCode 400대 에러 발생
         }
 
-        Test();
+        //Test();
     }
 
     // 동기 함수를 비동기에서 호출하게 해주는 함수(유니티 UI 접근 불가)
