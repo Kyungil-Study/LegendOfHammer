@@ -215,7 +215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3380768c582997f41b7fda6a7ab1e040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyID: 12007
+  enemyID: 12009
   testPlayer: {fileID: 0}
   testPlayerLayerMask:
     serializedVersion: 2
