@@ -5,7 +5,7 @@ using UnityEngine;
 using BackEnd;
 using Unity.VisualScripting;
 
-public class Augment
+public class BackendAugment
 {
     public string CommonAugmentData;
     public string WarriorAugmentData;
@@ -38,14 +38,14 @@ public class BackendAugmentData
         }
     }
 
-    public static Augment augment;
+    public static BackendAugment augment;
 
     // 증강 데이터 초기화
     public void InitalizeAugmentData()
     {
         if (augment == null)
         {
-            augment = new Augment();
+            augment = new BackendAugment();
         }
         Debug.Log("증강 초기화");
         augment.CommonAugmentData = "";
@@ -88,7 +88,7 @@ public class BackendAugmentData
             }
             else
             {
-                augment = new Augment();
+                augment = new BackendAugment();
                 augment.CommonAugmentData  = gameDataJson[0]["commonAugmentData"].ToString();
                 augment.WarriorAugmentData = gameDataJson[0]["warriorAugmentData"].ToString();
                 augment.WizardAugmentData  = gameDataJson[0]["wizardAugmentData"].ToString();
@@ -101,7 +101,7 @@ public class BackendAugmentData
     public void ResetAugmentData()
     {
         if (augment == null)
-            augment = new Augment();
+            augment = new BackendAugment();
         
         augment.CommonAugmentData  = "";
         augment.WarriorAugmentData = "";
