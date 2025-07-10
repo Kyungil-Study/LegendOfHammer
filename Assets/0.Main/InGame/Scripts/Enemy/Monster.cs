@@ -28,13 +28,16 @@ public class Monster : MonoBehaviour, IBattleCharacter
     [Header("지그재그")] [Tooltip("zigzagAmplitude: 진동폭, zigzagFrequency: 주기")]
     [SerializeField] private float zigzagAmplitude = 1f;
     [SerializeField] private float zigzagFrequency = 2f;
-    private int zigzagDir = 1;
+    private float mInitialX;
+    private float mZigzagTime;
 
     [Header("자폭")] [Tooltip("자폭 딜레이, 탐지 범위, 데미지 처리 범위, 폭발 이펙트 설정")]
     [SerializeField] private float suicideDelay = 2f;
     [SerializeField] private float detectRange = 0.5f;
     [SerializeField] private float attackRange = 0.75f;
     [SerializeField] private GameObject explosionPrefab;
+    private bool mIsDetected;
+    private bool mIsSuicide;
     
     [Header("체공형")] [Tooltip("하강 후 멈출 거리 설정")]
     [SerializeField] private float distanceToStop = 3f;
@@ -58,14 +61,6 @@ public class Monster : MonoBehaviour, IBattleCharacter
     private EnemyMovementPattern mMovementPattern;
     private EnemyAttackPattern   mAttackPattern;
     
-    // 지그재그용
-    private float mInitialX;
-    private float mZigzagTime;
-    
-    // 추적, 자폭용
-    private bool mIsDetected;
-    private bool mIsSuicide;
-
     public void SetPlayer(GameObject player) => testPlayer = player;
 
     void Awake()
@@ -163,7 +158,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
         mCurrentHP -= damage;
         
-        if (mCurrentHP <= 0) // HP 깎여 사망시
+        if (mCurrentHP <= 0) // HP가 줄어서 사망했을 경우
         {
             OnDeath();
         }
@@ -177,20 +172,33 @@ public class Monster : MonoBehaviour, IBattleCharacter
     
     void OnTriggerEnter2D(Collider2D collision)
     {
-        // Suicide 패턴은 별도 처리
-        if (mAttackPattern == EnemyAttackPattern.Suicide)
+        if (mAttackPattern == EnemyAttackPattern.Suicide) // 자폭은 단순 충돌로 데미지를 입지 않도록
         {
             return;
         }
         
-        // Border Object 충돌 시, 지그재그 처리하기
+        // Border Object 충돌 시 (지그재그 처리)
         if (mMovementPattern == EnemyMovementPattern.Zigzag && collision.gameObject.layer == 8)
         {
-            // 위상 반전: sin(ωt) -> sin(ωt + π)
-            mZigzagTime += Mathf.PI / zigzagFrequency;
+            mInitialX = transform.position.x;
+
+            // 좌/우 벽 판단
+            float x = transform.position.x;
+            float mid = (MapManager.Instance.LeftBoundX + MapManager.Instance.RightBoundX) * 0.5f;
+
+            if (x < mid)
+            {
+                // 왼쪽 벽: 위상 0 → 오른쪽으로 튕기도록
+                mZigzagTime = 0f;
+            }
+            else
+            {
+                // 오른쪽 벽: 위상을 π/ω 로 → 왼쪽으로 튕기도록
+                mZigzagTime = Mathf.PI / zigzagFrequency;
+            }
         }
         
-        // 플레이어 레이어 체크
+        // 플레이어 레이어 체크, 충돌 시 플레이어 쪽 데미지 Call
         int bit = 1 << collision.gameObject.layer;
         if ((testPlayerLayerMask.value & bit) != 0)
         {
@@ -209,7 +217,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
             }
         }
 
-        // ClearZone 레이어 체크
+        // ClearZone
         if (collision.gameObject.layer == 9)    
         {
             BattleEventManager.Instance.CallEvent(new AliveMonsterEventArgs(this));
@@ -227,36 +235,42 @@ public class Monster : MonoBehaviour, IBattleCharacter
         
         switch (movementType)
         {
-            case EnemyMovementPattern.Straight: // 등속 직선 이동 (하강)
+            case EnemyMovementPattern.Straight:
+                
                 transform.position += Vector3.down * (mMoveSpeed * Time.deltaTime);
+                
                 break;
-            case EnemyMovementPattern.Zigzag: // 지그재그 이동 : 진동폭 만큼 좌우로 움직이며 등속 직선 이동 (하강)
+            
+            case EnemyMovementPattern.Zigzag:
+                
                 mZigzagTime += Time.deltaTime;
+                
                 float x = mInitialX + Mathf.Sin(mZigzagTime * zigzagFrequency) * zigzagAmplitude;
                 float y = transform.position.y - mMoveSpeed * Time.deltaTime;
+                
                 transform.position = new Vector2(x, y);
+                
                 break;
+            
             case EnemyMovementPattern.Chase:
-                // 추적 이동 : 플레이어 추적 -> 일정 트리거 범위에서 멈추고 폭발 (이건 OnAttack서 처리)
-                // 플레이어 추적, 없으면 하강
+                
                 var hits = Physics2D.OverlapCircleAll(transform.position, detectRange, testPlayerLayerMask);
                 
                 if (hits.Length > 0)
                 {
                     mIsDetected = true;
-                    // TODO: 폭발 준비 (OnAttack에서 처리)
                     break;
                 }
                 
                 if (testPlayer != null)
                 {
-                    transform.position = Vector2.MoveTowards(
+                    transform.position = Vector2.MoveTowards
+                    (
                         transform.position,
                         testPlayer.transform.position,
                         mMoveSpeed * Time.deltaTime
                     );
                 }
-                
                 else
                 {
                     transform.position += Vector3.down * (mMoveSpeed * Time.deltaTime);
@@ -265,9 +279,9 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 break;
 
             case EnemyMovementPattern.Flying:
-                // 체공형 : OnAttack 시 멈춰서 발사
-                // 전장 하단으로 이동 → distanceToStop 이하 도달 시 멈춤, 멈추면 발사 시작
+                
                 float traveled = mFlyStartY - transform.position.y;
+                
                 if (traveled < distanceToStop)
                 {
                     transform.position += Vector3.down * (mMoveSpeed * Time.deltaTime);
@@ -276,6 +290,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 {
                     mHasStoppedFlying = true;
                 }
+                
                 break;
         }
     }
@@ -286,54 +301,61 @@ public class Monster : MonoBehaviour, IBattleCharacter
         switch (attackPattern)
         {
             case EnemyAttackPattern.Normal:
-                // 일반 공격, 그냥 닿으면 플레이어 TakeDamage 처리
+                
                 break;
+            
             case EnemyAttackPattern.Suicide:
-                // 플레이어 도달 시 일정 시간 후 폭발, 얘만 일반 공격으로 충돌 시 데미지 입히지 않음
+                
                 if (mIsDetected && mIsSuicide == false)
                 {
                     mIsSuicide = true;        
                     StartCoroutine(OnSuicide());
                 }
+                
                 break;
-            case EnemyAttackPattern.Shield:
-                // 공격 패턴이 아니라서, TakeDamage()에서 반감 로직 구현함
+            
+            case EnemyAttackPattern.Shield: // TakeDamage()에서 반감 구현
+                
                 break;
+            
             case EnemyAttackPattern.Sniper:
-                // 사격 시간 (3초) 마다 투사체 3연발(0.15초 간격)로 플레이어 방향으로 발사
+                
                 if (mIsFirng == false)
                 {
                     mIsFirng = true;
                    StartCoroutine(SniperAttackLoop());
                 }
+                
                 break;
+            
             case EnemyAttackPattern.Spread:
-                // 몬스터 전방 기준 45도 3갈래 3연발(0.2초 간격)로 발사
-                // 탄은 탄막 속도로 등속 직선 이동
-                // 몬스터와 플레이어 캐릭터의 상대적 위치에 따라 좌우 분사 방향 결정
+                
                 if (mIsFirng == false)
                 {
                     mIsFirng = true;
                     StartCoroutine(SpreadAttackLoop());
                 }
+                
                 break;
+            
             case EnemyAttackPattern.Radial:
-                // 몬스터 생성 후 사격 시간(3초) 마다 탄막 발사
-                // 몬스터 기준 시계 12개 방향으로 발사 (원형)
+                
                 if (mIsFirng == false)
                 {
                     mIsFirng = true;
                     StartCoroutine(RadialAttackLoop());
                 }
+                
                 break;
+            
             case EnemyAttackPattern.Flying:
-                // 정지 후 사격 시간(1초) 마다 탄막 발사
-                // 전장의 중선(파란선)을 지나는 무작위 방향으로 탄 1발 발사
+                
                 if (mHasStoppedFlying && mIsFirng == false)
                 {
                     mIsFirng = true;
                     StartCoroutine(FlyingAttackLoop());
                 }
+                
                 break;
         }
     }
@@ -357,19 +379,21 @@ public class Monster : MonoBehaviour, IBattleCharacter
         Destroy(gameObject);
     }
 
-    private Vector2 SetAngle(Vector2 vector, float degrees)
+    private Vector2 SetFireAngle(Vector2 vector, float degrees)
     {
         float rad = degrees * Mathf.Deg2Rad;
-        float cx = Mathf.Cos(rad), sx = Mathf.Sin(rad);
-        return new Vector2(vector.x * cx - vector.y * sx, vector.x * sx + vector.y * cx);
+        float cosX = Mathf.Cos(rad), sinX = Mathf.Sin(rad);
+        
+        return new Vector2(vector.x * cosX - vector.y * sinX, vector.x * sinX + vector.y * cosX);
     }
 
-    private IEnumerator FireProjectiles(int count, float interval, System.Func<int, Vector2> aim)
+    private IEnumerator FireProjectiles(int count, float interval, Func<int, Vector2> aim)
     {
         for (int i = 0; i < count; i++)
         {
             var obj = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
             var proj= obj.GetComponent<Projectile>();
+            
             proj.Initialize
             (
                 dir:      aim(i),
@@ -400,6 +424,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 interval: 0.15f,
                 aim: i => (testPlayer.transform.position - transform.position).normalized
             );
+            
             yield return new WaitForSeconds(fireInterval);
         }
     }
@@ -409,17 +434,13 @@ public class Monster : MonoBehaviour, IBattleCharacter
         while (true)
         {
             bool isLeft = testPlayer.transform.position.x < transform.position.x;
-            float[] angles = isLeft
-                ? new[] {  0f, -27.5f, -45f } 
-                : new[] {  0f,  27.5f,  45f };
-            
-            Debug.Log($"Spread: isLeft={isLeft}, angles=[{angles[0]}, {angles[1]}, {angles[2]}]");
+            float[] angles = isLeft ? new[] {  0f, -27.5f, -45f } : new[] {  0f,  27.5f,  45f };
             
             yield return FireProjectiles
             (
                 count:    3,
                 interval: 0.2f,
-                aim: i => SetAngle(Vector2.down, angles[i])
+                aim: i => SetFireAngle(Vector2.down, angles[i])
             );
             yield return new WaitForSeconds(fireInterval);
         }
@@ -436,7 +457,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 aim: i =>
                 {
                     float angle = i * 30f;
-                    return SetAngle(Vector2.down, angle);
+                    return SetFireAngle(Vector2.down, angle);
                 }
             );
             yield return new WaitForSeconds(fireInterval);
@@ -447,7 +468,6 @@ public class Monster : MonoBehaviour, IBattleCharacter
     {
         while (true)
         {
-            // 중간선 위 랜덤 위치
             float range = Random.Range(0f, 1f);
             Vector2 target = Vector2.Lerp
             (
@@ -456,10 +476,8 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 range
             );
 
-            // 발사 방향
             Vector2 dir = (target - (Vector2)transform.position).normalized;
 
-            // 한 발 발사
             yield return FireProjectiles
             (
                 count:    1,
@@ -489,8 +507,8 @@ public class Monster : MonoBehaviour, IBattleCharacter
             Gizmos.color = Color.blue;
             Vector3 origin = transform.position;
             
-            float halfAngle = 45f; // 90° 원뿔의 절반
-            int segments = 20; // 호(arc) 분할 수
+            float halfAngle = 45f; 
+            int segments = 20;
 
             Vector3 forward = Vector3.down;
             Vector3 leftDir = Quaternion.Euler(0, 0, halfAngle) * forward;
