@@ -10,7 +10,7 @@ public class ArcherArrow : HeroProjectile
     // 1보스
     // 2엘리트
     // 3최대체력
-    protected override void Hit(IBattleCharacter target)
+    protected override void Hit(Monster target)
     {
         TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(
             Squad.Instance,

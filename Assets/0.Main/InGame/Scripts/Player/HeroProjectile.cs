@@ -32,13 +32,13 @@ public abstract class HeroProjectile : MonoBehaviour
     
     private void SetSpeed()
     {
-        m_Speed = Squad.BASE_MOVE_SPEED * speed;
+        m_Speed = Squad.STANDARD_DISTANCE * speed;
     }
     
     public void SetSpeed(float newSpeed)
     {
         speed = newSpeed;
-        m_Speed = Squad.BASE_MOVE_SPEED * speed;
+        m_Speed = Squad.STANDARD_DISTANCE * speed;
     }
 
     public void Fire()
@@ -49,6 +49,9 @@ public abstract class HeroProjectile : MonoBehaviour
 
     protected virtual void SetDirection()
     {
+            m_TargetDirection = Vector3.up;
+            return;
+            // TODO: Remove test code
         var target = FindTarget();
         if (target != null)
         {
@@ -92,5 +95,5 @@ public abstract class HeroProjectile : MonoBehaviour
         }
     }
 
-    protected abstract void Hit(IBattleCharacter target);
+    protected abstract void Hit(Monster target);
 }

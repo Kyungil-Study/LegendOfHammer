@@ -34,17 +34,30 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
         [field:SerializeField] public float FinalDamageFactor { get; set; } = 1;
     }
 
-    [Range(0,10)] public const float BASE_MOVE_SPEED = 3f;
-
+    [Range(0,10)] public const float STANDARD_DISTANCE = 2.8f;
     public SquadStats stats = new SquadStats();
+    public Warrior warrior;
+    public bool isInvincible = false;
 
     public void TakeDamage(TakeDamageEventArgs eventArgs)
     {
+        if (isInvincible)
+        {
+            return;
+        }
         stats.CurrentHealth -= eventArgs.Damage;
     }
 
     private void Die()
     {
         BattleEventManager.Instance.CallEvent(new DeathEventArgs(this));
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (warrior.isCharging && BattleManager.GetMonsterBy(other, out Monster monster))
+        {
+            warrior.Impact(monster);
+        }
     }
 }
