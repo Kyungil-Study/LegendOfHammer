@@ -215,13 +215,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3380768c582997f41b7fda6a7ab1e040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyID: 12009
+  enemyID: 11005
   testPlayer: {fileID: 0}
   testPlayerLayerMask:
     serializedVersion: 2
     m_Bits: 64
   projectilePrefab: {fileID: 5122971031347301392, guid: 623e67ce00306e349ac9d084a76d79d4, type: 3}
   projectileSpeed: 5
+  fireInterval: 3
   zigzagAmplitude: 1
   zigzagFrequency: 2
   suicideDelay: 1
@@ -230,4 +231,3 @@ MonoBehaviour:
   explosionPrefab: {fileID: 6111301031846871093, guid: 9a3809abee10ab54188078ab046f1168, type: 3}
   distanceToStop: 3
   shieldDistance: 1
-  fireInterval: 3
