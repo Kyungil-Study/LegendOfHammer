@@ -76,6 +76,12 @@ public class Monster : MonoBehaviour, IBattleCharacter
     void Update()
     {
         OnMove(mMovementPattern);
+        
+        if (mAttackPattern == EnemyAttackPattern.Spread)
+        {
+            IsPlayerRightOrLeft();
+        }
+        
         OnAttack(mAttackPattern);
     }
 
@@ -222,18 +228,30 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 break;
             case EnemyAttackPattern.Sniper:
                 // 사격 시간 (3초) 마다 투사체 3연발(0.15초 간격)로 플레이어 방향으로 발사
-                StartCoroutine(SniperAttackLoop());
+                if (isFirng == false)
+                {
+                    isFirng = true;
+                   StartCoroutine(SniperAttackLoop());
+                }
                 break;
             case EnemyAttackPattern.Spread:
                 // 몬스터 전방 기준 45도 3갈래 3연발(0.2초 간격)로 발사
                 // 탄은 탄막 속도로 등속 직선 이동
                 // 몬스터와 플레이어 캐릭터의 상대적 위치에 따라 좌우 분사 방향 결정
-                StartCoroutine(SpreadAttackLoop());
+                if (isFirng == false)
+                {
+                    isFirng = true;
+                    StartCoroutine(SpreadAttackLoop());
+                }
                 break;
             case EnemyAttackPattern.Radial:
                 // 몬스터 생성 후 사격 시간(3초) 마다 탄막 발사
                 // 몬스터 기준 시계 12개 방향으로 발사 (원형)
-                StartCoroutine(RadialAttackLoop());
+                if (isFirng == false)
+                {
+                    isFirng = true;
+                    StartCoroutine(RadialAttackLoop());
+                }
                 break;
             case EnemyAttackPattern.Flying:
                 // 정지 후 사격 시간(1초) 마다 탄막 발사
@@ -258,7 +276,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
     
     IEnumerator OnSuicide()
     {
-        // 추가 : 반짝반짝 거리게 Fade 처리
+        // 추가 : Fade 처리하면 좋을 듯, 빨간색으로 깜빡깜빡
         yield return new WaitForSeconds(suicideDelay);
 
         var expObj = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
@@ -275,7 +293,6 @@ public class Monster : MonoBehaviour, IBattleCharacter
         Destroy(gameObject);
     }
     
-    // 발사 공통 메서드
     private IEnumerator FireProjectiles(int count, float interval, System.Func<int, Vector2> aim)
     {
         for (int i = 0; i < count; i++)
@@ -301,6 +318,9 @@ public class Monster : MonoBehaviour, IBattleCharacter
             }
         }
     }
+
+    private bool isFirng = false;
+    [SerializeField] private float fireInterval = 3f;
     
     private IEnumerator SniperAttackLoop()
     {
@@ -312,8 +332,15 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 interval: 0.15f,
                 aim: i => (testPlayer.transform.position - transform.position).normalized
             );
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(fireInterval);
         }
+    }
+    
+    bool isLeft = false;
+    
+    private bool IsPlayerRightOrLeft()
+    {
+        return testPlayer.transform.position.x < transform.position.x;
     }
     
     private IEnumerator SpreadAttackLoop()
@@ -327,12 +354,11 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 aim: i =>
                 {
                     // 플레이어가 왼쪽이면 +, 오른쪽이면 −
-                    bool isLeft = testPlayer.transform.position.x < transform.position.x;
                     float[] angles = isLeft ? new[] {0f, 27.5f, 45f} : new[] {0f, -27.5f, -45f};
                     return SetAngle(Vector2.down, angles[i]);
                 }
             );
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(fireInterval);
         }
     }
     
@@ -351,7 +377,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
                     return SetAngle(Vector2.down, angle);
                 }
             );
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(fireInterval);
         }
     }
 
