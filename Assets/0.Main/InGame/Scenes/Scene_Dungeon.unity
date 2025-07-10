@@ -211,6 +211,8 @@ MonoBehaviour:
     <BonusEffectFactor>k__BackingField: 0
     <TakeDamageFactor>k__BackingField: 1
     <FinalDamageFactor>k__BackingField: 1
+  warrior: {fileID: 0}
+  isInvincible: 0
 --- !u!1001 &1781639699784681340
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -284,10 +286,6 @@ PrefabInstance:
       propertyPath: TestPlayer
       value: 
       objectReference: {fileID: 2020863942}
-    - target: {fileID: 1912313772269553298, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
-      propertyPath: TestEnemyPrefab
-      value: 
-      objectReference: {fileID: 7494431464099580550, guid: cb7f568d296739141874983fa6d2c03d, type: 3}
     - target: {fileID: 2057616619765667853, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
       propertyPath: m_Name
       value: MonsterSpawner

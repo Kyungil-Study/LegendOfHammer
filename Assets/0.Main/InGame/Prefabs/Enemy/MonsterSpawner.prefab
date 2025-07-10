@@ -77,14 +77,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPatternTableSao: {fileID: 11400000, guid: 89d96262c07931d4b9a3698716afb265, type: 2}
+  monsterPrefabs: []
   monsterPrefab: {fileID: 7494431464099580550, guid: cb7f568d296739141874983fa6d2c03d, type: 3}
-  eliteMonsterPrefab: {fileID: 6751229596582898055, guid: 1e82f95e356b86b4c9b32946a77caa13, type: 3}
-  bossMonsterPrefab: {fileID: 3627491764740283123, guid: 1a4d21a69128dc344a5ed6fdc039638f, type: 3}
+  TestPlayer: {fileID: 0}
   spawnPoints:
   - {fileID: 57902397338766103}
   - {fileID: 229348489126502845}
   - {fileID: 4562884616346416316}
   midSpawnPoints: {fileID: 229348489126502845}
+  isTestMode: 0
+  TestEnemyPrefab: {fileID: 7494431464099580550, guid: cb7f568d296739141874983fa6d2c03d, type: 3}
 --- !u!1 &3430082036272000575
 GameObject:
   m_ObjectHideFlags: 0
