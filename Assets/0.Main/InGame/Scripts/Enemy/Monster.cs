@@ -19,7 +19,9 @@ public class Monster : MonoBehaviour, IBattleCharacter
     [Header("투사체")] [Tooltip("투사체 프리팹, 속도")]
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private float projectileSpeed = 5f;
+    [SerializeField] private float fireInterval = 3f;
     private float mProjectileDamage;
+    private bool mIsFirng = false;
     
     [Header("지그재그")] [Tooltip("zigzagAmplitude: 진동폭, zigzagFrequency: 주기")]
     [SerializeField] private float zigzagAmplitude = 1f;
@@ -99,7 +101,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
                     && Vector2.Distance(attackerPos, myPos) <= shieldDistance)
                 {
                     damage = Mathf.CeilToInt(damage * 0.5f);
-                    // 나중에 확인할 수 있도록, 플레이어 -> 적 공격 시 로그로
+                    // 나중에 확인할 수 있도록, 플레이어 -> 적 공격 시 로그로 확인
                     Debug.Log($"Shield 반감 적용: 원래 데미지 : {eventArgs.Damage} // 적용 데미지 : {damage}");
                 }
             }
@@ -108,6 +110,15 @@ public class Monster : MonoBehaviour, IBattleCharacter
         mCurrentHP -= damage;
     }
 
+    void OnDeath()
+    {
+        if (mCurrentHP <= 0) // HP 깎여 사망시
+        {
+            BattleEventManager.Instance.CallEvent(new DeathEventArgs(this));
+            Destroy(gameObject);
+        }
+    }
+    
     void OnTriggerEnter2D(Collider2D collision)
     {
         // Suicide 패턴은 별도 처리
@@ -118,27 +129,28 @@ public class Monster : MonoBehaviour, IBattleCharacter
         
         // 플레이어 레이어 체크
         int bit = 1 << collision.gameObject.layer;
-        if ((testPlayerLayerMask.value & bit) == 0)
+        if ((testPlayerLayerMask.value & bit) != 0)
         {
-            return;
+            var player = collision.GetComponent<IBattleCharacter>();
+            if (player != null)
+            {
+                BattleEventManager.Instance.CallEvent(
+                    new TakeDamageEventArgs
+                        (
+                            attacker: this, 
+                            target: player, 
+                            damage: mAttackPower
+                        )
+                );
+                Debug.Log($"플레이어 받은 데미지 : {mAttackPower}");
+            }
         }
-        
-        Debug.Log("플레이어 충돌 시 데미지 처리");
-        
-        var player = collision.GetComponent<IBattleCharacter>();
-        
-        if (player != null)
+
+        // ClearZone 레이어 체크
+        if (collision.gameObject.layer == 9)    
         {
-            BattleEventManager.Instance.CallEvent
-            (
-                new TakeDamageEventArgs
-                (
-                    attacker: this,
-                    target: player,
-                    damage: mAttackPower
-                )
-            );
-            Debug.Log($"플레이어 받은 데미지 : {mAttackPower}");
+            BattleEventManager.Instance.CallEvent(new AliveMonsterEventArgs(this));
+            Destroy(gameObject);
         }
     }
 
@@ -226,9 +238,9 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 break;
             case EnemyAttackPattern.Sniper:
                 // 사격 시간 (3초) 마다 투사체 3연발(0.15초 간격)로 플레이어 방향으로 발사
-                if (isFirng == false)
+                if (mIsFirng == false)
                 {
-                    isFirng = true;
+                    mIsFirng = true;
                    StartCoroutine(SniperAttackLoop());
                 }
                 break;
@@ -236,27 +248,27 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 // 몬스터 전방 기준 45도 3갈래 3연발(0.2초 간격)로 발사
                 // 탄은 탄막 속도로 등속 직선 이동
                 // 몬스터와 플레이어 캐릭터의 상대적 위치에 따라 좌우 분사 방향 결정
-                if (isFirng == false)
+                if (mIsFirng == false)
                 {
-                    isFirng = true;
+                    mIsFirng = true;
                     StartCoroutine(SpreadAttackLoop());
                 }
                 break;
             case EnemyAttackPattern.Radial:
                 // 몬스터 생성 후 사격 시간(3초) 마다 탄막 발사
                 // 몬스터 기준 시계 12개 방향으로 발사 (원형)
-                if (isFirng == false)
+                if (mIsFirng == false)
                 {
-                    isFirng = true;
+                    mIsFirng = true;
                     StartCoroutine(RadialAttackLoop());
                 }
                 break;
             case EnemyAttackPattern.Flying:
                 // 정지 후 사격 시간(1초) 마다 탄막 발사
                 // 전장의 중선(파란선)을 지나는 무작위 방향으로 탄 1발 발사
-                if (mHasStoppedFlying && isFirng == false)
+                if (mHasStoppedFlying && mIsFirng == false)
                 {
-                    isFirng = true;
+                    mIsFirng = true;
                     StartCoroutine(FlyingAttackLoop());
                 }
                 break;
@@ -281,10 +293,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
         Destroy(gameObject);
     }
-    
-    private bool isFirng = false;
-    [SerializeField] private float fireInterval = 3f;
-    
+
     private Vector2 SetAngle(Vector2 vector, float degrees)
     {
         float rad = degrees * Mathf.Deg2Rad;
@@ -353,7 +362,6 @@ public class Monster : MonoBehaviour, IBattleCharacter
         }
     }
     
-    // Radial 전용: 12방향 → 3초마다 발사
     private IEnumerator RadialAttackLoop()
     {
         while (true)
@@ -382,8 +390,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 interval: 0f,
                 aim: i =>
                 {
-                    // 전장의 중선(파란선)을 지나는 무작위 방향으로 탄 1발 발사
-                    float angle = Random.Range(-90f, 90f);
+                    float angle = Random.Range(-90f, 90f);  // 전방 180도 기준으로 아래로 랜덤 각도로 발사
                     return SetAngle(Vector2.down, angle);
                 }
             );
@@ -391,7 +398,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
         }
     }
     
-    // Chase, Shield 감지 범위
+    // 감지 범위
     void OnDrawGizmosSelected()
     {
         if (mMovementPattern == EnemyMovementPattern.Chase)
