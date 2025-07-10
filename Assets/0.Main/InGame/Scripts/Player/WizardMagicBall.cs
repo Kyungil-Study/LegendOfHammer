@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class WizardMagicBall : HeroProjectile
 {
-    private static readonly int EXPLOSION = Animator.StringToHash("Explosion");
+    public GameObject explosionEffectPrefab;
     public float explosionRadius = 1f;
     
-    protected override void Hit(IBattleCharacter target)
+    protected override void Hit(Monster target)
     {
-        Explode(transform.position, explosionRadius);
+        Explode(target.transform.position, explosionRadius);
     }
     
     private void Explode(Vector3 position, float radius)
     {
-        GetComponentInChildren<Animator>().SetTrigger(EXPLOSION);
         List<Monster> enemies = BattleManager.GetAllEnemyInRadius(position, radius);
         foreach (var enemy in enemies)
         {
@@ -25,6 +24,7 @@ public class WizardMagicBall : HeroProjectile
             );
             BattleEventManager.Instance.CallEvent(eventArgs);
         }
+        Destroy(Instantiate(explosionEffectPrefab, position, Quaternion.identity),2f);
         Destroy(gameObject);
     }
 }

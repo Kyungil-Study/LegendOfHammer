@@ -44,3 +44,6 @@ TagManager:
   - name: Lever
     uniqueID: 2714712515
     locked: 0
+  - name: Projectile
+    uniqueID: 3777063909
+    locked: 0
