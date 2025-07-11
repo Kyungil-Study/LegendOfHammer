@@ -29,7 +29,6 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
         [field:SerializeField] public float CriticalChance { get; set; } = 0;
         [field:SerializeField] public float CriticalDamage { get; set; } = 1.5f;
         [field:SerializeField] public int BonusDamagePerHit { get; set; } = 0;
-        [field:SerializeField] public float BonusEffectFactor { get; set; } = 0;
         [field:SerializeField] public float TakeDamageFactor { get; set; } = 1;
         [field:SerializeField] public float FinalDamageFactor { get; set; } = 1;
     }
