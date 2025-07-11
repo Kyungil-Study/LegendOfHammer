@@ -14,6 +14,7 @@ public class LobbyUI : MonoBehaviour
     public TMP_Text currentStageText;
     public TMP_Text maxStageText;
 
+    public TMP_InputField stageNameInput;
     public Button playButton;
 
     private void Awake()
@@ -70,7 +71,7 @@ public class LobbyUI : MonoBehaviour
     public void GoDungeonScene()
     {
         BackendStageGameData.Instance.UpdateStage();
-        SceneManager.LoadScene(2);
+        SessionManager.Instance.StartGame();
     }
     private void OnDestroy()
     {

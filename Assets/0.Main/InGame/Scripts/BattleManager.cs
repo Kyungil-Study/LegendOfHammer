@@ -26,6 +26,7 @@ public class BattleManager : MonoSingleton<BattleManager>
 
     private void OnDeath(DeathEventArgs args)
     {
+        Debug.Log("[BattleManager] OnDeath called.");
         if (args.Target as Squad)
         {
             Debug.Log("Player has died. Ending game.");
@@ -91,7 +92,7 @@ public class BattleManager : MonoSingleton<BattleManager>
         EndBattleEventArgs endEventArgs = new EndBattleEventArgs(isVictory); // Assuming victory for now
         BattleEventManager.Instance.CallEvent(endEventArgs);
         
-        SessionManager.Instance.EndGame();
+        SessionManager.Instance.EndGame(isVictory);
     }
     
     // TODO: Implement logic to get monster by collider
