@@ -812,7 +812,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &680784927
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1304,6 +1304,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 19721719880681770, guid: 5e5e4f8032266774587a385bd60bce09, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 19721719880681770, guid: 5e5e4f8032266774587a385bd60bce09, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 772309319644952599, guid: 5e5e4f8032266774587a385bd60bce09, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -1388,9 +1396,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2493149407742344229, guid: 5e5e4f8032266774587a385bd60bce09, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2493149407742344229, guid: 5e5e4f8032266774587a385bd60bce09, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2493149407742344229, guid: 5e5e4f8032266774587a385bd60bce09, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6329636774714983302, guid: 5e5e4f8032266774587a385bd60bce09, type: 3}
       propertyPath: m_Name
       value: RankCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 6329636774714983302, guid: 5e5e4f8032266774587a385bd60bce09, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7462175839399121881, guid: 5e5e4f8032266774587a385bd60bce09, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1836,7 +1864,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1904900244
 RectTransform:
   m_ObjectHideFlags: 0
