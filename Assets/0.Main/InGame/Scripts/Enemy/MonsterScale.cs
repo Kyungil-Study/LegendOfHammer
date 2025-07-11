@@ -2,42 +2,121 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = System.Random;
 
+[RequireComponent(typeof(BoxCollider2D))]
 public class MonsterScale : MonoBehaviour
 {
-    [Header("몬스터 모델 오브젝트 연결 (자식)")]
+    [Serializable]
+    private struct Appearance
+    {
+        public Sprite sprite;
+        [Tooltip("Idle 상태용 클립")]
+        public AnimationClip idleClip;
+    }
+    
+    [Header("몬스터 모델 오브젝트 (자식)")]
     [SerializeField] private Transform model;
-
-    private SpriteRenderer    spriteRenderer;
-    private BoxCollider2D  Collider;
+    [Header("몬스터 외형 세팅")] 
+    [SerializeField] private Appearance[] appearances;
+    [Header("콜라이더 크기 조정 계수")]
+    [SerializeField][Range(0.1f, 2f)] private float mHitBoxSize = 1f;
+    
+    private SpriteRenderer  mSpriteRenderer;
+    private BoxCollider2D   mCollider;
+    private Animator        mAnimator;
+    
+    private int mAppearanceIndex;
+    private float mScaleFactor;
 
     private void Awake()
     {
-        spriteRenderer = model.GetComponent<SpriteRenderer>();
-        Collider = GetComponent<BoxCollider2D>();
+        mSpriteRenderer = model.GetComponent<SpriteRenderer>();
+        mAnimator       = model.GetComponent<Animator>();
+        mCollider       = GetComponent<BoxCollider2D>();
     }
 
     private void Start()
     {
-        var monster = GetComponent<Monster>();
-        var data    = EnemyDataManager.Instance.Records[monster.EnemyID];
-        int pixelSize;
+        PickRandomSprite();
+        mScaleFactor = CalculateScaleFactor();
         
-        switch (data.Enemy_Rank)
+        ApplyModelScale(mScaleFactor);
+        ApplyColliderFromPhysicsShape(mScaleFactor);
+    }
+    
+    private void PickRandomSprite()
+    {
+        if (appearances == null || appearances.Length == 0)
         {
-            case EnemyRank.Elite: pixelSize = 160; break;
-            case EnemyRank.Boss:  pixelSize = 240; break;
-            default:              pixelSize =  72; break;
+            Debug.LogError("적 외형을 설정해주세요");
+            return;
         }
 
-        float origPixels = spriteRenderer.sprite.rect.width;
-        float scaleFactor = pixelSize / origPixels;
-        model.localScale = Vector3.one * scaleFactor;
+        mAppearanceIndex = UnityEngine.Random.Range(0, appearances.Length);
+        var appearance = appearances[mAppearanceIndex];
 
-        Vector2 size = spriteRenderer.bounds.size;
+        mSpriteRenderer.sprite = appearance.sprite;
+
+        if (appearance.idleClip != null)
+        {
+            var overrideCtrl = new AnimatorOverrideController(mAnimator.runtimeAnimatorController);
+            overrideCtrl["Idle"] = appearance.idleClip;  
+            mAnimator.runtimeAnimatorController = overrideCtrl;
+        }
+    }
+
+    private float CalculateScaleFactor()
+    {
+        var monster = GetComponent<Monster>();
+        var data    = EnemyDataManager.Instance.Records[monster.EnemyID];
+        int enemyPixel = data.Enemy_Rank switch
+        {
+            EnemyRank.Elite  => 160,
+            EnemyRank.Boss   => 240,
+            EnemyRank.Normal =>  72
+        };
         
-        // spriteRenderer.bounds.size.x 는 '모델.localScale' 이 적용된 월드 너비
-        Collider.size   = size;
-        Collider.offset = spriteRenderer.bounds.center - (Vector3)transform.position;
+        float originPixel = mSpriteRenderer.sprite.rect.width;
+        return enemyPixel / originPixel;
+    }
+
+    private void ApplyModelScale(float scaleFactor)
+    {
+        model.localScale = Vector3.one * scaleFactor;
+    }
+    
+    private void ApplyColliderFromPhysicsShape(float scaleFactor)
+    {
+        var sprite    = mSpriteRenderer.sprite;
+        int count  = sprite.GetPhysicsShapeCount();
+        var allPoints = new List<Vector2>();
+
+        for (int i = 0; i < count; i++)
+        {
+            var path = new List<Vector2>();
+            sprite.GetPhysicsShape(i, path);
+            allPoints.AddRange(path);
+        }
+
+        if (allPoints.Count == 0) return;
+
+        float minX = allPoints[0].x, maxX = allPoints[0].x;
+        float minY = allPoints[0].y, maxY = allPoints[0].y;
+        
+        foreach (var points in allPoints)
+        {
+            if (points.x < minX) minX = points.x;
+            if (points.x > maxX) maxX = points.x;
+            if (points.y < minY) minY = points.y;
+            if (points.y > maxY) maxY = points.y;
+        }
+
+        Vector2 size   = new Vector2(maxX - minX, maxY - minY) * scaleFactor * mHitBoxSize;
+        Vector2 center = new Vector2((minX + maxX) * 0.5f, (minY + maxY) * 0.5f) * scaleFactor
+                         + (Vector2)model.localPosition;
+
+        mCollider.size   = size;
+        mCollider.offset = center;
     }
 }
