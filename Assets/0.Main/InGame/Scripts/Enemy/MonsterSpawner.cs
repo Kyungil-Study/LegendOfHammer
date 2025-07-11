@@ -7,6 +7,8 @@ using UnityEngine.Serialization;
 
 public class MonsterSpawner : MonoSingleton<MonsterSpawner>
 {
+    [SerializeField] private EnemyID testSpawnID = EnemyID.Straight_Normal_001; // For testing purposes, remove later
+    
     public class PatternActivation
     {
         public int ID { get; set; }
@@ -69,6 +71,7 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
         {
             // 테스트용, 나중에 지우기
             Monster testMonster = Instantiate(TestEnemyPrefab, spawnPoints[2]);
+            testMonster.EnemyID = testSpawnID; 
             testMonster.GetComponent<Monster>().SetPlayer(TestPlayer);
         }
     }

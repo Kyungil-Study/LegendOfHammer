@@ -6,12 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class SessionManager : SingletonBase<SessionManager>
 {
-    [SerializeField] private TMP_InputField stageIndexInputField; // todo: For testing purposes, remove later
-    int stageIndex = 1; // todo: For testing purposes, remove later
-    public void StartGame()
+    public void StartGame() 
     { // todo: 로딩 연동 필요
         
-        stageIndex = int.Parse(stageIndexInputField.text); // For testing purposes, remove later
+        var stageIndex = BackendStageGameData.stage.Currentstage;; // For testing purposes, remove later
         SceneManager.LoadSceneAsync("Scene_Dungeon", LoadSceneMode.Single)!.completed += (operation) =>
         {
             Debug.Log("Loading scene completed.");
@@ -19,8 +17,18 @@ public class SessionManager : SingletonBase<SessionManager>
         };
     }
     
-    public void EndGame()
+    public void EndGame(bool success)
     {
+        if (success)
+        {
+            Debug.Log("Game completed successfully.");
+            BackendStageGameData.Instance.NextStage();
+        }
+        else
+        {
+            BackendStageGameData.Instance.ResetStage();
+        }
+
         Debug.Log($"[SessionManager] Ending game");
         SceneManager.LoadSceneAsync("TestScene", LoadSceneMode.Single)!.completed += (operation) =>
         {
