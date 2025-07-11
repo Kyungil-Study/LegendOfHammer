@@ -11,15 +11,15 @@ public class InventoryUIManager : MonoBehaviour
 
     private List<GameObject> slotInstances = new List<GameObject>();
 
-    // private void OnEnable()
-    // {
-    //     RefreshInventory();
-    // }
-    
-    private void Start()
+    private void OnEnable()
     {
         RefreshInventory();
     }
+    
+    // private void Start() //테스트용
+    // {
+    //     RefreshInventory();
+    // }
 
     public void RefreshInventory()
     {
