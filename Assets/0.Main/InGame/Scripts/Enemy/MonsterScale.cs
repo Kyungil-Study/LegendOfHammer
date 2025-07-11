@@ -4,70 +4,100 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = System.Random;
 
+[RequireComponent(typeof(BoxCollider2D))]
 public class MonsterScale : MonoBehaviour
 {
-    [Header("몬스터 모델 오브젝트 연결 (자식)")]
+    [Header("몬스터 모델 오브젝트 (자식)")]
     [SerializeField] private Transform model;
-    [SerializeField] [Tooltip("적 Sprite, 랜덤 생성")]
-    private Sprite[] mSprites;
-    [SerializeField] [Tooltip("적 애니메이션 클립, 스프라이트와 매핑시키기")]
-    private AnimationClip[] mAnimationClips;
+    [Header("적 스프라이트")]
+    [SerializeField] private Sprite[] mSprites;
+    [Header("애니메이션 클립")]
+    [SerializeField] private AnimationClip[] mAnimationClips;
+    [Header("콜라이더 크기 조정 계수")]
+    [SerializeField][Range(0.1f, 2f)] private float mHitBoxSize = 1f;
+    [Header("콜라이더 오프셋 보정")]
+    [SerializeField][Tooltip("콜라이더 중앙에서 얼마나 X축 방향으로 이동할지")]
+    private float mHitBoxOffsetX = 0f;
+    [SerializeField][Tooltip("콜라이더 중앙에서 얼마나 Y축 방향으로 이동할지")]
+    private float mHitBoxOffsetY = 0f;
     
-    private SpriteRenderer mSpriteRenderer;
-    private BoxCollider2D  mCollider;
+    private SpriteRenderer  mSpriteRenderer;
+    private BoxCollider2D   mCollider;
+    private Animator        mAnimator;
+    private Rect            mTrimmedRect;
+    private float           mScaleFactor;
+    private float           mPixelPerUnit;
 
-    private int mSpriteIndex;
-    
     private void Awake()
     {
         mSpriteRenderer = model.GetComponent<SpriteRenderer>();
-        mCollider = GetComponent<BoxCollider2D>();
-        
+        mCollider       = GetComponent<BoxCollider2D>();
+        mAnimator       = GetComponent<Animator>();
     }
 
     private void Start()
     {
+        PickRandomSprite();
+        SetSpriteData();
+        
+        mScaleFactor = CalculateScaleFactor();
+        
+        ApplyModelScale(mScaleFactor);
+        ApplyColliderSize(mScaleFactor);
+        ApplyColliderOffset(mScaleFactor);
+    }
+    
+    private void PickRandomSprite()
+    {
+        if (mSprites.Length == 0) return;
+        int index = UnityEngine.Random.Range(0, mSprites.Length);
+        mSpriteRenderer.sprite = mSprites[index];
+        // 클립도 이 index에 맞게 바꿔주기
+    }
+    
+    private void SetSpriteData()
+    {
+        mTrimmedRect = mSpriteRenderer.sprite.textureRect;
+        mPixelPerUnit = mSpriteRenderer.sprite.pixelsPerUnit;
+    }
+
+    private float CalculateScaleFactor()
+    {
         var monster = GetComponent<Monster>();
         var data    = EnemyDataManager.Instance.Records[monster.EnemyID];
-        int pixelSize;
-        
-        switch (data.Enemy_Rank)
+        int enemyPixel = data.Enemy_Rank switch
         {
-            case EnemyRank.Elite: pixelSize = 160; break;
-            case EnemyRank.Boss:  pixelSize = 240; break;
-            default:              pixelSize =  72; break;
-        }
+            EnemyRank.Elite  => 160,
+            EnemyRank.Boss   => 240,
+            EnemyRank.Normal =>  72
+        };
+        
+        float originPixel = mSpriteRenderer.sprite.rect.width;
+        return enemyPixel / originPixel;
+    }
 
-        float origPixels = mSpriteRenderer.sprite.rect.width;
-        float scaleFactor = pixelSize / origPixels;
+    private void ApplyModelScale(float scaleFactor)
+    {
         model.localScale = Vector3.one * scaleFactor;
+    }
 
-        Rect texRect = mSpriteRenderer.sprite.textureRect;
-        float pixelsPerUnit = mSpriteRenderer.sprite.pixelsPerUnit;
-        
-        float localWidth = texRect.width  / pixelsPerUnit;
-        float localHeight = texRect.height / pixelsPerUnit;
+    private void ApplyColliderSize(float scaleFactor)
+    {
+        Vector2 baseSizeUnits = new Vector2(mTrimmedRect.width, mTrimmedRect.height) / mPixelPerUnit;
+        Vector2 finalSize = baseSizeUnits * scaleFactor * mHitBoxSize;
+        mCollider.size = finalSize;
+    }
 
-        mCollider.size = new Vector2(localWidth * scaleFactor, localHeight * scaleFactor);
-        
-        // 콜라이더 Offset 맞추기
-        
-        // Sprite 영역 픽셀에 맞게 자르기
-        Vector2 rectSizePx   = new Vector2(texRect.width, texRect.height);
-        Vector2 rectCenterPx = rectSizePx * 0.5f;
-
-        // 픽셀 오프셋과 스프라이트 오프셋 차이
+    private void ApplyColliderOffset(float scaleFactor)
+    {
+        Vector2 rectCenterPx = new Vector2(mTrimmedRect.width, mTrimmedRect.height) * 0.5f;
         Vector2 pivotPx      = mSpriteRenderer.sprite.pivot;
         Vector2 offsetPx     = rectCenterPx - pivotPx;
 
-        // 픽셀 → 유닛 단위
-        Vector2 offsetUnits  = offsetPx / pixelsPerUnit;
+        Vector2 baseOffsetUnits = offsetPx / mPixelPerUnit * scaleFactor;
+        Vector2 modelPos2D = (Vector2)model.localPosition;
+        Vector2 manualOffset = new Vector2(mHitBoxOffsetX, mHitBoxOffsetY);
 
-        // 스케일 적용 & 모델 위치 보정
-        Vector2 modelPos2D   = (Vector2)model.localPosition;
-        Vector2 finalOffset  = offsetUnits * scaleFactor + modelPos2D;
-
-        // 콜라이더 Offset에 적용
-        mCollider.offset     = finalOffset;
+        mCollider.offset = baseOffsetUnits + modelPos2D + manualOffset;
     }
 }
