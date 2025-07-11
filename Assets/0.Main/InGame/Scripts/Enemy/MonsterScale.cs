@@ -15,18 +15,11 @@ public class MonsterScale : MonoBehaviour
     [SerializeField] private AnimationClip[] mAnimationClips;
     [Header("콜라이더 크기 조정 계수")]
     [SerializeField][Range(0.1f, 2f)] private float mHitBoxSize = 1f;
-    [Header("콜라이더 오프셋 보정")]
-    [SerializeField][Tooltip("콜라이더 중앙에서 얼마나 X축 방향으로 이동할지")]
-    private float mHitBoxOffsetX = 0f;
-    [SerializeField][Tooltip("콜라이더 중앙에서 얼마나 Y축 방향으로 이동할지")]
-    private float mHitBoxOffsetY = 0f;
-    
+
     private SpriteRenderer  mSpriteRenderer;
     private BoxCollider2D   mCollider;
     private Animator        mAnimator;
-    private Rect            mTrimmedRect;
     private float           mScaleFactor;
-    private float           mPixelPerUnit;
 
     private void Awake()
     {
@@ -38,13 +31,10 @@ public class MonsterScale : MonoBehaviour
     private void Start()
     {
         PickRandomSprite();
-        SetSpriteData();
-        
         mScaleFactor = CalculateScaleFactor();
         
         ApplyModelScale(mScaleFactor);
-        ApplyColliderSize(mScaleFactor);
-        ApplyColliderOffset(mScaleFactor);
+        ApplyColliderFromPhysicsShape(mScaleFactor);
     }
     
     private void PickRandomSprite()
@@ -53,12 +43,6 @@ public class MonsterScale : MonoBehaviour
         int index = UnityEngine.Random.Range(0, mSprites.Length);
         mSpriteRenderer.sprite = mSprites[index];
         // 클립도 이 index에 맞게 바꿔주기
-    }
-    
-    private void SetSpriteData()
-    {
-        mTrimmedRect = mSpriteRenderer.sprite.textureRect;
-        mPixelPerUnit = mSpriteRenderer.sprite.pixelsPerUnit;
     }
 
     private float CalculateScaleFactor()
@@ -80,24 +64,38 @@ public class MonsterScale : MonoBehaviour
     {
         model.localScale = Vector3.one * scaleFactor;
     }
-
-    private void ApplyColliderSize(float scaleFactor)
+    
+    private void ApplyColliderFromPhysicsShape(float scaleFactor)
     {
-        Vector2 baseSizeUnits = new Vector2(mTrimmedRect.width, mTrimmedRect.height) / mPixelPerUnit;
-        Vector2 finalSize = baseSizeUnits * scaleFactor * mHitBoxSize;
-        mCollider.size = finalSize;
-    }
+        var sprite    = mSpriteRenderer.sprite;
+        int count  = sprite.GetPhysicsShapeCount();
+        var allPoints = new List<Vector2>();
 
-    private void ApplyColliderOffset(float scaleFactor)
-    {
-        Vector2 rectCenterPx = new Vector2(mTrimmedRect.width, mTrimmedRect.height) * 0.5f;
-        Vector2 pivotPx      = mSpriteRenderer.sprite.pivot;
-        Vector2 offsetPx     = rectCenterPx - pivotPx;
+        for (int i = 0; i < count; i++)
+        {
+            var path = new List<Vector2>();
+            sprite.GetPhysicsShape(i, path);
+            allPoints.AddRange(path);
+        }
 
-        Vector2 baseOffsetUnits = offsetPx / mPixelPerUnit * scaleFactor;
-        Vector2 modelPos2D = (Vector2)model.localPosition;
-        Vector2 manualOffset = new Vector2(mHitBoxOffsetX, mHitBoxOffsetY);
+        if (allPoints.Count == 0) return;
 
-        mCollider.offset = baseOffsetUnits + modelPos2D + manualOffset;
+        float minX = allPoints[0].x, maxX = allPoints[0].x;
+        float minY = allPoints[0].y, maxY = allPoints[0].y;
+        
+        foreach (var points in allPoints)
+        {
+            if (points.x < minX) minX = points.x;
+            if (points.x > maxX) maxX = points.x;
+            if (points.y < minY) minY = points.y;
+            if (points.y > maxY) maxY = points.y;
+        }
+
+        Vector2 size   = new Vector2(maxX - minX, maxY - minY) * scaleFactor * mHitBoxSize;
+        Vector2 center = new Vector2((minX + maxX) * 0.5f, (minY + maxY) * 0.5f) * scaleFactor
+                         + (Vector2)model.localPosition;
+
+        mCollider.size   = size;
+        mCollider.offset = center;
     }
 }
