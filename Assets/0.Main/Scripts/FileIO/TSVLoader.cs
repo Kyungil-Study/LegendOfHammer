@@ -28,6 +28,7 @@ public static class TSVLoader
     public static async Task<List<T>> LoadTableAsync<T>(string tableName, bool isStreamingAssetPath = true)
     {
         string basePath = isStreamingAssetPath ? Application.streamingAssetsPath : Application.persistentDataPath;
+        
         string folderPath = Path.Combine(basePath, "Table");
         string filePath = Path.Combine(folderPath, tableName + ".tsv");
         
@@ -42,6 +43,8 @@ public static class TSVLoader
 
         try
         {
+            
+            
             using var reader = new StreamReader(filePath);
             // 첫 번째 줄(1행) 스킵 (데이터 사용처에 대한 설명)
             await reader.ReadLineAsync();
