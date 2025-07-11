@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1000
-  m_Sprite: {fileID: 21300000, guid: 216e16886fee16f419df3566cc393aaa, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c560acba54139134b91efb372b8c8790, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -226,7 +226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3380768c582997f41b7fda6a7ab1e040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyID: 31001
+  enemyID: 21001
   testPlayer: {fileID: 0}
   testPlayerLayerMask:
     serializedVersion: 2
@@ -259,3 +259,6 @@ MonoBehaviour:
   model: {fileID: 8212737276976261949}
   mSprites: []
   mAnimationClips: []
+  mHitBoxSize: 1
+  mHitBoxOffsetX: 0.25
+  mHitBoxOffsetY: 0
