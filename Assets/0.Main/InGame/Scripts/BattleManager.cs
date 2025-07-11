@@ -1,13 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class BattleManager : MonoSingleton<BattleManager>
 {
     public int StageIndex = 0;
-    [SerializeField] private Squad player;
     
     [Header("추격 게이지 세팅")]
     [SerializeField] private float chaseGuageDecreaseRate = 0.5f; // Increase rate per second
@@ -42,17 +43,27 @@ public class BattleManager : MonoSingleton<BattleManager>
         }
     }
 
-    private void OnAliveMonster(AliveMonsterEventArgs obj)
+    private void OnAliveMonster(AliveMonsterEventArgs args)
     {
-        chaseGuage += chaseIncreaseRate;
-        if (chaseGuage >= chaseGuageMax)
+        var monster = args.Monster as Monster;
+        Debug.Log($"[BattleManager] Monster {monster.EnemyID} is alive.");
+        var data = EnemyDataManager.Instance.Records[monster.EnemyID];
+        if (data.Enemy_Rank.Equals(EnemySpawnRankType.Boss))
         {
             EndGame(false);
         }
+        // todo: UI 완료되면 활성화
+        /*chaseGuage += chaseIncreaseRate;
+        if (chaseGuage >= chaseGuageMax)
+        {
+            EndGame(false);
+        }*/
     }
 
-    public void StartGame()
+
+    public void StartGame(int stageIndex) // todo: 로딩 연동 필요
     {
+        StageIndex = stageIndex; // For testing purposes, remove later
         StartBattleEventArgs startEventArgs = new StartBattleEventArgs(StageIndex);
         
         BattleEventManager.Instance.CallEvent(startEventArgs);
@@ -63,11 +74,6 @@ public class BattleManager : MonoSingleton<BattleManager>
         if (isEnded)
         {
             return;
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            StartGame();
         }
         
         chaseGuage -= chaseGuageDecreaseRate * Time.deltaTime;
@@ -82,8 +88,10 @@ public class BattleManager : MonoSingleton<BattleManager>
         Debug.Log(isVictory ? "Battle ended with victory!" : "Battle ended with defeat!");
         
         // Call the end battle event
-        EndBattleEventArgs endEventArgs = new EndBattleEventArgs(true); // Assuming victory for now
+        EndBattleEventArgs endEventArgs = new EndBattleEventArgs(isVictory); // Assuming victory for now
         BattleEventManager.Instance.CallEvent(endEventArgs);
+        
+        SessionManager.Instance.EndGame();
     }
     
     // TODO: Implement logic to get monster by collider
