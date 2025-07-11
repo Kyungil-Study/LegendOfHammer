@@ -2,19 +2,27 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = System.Random;
 
 public class MonsterScale : MonoBehaviour
 {
     [Header("몬스터 모델 오브젝트 연결 (자식)")]
     [SerializeField] private Transform model;
-
+    [SerializeField] [Tooltip("적 Sprite, 랜덤 생성")]
+    private Sprite[] mSprites;
+    [SerializeField] [Tooltip("적 애니메이션 클립, 스프라이트와 매핑시키기")]
+    private AnimationClip[] mAnimationClips;
+    
     private SpriteRenderer mSpriteRenderer;
     private BoxCollider2D  mCollider;
 
+    private int mSpriteIndex;
+    
     private void Awake()
     {
         mSpriteRenderer = model.GetComponent<SpriteRenderer>();
         mCollider = GetComponent<BoxCollider2D>();
+        
     }
 
     private void Start()
@@ -34,21 +42,32 @@ public class MonsterScale : MonoBehaviour
         float scaleFactor = pixelSize / origPixels;
         model.localScale = Vector3.one * scaleFactor;
 
-        // 2) TextureRect에서 투명 제외된 실제 이미지 크기(px)
-        Rect texRect   = mSpriteRenderer.sprite.textureRect;
-        float ppu      = mSpriteRenderer.sprite.pixelsPerUnit;
-        float w_local  = texRect.width  / ppu;  // 로컬(unscaled) 너비
-        float h_local  = texRect.height / ppu;  // 로컬(unscaled) 높이
-
-        // 3) BoxCollider2D 사이즈 = 로컬 크기에 스케일 곱하기
-        mCollider.size = new Vector2(w_local * scaleFactor, h_local * scaleFactor);
-
-        Vector2 pivotLocal = (mSpriteRenderer.sprite.pivot / ppu) - new Vector2(w_local, h_local) * 0.5f;
+        Rect texRect = mSpriteRenderer.sprite.textureRect;
+        float pixelsPerUnit = mSpriteRenderer.sprite.pixelsPerUnit;
         
-        // 4) Pivot(0~pixels) → 로컬 좌표 기준 offset 계산
-        //    pivot(픽셀) / ppu  → 로컬좌표
-        //    -(w_local/2, h_local/2) → bottom-left 기준에서 중앙정렬
-        Vector2 modelPos2D = new Vector2(model.localPosition.x, model.localPosition.y);
-        mCollider.offset    = modelPos2D + pivotLocal * scaleFactor;
+        float localWidth = texRect.width  / pixelsPerUnit;
+        float localHeight = texRect.height / pixelsPerUnit;
+
+        mCollider.size = new Vector2(localWidth * scaleFactor, localHeight * scaleFactor);
+        
+        // 콜라이더 Offset 맞추기
+        
+        // Sprite 영역 픽셀에 맞게 자르기
+        Vector2 rectSizePx   = new Vector2(texRect.width, texRect.height);
+        Vector2 rectCenterPx = rectSizePx * 0.5f;
+
+        // 픽셀 오프셋과 스프라이트 오프셋 차이
+        Vector2 pivotPx      = mSpriteRenderer.sprite.pivot;
+        Vector2 offsetPx     = rectCenterPx - pivotPx;
+
+        // 픽셀 → 유닛 단위
+        Vector2 offsetUnits  = offsetPx / pixelsPerUnit;
+
+        // 스케일 적용 & 모델 위치 보정
+        Vector2 modelPos2D   = (Vector2)model.localPosition;
+        Vector2 finalOffset  = offsetUnits * scaleFactor + modelPos2D;
+
+        // 콜라이더 Offset에 적용
+        mCollider.offset     = finalOffset;
     }
 }
