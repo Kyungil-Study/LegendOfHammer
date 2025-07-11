@@ -51,9 +51,6 @@ public class ItemSlotUI : MonoBehaviour
             return;
         }
 
-        // 재화 차감
-        BackendGameData.userData.inventory[currencyKey] -= data.Piece;
-
         // 서버 저장
         BackendGameData.Instance.GameDataUpdate();
 
@@ -80,6 +77,9 @@ public class ItemSlotUI : MonoBehaviour
         {
             BackendGameData.userData.inventory.Add(itemName, itemCount);
         }
+        
+        // 재화 차감
+        BackendGameData.userData.inventory[currencyKey] -= data.Piece;
         
         // 서버 저장
         BackendGameData.Instance.GameDataUpdate();
