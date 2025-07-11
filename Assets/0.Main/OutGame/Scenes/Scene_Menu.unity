@@ -812,7 +812,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &680784927
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1864,7 +1864,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1904900244
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2136,30 +2136,6 @@ PrefabInstance:
     - target: {fileID: 259293353483058818, guid: 240593c5545de9d49a3f14339f6f392e, type: 3}
       propertyPath: m_Name
       value: MarketCanvas
-      objectReference: {fileID: 0}
-    - target: {fileID: 259293353483058818, guid: 240593c5545de9d49a3f14339f6f392e, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 884850809236208790, guid: 240593c5545de9d49a3f14339f6f392e, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 884850809236208790, guid: 240593c5545de9d49a3f14339f6f392e, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 942061714157861485, guid: 240593c5545de9d49a3f14339f6f392e, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 942061714157861485, guid: 240593c5545de9d49a3f14339f6f392e, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 942061714157861485, guid: 240593c5545de9d49a3f14339f6f392e, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4001402008158103859, guid: 240593c5545de9d49a3f14339f6f392e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target

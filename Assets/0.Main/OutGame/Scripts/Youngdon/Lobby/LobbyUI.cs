@@ -29,6 +29,10 @@ public class LobbyUI : MonoBehaviour
         
         // 시작 시 서버에서 스테이지 정보 가져오기
         BackendStageGameData.Instance.GetStage();
+        if (BackendStageGameData.stage.Maxstage == 0)
+        {
+            BackendStageGameData.Instance.ResetStage();
+        }
         RefreshStageUI();
     }
 
