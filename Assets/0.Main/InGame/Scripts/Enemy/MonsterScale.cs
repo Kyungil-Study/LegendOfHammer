@@ -7,25 +7,33 @@ using Random = System.Random;
 [RequireComponent(typeof(BoxCollider2D))]
 public class MonsterScale : MonoBehaviour
 {
+    [Serializable]
+    private struct Appearance
+    {
+        public Sprite sprite;
+        [Tooltip("Idle 상태용 클립")]
+        public AnimationClip idleClip;
+    }
+    
     [Header("몬스터 모델 오브젝트 (자식)")]
     [SerializeField] private Transform model;
-    [Header("적 스프라이트")]
-    [SerializeField] private Sprite[] mSprites;
-    [Header("애니메이션 클립")]
-    [SerializeField] private AnimationClip[] mAnimationClips;
+    [Header("몬스터 외형 세팅")] 
+    [SerializeField] private Appearance[] appearances;
     [Header("콜라이더 크기 조정 계수")]
     [SerializeField][Range(0.1f, 2f)] private float mHitBoxSize = 1f;
-
+    
     private SpriteRenderer  mSpriteRenderer;
     private BoxCollider2D   mCollider;
     private Animator        mAnimator;
-    private float           mScaleFactor;
+    
+    private int mAppearanceIndex;
+    private float mScaleFactor;
 
     private void Awake()
     {
         mSpriteRenderer = model.GetComponent<SpriteRenderer>();
+        mAnimator       = model.GetComponent<Animator>();
         mCollider       = GetComponent<BoxCollider2D>();
-        mAnimator       = GetComponent<Animator>();
     }
 
     private void Start()
@@ -39,10 +47,23 @@ public class MonsterScale : MonoBehaviour
     
     private void PickRandomSprite()
     {
-        if (mSprites.Length == 0) return;
-        int index = UnityEngine.Random.Range(0, mSprites.Length);
-        mSpriteRenderer.sprite = mSprites[index];
-        // 클립도 이 index에 맞게 바꿔주기
+        if (appearances == null || appearances.Length == 0)
+        {
+            Debug.LogError("적 외형을 설정해주세요");
+            return;
+        }
+
+        mAppearanceIndex = UnityEngine.Random.Range(0, appearances.Length);
+        var appearance = appearances[mAppearanceIndex];
+
+        mSpriteRenderer.sprite = appearance.sprite;
+
+        if (appearance.idleClip != null)
+        {
+            var overrideCtrl = new AnimatorOverrideController(mAnimator.runtimeAnimatorController);
+            overrideCtrl["Idle"] = appearance.idleClip;  
+            mAnimator.runtimeAnimatorController = overrideCtrl;
+        }
     }
 
     private float CalculateScaleFactor()
