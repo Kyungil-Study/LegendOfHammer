@@ -49,17 +49,20 @@ public class BackEndAuth : MonoBehaviour
     private void OnGuestLogin()
     {
         Backend.BMember.DeleteGuestInfo();
-        var bro = Backend.BMember.GuestLogin();
+        string guestID =  PlayerPrefs.GetString("GuestId", string.Empty);
+        var bro = Backend.BMember.GuestLogin(guestID); // 게스트 로그인 시도 처음이라면 게스트 ID 생성해서 반환됨
         if (!bro.IsSuccess())
         {
-            Debug.LogError("게스트 로그인 실패: " + bro);
+            DebugScreen.LogError("게스트 로그인 실패: " + bro);
             return;
         }
-
-        Debug.Log("게스트 로그인 성공");
+        
+        DebugScreen.Log("게스트 로그인 성공");
         var json    = bro.GetReturnValuetoJSON();
-        string guestId = json?["row"]?["custom_id"]?.ToString() ?? System.Guid.NewGuid().ToString();
-        UserData.Instance.SetUser(guestId, "Guest");
+        guestID = json?["row"]?["custom_id"]?.ToString() ?? System.Guid.NewGuid().ToString();
+        guestID = Backend.BMember.GetGuestID();
+        PlayerPrefs.SetString("GuestId", guestID);
+        UserData.Instance.SetUser(guestID, "Guest");
 
         // 로그인 후 항상 스테이지 정보 불러오기
         BackendStageGameData.Instance.InitalizeStage();
@@ -81,7 +84,7 @@ public class BackEndAuth : MonoBehaviour
         var bro = Backend.BMember.CustomLogin(id, pw);
         if (bro.IsSuccess())
         {
-            Debug.Log("커스텀 로그인 성공");
+            DebugScreen.Log("커스텀 로그인 성공");
 
             // [기능] 로그인 성공 후 닉네임 가져오기
             var infoBro = Backend.BMember.GetUserInfo();
@@ -105,7 +108,7 @@ public class BackEndAuth : MonoBehaviour
         }
         else
         {
-            Debug.LogError("커스텀 로그인 실패: " + bro);
+            DebugScreen.LogError("커스텀 로그인 실패: " + bro);
         }
     }
     // [기능] 회원가입 처리
@@ -119,13 +122,13 @@ public class BackEndAuth : MonoBehaviour
         var signUpBro = Backend.BMember.CustomSignUp(id, pw);
         if (signUpBro.IsSuccess())
         {
-            Debug.Log("회원가입 성공");
+            DebugScreen.Log("회원가입 성공");
 
             // [기능] 닉네임 설정
             var nickBro = Backend.BMember.UpdateNickname(nick);
             if (nickBro.IsSuccess())
             {
-                Debug.Log("닉네임 설정 성공");
+                DebugScreen.Log("닉네임 설정 성공");
 
                 // [기능] 닉네임 설정 성공 시 자동 로그인 실행
                 BackendStageGameData.Instance.InitalizeStage();
@@ -134,12 +137,12 @@ public class BackEndAuth : MonoBehaviour
             }
             else
             {
-                Debug.LogError("닉네임 설정 실패: " + nickBro);
+                DebugScreen.LogError("닉네임 설정 실패: " + nickBro);
             }
         }
         else
         {
-            Debug.LogError("회원가입 실패: " + signUpBro);
+            DebugScreen.LogError("회원가입 실패: " + signUpBro);
         }
     }
 }
