@@ -12,6 +12,10 @@ public class BackEndAuth : MonoBehaviour
     [Header("Buttons")]
     public Button customLoginButton, guestLoginButton, signUpButton;
 
+    [Header("Hash")]
+    public Button hashGenerateButton;
+    public TMP_InputField hashResultInput;
+    
     private void Awake()
     {
         // [기능] 뒤끝 SDK 초기화
@@ -23,6 +27,14 @@ public class BackEndAuth : MonoBehaviour
             customLoginButton.onClick.AddListener(OnCustomLogin);
             guestLoginButton.onClick.AddListener(OnGuestLogin);
             signUpButton.onClick.AddListener(OnSignUp);
+            
+            hashGenerateButton.onClick.AddListener(() =>
+            {
+                // [기능] 입력값을 해시로 변환
+                string googleHash = Backend.Utils.GetGoogleHash();
+                hashResultInput.text = googleHash;
+                Debug.Log("해시 생성 성공: " + googleHash);
+            });
         }
         else
         {
