@@ -65,8 +65,9 @@ public class BattleManager : MonoSingleton<BattleManager>
     public void StartGame(int stageIndex) // todo: 로딩 연동 필요
     {
         StageIndex = stageIndex; // For testing purposes, remove later
+        Debug.Log($"[BattleManager] Starting game for stage {StageIndex}.");
         StartBattleEventArgs startEventArgs = new StartBattleEventArgs(StageIndex);
-        
+           
         BattleEventManager.Instance.CallEvent(startEventArgs);
     }
 

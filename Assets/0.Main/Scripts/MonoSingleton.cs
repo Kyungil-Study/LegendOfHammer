@@ -21,7 +21,7 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
             
             if (_instance == null)
             {
-                _instance = FindObjectOfType<T>();
+                _instance = FindObjectOfType<T>(true);
                 if (_instance == null)
                 {
                     Debug.LogError($"[MonoSingleton] {typeof(T).Name} 인스턴스가 존재하지 않습니다. 씬에 추가해주세요.");

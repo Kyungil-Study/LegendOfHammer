@@ -48,7 +48,7 @@ public class BackEndAuth : MonoBehaviour
     // [기능] 게스트 로그인 처리
     private void OnGuestLogin()
     {
-        Backend.BMember.DeleteGuestInfo();
+        //Backend.BMember.DeleteGuestInfo(); guest 정보 유지를 위해 주석
         string guestID =  PlayerPrefs.GetString("GuestId", string.Empty);
         var bro = Backend.BMember.GuestLogin(guestID); // 게스트 로그인 시도 처음이라면 게스트 ID 생성해서 반환됨
         if (!bro.IsSuccess())
