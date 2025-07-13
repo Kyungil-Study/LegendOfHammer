@@ -71,7 +71,7 @@ public class LobbyUI : MonoBehaviour
     public void GoDungeonScene()
     {
         BackendStageGameData.Instance.UpdateStage();
-        SessionManager.Instance.GoToLoadScene();
+        SessionManager.Instance.GoToGameScene();
     }
     private void OnDestroy()
     {
