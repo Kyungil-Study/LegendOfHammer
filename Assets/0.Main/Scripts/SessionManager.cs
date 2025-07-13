@@ -58,67 +58,9 @@ public class SessionManager : SingletonBase<SessionManager>
         }
         
     }
-    
-    public void StartLoad()
-    {
-        Debug.Log($"[SessionManager] Starting game load");
-        
-        // Load all ILoadable components in the scene
-        var monos = FindObjectsOfType<MonoBehaviour>();
-        
-        List<ILoadable> loadables = new List<ILoadable>();
-        foreach (var mono in monos)
-        {
-            if(mono is ILoadable { IsLoaded: false } loadable)
-            {
-                loadables.Add(loadable);
-            }   
-        }
-        
-        int loadCount = loadables.Count;
-        if (loadCount == 0)
-        {
-            Debug.Log("All loadables have been loaded.");
-            gotoGame = true; // Set flag to start the game in the next frame
-        }
-        
-        foreach (var loadable in loadables)
-        {
-            loadable.Load((args) =>
-            {
-                loadCount--;
-                if (args.Success)
-                {
-                    Debug.Log($"{loadable.GetType().Name} loaded successfully.");
-                }
-                else
-                {
-                    Debug.LogError($"{loadable.GetType().Name} failed to load: {args.ErrorMessage}");
-                }
-
-                if (loadCount <= 0)
-                {
-                    Debug.Log("All loadables have been loaded.");
-                    gotoGame = true; // Set flag to start the game in the next frame
-                }
-            });
-        }
-    }
-
-    bool gotoGame = false;
-    bool startGame = false;
-    private void Update()
-    {
-        if (gotoGame)
-        {
-            gotoGame = false; // Reset the flag to prevent multiple calls
-            GoToGameScene();
-        }
-    }
 
     void StartGame()
     {
-        startGame = false; // Reset the flag to prevent multiple calls
         Debug.Log($"[SessionManager] Starting game");
         var stageIndex = BackendStageGameData.stage.Currentstage;; // For testing purposes, remove later
         BattleManager.Instance.StartGame(stageIndex);
@@ -127,7 +69,6 @@ public class SessionManager : SingletonBase<SessionManager>
     public void GoToGameScene() 
     { // todo: 로딩 연동 필요
 
-        gotoGame = false; // Reset the flag to prevent multiple calls
         Debug.Log($"[SessionManager] Starting game");
         var stageIndex = BackendStageGameData.stage.Currentstage;; // For testing purposes, remove later
         SceneManager.LoadScene("Scene_Dungeon", LoadSceneMode.Single);
