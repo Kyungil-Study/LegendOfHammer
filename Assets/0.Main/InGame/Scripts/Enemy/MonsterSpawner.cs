@@ -27,15 +27,6 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
     
     // todo: 스테이지별 스폰 가능 몬스터 달라짐 , 데이터 테이블 연동 필요
     [FormerlySerializedAs("spawnPatternTable")] [FormerlySerializedAs("waveTable")] [SerializeField] private SpawnPatternTableSAO spawnPatternTableSao;
-    [SerializeField] string patternActivationTablePath  = "SpawnPatternTable";
-    List<PatternActivation> patternActivations = new List<PatternActivation>();
-    Dictionary<WaveRankType, List<EnemySpawnPatternType>> activatedPatternByRank = new Dictionary<WaveRankType, List<EnemySpawnPatternType>>()
-    {
-        { WaveRankType.Normal, new List<EnemySpawnPatternType>() },
-        { WaveRankType.Elite, new List<EnemySpawnPatternType>() },
-        { WaveRankType.Boss, new List<EnemySpawnPatternType>() }
-    };
-    
     
     [SerializeField] Monster[] monsterPrefabs; 
     [SerializeField] Monster monsterPrefab;
@@ -49,20 +40,21 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
     [SerializeField] bool isTestMode = false; // For testing purposes, remove later
     [SerializeField] Monster TestEnemyPrefab; // todo : 테스트용, 나중에 지우기 For testing purposes, remove later
 
+        
+    Dictionary<WaveRankType, List<EnemySpawnPatternType>> activatedPatternByRank = new Dictionary<WaveRankType, List<EnemySpawnPatternType>>()
+    {
+        { WaveRankType.Normal, new List<EnemySpawnPatternType>() },
+        { WaveRankType.Elite, new List<EnemySpawnPatternType>() },
+        { WaveRankType.Boss, new List<EnemySpawnPatternType>() }
+    };
+
+    
     private void Awake()
     {
         var callbacks = BattleEventManager.Instance.Callbacks;
         callbacks.OnStartBattle += StartGame;
         callbacks.OnEndBattle += EndGame;
         spawnPatternTableSao.Resolve();
-        
-        TSVLoader.LoadTableAsync<PatternActivation>(patternActivationTablePath).ContinueWith(
-            (taskResult) =>
-            {
-                patternActivations = taskResult.Result;
-                Debug.Log($" [MonsterSpawner] Pattern activations loaded successfully. Total patterns: {patternActivations.Count}");
-            }
-        );
     }
 
     void Update()
@@ -85,7 +77,9 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
     void StartGame(StartBattleEventArgs args)
     {
         int stageIndex = args.StageIndex;
-        foreach (var activation in patternActivations)
+
+        var datas = PatternActivationDataManager.Instance.Records;
+        foreach (var activation in datas)
         {
             if (activation.AppearStage <= stageIndex && stageIndex <= activation.DisappearStage)
             {
