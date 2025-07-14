@@ -138,7 +138,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
     public void TakeDamage(TakeDamageEventArgs eventArgs)
     {
         int damage = Mathf.RoundToInt(eventArgs.Damage * mShieldRate);
-
+        
         mCurrentHP -= damage;
         
         Debug.Log($"[Moster:TakeDamage] 받은 데미지 = {damage} // 남은 HP = {mCurrentHP} // 쉴드? {mShieldRate == 0.5f}");
