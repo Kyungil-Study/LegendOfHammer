@@ -30,7 +30,7 @@ public class BattleManager : MonoSingleton<BattleManager>
 
     private void OnDeath(DeathEventArgs args)
     {
-        Debug.Log("[BattleManager] OnDeath called.");
+        Debug.Log($"[BattleManager] OnDeath called.");
         if (args.Target as Squad)
         {
             Debug.Log("Player has died. Ending game.");
@@ -38,9 +38,10 @@ public class BattleManager : MonoSingleton<BattleManager>
         }
         else if(args.Target is Monster monster)
         {
+            Debug.Log($"[BattleManager] Monster {monster.EnemyID} has died.");
             var id = monster.EnemyID;
             var data = EnemyDataManager.Instance.Records[id];
-            if( data.Enemy_Rank.Equals(EnemySpawnRankType.Boss))
+            if( data.Enemy_Rank.Equals(EnemyRank.Boss))
             {
                 Debug.Log($"Boss Monster has died.");
                 EndGame(true);
@@ -53,7 +54,7 @@ public class BattleManager : MonoSingleton<BattleManager>
         var monster = args.Monster as Monster;
         Debug.Log($"[BattleManager] Monster {monster.EnemyID} is alive.");
         var data = EnemyDataManager.Instance.Records[monster.EnemyID];
-        if (data.Enemy_Rank.Equals(EnemySpawnRankType.Boss))
+        if (data.Enemy_Rank.Equals(EnemyRank.Boss))
         {
             EndGame(false);
         }
