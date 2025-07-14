@@ -68,7 +68,6 @@ public class SquadController : MonoBehaviour
         if (m_LastTapTime + multiTapGap > Time.time)
         {
             Vector3 direction = inputPosition - lever.transform.position;
-            Debug.Log($"{inputPosition} / {lever.transform.position} / {direction}");
             warrior.ChargeAttack(direction);
         }
         else
