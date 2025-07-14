@@ -205,6 +205,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1256415705245044117, guid: aaa160931bddeea4e9a2975bbb51a54e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -7
+      objectReference: {fileID: 0}
     - target: {fileID: 3865100631611112336, guid: aaa160931bddeea4e9a2975bbb51a54e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -248,6 +252,10 @@ PrefabInstance:
     - target: {fileID: 6054395728682833670, guid: aaa160931bddeea4e9a2975bbb51a54e, type: 3}
       propertyPath: m_Name
       value: BattleStage
+      objectReference: {fileID: 0}
+    - target: {fileID: 8298909363587306123, guid: aaa160931bddeea4e9a2975bbb51a54e, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
