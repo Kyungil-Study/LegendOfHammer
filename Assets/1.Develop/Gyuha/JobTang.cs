@@ -8,7 +8,7 @@ public class JobTang : MonoBehaviour
 
     private void Start()
     {
-        uint a = 10;
-        uint b = 20;
+        hp = 3 + hp;
+        hp = hp + 3;
     }
 }
