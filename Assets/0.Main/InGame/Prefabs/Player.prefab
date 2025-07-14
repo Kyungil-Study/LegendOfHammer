@@ -202,7 +202,6 @@ MonoBehaviour:
     <CriticalChance>k__BackingField: 0
     <CriticalDamage>k__BackingField: 1.5
     <BonusDamagePerHit>k__BackingField: 0
-    <BonusEffectFactor>k__BackingField: 0
     <TakeDamageFactor>k__BackingField: 1
     <FinalDamageFactor>k__BackingField: 1
   warrior: {fileID: 3228702557338661824}
@@ -363,7 +362,6 @@ MonoBehaviour:
   chargeDistance: 2
   chargeDuration: 0.2
   chargeKnockbackDistance: 1
-  isCharging: 0
 --- !u!1 &4852727541690639173
 GameObject:
   m_ObjectHideFlags: 0
@@ -421,6 +419,9 @@ MonoBehaviour:
   innerCircle: {fileID: 9196270062072963968}
   min: {fileID: 8070707938485047432}
   max: {fileID: 5427063375397176144}
+  inputActionAsset: {fileID: -944628639613478452, guid: 0e6465b597d0a7046ad9091fadf7a7bf, type: 3}
+  pointerPress: {fileID: 6790972738586011630, guid: 0e6465b597d0a7046ad9091fadf7a7bf, type: 3}
+  pointerPosition: {fileID: 203037593943612472, guid: 0e6465b597d0a7046ad9091fadf7a7bf, type: 3}
 --- !u!1 &5635584663710108001
 GameObject:
   m_ObjectHideFlags: 0
