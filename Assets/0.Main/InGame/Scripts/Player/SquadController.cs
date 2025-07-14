@@ -19,10 +19,8 @@ public class SquadController : MonoBehaviour
     private float m_LastTapTime;
     
     public GameObject lever;
-    //public SpriteRenderer outerCircle;
-    //public SpriteRenderer middleCircle;
-    public RectTransform outerCircle;
-    public RectTransform middleCircle;
+    public SpriteRenderer outerCircle;
+    public SpriteRenderer middleCircle;
     public GameObject innerCircle;
     private float m_LeverRadius;
     private float m_LeverThreshold;
@@ -38,19 +36,18 @@ public class SquadController : MonoBehaviour
     private void Start()
     {
         m_Camera = Camera.main;
-        
-        m_LeverRadius = (outerCircle.rect.width * 0.5f) * outerCircle.GetComponentInParent<Canvas>().scaleFactor;
-        float middleRadius = m_LeverRadius * middleCircle.transform.localScale.x;
+
+        m_LeverRadius = (outerCircle.bounds.size / 2).x;
+        float middleRadius = (middleCircle.bounds.size / 2).x;
         m_LeverThreshold = middleRadius / m_LeverRadius;
         
         inputActionAsset.Enable();
 
-        pointerPress.action.performed += StartMove;
+        pointerPress.action.performed += ApplyMove;
         pointerPress.action.canceled += context =>
         {
             mb_IsPointerPressed = false;
             innerCircle.transform.position = lever.transform.position;
-            m_DisappearTime = disappearTime;
         };
 
         var callbacks = BattleEventManager.Instance.Callbacks;
@@ -58,10 +55,9 @@ public class SquadController : MonoBehaviour
         callbacks.OnEndBattle += (args) => { gameObject.SetActive(false); };
     }
 
-    private void StartMove(InputAction.CallbackContext context)
+    private void ApplyMove(InputAction.CallbackContext context)
     {
         mb_IsPointerPressed = true;
-        lever.SetActive(true);
         var inputPosition = ReadPointerPosition();
         if (Vector2.Distance(inputPosition, lever.transform.position) > m_LeverRadius)
         {
@@ -82,7 +78,6 @@ public class SquadController : MonoBehaviour
 
     private Vector3 ReadPointerPosition()
     {
-        return pointerPosition.action.ReadValue<Vector2>();
         var reVal = m_Camera.ScreenToWorldPoint(pointerPosition.action.ReadValue<Vector2>());
         reVal.z = 0;
         return reVal;
@@ -102,22 +97,12 @@ public class SquadController : MonoBehaviour
             squad.transform.position += dir * (Squad.STANDARD_DISTANCE * squad.stats.MoveSpeed * Time.deltaTime);
         }
     }
-
-    public float disappearTime = 1f;
-    private float m_DisappearTime;
+    
     private void Update()
     {
         if (mb_IsPointerPressed)
         {
             Move();
-        }
-        else
-        {
-            m_DisappearTime -= Time.deltaTime;
-            if (m_DisappearTime <= 0)
-            {
-                lever.SetActive(false);
-            }
         }
     }
 
