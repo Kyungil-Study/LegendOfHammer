@@ -19,8 +19,10 @@ public class SquadController : MonoBehaviour
     private float m_LastTapTime;
     
     public GameObject lever;
-    public SpriteRenderer outerCircle;
-    public SpriteRenderer middleCircle;
+    //public SpriteRenderer outerCircle;
+    //public SpriteRenderer middleCircle;
+    public RectTransform outerCircle;
+    public RectTransform middleCircle;
     public GameObject innerCircle;
     private float m_LeverRadius;
     private float m_LeverThreshold;
@@ -36,9 +38,9 @@ public class SquadController : MonoBehaviour
     private void Start()
     {
         m_Camera = Camera.main;
-
-        m_LeverRadius = (outerCircle.bounds.size / 2).x;
-        float middleRadius = (middleCircle.bounds.size / 2).x;
+        
+        m_LeverRadius = (outerCircle.rect.width * 0.5f) * outerCircle.GetComponentInParent<Canvas>().scaleFactor;
+        float middleRadius = m_LeverRadius * middleCircle.transform.localScale.x;
         m_LeverThreshold = middleRadius / m_LeverRadius;
         
         inputActionAsset.Enable();
@@ -66,6 +68,7 @@ public class SquadController : MonoBehaviour
         if (m_LastTapTime + multiTapGap > Time.time)
         {
             Vector3 direction = inputPosition - lever.transform.position;
+            Debug.Log($"{inputPosition} / {lever.transform.position} / {direction}");
             warrior.ChargeAttack(direction);
         }
         else
@@ -76,6 +79,7 @@ public class SquadController : MonoBehaviour
 
     private Vector3 ReadPointerPosition()
     {
+        return pointerPosition.action.ReadValue<Vector2>();
         var reVal = m_Camera.ScreenToWorldPoint(pointerPosition.action.ReadValue<Vector2>());
         reVal.z = 0;
         return reVal;

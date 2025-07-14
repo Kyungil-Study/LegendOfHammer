@@ -33,10 +33,15 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
         [field:SerializeField] public float FinalDamageFactor { get; set; } = 1;
     }
 
-    [Range(0,10)] public const float STANDARD_DISTANCE = 2.8f;
+    public const float STANDARD_DISTANCE = 2.8f;
     public SquadStats stats = new SquadStats();
     public Warrior warrior;
     public bool isInvincible = false;
+
+    private void Awake()
+    {
+        stats.CurrentHealth = stats.MaxHealth;
+    }
 
     public void TakeDamage(TakeDamageEventArgs eventArgs)
     {
