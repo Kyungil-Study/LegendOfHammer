@@ -52,6 +52,7 @@ public abstract class HeroProjectile : MonoBehaviour
             m_TargetDirection = Vector3.up;
             return;
             // TODO: Remove test code
+            #pragma warning disable CS0162
         var target = FindTarget();
         if (target != null)
         {
@@ -62,6 +63,7 @@ public abstract class HeroProjectile : MonoBehaviour
         {
             m_TargetDirection = Vector3.up;
         }
+            #pragma warning restore CS0162
     }
 
     protected virtual GameObject FindTarget()

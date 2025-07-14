@@ -13,6 +13,7 @@ public class ItemSlotUI : MonoBehaviour
     public GameObject soldOutOverlay;
 
     private MarketData data;
+    private int maxCount;
 
     
 
@@ -20,10 +21,11 @@ public class ItemSlotUI : MonoBehaviour
     public void SetData(MarketData marketData)
     {
         data = marketData;
+        maxCount = data.Number;
 
         nameText.text = data.Name;
         priceText.text = $"{data.Piece}원";
-        MaxCountText.text = $"{data.Number}";
+        MaxCountText.text = $"{maxCount}";
 
         var sprite = Resources.Load<Sprite>($"MarketIcons/{data.Product_Image_ID}");
         if (sprite != null) productImage.sprite = sprite;
@@ -38,6 +40,8 @@ public class ItemSlotUI : MonoBehaviour
     {
         int point = 0;
         string currencyKey = "던전런 포인트";
+        string itemName = data.Name;
+        int itemCount = 1;
 
         if (!BackendGameData.userData.inventory.TryGetValue(currencyKey, out point))
         {
@@ -59,15 +63,12 @@ public class ItemSlotUI : MonoBehaviour
         if (data.Currency >= data.Number)
         {
             ShowPopup("구매 제한 횟수를 초과했습니다.");
-            // 품절 처리 예시
+            // 품절 처리
             data.Check_Product_Availability = false;
             soldOutOverlay.SetActive(true);
             buyButton.interactable = false;
             return;
         }
-        
-        string itemName = data.Name;
-        int itemCount = 1;
 
         if (BackendGameData.userData.inventory.ContainsKey(itemName))
         {
@@ -80,6 +81,7 @@ public class ItemSlotUI : MonoBehaviour
         
         // 재화 차감
         BackendGameData.userData.inventory[currencyKey] -= data.Piece;
+        MaxCountText.text = $"{maxCount -= 1}";
         
         // 서버 저장
         BackendGameData.Instance.GameDataUpdate();
