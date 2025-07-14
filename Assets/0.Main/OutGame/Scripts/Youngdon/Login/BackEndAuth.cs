@@ -12,6 +12,8 @@ public class BackEndAuth : MonoBehaviour
     [Header("Buttons")]
     public Button customLoginButton, guestLoginButton, signUpButton;
 
+    public Button resetButton;
+    
     [Header("Hash")]
     public Button hashGenerateButton;
     public TMP_InputField hashResultInput;
@@ -34,6 +36,13 @@ public class BackEndAuth : MonoBehaviour
                 string googleHash = Backend.Utils.GetGoogleHash();
                 hashResultInput.text = googleHash;
                 Debug.Log("해시 생성 성공: " + googleHash);
+            });
+            
+            resetButton.onClick.AddListener(() =>
+            {
+                // [기능] 뒤끝 초기화
+                Backend.BMember.DeleteGuestInfo();
+                Debug.Log("뒤끝 초기화 완료");
             });
         }
         else
