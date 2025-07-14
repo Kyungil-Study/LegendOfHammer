@@ -16,8 +16,18 @@ public class ClampedInt : ClampedValue<int>
         return new ClampedInt(a.Min, a.Max, a.Current + b);
     }
     
+    public static ClampedInt operator +(int a, ClampedInt b)
+    {
+        return new ClampedInt(b.Min, b.Max, a + b.Current);
+    }
+    
     public static ClampedInt operator -(ClampedInt a, int b)
     {
         return new ClampedInt(a.Min, a.Max, a.Current - b);
+    }
+    
+    public static ClampedInt operator -(int a, ClampedInt b)
+    {
+        return new ClampedInt(b.Min, b.Max, a - b.Current);
     }
 }

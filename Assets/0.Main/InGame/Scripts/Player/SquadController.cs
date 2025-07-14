@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
+using TouchPhase = UnityEngine.TouchPhase;
 
 public class SquadController : MonoBehaviour
 {
@@ -24,6 +27,11 @@ public class SquadController : MonoBehaviour
 
     public Transform min;
     public Transform max;
+
+    public InputActionAsset inputActionAsset;
+    public InputActionReference pointerPress;
+    public InputActionReference pointerPosition;
+    private bool mb_IsPointerPressed = false;
     
     private void Start()
     {
@@ -32,52 +40,65 @@ public class SquadController : MonoBehaviour
         m_LeverRadius = (outerCircle.bounds.size / 2).x;
         float middleRadius = (middleCircle.bounds.size / 2).x;
         m_LeverThreshold = middleRadius / m_LeverRadius;
+        
+        inputActionAsset.Enable();
+
+        pointerPress.action.performed += ApplyMove;
+        pointerPress.action.canceled += context =>
+        {
+            mb_IsPointerPressed = false;
+            innerCircle.transform.position = lever.transform.position;
+        };
+    }
+
+    private void ApplyMove(InputAction.CallbackContext context)
+    {
+        mb_IsPointerPressed = true;
+        var inputPosition = ReadPointerPosition();
+        if (Vector2.Distance(inputPosition, lever.transform.position) > m_LeverRadius)
+        {
+            m_TouchStartPosition = inputPosition;
+            lever.transform.position = inputPosition;
+        }
+        // Check for multi-tap
+        if (m_LastTapTime + multiTapGap > Time.time)
+        {
+            Vector3 direction = inputPosition - lever.transform.position;
+            warrior.ChargeAttack(direction);
+        }
+        else
+        {
+            m_LastTapTime = Time.time;
+        }
+    }
+
+    private Vector3 ReadPointerPosition()
+    {
+        var reVal = m_Camera.ScreenToWorldPoint(pointerPosition.action.ReadValue<Vector2>());
+        reVal.z = 0;
+        return reVal;
+    }
+    
+    private void Move()
+    {
+        var inputPosition = ReadPointerPosition();
+        Vector3 dir = inputPosition - m_TouchStartPosition;
+                
+        dir = dir.normalized * Mathf.InverseLerp(0, m_LeverRadius, dir.magnitude);
+                
+        innerCircle.transform.position = lever.transform.position + dir * m_LeverRadius;
+        
+        if (dir.magnitude > m_LeverThreshold)
+        {
+            squad.transform.position += dir * (Squad.STANDARD_DISTANCE * squad.stats.MoveSpeed * Time.deltaTime);
+        }
     }
     
     private void Update()
     {
-        if (Input.touchCount > 0)
+        if (mb_IsPointerPressed)
         {
-            Touch touch = Input.touches[0];
-            var touchPosition = m_Camera.ScreenToWorldPoint(touch.position);
-            touchPosition.z = 0;
-            
-            if (touch.phase == TouchPhase.Began)
-            {
-                if (Vector2.Distance(touchPosition, lever.transform.position) > m_LeverRadius)
-                {
-                    m_TouchStartPosition = touchPosition;
-                    lever.transform.position = touchPosition;
-                }
-                
-                // Check for multi-tap
-                if (m_LastTapTime + multiTapGap > Time.time)
-                {
-                    Vector3 direction = touchPosition - lever.transform.position;
-                    warrior.ChargeAttack(direction);
-                }
-                else
-                {
-                    m_LastTapTime = Time.time;
-                }
-            }
-            else if (touch.phase == TouchPhase.Ended)
-            {
-                innerCircle.transform.position = lever.transform.position;
-            }
-            else
-            {
-                Vector3 dir = touchPosition - m_TouchStartPosition;
-                
-                dir = dir.normalized * Mathf.InverseLerp(0, m_LeverRadius, dir.magnitude);
-                
-                innerCircle.transform.position = lever.transform.position + dir * m_LeverRadius;
-
-                if (dir.magnitude > m_LeverThreshold)
-                {
-                    squad.transform.position += dir * (Squad.STANDARD_DISTANCE * squad.stats.MoveSpeed * Time.deltaTime);
-                }
-            }
+            Move();
         }
     }
 
