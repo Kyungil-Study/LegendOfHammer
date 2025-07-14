@@ -43,17 +43,19 @@ public class SquadController : MonoBehaviour
         
         inputActionAsset.Enable();
 
-        pointerPress.action.performed += ApplyMove;
+        pointerPress.action.performed += StartMove;
         pointerPress.action.canceled += context =>
         {
             mb_IsPointerPressed = false;
             innerCircle.transform.position = lever.transform.position;
+            m_DisappearTime = disappearTime;
         };
     }
 
-    private void ApplyMove(InputAction.CallbackContext context)
+    private void StartMove(InputAction.CallbackContext context)
     {
         mb_IsPointerPressed = true;
+        lever.SetActive(true);
         var inputPosition = ReadPointerPosition();
         if (Vector2.Distance(inputPosition, lever.transform.position) > m_LeverRadius)
         {
@@ -93,12 +95,22 @@ public class SquadController : MonoBehaviour
             squad.transform.position += dir * (Squad.STANDARD_DISTANCE * squad.stats.MoveSpeed * Time.deltaTime);
         }
     }
-    
+
+    public float disappearTime = 1f;
+    private float m_DisappearTime;
     private void Update()
     {
         if (mb_IsPointerPressed)
         {
             Move();
+        }
+        else
+        {
+            m_DisappearTime -= Time.deltaTime;
+            if (m_DisappearTime <= 0)
+            {
+                lever.SetActive(false);
+            }
         }
     }
 
