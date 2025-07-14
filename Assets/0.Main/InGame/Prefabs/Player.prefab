@@ -357,8 +357,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63b4dd7d165a75247ae7661d77995944, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseAttackDamage: 0
-  attackPerSec: 0
+  baseAttackDamage: 500
+  attackPerSec: 0.1
+  cooldownIndicator: {fileID: 5601146472650972066}
   chargeDistance: 2
   chargeDuration: 0.2
   chargeKnockbackDistance: 1
@@ -776,7 +777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a01ae529d9e3e584f998266c5d9cff95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseAttackDamage: 0
+  baseAttackDamage: 250
   attackPerSec: 2
   projectileSpawnPoint: {fileID: 386511076734694341}
   projectilePrefab: {fileID: 2213334373689080831, guid: 06e33e6d1b33be646a96d05a5b3f79ed, type: 3}
@@ -962,7 +963,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3adce5ac45099fb4babe269bc38b2cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseAttackDamage: 0
+  baseAttackDamage: 300
   attackPerSec: 1
   projectileSpawnPoint: {fileID: 2844217813709663506}
   projectilePrefab: {fileID: -9055637960358438273, guid: fcfc5c6fe3d83bb4c9aafffa60046a6b, type: 3}
@@ -1156,3 +1157,14 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &5601146472650972066 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4677038394050703356, guid: 24caf808a978684479513ffd8812eb85, type: 3}
+  m_PrefabInstance: {fileID: 960226223891051614}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c84a5c3a9e2a3c4a9f1ab77d9a3bada, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
