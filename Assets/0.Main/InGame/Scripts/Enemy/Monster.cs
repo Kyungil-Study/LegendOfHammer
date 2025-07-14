@@ -146,7 +146,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
                 float dot = Vector2.Dot(forward, hitDir);
 
-                if (dot >= Mathf.Cos(45f * Mathf.Deg2Rad)
+                if (dot >= Mathf.Cos(45f * Mathf.Deg2Rad)   
                     && Vector2.Distance(attackerPos, myPos) <= shieldDistance)
                 {
                     damage = Mathf.CeilToInt(damage * 0.5f);
