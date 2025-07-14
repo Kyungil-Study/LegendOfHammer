@@ -52,6 +52,10 @@ public class SquadController : MonoBehaviour
             innerCircle.transform.position = lever.transform.position;
             m_DisappearTime = disappearTime;
         };
+
+        var callbacks = BattleEventManager.Instance.Callbacks;
+        
+        callbacks.OnEndBattle += (args) => { gameObject.SetActive(false); };
     }
 
     private void StartMove(InputAction.CallbackContext context)
