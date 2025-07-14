@@ -10,15 +10,15 @@ public class RankUIManager : MonoBehaviour
     public Transform contentParent; // Content에 할당
     public GameObject rankSlotPrefab; // RankSlot 프리팹
 
-    // private void OnEnable()
-    // {
-    //     StartCoroutine(LoadRankList());
-    // }
-    
-    private void Start() //테스트용
+    private void OnEnable()
     {
         StartCoroutine(LoadRankList());
     }
+    
+    // private void Start() //테스트용
+    // {
+    //     StartCoroutine(LoadRankList());
+    // }
 
     IEnumerator LoadRankList()
     {

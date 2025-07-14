@@ -7,9 +7,6 @@ using Random = UnityEngine.Random;
 
 public class StageManager : MonoBehaviour
 {
-    [Header("Stage Wave 설정")]
-    [SerializeField] private string stageWaveTablePath = "StageWaveTable";
-    
     [Header("Stage 시간 세팅")]
     [SerializeField] private float nextPageInterval = 60f; // Time in seconds to show next page
     
@@ -23,33 +20,6 @@ public class StageManager : MonoBehaviour
     {
         BattleEventManager.Instance.Callbacks.OnStartBattle += StartGame;
         BattleEventManager.Instance.Callbacks.OnEndBattle += EndGame;
-        
-        // todo:: 로드가 완료될때까지 게임이 시작되면 안됨. 동기화 처리 필요
-        TSVLoader.LoadTableAsync<StageWaveTSV>(stageWaveTablePath, true).ContinueWith(
-            (taskResult) =>
-            {
-                var list = taskResult.Result;
-
-                List<StageWave> stageWaves = new List<StageWave>();
-                foreach (var stageWaveTSV in list)
-                {
-                    var stageWave = new StageWave(stageWaveTSV);
-                    stageWaves.Add(stageWave);
-                    //Debug.Log(stageWave);
-                }
-                
-                stageWaves.Sort( (stageWave1, stageWave2) => 
-                {
-                    return stageWave1.PlayTime < stageWave2.PlayTime ? -1 : 1;
-                });
-
-                foreach (var wave in stageWaves)
-                {
-                    stageWavesQueue.Enqueue(wave);
-                }
-                Debug.Log($" [StageManager] Stage waves loaded successfully. Total waves: {stageWavesQueue.Count}");
-            }
-        );
     }
 
     private void EndGame(EndBattleEventArgs args)
@@ -60,6 +30,12 @@ public class StageManager : MonoBehaviour
     
     private void StartGame(StartBattleEventArgs startEventArgs)
     {
+        var stageWaves = StageDataManager.Instance.Records;
+        foreach (var wave in stageWaves)
+        {
+            stageWavesQueue.Enqueue(wave);
+        }
+        
         pageScroller.enabled = true;
         int pageIndex = (startEventArgs.StageIndex % stagePagePrefabs.Length);
         int NextPageIndex = (pageIndex + 1) % stagePagePrefabs.Length;

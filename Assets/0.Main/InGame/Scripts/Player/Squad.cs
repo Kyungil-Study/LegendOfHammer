@@ -29,19 +29,23 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
         [field:SerializeField] public float CriticalChance { get; set; } = 0;
         [field:SerializeField] public float CriticalDamage { get; set; } = 1.5f;
         [field:SerializeField] public int BonusDamagePerHit { get; set; } = 0;
-        [field:SerializeField] public float BonusEffectFactor { get; set; } = 0;
         [field:SerializeField] public float TakeDamageFactor { get; set; } = 1;
         [field:SerializeField] public float FinalDamageFactor { get; set; } = 1;
     }
 
-    [Range(0,10)] public const float STANDARD_DISTANCE = 2.8f;
+    public const float STANDARD_DISTANCE = 2.8f;
     public SquadStats stats = new SquadStats();
     public Warrior warrior;
     public bool isInvincible = false;
 
+    private void Awake()
+    {
+        stats.CurrentHealth = stats.MaxHealth;
+    }
+
     public void TakeDamage(TakeDamageEventArgs eventArgs)
     {
-        if (isInvincible)
+        if (warrior.IsCharging)
         {
             return;
         }
@@ -55,7 +59,7 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (warrior.isCharging && BattleManager.GetMonsterBy(other, out Monster monster))
+        if (warrior.IsCharging && BattleManager.GetMonsterBy(other, out Monster monster))
         {
             warrior.Impact(monster);
         }

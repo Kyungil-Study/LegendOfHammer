@@ -12,6 +12,12 @@ public class BackEndAuth : MonoBehaviour
     [Header("Buttons")]
     public Button customLoginButton, guestLoginButton, signUpButton;
 
+    public Button resetButton;
+    
+    [Header("Hash")]
+    public Button hashGenerateButton;
+    public TMP_InputField hashResultInput;
+    
     private void Awake()
     {
         // [기능] 뒤끝 SDK 초기화
@@ -23,6 +29,21 @@ public class BackEndAuth : MonoBehaviour
             customLoginButton.onClick.AddListener(OnCustomLogin);
             guestLoginButton.onClick.AddListener(OnGuestLogin);
             signUpButton.onClick.AddListener(OnSignUp);
+            
+            hashGenerateButton.onClick.AddListener(() =>
+            {
+                // [기능] 입력값을 해시로 변환
+                string googleHash = Backend.Utils.GetGoogleHash();
+                hashResultInput.text = googleHash;
+                Debug.Log("해시 생성 성공: " + googleHash);
+            });
+            
+            resetButton.onClick.AddListener(() =>
+            {
+                // [기능] 뒤끝 초기화
+                Backend.BMember.DeleteGuestInfo();
+                Debug.Log("뒤끝 초기화 완료");
+            });
         }
         else
         {
@@ -36,18 +57,21 @@ public class BackEndAuth : MonoBehaviour
     // [기능] 게스트 로그인 처리
     private void OnGuestLogin()
     {
-        Backend.BMember.DeleteGuestInfo();
-        var bro = Backend.BMember.GuestLogin();
+        //Backend.BMember.DeleteGuestInfo(); guest 정보 유지를 위해 주석
+        string guestID =  PlayerPrefs.GetString("GuestId", string.Empty);
+        var bro = Backend.BMember.GuestLogin(guestID); // 게스트 로그인 시도 처음이라면 게스트 ID 생성해서 반환됨
         if (!bro.IsSuccess())
         {
-            Debug.LogError("게스트 로그인 실패: " + bro);
+            DebugScreen.LogError("게스트 로그인 실패: " + bro);
             return;
         }
-
-        Debug.Log("게스트 로그인 성공");
+        
+        DebugScreen.Log("게스트 로그인 성공");
         var json    = bro.GetReturnValuetoJSON();
-        string guestId = json?["row"]?["custom_id"]?.ToString() ?? System.Guid.NewGuid().ToString();
-        UserData.Instance.SetUser(guestId, "Guest");
+        guestID = json?["row"]?["custom_id"]?.ToString() ?? System.Guid.NewGuid().ToString();
+        guestID = Backend.BMember.GetGuestID();
+        PlayerPrefs.SetString("GuestId", guestID);
+        UserData.Instance.SetUser(guestID, "Guest");
 
         // 로그인 후 항상 스테이지 정보 불러오기
         BackendStageGameData.Instance.InitalizeStage();
@@ -69,7 +93,7 @@ public class BackEndAuth : MonoBehaviour
         var bro = Backend.BMember.CustomLogin(id, pw);
         if (bro.IsSuccess())
         {
-            Debug.Log("커스텀 로그인 성공");
+            DebugScreen.Log("커스텀 로그인 성공");
 
             // [기능] 로그인 성공 후 닉네임 가져오기
             var infoBro = Backend.BMember.GetUserInfo();
@@ -93,7 +117,7 @@ public class BackEndAuth : MonoBehaviour
         }
         else
         {
-            Debug.LogError("커스텀 로그인 실패: " + bro);
+            DebugScreen.LogError("커스텀 로그인 실패: " + bro);
         }
     }
     // [기능] 회원가입 처리
@@ -107,13 +131,13 @@ public class BackEndAuth : MonoBehaviour
         var signUpBro = Backend.BMember.CustomSignUp(id, pw);
         if (signUpBro.IsSuccess())
         {
-            Debug.Log("회원가입 성공");
+            DebugScreen.Log("회원가입 성공");
 
             // [기능] 닉네임 설정
             var nickBro = Backend.BMember.UpdateNickname(nick);
             if (nickBro.IsSuccess())
             {
-                Debug.Log("닉네임 설정 성공");
+                DebugScreen.Log("닉네임 설정 성공");
 
                 // [기능] 닉네임 설정 성공 시 자동 로그인 실행
                 BackendStageGameData.Instance.InitalizeStage();
@@ -122,12 +146,12 @@ public class BackEndAuth : MonoBehaviour
             }
             else
             {
-                Debug.LogError("닉네임 설정 실패: " + nickBro);
+                DebugScreen.LogError("닉네임 설정 실패: " + nickBro);
             }
         }
         else
         {
-            Debug.LogError("회원가입 실패: " + signUpBro);
+            DebugScreen.LogError("회원가입 실패: " + signUpBro);
         }
     }
 }
