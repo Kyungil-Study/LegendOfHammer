@@ -79,9 +79,6 @@ public class SquadController : MonoBehaviour
     private Vector3 ReadPointerPosition()
     {
         return pointerPosition.action.ReadValue<Vector2>();
-        var reVal = m_Camera.ScreenToWorldPoint(pointerPosition.action.ReadValue<Vector2>());
-        reVal.z = 0;
-        return reVal;
     }
     
     private void Move()

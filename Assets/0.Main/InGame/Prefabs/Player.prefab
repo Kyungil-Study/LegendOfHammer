@@ -309,7 +309,7 @@ GameObject:
   - component: {fileID: 2359132699372548322}
   - component: {fileID: 8790931689560328816}
   - component: {fileID: 7339563107259497919}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Squad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
