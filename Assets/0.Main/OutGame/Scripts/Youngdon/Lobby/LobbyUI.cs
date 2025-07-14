@@ -1,5 +1,8 @@
+using System;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LobbyUI : MonoBehaviour
 {
@@ -11,6 +14,14 @@ public class LobbyUI : MonoBehaviour
     public TMP_Text currentStageText;
     public TMP_Text maxStageText;
 
+    public TMP_InputField stageNameInput;
+    public Button playButton;
+
+    private void Awake()
+    {
+        playButton.onClick.AddListener(GoDungeonScene);
+    }
+
     private void Start()
     {
         // User 정보 세팅
@@ -19,6 +30,10 @@ public class LobbyUI : MonoBehaviour
         
         // 시작 시 서버에서 스테이지 정보 가져오기
         BackendStageGameData.Instance.GetStage();
+        if (BackendStageGameData.stage.Maxstage == 0)
+        {
+            BackendStageGameData.Instance.ResetStage();
+        }
         RefreshStageUI();
     }
 
@@ -53,13 +68,26 @@ public class LobbyUI : MonoBehaviour
         maxStageText.text     = $"MaxStage: {stage.Maxstage}";
     }
 
+    public void GoDungeonScene()
+    {
+        BackendStageGameData.Instance.UpdateStage();
+        SessionManager.Instance.GoToGameScene();
+    }
+    private void OnDestroy()
+    {
+        playButton.onClick.RemoveListener(GoDungeonScene);
+    }
+
+    // 뒤끝 연동 디버그용 메서드
     public void TestNextStage()
     {
         BackendStageGameData.Instance.NextStage();
     }
-
+    // 뒤끝 연동 디버그용 메서드
     public void TestUpdateDataToBackend()
     {
+        BackendRank.Instance.RankInsert(BackendStageGameData.stage.Maxstage);
         BackendStageGameData.Instance.UpdateStage();
     }
+    
 }

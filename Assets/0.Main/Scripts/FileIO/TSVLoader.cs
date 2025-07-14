@@ -2,23 +2,65 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
 using UnityEngine;
 
-
+using Better.StreamingAssets;
 public static class TSVLoader
 {
+    static TSVLoader()
+    {
+        // BetterStreamingAssets 초기화
+        BetterStreamingAssets.Initialize();
+    }
+     
     private static readonly CsvConfiguration TsvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
     {
         Delimiter = "\t",
         Mode = CsvMode.NoEscape,
         HasHeaderRecord = false,
-        MissingFieldFound = null,
+        MissingFieldFound = MissingFieldFound,
         HeaderValidated = null,
     };
 
+    static void MissingFieldFound(MissingFieldFoundArgs args)
+    {
+        var header = args.HeaderNames[args.Index];
+        
+        Debug.LogWarning($"[TSVLoader] 필드가 누락되었습니다: {header}");
+        
+    }
+    
+    public static string  ResolvePath(string tableName, bool isStreamingAssetPath)
+    {
+        string basePath = isStreamingAssetPath ? "" : Application.persistentDataPath;
+        
+        string folderPath = Path.Combine(basePath, "Table");
+        string filePath = Path.Combine(folderPath, tableName + ".tsv");
+        
+        if (isStreamingAssetPath)
+        {
+            string streamingAssetPath = Path.Combine("Table", tableName + ".tsv");
+            filePath = streamingAssetPath;
+            if (!BetterStreamingAssets.FileExists(streamingAssetPath))
+            {
+                throw new FileNotFoundException($"파일이 존재하지 않습니다: {filePath}");
+            }
+        }
+        else
+        {
+            if (File.Exists(filePath) == false)
+            {
+                throw new FileNotFoundException($"파일이 존재하지 않습니다: {filePath}");
+            }
+        }
+        
+        return filePath;
+    }
+    
     /// <summary>
     /// Application.persistentDataPath/Table 폴더에서 주어진 테이블 이름의 TSV 파일을 읽어 List<T>로 반환합니다.
     /// </summary>
@@ -27,22 +69,11 @@ public static class TSVLoader
     /// <returns> 파싱된 데이터 리스트</returns>
     public static async Task<List<T>> LoadTableAsync<T>(string tableName, bool isStreamingAssetPath = true)
     {
-        string basePath = isStreamingAssetPath ? Application.streamingAssetsPath : Application.persistentDataPath;
-        string folderPath = Path.Combine(basePath, "Table");
-        string filePath = Path.Combine(folderPath, tableName + ".tsv");
-        
-        Debug.Log(Application.streamingAssetsPath);
-        Debug.Log(File.Exists(filePath));
-
-        if (File.Exists(filePath) == false)
-        {
-            Debug.LogError($"[TableLoader] 파일이 존재하지 않습니다: {filePath}");
-            return null;
-        }
-
         try
         {
-            using var reader = new StreamReader(filePath);
+            string filePath = ResolvePath(tableName, isStreamingAssetPath);
+            using StreamReader reader = BetterStreamingAssets.OpenText(filePath); 
+            //using var reader = new StreamReader(filePath);
             // 첫 번째 줄(1행) 스킵 (데이터 사용처에 대한 설명)
             await reader.ReadLineAsync();
             // 두 번째 줄(2행) 스킵 (데이터 타입에 대한 설명)
@@ -56,10 +87,12 @@ public static class TSVLoader
             }
             return records;
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            Debug.LogError($"[TableLoader] {tableName}.tsv 로딩 실패: {ex.Message}");
+            Debug.LogError($"[TableLoader] {tableName}.tsv 로딩 실패: {e.Message}");
             return null;
         }
+        
+       
     }
 }

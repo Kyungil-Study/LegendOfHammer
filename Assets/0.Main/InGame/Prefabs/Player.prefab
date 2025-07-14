@@ -963,7 +963,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseAttackDamage: 0
   attackPerSec: 1
-  projectileSpawnPoint: {fileID: 7523279484514845190}
+  projectileSpawnPoint: {fileID: 2844217813709663506}
   projectilePrefab: {fileID: -9055637960358438273, guid: fcfc5c6fe3d83bb4c9aafffa60046a6b, type: 3}
 --- !u!1 &9132952128616439255
 GameObject:
