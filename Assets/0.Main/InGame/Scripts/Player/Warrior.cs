@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class Warrior : Hero
 {
+    public Image cooldownIndicator;
     public float chargeDistance = 2f;
     public float chargeDuration = 0.2f;
     private float ChargeSpeed => Squad.STANDARD_DISTANCE * chargeDistance / chargeDuration;
@@ -22,6 +25,20 @@ public class Warrior : Hero
         }
     }
     private Vector3 m_ChargeDirection;
+
+    private void Start()
+    {
+        bAutoFire = false;
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        if (cooldownIndicator != null)
+        {
+            cooldownIndicator.fillAmount = 1 - Mathf.Clamp01(leftCooldown / AttackCooldown);
+        }
+    }
     
     // 전사 돌진 피해량
     // [{(전사 기본 공격 피해량 x 치명타 피해량) + 타격 당 데미지} x 받는 피해량 증가] x 최종 데미지 증가
@@ -33,12 +50,12 @@ public class Warrior : Hero
     
     public void ChargeAttack(Vector3 direction)
     {
-        // TODO: Remove comments to apply cooldown
-        
-        // if(attackCooldown > 0 || isCharging)
-        // {
-        //     return;
-        // }
+        Debug.Log("charge");
+        if(leftCooldown > 0 || IsCharging)
+        {
+            Debug.Log("return");
+            return;
+        }
         
         IsCharging = true;
         m_ChargeDirection = direction.normalized;
