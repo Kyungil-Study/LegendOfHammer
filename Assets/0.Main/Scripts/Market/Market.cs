@@ -23,21 +23,21 @@ public class MarketData
     public string Sale_Period { get; set; }
 }
 
-public class Market : MonoBehaviour
+public class Market : GenericResourceManager<MarketData, Market>
 {
-    private async void Start()
-    {
-        List<MarketData> marketList = await TSVLoader.LoadTableAsync<MarketData>("MarketTable");
-
-        if (marketList == null || marketList.Count == 0)
-        {
-            Debug.LogWarning("[MarketManager] 마켓 데이터를 불러오지 못했습니다.");
-            return;
-        }
-
-        foreach (var item in marketList)
-        {
-            Debug.Log($"[{item.ID}] {item.Name} - {item.Piece}원 ({item.Sale_Period})");
-        }
-    }
+    // private async void Start()
+    // {
+    //     List<MarketData> marketList = await TSVLoader.LoadTableAsync<MarketData>("MarketTable");
+    //
+    //     if (marketList == null || marketList.Count == 0)
+    //     {
+    //         Debug.LogWarning("[MarketManager] 마켓 데이터를 불러오지 못했습니다.");
+    //         return;
+    //     }
+    //
+    //     foreach (var item in marketList)
+    //     {
+    //         Debug.Log($"[{item.ID}] {item.Name} - {item.Piece}원 ({item.Sale_Period})");
+    //     }
+    // }
 }
