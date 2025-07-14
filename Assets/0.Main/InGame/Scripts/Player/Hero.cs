@@ -9,7 +9,8 @@ public abstract class Hero : MonoBehaviour
     protected Squad.SquadStats baseStats;
     public int baseAttackDamage;
     public float attackPerSec;
-    protected float attackCooldown;
+    protected float AttackCooldown => CalculateCooldown();
+    protected float leftCooldown;
     protected bool bAutoFire = true;
     public int Damage => CalculateDamage();
 
@@ -22,10 +23,10 @@ public abstract class Hero : MonoBehaviour
         baseStats = Squad.Instance.stats;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
-        attackCooldown -= Time.deltaTime;
-        if (bAutoFire && attackCooldown <= 0)
+        leftCooldown -= Time.deltaTime;
+        if (bAutoFire && leftCooldown <= 0)
         {
             Attack();
             ApplyCooldown();
@@ -34,6 +35,11 @@ public abstract class Hero : MonoBehaviour
     
     protected virtual void ApplyCooldown()
     {
-        attackCooldown = 1 / attackPerSec;
+        leftCooldown = AttackCooldown;
+    }
+    
+    protected virtual float CalculateCooldown()
+    {
+        return 1 / attackPerSec;
     }
 }

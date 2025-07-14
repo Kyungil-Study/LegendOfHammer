@@ -67,7 +67,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
     private EnemyAttackPattern   mAttackPattern;
     
     public void SetPlayer(GameObject player) => testPlayer = player;
-
+    
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
@@ -298,8 +298,10 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 
                 break;
             
-            case EnemyAttackPattern.Shield: // TakeDamage()에서 반감 구현
+            case EnemyAttackPattern.Shield:
+                
                 ApplyShieldRate();
+                
                 break;
             
             case EnemyAttackPattern.Sniper:
@@ -369,14 +371,20 @@ public class Monster : MonoBehaviour, IBattleCharacter
         
         Vector2 origin = (Vector2)transform.position + shieldPivotOffset;
         float halfCos = Mathf.Cos((shieldAngleDeg * 0.5f) * Mathf.Deg2Rad);
-
-        var hits = Physics2D.OverlapCircleAll(origin, shieldRadius, projectileLayerMask);
+        
+        LayerMask comboMask = playerLayerMask | projectileLayerMask;
+        var hits = Physics2D.OverlapCircleAll(origin, shieldRadius, comboMask);
 
         foreach (var col in hits)
         {
-            Vector2 dir = ((Vector2)col.transform.position - origin).normalized;
-            float dot = Vector2.Dot(Vector2.down, dir);
-            if (dot >= halfCos)
+            Vector2 hitPos = col.ClosestPoint(origin);
+            Vector2 dir    = (hitPos - origin).normalized;
+            Vector2 forward = -transform.up; 
+
+            float dot  = Vector2.Dot(forward, dir);
+            float distance = Vector2.Distance(origin, hitPos);
+
+            if (dot >= halfCos && distance <= shieldRadius)
             {
                 mShieldRate = 0.5f;
                 break;

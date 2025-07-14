@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class BattleEventArgs : System.EventArgs
 {
+    
 }
-
 
 public class StartBattleEventArgs : BattleEventArgs
 {
@@ -35,6 +35,17 @@ public class TakeDamageEventArgs : BattleEventArgs
     {
         this.Attacker = attacker;
         this.Target = target;
+        this.Damage = damage;
+    }
+}
+
+public class ReceiveDamageEventArgs : BattleEventArgs
+{
+    public IBattleCharacter Self {get; set; }
+    public int Damage {get;set; }
+    public ReceiveDamageEventArgs(IBattleCharacter self, int damage)
+    {
+        this.Self = self;
         this.Damage = damage;
     }
 }
