@@ -2141,6 +2141,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 780603150}
+    - target: {fileID: 5491656904146084032, guid: 240593c5545de9d49a3f14339f6f392e, type: 3}
+      propertyPath: resourcePath
+      value: MarketTable
+      objectReference: {fileID: 0}
     - target: {fileID: 6707416486406909560, guid: 240593c5545de9d49a3f14339f6f392e, type: 3}
       propertyPath: m_Pivot.x
       value: 0
