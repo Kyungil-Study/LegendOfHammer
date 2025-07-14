@@ -32,7 +32,7 @@ public abstract class Hero : MonoBehaviour
         }
     }
     
-    protected void ApplyCooldown()
+    protected virtual void ApplyCooldown()
     {
         attackCooldown = 1 / attackPerSec;
     }
