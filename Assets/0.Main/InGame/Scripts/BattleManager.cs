@@ -134,8 +134,6 @@ public class BattleManager : MonoSingleton<BattleManager>
         // Call the end battle event
         EndBattleEventArgs endEventArgs = new EndBattleEventArgs(isVictory); // Assuming victory for now
         BattleEventManager.Instance.CallEvent(endEventArgs);
-        
-        SessionManager.Instance.EndGame(isVictory);
     }
     
     // TODO: Implement logic to get monster by collider
