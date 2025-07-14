@@ -1,13 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class BattleManager : MonoSingleton<BattleManager>
 {
+    [SerializeField] GameObject loadUI;
+
     public int StageIndex = 0;
-    [SerializeField] private Squad player;
     
     [Header("추격 게이지 세팅")]
     [SerializeField] private float chaseGuageDecreaseRate = 0.5f; // Increase rate per second
@@ -25,6 +30,7 @@ public class BattleManager : MonoSingleton<BattleManager>
 
     private void OnDeath(DeathEventArgs args)
     {
+        Debug.Log($"[BattleManager] OnDeath called.");
         if (args.Target as Squad)
         {
             Debug.Log("Player has died. Ending game.");
@@ -32,9 +38,10 @@ public class BattleManager : MonoSingleton<BattleManager>
         }
         else if(args.Target is Monster monster)
         {
+            Debug.Log($"[BattleManager] Monster {monster.EnemyID} has died.");
             var id = monster.EnemyID;
             var data = EnemyDataManager.Instance.Records[id];
-            if( data.Enemy_Rank.Equals(EnemySpawnRankType.Boss))
+            if( data.Enemy_Rank.Equals(EnemyRank.Boss))
             {
                 Debug.Log($"Boss Monster has died.");
                 EndGame(true);
@@ -42,19 +49,67 @@ public class BattleManager : MonoSingleton<BattleManager>
         }
     }
 
-    private void OnAliveMonster(AliveMonsterEventArgs obj)
+    private void OnAliveMonster(AliveMonsterEventArgs args)
     {
-        chaseGuage += chaseIncreaseRate;
-        if (chaseGuage >= chaseGuageMax)
+        var monster = args.Monster as Monster;
+        Debug.Log($"[BattleManager] Monster {monster.EnemyID} is alive.");
+        var data = EnemyDataManager.Instance.Records[monster.EnemyID];
+        if (data.Enemy_Rank.Equals(EnemyRank.Boss))
         {
             EndGame(false);
         }
+        // todo: UI 완료되면 활성화
+        /*chaseGuage += chaseIncreaseRate;
+        if (chaseGuage >= chaseGuageMax)
+        {
+            EndGame(false);
+        }*/
     }
 
-    public void StartGame()
+    private async void Start()
     {
-        StartBattleEventArgs startEventArgs = new StartBattleEventArgs(StageIndex);
+        Debug.Log("[BattleManager] Start called. Loading all resources.");
+        loadUI.SetActive(true);
+        await LoadAllResourcesAsync();
+        StartGame();
+    }
+
+    public async Task LoadAllResourcesAsync()
+    {
+        var loadables = FindObjectsOfType<MonoBehaviour>().OfType<ILoadable>().Where(l => !l.IsLoaded).ToList();
+        var tasks = loadables.Select(l => l.LoadAsync()).ToArray();
+
+        LoadCompleteEventArg[] results = await Task.WhenAll(tasks);
+
+        // 결과 처리 (성공/실패 여부)
+        if (results.All(r => r.Success))
+        {
+            Debug.Log("모든 리소스 로드 완료");
+        }
+        else
+        {
+            foreach(var r in results.Where(r => !r.Success))
+                Debug.LogError($"로드 실패: {r.ErrorMessage}");
+            // 실패시 처리
+        }
         
+    }
+
+    public void StartGame() // todo: 로딩 연동 필요
+    {
+        loadUI.SetActive(false);
+        
+        if(BackendStageGameData.stage == null)
+        {
+            // Debug.LogWarning("[BattleManager] BackendStageGameData.stage is null. Using default stage index 1.");
+        }
+        else
+        {
+            StageIndex = BackendStageGameData.stage.Currentstage;; // For testing purposes, remove later
+        }
+        
+        Debug.Log($"[BattleManager] Starting game for stage {StageIndex}.");
+        StartBattleEventArgs startEventArgs = new StartBattleEventArgs(StageIndex);
         BattleEventManager.Instance.CallEvent(startEventArgs);
     }
 
@@ -63,11 +118,6 @@ public class BattleManager : MonoSingleton<BattleManager>
         if (isEnded)
         {
             return;
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            StartGame();
         }
         
         chaseGuage -= chaseGuageDecreaseRate * Time.deltaTime;
@@ -82,7 +132,7 @@ public class BattleManager : MonoSingleton<BattleManager>
         Debug.Log(isVictory ? "Battle ended with victory!" : "Battle ended with defeat!");
         
         // Call the end battle event
-        EndBattleEventArgs endEventArgs = new EndBattleEventArgs(true); // Assuming victory for now
+        EndBattleEventArgs endEventArgs = new EndBattleEventArgs(isVictory); // Assuming victory for now
         BattleEventManager.Instance.CallEvent(endEventArgs);
     }
     

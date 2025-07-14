@@ -146,7 +146,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
                 float dot = Vector2.Dot(forward, hitDir);
 
-                if (dot >= Mathf.Cos(45f * Mathf.Deg2Rad)
+                if (dot >= Mathf.Cos(45f * Mathf.Deg2Rad)   
                     && Vector2.Distance(attackerPos, myPos) <= shieldDistance)
                 {
                     damage = Mathf.CeilToInt(damage * 0.5f);
@@ -383,7 +383,9 @@ public class Monster : MonoBehaviour, IBattleCharacter
     private Vector2 SetFireAngle(Vector2 vector, float degrees)
     {
         float rad = degrees * Mathf.Deg2Rad;
-        float cosX = Mathf.Cos(rad), sinX = Mathf.Sin(rad);
+        
+        float cosX = Mathf.Cos(rad);
+        float sinX = Mathf.Sin(rad);
         
         return new Vector2(vector.x * cosX - vector.y * sinX, vector.x * sinX + vector.y * cosX);
     }
