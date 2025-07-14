@@ -3,8 +3,7 @@ using UnityEngine.UI;
 
 public class SquadHP : MonoBehaviour
 {
-    [SerializeField] private RectTransform fillRect;       // Fill 오브젝트의 RectTransform
-    [SerializeField] private RectTransform backgroundRect; // Background 기준 너비
+    [SerializeField] private Image fillImage;       // Fill 오브젝트의 RectTransformz
     [SerializeField] private Transform target;             // 체력바 띄울 대상
     [SerializeField] private Vector3 offset = new Vector3(0, -0.7f, 0);
     [SerializeField] private Camera mainCamera;
@@ -23,16 +22,12 @@ public class SquadHP : MonoBehaviour
 
     private void Update()
     {
-        // 1. 체력바 위치를 캐릭터 위로 이동
+        // 1. UI를 대상 위에 위치시키기 (2D에서 정상 작동)
         Vector3 screenPos = mainCamera.WorldToScreenPoint(target.position + offset);
         rectTransform.position = screenPos;
 
-        // 2. 체력 비율 계산
+        // 2. fillAmount 조절 (Image.type = Filled 일 때 작동)
         float ratio = (float)squad.stats.CurrentHealth / squad.stats.MaxHealth;
-        ratio = Mathf.Clamp01(ratio);
-
-        // 3. Fill 오브젝트의 width 조정 (Sliced 타입 유지)
-        float maxWidth = backgroundRect.rect.width;
-        fillRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth * ratio);
+        fillImage.fillAmount = ratio;
     }
 }
