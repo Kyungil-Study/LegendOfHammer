@@ -1004,54 +1004,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 7511207680696367698, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7782394145824058224, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
-      propertyPath: tapInput
-      value: 
-      objectReference: {fileID: 6790972738586011630, guid: 0e6465b597d0a7046ad9091fadf7a7bf, type: 3}
-    - target: {fileID: 7782394145824058224, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
-      propertyPath: moveInput
-      value: 
-      objectReference: {fileID: 203037593943612472, guid: 0e6465b597d0a7046ad9091fadf7a7bf, type: 3}
-    - target: {fileID: 7782394145824058224, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
-      propertyPath: moveAction
-      value: 
-      objectReference: {fileID: 203037593943612472, guid: 0e6465b597d0a7046ad9091fadf7a7bf, type: 3}
-    - target: {fileID: 7782394145824058224, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
-      propertyPath: touchInput
-      value: 
-      objectReference: {fileID: 6790972738586011630, guid: 0e6465b597d0a7046ad9091fadf7a7bf, type: 3}
-    - target: {fileID: 7782394145824058224, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
-      propertyPath: pointerPress
-      value: 
-      objectReference: {fileID: 6790972738586011630, guid: 0e6465b597d0a7046ad9091fadf7a7bf, type: 3}
-    - target: {fileID: 7782394145824058224, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
-      propertyPath: pointerPosition
-      value: 
-      objectReference: {fileID: 203037593943612472, guid: 0e6465b597d0a7046ad9091fadf7a7bf, type: 3}
-    - target: {fileID: 7782394145824058224, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
-      propertyPath: inputActionAsset
-      value: 
-      objectReference: {fileID: -944628639613478452, guid: 0e6465b597d0a7046ad9091fadf7a7bf, type: 3}
-    - target: {fileID: 7782394145824058224, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
-      propertyPath: moveAction.m_Name
-      value: Move
-      objectReference: {fileID: 0}
-    - target: {fileID: 7782394145824058224, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
-      propertyPath: moveAction.m_SingletonActionBindings.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7782394145824058224, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
-      propertyPath: moveAction.m_SingletonActionBindings.Array.data[0].m_Id
-      value: 91fc7497-9867-4906-9697-bbc90321ae36
-      objectReference: {fileID: 0}
-    - target: {fileID: 7782394145824058224, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
-      propertyPath: moveAction.m_SingletonActionBindings.Array.data[0].m_Action
-      value: Move
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

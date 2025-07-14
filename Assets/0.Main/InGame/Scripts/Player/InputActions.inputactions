@@ -6,15 +6,6 @@
             "id": "a3ddaa4f-034a-436d-83a0-63ee8df97832",
             "actions": [
                 {
-                    "name": "PointerPosition",
-                    "type": "Value",
-                    "id": "d4f7c42f-f1df-4a39-9ae0-71b19e71d24d",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "PointerPress",
                     "type": "Button",
                     "id": "57c199a7-a9bc-47c9-b5e6-9a5a8ff409a1",
@@ -22,6 +13,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "PointerPosition",
+                    "type": "Value",
+                    "id": "d4f7c42f-f1df-4a39-9ae0-71b19e71d24d",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
