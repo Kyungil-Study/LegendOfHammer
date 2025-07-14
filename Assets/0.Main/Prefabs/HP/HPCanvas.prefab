@@ -102,8 +102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a787276617a2c4d4e92df5b6f09dc101, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fillRect: {fileID: 2434741627675638777}
-  backgroundRect: {fileID: 6403922988083864894}
+  fillImage: {fileID: 554494816275590308}
   target: {fileID: 0}
   offset: {x: 0, y: -0.7, z: 0}
   mainCamera: {fileID: 0}
@@ -218,7 +217,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6485243841679111862
 CanvasRenderer:
@@ -249,7 +248,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
