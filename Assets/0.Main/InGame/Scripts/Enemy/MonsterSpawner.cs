@@ -7,6 +7,24 @@ using UnityEngine.Serialization;
 
 public class MonsterSpawner : MonoSingleton<MonsterSpawner>
 {
+    [SerializeField] private EnemyID testSpawnID = EnemyID.Straight_Normal_001; // For testing purposes, remove later
+    
+    public class PatternActivation
+    {
+        public int ID { get; set; }
+        public EnemySpawnPatternType PatternName { get; set; }
+        public WaveRankType Rank { get; set; }
+        public bool OnlyMid { get; set; }
+        public int NormalMelee { get; set; }
+        public int NormalRange { get; set; }
+        public int EliteMelee { get; set; }
+        public int EliteRange { get; set; }
+        public int BossMelee { get; set; }
+        public int BossRange { get; set; }
+        public int AppearStage { get; set; }
+        public int DisappearStage { get; set; }
+    }
+    
     // todo: 스테이지별 스폰 가능 몬스터 달라짐 , 데이터 테이블 연동 필요
     [FormerlySerializedAs("spawnPatternTable")] [FormerlySerializedAs("waveTable")] [SerializeField] private SpawnPatternTableSAO spawnPatternTableSao;
     
@@ -18,10 +36,18 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
     [SerializeField] private Transform[] spawnPoints; // Maximum number of monsters allowed on screen
     [SerializeField] private Transform midSpawnPoints; // Maximum number of monsters allowed on screen
     // Start is called before the first frame update
+
     [SerializeField] bool isTestMode = false; // For testing purposes, remove later
     [SerializeField] Monster TestEnemyPrefab; // todo : 테스트용, 나중에 지우기 For testing purposes, remove later
-    List<StageWave> stageWaves = new List<StageWave>();
-    Queue<StageWave> stageWavesQueue = new Queue<StageWave>();
+
+        
+    Dictionary<WaveRankType, List<EnemySpawnPatternType>> activatedPatternByRank = new Dictionary<WaveRankType, List<EnemySpawnPatternType>>()
+    {
+        { WaveRankType.Normal, new List<EnemySpawnPatternType>() },
+        { WaveRankType.Elite, new List<EnemySpawnPatternType>() },
+        { WaveRankType.Boss, new List<EnemySpawnPatternType>() }
+    };
+
     
     private void Awake()
     {
@@ -36,7 +62,9 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             // 테스트용, 나중에 지우기
-            isTestMode = true;
+            Monster testMonster = Instantiate(TestEnemyPrefab, spawnPoints[2]);
+            testMonster.EnemyID = testSpawnID; 
+            testMonster.GetComponent<Monster>().SetPlayer(TestPlayer);
         }
     }
 
@@ -48,9 +76,16 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
 
     void StartGame(StartBattleEventArgs args)
     {
-        
-        
-        
+        int stageIndex = args.StageIndex;
+
+        var datas = PatternActivationDataManager.Instance.Records;
+        foreach (var activation in datas)
+        {
+            if (activation.AppearStage <= stageIndex && stageIndex <= activation.DisappearStage)
+            {
+                activatedPatternByRank[activation.Rank].Add(activation.PatternName);
+            }
+        }
     }
 
     void SpawnPattern(SpawnPattern pattern)
@@ -93,7 +128,7 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
                 filteredRecords.Add(record);
             }
         }
-        
+        Debug.Log($"[MonsterSpawner] Spawned {filteredRecords.Count} monsters of rank {rank} and attack type {spawnAttackType} at position {position}");
         // todo: 몬스터 ID 세팅을 prefab 변경으로 수정
         Monster newMonster = Instantiate(TestEnemyPrefab, position, Quaternion.identity);
         newMonster.EnemyID = filteredRecords[UnityEngine.Random.Range(0, filteredRecords.Count)].Enemy_ID;
@@ -103,66 +138,14 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
         // todo: 테스트용, 병합 시 각주처리 제거하고 EnemyID 맞게 Instantiate하기 !!
         // newMonster.EnemyID = filteredRecords[UnityEngine.Random.Range(0, filteredRecords.Count)].Enemy_ID;
         // newMonster.GetComponent<Monster>().SetPlayer(TestPlayer);   // For testing purposes, remove later
-      
-        
     }
     
-    void SpawnNormalPatternMonster()
-    {
-        // 테스트용
-        var normalPatternList = new EnemySpawnPatternType[]
-        {
-            EnemySpawnPatternType.Normal_Three_A,
-        };
-        int randomIndex = UnityEngine.Random.Range(0, normalPatternList.Length);
-        SpawnPattern spawnPattern = spawnPatternTableSao.GetSpawnPattern(normalPatternList[randomIndex]);
-        SpawnPattern(spawnPattern);
-        
-        
-    }
-    
-    void SpawnElitePatternMonster()
-    {
-        // 테스트용
-        var elitePatternList = new EnemySpawnPatternType[]
-        {
-            EnemySpawnPatternType.Elite_One_A,
-            EnemySpawnPatternType.Elite_Two_A,
-            EnemySpawnPatternType.Elite_Three_A,
-        };
-        int randomIndex = UnityEngine.Random.Range(0, elitePatternList.Length);
-        SpawnPattern spawnPattern = spawnPatternTableSao.GetSpawnPattern(elitePatternList[randomIndex]);
-        SpawnPattern(spawnPattern);
-    }
-    
-    void SpawnBossPatternMonster()
-    {
-        // 테스트용
-        var bossPatternList = new EnemySpawnPatternType[]
-        {
-            EnemySpawnPatternType.Boss_One_A,
-        };
-        int randomIndex = UnityEngine.Random.Range(0, bossPatternList.Length);
-        SpawnPattern spawnPattern = spawnPatternTableSao.GetSpawnPattern(bossPatternList[randomIndex]);
-        SpawnPattern(spawnPattern);
-    }
 
     public void SpawnMonster(WaveRankType currentWaveWaveRank)
     {
-        switch (currentWaveWaveRank)
-        {
-            case WaveRankType.Normal:
-                SpawnNormalPatternMonster();
-                break;
-            case WaveRankType.Elite:
-                SpawnElitePatternMonster();
-                break;
-            case WaveRankType.Boss:
-                SpawnBossPatternMonster();
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(currentWaveWaveRank), currentWaveWaveRank, null);
-            
-        }
+        var patternList = activatedPatternByRank[currentWaveWaveRank];
+        int randomIndex = UnityEngine.Random.Range(0, patternList.Count);
+        SpawnPattern spawnPattern = spawnPatternTableSao.GetSpawnPattern(patternList[randomIndex]);
+        SpawnPattern(spawnPattern);
     }
 }

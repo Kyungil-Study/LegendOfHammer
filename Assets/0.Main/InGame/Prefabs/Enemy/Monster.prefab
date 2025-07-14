@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8212737276976261949}
   - component: {fileID: 3903098738402647018}
   - component: {fileID: 2138802484598532216}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1000
-  m_Sprite: {fileID: 21300000, guid: 15156f945630f164aba991226f4c0b5f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c560acba54139134b91efb372b8c8790, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -116,9 +116,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7613585881291570754}
   - component: {fileID: 319402234662238148}
-  - component: {fileID: 4364333249900037650}
+  - component: {fileID: 3874214853159092470}
   - component: {fileID: 7494431464099580550}
-  m_Layer: 0
+  - component: {fileID: 5546129984101200141}
+  m_Layer: 7
   m_Name: Monster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -168,8 +169,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!58 &4364333249900037650
-CircleCollider2D:
+--- !u!61 &3874214853159092470
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -201,8 +202,18 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!114 &7494431464099580550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -215,12 +226,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3380768c582997f41b7fda6a7ab1e040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyID: 11003
+  enemyID: 12009
   testPlayer: {fileID: 0}
   testPlayerLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 5122971031347301392, guid: 623e67ce00306e349ac9d084a76d79d4, type: 3}
+  projectileSpeed: 5
+  fireInterval: 3
   zigzagAmplitude: 1
   zigzagFrequency: 2
   suicideDelay: 1
@@ -228,3 +241,33 @@ MonoBehaviour:
   attackRange: 0.75
   explosionPrefab: {fileID: 6111301031846871093, guid: 9a3809abee10ab54188078ab046f1168, type: 3}
   distanceToStop: 3
+  shieldDistance: 1
+  knockbackForce: 2.5
+  knockbackDuration: 0.2
+--- !u!114 &5546129984101200141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8015743650478422896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12b88cfb524a69443a26f832ad1fb503, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  model: {fileID: 8212737276976261949}
+  appearances:
+  - sprite: {fileID: 21300000, guid: c560acba54139134b91efb372b8c8790, type: 3}
+    idleClip: {fileID: 7400000, guid: 40e1d67f75e9b7845828af50e865e9d6, type: 2}
+  - sprite: {fileID: 21300000, guid: 276e7cb5c55bc224ebbc1305cd62570f, type: 3}
+    idleClip: {fileID: 7400000, guid: 087312862b422cc4cb21e44844b3be07, type: 2}
+  - sprite: {fileID: 21300000, guid: 216e16886fee16f419df3566cc393aaa, type: 3}
+    idleClip: {fileID: 7400000, guid: 36aa87f86d5a0a44f89a12bc1b94d94a, type: 2}
+  - sprite: {fileID: 21300000, guid: fbb752f4fd0eea04b8ab2ff2aa86ee65, type: 3}
+    idleClip: {fileID: 7400000, guid: e272bf485008c6040bcd2da0524c2f9e, type: 2}
+  - sprite: {fileID: 21300000, guid: 4df5556191c164a4a92326b55d60d51c, type: 3}
+    idleClip: {fileID: 7400000, guid: 0a0a2209e757e0840a605a988a82fb1c, type: 2}
+  - sprite: {fileID: 21300000, guid: 15156f945630f164aba991226f4c0b5f, type: 3}
+    idleClip: {fileID: 7400000, guid: 9211ac6bf910282488d2880bfbd869ed, type: 2}
+  mHitBoxSize: 1
