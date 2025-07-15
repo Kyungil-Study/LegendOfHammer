@@ -10,5 +10,4 @@ public static class EnumMapper
             _ => throw new System.ArgumentOutOfRangeException(nameof(rankType), rankType, null)
         };
     }
-        
 }
