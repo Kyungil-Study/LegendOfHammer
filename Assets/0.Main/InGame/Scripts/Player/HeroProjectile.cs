@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public abstract class HeroProjectile : MonoBehaviour
 {
@@ -10,20 +11,14 @@ public abstract class HeroProjectile : MonoBehaviour
     public int damage;
     public Func<GameObject> FindTargetFunc { get; set; }
     private Vector3 m_TargetDirection;
-    private float m_Speed;
-    [Range(0, 10)] public float speed;
+    [Range(0,10)] public float speed;
     private float m_LifeTime = 5f;
-
-    private void Awake()
-    {
-        SetSpeed();
-    }
 
     private void Update()
     {
         if (mb_IsFired)
         {
-            transform.Translate(m_TargetDirection * (m_Speed * Time.deltaTime), Space.World);
+            transform.Translate(m_TargetDirection * (speed * Distance.STANDARD_DISTANCE * Time.deltaTime), Space.World);
         }
         
         m_LifeTime -= Time.deltaTime;
@@ -31,17 +26,6 @@ public abstract class HeroProjectile : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
-    
-    private void SetSpeed()
-    {
-        m_Speed = Squad.STANDARD_DISTANCE * speed;
-    }
-    
-    public void SetSpeed(float newSpeed)
-    {
-        speed = newSpeed;
-        m_Speed = Squad.STANDARD_DISTANCE * speed;
     }
 
     public void Fire()
