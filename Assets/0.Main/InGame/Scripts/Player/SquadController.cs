@@ -55,8 +55,13 @@ public class SquadController : MonoBehaviour
 
         var callbacks = BattleEventManager.Instance.Callbacks;
 
-        callbacks.OnStartBattle += (args) => { lever.SetActive(true); };
+        callbacks.OnStartBattle += (args) =>
+        {
+            gameObject.SetActive(true);
+            lever.SetActive(true);
+        };
         callbacks.OnEndBattle += (args) => { gameObject.SetActive(false); };
+        gameObject.SetActive(false); // Initially hide the controller
     }
 
     private void StartMove(InputAction.CallbackContext context)
