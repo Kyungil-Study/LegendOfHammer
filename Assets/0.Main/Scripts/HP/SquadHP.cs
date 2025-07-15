@@ -20,14 +20,43 @@ public class SquadHP : MonoBehaviour
         Debug.Log(squad.stats.CurrentHealth);
     }
 
+    // private void Update()
+    // {
+    //     // 1. UI를 대상 위에 위치시키기 (2D에서 정상 작동)
+    //     Vector3 screenPos = mainCamera.WorldToScreenPoint(target.position + offset);
+    //     rectTransform.position = screenPos;
+    //
+    //     // 2. fillAmount 조절 (Image.type = Filled 일 때 작동)
+    //     float ratio = (float)squad.stats.CurrentHealth / squad.stats.MaxHealth;
+    //     fillImage.fillAmount = ratio;
+    // }
+    
     private void Update()
     {
-        // 1. UI를 대상 위에 위치시키기 (2D에서 정상 작동)
-        Vector3 screenPos = mainCamera.WorldToScreenPoint(target.position + offset);
-        rectTransform.position = screenPos;
+        if (target == null || mainCamera == null) return;
 
-        // 2. fillAmount 조절 (Image.type = Filled 일 때 작동)
+        Vector3 worldPos = target.position + offset;
+
+        // 캔버스 렌더모드에 따라 위치 계산
+        Canvas canvas = GetComponentInParent<Canvas>();
+        if (canvas != null)
+        {
+            if (canvas.renderMode == RenderMode.WorldSpace)
+            {
+                // World Space: 직접 월드 위치 지정
+                rectTransform.position = worldPos;
+            }
+            else
+            {
+                // Screen Space: 카메라 기준 스크린 좌표로 변환
+                Vector3 screenPos = mainCamera.WorldToScreenPoint(worldPos);
+                rectTransform.position = screenPos;
+            }
+        }
+
+        // 체력 비율 적용
         float ratio = (float)squad.stats.CurrentHealth / squad.stats.MaxHealth;
-        fillImage.fillAmount = ratio;
+        fillImage.fillAmount = Mathf.Clamp01(ratio);
     }
+
 }
