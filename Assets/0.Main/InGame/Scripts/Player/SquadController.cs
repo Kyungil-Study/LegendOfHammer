@@ -54,7 +54,8 @@ public class SquadController : MonoBehaviour
         };
 
         var callbacks = BattleEventManager.Instance.Callbacks;
-        
+
+        callbacks.OnStartBattle += (args) => { lever.SetActive(true); };
         callbacks.OnEndBattle += (args) => { gameObject.SetActive(false); };
     }
 
