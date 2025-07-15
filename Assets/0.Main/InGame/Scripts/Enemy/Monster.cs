@@ -139,9 +139,9 @@ public class Monster : MonoBehaviour, IBattleCharacter
     {
         int damage = Mathf.RoundToInt(eventArgs.Damage * mShieldRate);
         
-        mCurrentHP -= damage;
+        BattleEventManager.Instance.CallEvent(new ReceiveDamageEventArgs(this, damage));
         
-        Debug.Log($"[Moster:TakeDamage] 받은 데미지 = {damage} // 남은 HP = {mCurrentHP} // 쉴드? {mShieldRate == 0.5f}");
+        mCurrentHP -= damage;
         
         if (mCurrentHP <= 0) // HP가 줄어서 사망했을 경우
         {
