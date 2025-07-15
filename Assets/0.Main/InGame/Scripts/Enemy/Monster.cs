@@ -61,6 +61,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
     private int   mAttackPower;
     private int   mCurrentHP;
     private int   mMaxHP;
+    public int MaxHP => mMaxHP;
     
     private EnemyMovementPattern mMovementPattern;
     private EnemyAttackPattern   mAttackPattern;
@@ -75,11 +76,13 @@ public class Monster : MonoBehaviour, IBattleCharacter
     void OnEnable()
     {
         BattleEventManager.Instance.Callbacks.OnChargeCollision += OnChargeCollision;
+        BattleManager.Instance.RegisterMonster(this);
     }
 
     void OnDisable()
     {
         BattleEventManager.Instance.Callbacks.OnChargeCollision -= OnChargeCollision;
+        BattleManager.Instance.UnregisterMonster(this);
     }
     
     private void OnChargeCollision(ChargeCollisionArgs args)

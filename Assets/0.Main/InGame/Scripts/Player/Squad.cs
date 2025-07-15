@@ -61,7 +61,7 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (warrior.IsCharging && BattleManager.GetMonsterBy(other, out Monster monster))
+        if (warrior.IsCharging && BattleManager.TryGetMonsterBy(other, out Monster monster))
         {
             warrior.Impact(monster);
         }
