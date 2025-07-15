@@ -4,18 +4,18 @@ using UnityEngine;
 
 public enum AugmentType
 {
-    Common = 0,
-    Warrior = 1,
-    Archer = 2,
-    Wizard = 3
+    Common,
+    Warrior,
+    Archer,
+    Wizard
 }
 
 public enum AugmentRarity
 {
-    Common = 0,
-    Rare = 1,
-    Hero = 2,
-    Legendary = 3
+    Normal,
+    Rare,
+    Hero,
+    Legendary
 }
 
 public abstract class Augment
@@ -25,23 +25,53 @@ public abstract class Augment
     public abstract AugmentType GetAugmentType();
     public abstract string GetGrade();
 
-
+    public abstract string GetDescription();
 }
 
-public class CommonAugment : Augment
+public abstract class ClassAugment : Augment
 {
-    public int ID { get; set; }
+    public abstract int Next();
+}
+
+public class AugmentData
+{
+    public int AugmentID { get; set; }
     public string AugmentName { get; set; }
-    public AugmentRarity Rarity { get; set; }
+    public int OptionID { get; set; }
+    public AugmentRarity AugmentRarity { get; set; }
+    public string AugmentText { get; set; }
+
+    // 옵션별 효과 수치
     public float AtkIncrease { get; set; }
     public float AtkSpeedDecrease { get; set; }
     public float CriticalRateIncrease { get; set; }
     public float CriticalDamageIncrease { get; set; }
     public int AdditionalHit { get; set; }
     public int SquadMaxHpIncrease { get; set; }
-    public float IncreasedTakenDamage  { get; set; }
-    public float IncreasedFinalDamage  { get; set; }
-    public float MoveSpeedIncrease  { get; set; }
+    public float IncreasedTakenDamage { get; set; }
+    public float IncreasedFinalDamage { get; set; }
+    public float MoveSpeedIncrease { get; set; }
+
+    // 생성자, ToString 등 필요에 따라 추가
+}
+
+public class CommonAugment : Augment
+{
+    public int ID { get; set; }
+    public string AugmentName { get; set; }
+    public int OptionID { get; set; }
+    public AugmentRarity Rarity { get; set; }
+    public string Description { get; set; }
+    
+    public float AtkIncrease { get; set; }
+    public float AtkSpeedDecrease { get; set; }
+    public float CriticalRateIncrease { get; set; }
+    public float CriticalDamageIncrease { get; set; }
+    public int AdditionalHit { get; set; }
+    public int SquadMaxHpIncrease { get; set; }
+    public float IncreasedTakenDamage { get; set; }
+    public float IncreasedFinalDamage { get; set; }
+    public float MoveSpeedIncrease { get; set; }
 
     public override int GetID()
     {
@@ -62,13 +92,22 @@ public class CommonAugment : Augment
     {
         return Rarity.ToString();
     }
+
+    public override string GetDescription()
+    {
+        return Description;
+    }
 }
 
-public class WarriorAugment : Augment
+public class WarriorAugment : ClassAugment
 {
     public int ID { get; set; }
     public string Name { get; set; }
     public int Level { get; set; }
+    public string Description { get; set; }
+    public string FinalDescription { get; set; }
+    public int NextAugmentID { get; set; }
+    
     public int DashCoolDown { get; set; }
     public int KnockbackBonus { get; set; }
     public int ArcWaveSize { get; set; }
@@ -96,15 +135,26 @@ public class WarriorAugment : Augment
     {
         return $"Lv.{Level} "; // Assuming Warrior Augments are always Hero grade
     }
+
+    public override string GetDescription()
+    {
+        return Description; // Assuming Description is a string that describes the augment
+    }
+
+    public override int Next()
+    {
+        return NextAugmentID; // Assuming NextAugmentID is set to the next augment's ID
+    }
 }
 
-public class ArcherAugment : Augment
+public class ArcherAugment : ClassAugment
 {
     public int ID { get; set; }
     public string Name { get; set; }
-    
-    public int NextAugmentID { get; set; }
     public int Level { get; set; }
+    public string Description { get; set; }
+    public string FinalDescription { get; set; }
+    public int NextAugmentID { get; set; }
     public float AttackSpeedIncreasedRate { get; set; }
     public float SmallArrowAttackRatio { get; set; }
     public float AttackSpeedIncreased { get; set; }
@@ -132,13 +182,27 @@ public class ArcherAugment : Augment
     {
         return $"Lv.{Level} "; // Assuming Archer Augments are always Hero grade
     }
+
+    public override string GetDescription()
+    {
+        return Description; // Assuming Description is a string that describes the augment
+    }
+
+    public override int Next()
+    {
+        return NextAugmentID; // Assuming NextAugmentID is set to the next augment's ID
+    }
 }
 
-public class WizardAugment : Augment
+public class WizardAugment : ClassAugment
 {
     public int ID { get; set; }
     public string Name { get; set; }
     public int Level { get; set; }
+    public string Description { get; set; }
+    public string FinalDescription { get; set; }
+    public int NextAugmentID { get; set; }
+    
     public int Increased_Projectiles { get; set; }
     public float AttackRatio_ReductionRate  { get; set; }
     public float OverlapDamage_Reduction  { get; set; }
@@ -150,7 +214,6 @@ public class WizardAugment : Augment
     public float AdditionalExplosion  { get; set; }
     public float AdditionalExplosion_Ratio { get; set; }
     
-    public string Final_Upgrade { get; set; }
     
     public override int GetID()
     {
@@ -170,6 +233,16 @@ public class WizardAugment : Augment
     public override string GetGrade()
     {
         return $"Lv.{Level} "; // Assuming Wizard Augments are always Hero grade
+    }
+
+    public override string GetDescription()
+    {
+        return Description; // Assuming Description is a string that describes the augment
+    }
+
+    public override int Next()
+    {
+        return NextAugmentID; // Assuming NextAugmentID is set to the next augment's ID
     }
     
 }

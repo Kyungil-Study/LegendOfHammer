@@ -18,10 +18,11 @@ public class AugmentSlot : MonoBehaviour , IPointerClickHandler
         this.augment = augment;
         augmentNameText.text = augment.GetName();
         augmentGradeText.text = augment.GetGrade(); // Assuming ID is used as level for simplicity
+        augmentDescriptionText.text = augment.GetDescription(); // Assuming GetAugmentType() returns a string representation
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        // todo :: 증강 선택 완료
+        BattleEventManager.Instance.CallEvent(new SelectAugmentEventArgs(augment));
     }
 }

@@ -275,7 +275,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 386511076734694341}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ArrowSpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -309,7 +309,7 @@ GameObject:
   - component: {fileID: 2359132699372548322}
   - component: {fileID: 8790931689560328816}
   - component: {fileID: 7339563107259497919}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Squad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -549,7 +549,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3292731646057753534}
   - component: {fileID: 3228702557338661824}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Warrior
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -765,7 +765,7 @@ GameObject:
   - component: {fileID: 3338727660838921703}
   - component: {fileID: 2321418139471093657}
   - component: {fileID: 239061345864969220}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -871,7 +871,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1852620130419979727}
   - component: {fileID: 2371057015709172346}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1109,7 +1109,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4104936536418046007}
   - component: {fileID: 6134312133047931347}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Archer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1144,7 +1144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a01ae529d9e3e584f998266c5d9cff95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseAttackDamage: 250
+  baseAttackDamage: 500
   attackPerSec: 2
   projectileSpawnPoint: {fileID: 386511076734694341}
   projectilePrefab: {fileID: 2213334373689080831, guid: 06e33e6d1b33be646a96d05a5b3f79ed, type: 3}
@@ -1159,7 +1159,7 @@ GameObject:
   - component: {fileID: 2844217813709663506}
   - component: {fileID: 7784057588379899713}
   - component: {fileID: 7530942073041330133}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1300,7 +1300,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6051618761392146341
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1332,7 +1332,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7523279484514845190}
   - component: {fileID: 8187177615337158848}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wizard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1367,7 +1367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3adce5ac45099fb4babe269bc38b2cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseAttackDamage: 300
+  baseAttackDamage: 500
   attackPerSec: 1
   projectileSpawnPoint: {fileID: 2844217813709663506}
   projectilePrefab: {fileID: -9055637960358438273, guid: fcfc5c6fe3d83bb4c9aafffa60046a6b, type: 3}
@@ -1382,7 +1382,7 @@ GameObject:
   - component: {fileID: 5256962366742529878}
   - component: {fileID: 856782335946647664}
   - component: {fileID: 4830536131382647911}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
