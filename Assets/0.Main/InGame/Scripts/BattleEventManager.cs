@@ -37,7 +37,7 @@ public class BattleEventManager : MonoSingleton<BattleEventManager>
         }
         else if (eventArgs is ReceiveDamageEventArgs sendEvent)
         {
-            
+            Callbacks.OnSendDamage?.Invoke(sendEvent);
         }
         else if(eventArgs is AliveMonsterEventArgs aliveMonsterEvent)
         {

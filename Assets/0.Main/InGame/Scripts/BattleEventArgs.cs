@@ -42,11 +42,11 @@ public class TakeDamageEventArgs : BattleEventArgs
 public class ReceiveDamageEventArgs : BattleEventArgs
 {
     public IBattleCharacter Self {get; set; }
-    public int Damage {get;set; }
-    public ReceiveDamageEventArgs(IBattleCharacter self, int damage)
+    public int ActualDamage {get;set; }
+    public ReceiveDamageEventArgs(IBattleCharacter self, int actualDamage)
     {
         this.Self = self;
-        this.Damage = damage;
+        this.ActualDamage = actualDamage;
     }
 }
 
