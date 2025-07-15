@@ -228,9 +228,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyID: 12009
   testPlayer: {fileID: 0}
-  testPlayerLayerMask:
+  playerLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  projectileLayerMask:
+    serializedVersion: 2
+    m_Bits: 1024
   projectilePrefab: {fileID: 5122971031347301392, guid: 623e67ce00306e349ac9d084a76d79d4, type: 3}
   projectileSpeed: 5
   fireInterval: 3
@@ -241,7 +244,9 @@ MonoBehaviour:
   attackRange: 0.75
   explosionPrefab: {fileID: 6111301031846871093, guid: 9a3809abee10ab54188078ab046f1168, type: 3}
   distanceToStop: 3
-  shieldDistance: 1
+  shieldRadius: 1.2
+  shieldAngleDeg: 90
+  shieldPivotOffset: {x: 0, y: -0.2}
   knockbackForce: 2.5
   knockbackDuration: 0.2
 --- !u!114 &5546129984101200141

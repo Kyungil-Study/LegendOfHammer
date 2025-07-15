@@ -32,6 +32,14 @@ public class SessionManager : SingletonBase<SessionManager>
         SceneManager.LoadScene("Scene_Dungeon", LoadSceneMode.Single);
 
     }
+
+    public void NextGame()
+    {
+        BackendStageGameData.Instance.NextStage();
+        BackendStageGameData.Instance.UpdateStage();
+        Debug.Log($"[SessionManager] Proceeding to next game stage");
+        SceneManager.LoadScene("Scene_Dungeon", LoadSceneMode.Single);
+    }
     
     public void EndGame(bool success)
     {
@@ -45,6 +53,7 @@ public class SessionManager : SingletonBase<SessionManager>
             BackendStageGameData.Instance.ResetStage();
         }
 
+        BackendStageGameData.Instance.UpdateStage();
         Debug.Log($"[SessionManager] Ending game");
         SceneManager.LoadScene("Scene_Lobby", LoadSceneMode.Single);
     }

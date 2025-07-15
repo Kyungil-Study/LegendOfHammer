@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class Monster : MonoBehaviour, IBattleCharacter
@@ -15,8 +16,9 @@ public class Monster : MonoBehaviour, IBattleCharacter
     
     [Header("플레이어 테스트")] [Tooltip("추적/충돌할 플레이어 오브젝트")]
     public GameObject testPlayer;
-    [Tooltip("플레이어 레이어 마스크")]
-    [SerializeField] private LayerMask testPlayerLayerMask;
+    [Tooltip("플레이어 레이어")]
+    [SerializeField] private LayerMask playerLayerMask;
+    [SerializeField] private LayerMask projectileLayerMask;
     
     [Header("투사체")] [Tooltip("투사체 프리팹, 속도")]
     [SerializeField] private GameObject projectilePrefab;
@@ -44,8 +46,11 @@ public class Monster : MonoBehaviour, IBattleCharacter
     private float mFlyStartY;
     private bool mHasStoppedFlying;
     
-    [Header("쉴드")] [Tooltip("쉴드 거리")]
-    [SerializeField] private float shieldDistance = 1f;
+    [Header("쉴드")] [Tooltip("쉴드 거리 & 각도 & 피벗")]
+    [SerializeField] private float shieldRadius = 1f;
+    [SerializeField] private float shieldAngleDeg = 90f;
+    [SerializeField] private Vector2 shieldPivotOffset;
+    private float mShieldRate = 1;
     
     [Header("넉백 설정")] [Tooltip("넉백 세기, 지속 시간")]
     [SerializeField] private float knockbackForce    = 2.5f;    // 넉백 세기
@@ -62,7 +67,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
     private EnemyAttackPattern   mAttackPattern;
     
     public void SetPlayer(GameObject player) => testPlayer = player;
-
+    
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
@@ -132,32 +137,11 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
     public void TakeDamage(TakeDamageEventArgs eventArgs)
     {
-        int damage = eventArgs.Damage;
-
-        // Shield 패턴일 때 반감처리
-        if (mAttackPattern == EnemyAttackPattern.Shield)
-        {
-            if (eventArgs.Attacker is MonoBehaviour mono)
-            {
-                Vector2 attackerPos = mono.transform.position;
-                Vector2 myPos = transform.position;
-                Vector2 hitDir = (attackerPos - myPos).normalized;
-                Vector2 forward = Vector2.down;
-
-                float dot = Vector2.Dot(forward, hitDir);
-
-                if (dot >= Mathf.Cos(45f * Mathf.Deg2Rad)
-                    && Vector2.Distance(attackerPos, myPos) <= shieldDistance)
-                {
-                    damage = Mathf.CeilToInt(damage * 0.5f);
-                    // 나중에 확인할 수 있도록, 플레이어 -> 적 공격 시 로그로 확인
-                    Debug.Log($"Shield 반감 적용: 원래 데미지 : {eventArgs.Damage} // 적용 데미지 : {damage}");
-                }
-            }
-        }
-
+        int damage = Mathf.RoundToInt(eventArgs.Damage * mShieldRate);
+        
         mCurrentHP -= damage;
-        Debug.Log($"TakeDamage 호출 : 받은 데미지 ? => {damage} // 남은 HP ? => {mCurrentHP}");
+        
+        Debug.Log($"[Moster:TakeDamage] 받은 데미지 = {damage} // 남은 HP = {mCurrentHP} // 쉴드? {mShieldRate == 0.5f}");
         
         if (mCurrentHP <= 0) // HP가 줄어서 사망했을 경우
         {
@@ -177,7 +161,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
         {
             return;
         }
-        
+ 
         // Border Object 충돌 시 (지그재그 처리)
         if (mMovementPattern == EnemyMovementPattern.Zigzag && collision.gameObject.layer == 8)
         {
@@ -199,9 +183,8 @@ public class Monster : MonoBehaviour, IBattleCharacter
             }
         }
         
-        // 플레이어 레이어 체크, 충돌 시 플레이어 쪽 데미지 Call
         int bit = 1 << collision.gameObject.layer;
-        if ((testPlayerLayerMask.value & bit) != 0)
+        if ((playerLayerMask.value & bit) != 0)
         {
             var player = collision.GetComponent<IBattleCharacter>();
             if (player != null)
@@ -217,7 +200,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 Debug.Log($"플레이어 받은 데미지 : {mAttackPower}");
             }
         }
-
+        
         // ClearZone
         if (collision.gameObject.layer == 9)    
         {
@@ -255,7 +238,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
             
             case EnemyMovementPattern.Chase:
                 
-                var hits = Physics2D.OverlapCircleAll(transform.position, detectRange, testPlayerLayerMask);
+                var hits = Physics2D.OverlapCircleAll(transform.position, detectRange, playerLayerMask);
                 
                 if (hits.Length > 0)
                 {
@@ -315,7 +298,9 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 
                 break;
             
-            case EnemyAttackPattern.Shield: // TakeDamage()에서 반감 구현
+            case EnemyAttackPattern.Shield:
+                
+                ApplyShieldRate();
                 
                 break;
             
@@ -374,12 +359,39 @@ public class Monster : MonoBehaviour, IBattleCharacter
             attacker: this,
             damage:   mAttackPower,
             radius:   attackRange,
-            mask:     testPlayerLayerMask
+            mask:     playerLayerMask
         );
 
         Destroy(gameObject);
     }
 
+    private void ApplyShieldRate()
+    {
+        mShieldRate = 1f;
+        
+        Vector2 origin = (Vector2)transform.position + shieldPivotOffset;
+        float halfCos = Mathf.Cos((shieldAngleDeg * 0.5f) * Mathf.Deg2Rad);
+        
+        LayerMask comboMask = playerLayerMask | projectileLayerMask;
+        var hits = Physics2D.OverlapCircleAll(origin, shieldRadius, comboMask);
+
+        foreach (var col in hits)
+        {
+            Vector2 hitPos = col.ClosestPoint(origin);
+            Vector2 dir    = (hitPos - origin).normalized;
+            Vector2 forward = -transform.up; 
+
+            float dot  = Vector2.Dot(forward, dir);
+            float distance = Vector2.Distance(origin, hitPos);
+
+            if (dot >= halfCos && distance <= shieldRadius)
+            {
+                mShieldRate = 0.5f;
+                break;
+            }
+        }
+    }
+    
     private Vector2 SetFireAngle(Vector2 vector, float degrees)
     {
         float rad = degrees * Mathf.Deg2Rad;
@@ -402,7 +414,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
                 dir:      aim(i),
                 speed:    projectileSpeed,
                 damage:   (int)mAttackPower,
-                mask:     testPlayerLayerMask,
+                mask:     playerLayerMask,
                 attacker: this
             );
             
@@ -508,28 +520,18 @@ public class Monster : MonoBehaviour, IBattleCharacter
         if (mAttackPattern == EnemyAttackPattern.Shield)
         {
             Gizmos.color = Color.blue;
-            Vector3 origin = transform.position;
+            Vector2 origin = (Vector2)transform.position + shieldPivotOffset;
             
-            float halfAngle = 45f; 
-            int segments = 20;
-
-            Vector3 forward = Vector3.down;
-            Vector3 leftDir = Quaternion.Euler(0, 0, halfAngle) * forward;
-            Vector3 rightDir = Quaternion.Euler(0, 0, -halfAngle) * forward;
-
-            Gizmos.DrawLine(origin, origin + forward * shieldDistance);
-            Gizmos.DrawLine(origin, origin + leftDir * shieldDistance);
-            Gizmos.DrawLine(origin, origin + rightDir * shieldDistance);
-
-            Vector3 prevPoint = origin + leftDir * shieldDistance;
-            for (int i = 1; i <= segments; i++)
-            {
-                float angle = halfAngle - (i * (halfAngle * 2) / segments);
-                Vector3 dir = Quaternion.Euler(0, 0, angle) * forward;
-                Vector3 nextPoint = origin + dir * shieldDistance;
-                Gizmos.DrawLine(prevPoint, nextPoint);
-                prevPoint = nextPoint;
-            }
+            Gizmos.DrawWireSphere(origin, shieldRadius);
+            float half = shieldAngleDeg * 0.5f;
+            Vector2 forward = Vector3.down * shieldRadius;
+            
+            Vector2 left    = Quaternion.Euler(0, 0,  half) * forward;
+            Vector2 right   = Quaternion.Euler(0, 0, -half) * forward;
+            
+            Gizmos.DrawLine(origin, origin + forward);
+            Gizmos.DrawLine(origin, origin + left);
+            Gizmos.DrawLine(origin, origin + right);
         }
     }
 }
