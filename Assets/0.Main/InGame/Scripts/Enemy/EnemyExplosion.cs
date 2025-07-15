@@ -9,9 +9,8 @@ public class EnemyExplosion : MonoBehaviour
     private LayerMask targetMask;
     private IBattleCharacter attacker;
 
-    [SerializeField] private float  lifetime = 1f; // 언제 삭제되게 할 건지
+    [SerializeField] private float  lifetime = 1f;
 
-    // Monster 쪽에서 데이터 초기화
     public void Initialize(IBattleCharacter attacker, int damage, float radius, LayerMask mask)
     {
         this.attacker   = attacker;
@@ -27,6 +26,7 @@ public class EnemyExplosion : MonoBehaviour
         foreach (var col in hits)
         {
             var target = col.GetComponent<IBattleCharacter>();
+            
             if (target != null)
             {
                 BattleEventManager.Instance.CallEvent
@@ -35,8 +35,6 @@ public class EnemyExplosion : MonoBehaviour
                 );
             }
         }
-        
-        Debug.Log($"폭발로 전달한 데미지 : {damage}");
 
         StartCoroutine(DestroyAfter());
     }
