@@ -108,7 +108,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
         while (timer < knockbackDuration)
         {
-            rigid.velocity = dir * args.KnockBackForce;
+            rigid.velocity = dir * args.KnockBackDistance;
             timer += Time.deltaTime;
             yield return null;
         }
