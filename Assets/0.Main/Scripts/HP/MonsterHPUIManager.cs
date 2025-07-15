@@ -9,14 +9,48 @@ public class MonsterHPUIManager : MonoBehaviour
 
     private readonly Dictionary<MonoBehaviour, MonsterHPBar> activeBars = new();
 
+    // public void RegisterMonster(MonoBehaviour monster)
+    // {
+    //     if (activeBars.ContainsKey(monster)) return;
+    //     
+    //     var bar = Instantiate(hpBarPrefab, hpBarParent);
+    //     activeBars[monster] = bar;
+    //     bar.AttachTo(monster.transform);
+    // }
+    
     public void RegisterMonster(MonoBehaviour monster)
     {
         if (activeBars.ContainsKey(monster)) return;
 
-        var bar = Instantiate(hpBarPrefab, hpBarParent);
-        activeBars[monster] = bar;
-        bar.AttachTo(monster.transform);
+        // 1. EnemyID 가져오기 (리플렉션)
+        var enemyIdProp = monster.GetType().GetProperty("EnemyID");
+        if (enemyIdProp == null) return;
+
+        if (enemyIdProp.GetValue(monster) is EnemyID enemyID &&
+            EnemyDataManager.Instance.Records.TryGetValue(enemyID, out var data))
+        {
+            // 2. 랭크 확인
+            if (data.Enemy_Rank == EnemyRank.Elite || data.Enemy_Rank == EnemyRank.Boss)
+            {
+                // 3. HP바 생성 및 등록
+                var bar = Instantiate(hpBarPrefab, hpBarParent);
+                bar.AttachTo(monster.transform);
+
+                // 4. 보스는 위치 보정 더 크게
+                if (data.Enemy_Rank == EnemyRank.Boss)
+                {
+                    bar.worldOffset = new Vector3(0, -1.5f, 0); // 보스일 경우 더 위에 표시
+                }
+                else
+                {
+                    bar.worldOffset = new Vector3(0, -1f, 0); // 일반 몬스터
+                }
+
+                activeBars[monster] = bar;
+            }
+        }
     }
+
 
     public void UnregisterMonster(MonoBehaviour monster)
     {
@@ -29,24 +63,24 @@ public class MonsterHPUIManager : MonoBehaviour
 
     void LateUpdate()
     {
-        foreach (var pair in activeBars)
-        {
-            var monster = pair.Key;
-            var bar = pair.Value;
+        var keys = new List<MonoBehaviour>(activeBars.Keys);
 
+        foreach (var monster in keys)
+        {
             if (monster == null)
             {
-                UnregisterMonster(pair.Key);
+                UnregisterMonster(monster);
                 continue;
             }
 
+            var bar = activeBars[monster];
             bar.UpdatePosition();
 
-            // 🔥 체력 업데이트
             float ratio = GetHealthRatio(monster);
             bar.SetRatio(ratio);
         }
     }
+
 
     private float GetHealthRatio(MonoBehaviour monster)
     {
