@@ -98,17 +98,16 @@ public class Monster : MonoBehaviour, IBattleCharacter
     private IEnumerator ApplyKnockback(ChargeCollisionArgs args)
     {
         var attackerMono = args.Attacker as MonoBehaviour;
-        if (attackerMono == null)
-        {
-            yield break;
-        }
+        
+        if (attackerMono == null) yield break;
 
         Vector2 dir = ((Vector2)transform.position - (Vector2)attackerMono.transform.position).normalized;
+        float speed = args.KnockBackDistance / knockbackDuration;
         float timer = 0f;
 
         while (timer < knockbackDuration)
         {
-            rigid.velocity = dir * args.KnockBackDistance;
+            rigid.velocity = dir * speed;
             timer += Time.deltaTime;
             yield return null;
         }
