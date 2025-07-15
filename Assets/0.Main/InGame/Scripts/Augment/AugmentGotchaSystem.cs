@@ -75,12 +75,6 @@ public class AugmentGotchaSystem : MonoBehaviour
     
     private void GotchaClassAugment()
     {
-        var groups = ClassAugmentManager.Instance.AugmentOptionGroups;
-        
-        var groupIndex0 = Random.Range(0, groups.Count);
-        var groupIndex1 = Random.Range(0, groups.Count);
-        AugmentOptionGroup group0 = groups[groupIndex0];
-        AugmentOptionGroup group1 = groups[groupIndex1];
     }
     
     private void GotchaCommonAugment()
