@@ -9,7 +9,7 @@ using TouchPhase = UnityEngine.TouchPhase;
 
 public class SquadController : MonoBehaviour
 {
-    public Squad squad;
+    private Squad m_Squad;
     public Rigidbody2D squadRigidbody;
     public Warrior warrior;
     private Vector3 m_TouchStartPosition;
@@ -38,6 +38,7 @@ public class SquadController : MonoBehaviour
     private void Start()
     {
         m_Camera = Camera.main;
+        m_Squad = Squad.Instance;
         
         m_LeverRadius = (outerCircle.rect.width * 0.5f) * outerCircle.GetComponentInParent<Canvas>().scaleFactor;
         float middleRadius = m_LeverRadius * middleCircle.transform.localScale.x;
@@ -64,10 +65,11 @@ public class SquadController : MonoBehaviour
             m_TouchStartPosition = inputPosition;
             lever.transform.position = inputPosition;
         }
+        
         // Check for multi-tap
         if (m_LastTapTime + multiTapGap > Time.time)
         {
-            Vector3 direction = inputPosition - lever.transform.position;
+            Vector3 direction = inputPosition - m_Camera.WorldToScreenPoint(m_Squad.transform.position);
             warrior.ChargeAttack(direction);
         }
         else
@@ -92,7 +94,7 @@ public class SquadController : MonoBehaviour
         
         if (dir.magnitude > m_LeverThreshold)
         {
-            squad.transform.position += dir * (Squad.STANDARD_DISTANCE * squad.stats.MoveSpeed * Time.deltaTime);
+            m_Squad.transform.position += dir * (Squad.STANDARD_DISTANCE * m_Squad.stats.MoveSpeed * Time.deltaTime);
         }
     }
 
@@ -116,9 +118,9 @@ public class SquadController : MonoBehaviour
 
     private void LateUpdate()
     {
-        float x = Mathf.Clamp(squad.transform.position.x, min.position.x, max.position.x);
-        float y = Mathf.Clamp(squad.transform.position.y, min.position.y, max.position.y);
+        float x = Mathf.Clamp(m_Squad.transform.position.x, min.position.x, max.position.x);
+        float y = Mathf.Clamp(m_Squad.transform.position.y, min.position.y, max.position.y);
         
-        squad.transform.position = new Vector3(x, y, squad.transform.position.z);
+        m_Squad.transform.position = new Vector3(x, y, m_Squad.transform.position.z);
     }
 }
