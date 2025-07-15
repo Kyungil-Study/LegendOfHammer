@@ -36,6 +36,4 @@ public class DamageUIListener : MonoBehaviour
 
        DamageUIManager.Instance.ShowDamage(e.Damage, worldPos);
    }
-
-
 }
