@@ -118,6 +118,7 @@ public class MonsterScale : MonoBehaviour
     {
         var monster = GetComponent<Monster>();
         var data    = EnemyDataManager.Instance.Records[monster.EnemyID];
+        
         int enemyPixel = data.Enemy_Rank switch
         {
             EnemyRank.Elite  => 160,
