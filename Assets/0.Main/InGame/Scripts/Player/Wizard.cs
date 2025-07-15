@@ -7,11 +7,13 @@ public class Wizard : Hero
 {
     public Transform projectileSpawnPoint;
     public WizardMagicBall projectilePrefab;
+    [field:SerializeField]private float ExplosionRadius { get; set; } = 0.5f;
 
     protected override void Attack()
     {
         WizardMagicBall projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
         projectile.damage = Damage;
+        projectile.explosionRadius = ExplosionRadius;
         projectile.Fire();
     }
 

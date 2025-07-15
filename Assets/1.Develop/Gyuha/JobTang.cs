@@ -5,30 +5,17 @@ using UnityEngine;
 
 public class JobTang : MonoBehaviour
 {
-    public List<Hero> heroes = new List<Hero>();
+    private SpriteRenderer spriteRenderer;
+    public Sprite[] sprites;
 
-    private void Start()
+    private void Awake()
     {
-        var result = heroes.Select(hero =>
-        {
-            if (hero.baseAttackDamage > 300)
-            {
-                return hero;
-            }
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
 
-            return null;
-        });
-
-        foreach (var hero in result)
-        {
-            if (hero != null)
-            {
-                Debug.Log(hero.name);
-            }
-            else
-            {
-                Debug.Log("null");
-            }
-        }
+    private void Update()
+    {
+        Sprite sprite = spriteRenderer.sprite;
+        Debug.Log($"index {System.Array.IndexOf(sprites, sprite)} / rect {sprite.rect} / textureRect{sprite.textureRect}");
     }
 }
