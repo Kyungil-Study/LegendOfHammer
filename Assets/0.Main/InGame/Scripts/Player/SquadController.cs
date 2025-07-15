@@ -19,8 +19,6 @@ public class SquadController : MonoBehaviour
     private float m_LastTapTime;
     
     public GameObject lever;
-    //public SpriteRenderer outerCircle;
-    //public SpriteRenderer middleCircle;
     public RectTransform outerCircle;
     public RectTransform middleCircle;
     public GameObject innerCircle;
@@ -87,14 +85,14 @@ public class SquadController : MonoBehaviour
     {
         var inputPosition = ReadPointerPosition();
         Vector3 dir = inputPosition - m_TouchStartPosition;
-                
+        
         dir = dir.normalized * Mathf.InverseLerp(0, m_LeverRadius, dir.magnitude);
-                
+        
         innerCircle.transform.position = lever.transform.position + dir * m_LeverRadius;
         
         if (dir.magnitude > m_LeverThreshold)
         {
-            m_Squad.transform.position += dir * (Squad.STANDARD_DISTANCE * m_Squad.stats.MoveSpeed * Time.deltaTime);
+            m_Squad.transform.position += dir * (Distance.STANDARD_DISTANCE * m_Squad.stats.MoveSpeed * Time.deltaTime);
         }
     }
 

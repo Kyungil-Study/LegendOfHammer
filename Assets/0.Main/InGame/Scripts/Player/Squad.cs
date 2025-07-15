@@ -4,6 +4,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
+[Serializable]
+public struct Distance
+{
+    public const float STANDARD_DISTANCE = 2.8f;
+    [field:SerializeField] private float Value { get; set; }
+    public Distance(float value)
+    {
+        Value = value;
+    }
+}
+
 public class Squad : MonoSingleton<Squad>, IBattleCharacter
 {
     // 스탯마다 기준이 0, 1 이라 불편함
@@ -34,7 +45,6 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
         [field:SerializeField] public float FinalDamageFactor { get; set; } = 1;
     }
 
-    public const float STANDARD_DISTANCE = 2.8f;
     public SquadStats stats = new SquadStats();
     public Warrior warrior;
     public bool isInvincible = false;
