@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class MonsterHPBar : MonoBehaviour
 {
-    [SerializeField] private Vector3 worldOffset = new Vector3(0, -0.7f, 0); // 몬스터 위에 띄움
+    public Vector3 worldOffset = new Vector3(0, -0.7f, 0); // 몬스터 위에 띄움
     [SerializeField] private Image fillImage;
 
     private Transform target;
