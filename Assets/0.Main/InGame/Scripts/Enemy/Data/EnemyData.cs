@@ -11,14 +11,13 @@ public class EnemyData
     public string Enemy_Unit_Name { get; set; }
     public EnemyMovementPattern EnemyMovementPattern { get; set; }
     public EnemyAttackPattern Atk_Pattern { get; set; }
-    public int? HP { get; set; } // 체력 (int) : 빈 값 때문에 0 처리해야
+    public int HP { get; set; }
     public int Atk_Power { get; set; }
     public float Move_Speed { get; set; }
     public int Chasing_Increase { get; set; }
     public int First_Appear_Stage { get; set; }
 }
 
-// EnemyData.tsv 기반으로 재생성한 EnemyID enum
 public enum EnemyID
 {
     // Straight (ID: 11001, 21001, 31001)
@@ -63,7 +62,7 @@ public enum EnemyID
 }
 
 public enum EnemyRank
-{ 
+{
     Normal,
     Elite,
     Boss
