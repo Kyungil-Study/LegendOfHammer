@@ -52,10 +52,10 @@ public class Monster : MonoBehaviour, IBattleCharacter
     [SerializeField] private Vector2 shieldPivotOffset;
     private float mShieldRate = 1;
     
-    [Header("넉백 설정")] [Tooltip("넉백 세기, 지속 시간")]
-    [SerializeField] private float knockbackForce    = 2.5f;    // 넉백 세기
+    [Header("넉백 설정")] [Tooltip("지속 시간, 넉백 세기는 Squad에")]
     [SerializeField] private float knockbackDuration = 0.2f;  // 넉백 지속 시간
-
+    private float knockbackForce;
+    
     private Rigidbody2D rigid;
     
     private float mMoveSpeed;
@@ -105,7 +105,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
         while (timer < knockbackDuration)
         {
-            rigid.velocity = dir * knockbackForce;
+            rigid.velocity = dir * args.KnockBackForce;
             timer += Time.deltaTime;
             yield return null;
         }
@@ -139,9 +139,9 @@ public class Monster : MonoBehaviour, IBattleCharacter
     {
         int damage = Mathf.RoundToInt(eventArgs.Damage * mShieldRate);
         
-        mCurrentHP -= damage;
+        BattleEventManager.Instance.CallEvent(new ReceiveDamageEventArgs(this, damage));
         
-        Debug.Log($"[Moster:TakeDamage] 받은 데미지 = {damage} // 남은 HP = {mCurrentHP} // 쉴드? {mShieldRate == 0.5f}");
+        mCurrentHP -= damage;
         
         if (mCurrentHP <= 0) // HP가 줄어서 사망했을 경우
         {
