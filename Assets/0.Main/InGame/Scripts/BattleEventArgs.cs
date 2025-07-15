@@ -82,10 +82,13 @@ public class ChargeCollisionArgs : BattleEventArgs
 {
     public IBattleCharacter Attacker { get; private set; }
     public IBattleCharacter Target { get; private set; }
+    
+    public float KnockBackForce { get; private set; }
 
-    public ChargeCollisionArgs(IBattleCharacter attacker, IBattleCharacter target)
+    public ChargeCollisionArgs(IBattleCharacter attacker, IBattleCharacter target, float force)
     {
         this.Attacker = attacker;
         this.Target = target;
+        this.KnockBackForce = force;
     }
 }

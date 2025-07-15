@@ -12,6 +12,10 @@ public class Warrior : Hero
     private float ChargeSpeed => Squad.STANDARD_DISTANCE * chargeDistance / chargeDuration;
     public float chargeKnockbackDistance = 1f;
     private bool _isCharging = false;
+
+    [SerializeField] [Tooltip("돌진 넉백 세기")]
+    private float knockbackForce = 2.5f;
+    
     public bool IsCharging
     {
         get => _isCharging;
@@ -90,7 +94,7 @@ public class Warrior : Hero
         m_HitMonsters.Add(monster);
         TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(squad, monster, Damage);
         BattleEventManager.Instance.CallEvent(eventArgs);
-        // TODO: monster.Knockback(Vector3 direction, float distance);
+        BattleEventManager.Instance.CallEvent(new ChargeCollisionArgs(squad, monster, knockbackForce));
     }
 
     // 몬스터 넉백은 몬스터 쪽에서 처리하기로 함
