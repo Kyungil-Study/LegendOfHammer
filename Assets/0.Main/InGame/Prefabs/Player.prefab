@@ -590,6 +590,7 @@ MonoBehaviour:
   chargeDistance: 2
   chargeDuration: 0.2
   chargeKnockbackDistance: 1
+  knockbackForce: 2.5
 --- !u!1 &4852727541690639173
 GameObject:
   m_ObjectHideFlags: 0
@@ -1234,7 +1235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a01ae529d9e3e584f998266c5d9cff95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseAttackDamage: 1
+  baseAttackDamage: 250
   attackPerSec: 2
   projectileSpawnPoint: {fileID: 386511076734694341}
   projectilePrefab: {fileID: 2213334373689080831, guid: 06e33e6d1b33be646a96d05a5b3f79ed, type: 3}
@@ -1466,7 +1467,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6051618761392146341
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1533,7 +1534,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3adce5ac45099fb4babe269bc38b2cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseAttackDamage: 1
+  baseAttackDamage: 300
   attackPerSec: 1
   projectileSpawnPoint: {fileID: 2844217813709663506}
   projectilePrefab: {fileID: -9055637960358438273, guid: fcfc5c6fe3d83bb4c9aafffa60046a6b, type: 3}

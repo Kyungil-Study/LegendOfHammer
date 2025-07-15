@@ -4,10 +4,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class AugmentSlot : MonoBehaviour , IPointerClickHandler
 {
     [SerializeField] TMP_Text augmentNameText;
+    [SerializeField] Image augmentIcon; // todo : icon 연동되면 사용
     [SerializeField] TMP_Text augmentGradeText;
     [SerializeField] TMP_Text augmentDescriptionText;
 

@@ -19,6 +19,25 @@ public class AugmentGotchaSystem : MonoBehaviour
     {
         BattleEventManager.Instance.Callbacks.OnReadyBattle += OnReadyBattle;
         BattleEventManager.Instance.Callbacks.OnSelectAugment += OnSelectAugment;
+        
+        warriorSlot.onClick.AddListener(() => {
+            Debug.Log("Warrior slot selected.");
+            // Handle warrior slot selection logic here
+        });
+        wizardSlot.onClick.AddListener(() => {
+            Debug.Log("Wizard slot selected.");
+            // Handle wizard slot selection logic here
+        });
+        archerSlot.onClick.AddListener(() => {
+            Debug.Log("Archer slot selected.");
+            // Handle archer slot selection logic here
+        });
+        
+        rerollAugmentButton.onClick.AddListener(() => {
+            Debug.Log("Reroll augment button clicked.");
+            // Handle reroll logic here
+            GotchaCommonAugment();
+        });
     }
 
     private void OnSelectAugment(SelectAugmentEventArgs args)
