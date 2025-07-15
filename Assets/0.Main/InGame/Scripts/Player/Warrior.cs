@@ -36,7 +36,7 @@ public class Warrior : Hero
     }
 
     protected override void Update()
-    {
+    {  
         base.Update();
         if (cooldownIndicator != null)
         {

@@ -1,11 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public abstract class HeroProjectile : MonoBehaviour
 {
     private bool mb_IsFired = false;
     public int damage;
+    public Func<GameObject> FindTargetFunc { get; set; }
     private Vector3 m_TargetDirection;
     private float m_Speed;
     [Range(0, 10)] public float speed;
@@ -20,7 +23,7 @@ public abstract class HeroProjectile : MonoBehaviour
     {
         if (mb_IsFired)
         {
-            transform.Translate(m_TargetDirection * (m_Speed * Time.deltaTime));
+            transform.Translate(m_TargetDirection * (m_Speed * Time.deltaTime), Space.World);
         }
         
         m_LifeTime -= Time.deltaTime;
@@ -49,11 +52,7 @@ public abstract class HeroProjectile : MonoBehaviour
 
     protected virtual void SetDirection()
     {
-            m_TargetDirection = Vector3.up;
-            return;
-            // TODO: Remove test code
-            #pragma warning disable CS0162
-        var target = FindTarget();
+        GameObject target = FindTargetFunc != null ? FindTargetFunc() : FindTarget();
         if (target != null)
         {
             m_TargetDirection = target.transform.position - transform.position;
@@ -63,7 +62,8 @@ public abstract class HeroProjectile : MonoBehaviour
         {
             m_TargetDirection = Vector3.up;
         }
-            #pragma warning restore CS0162
+
+        transform.up = m_TargetDirection;
     }
 
     protected virtual GameObject FindTarget()
@@ -73,10 +73,14 @@ public abstract class HeroProjectile : MonoBehaviour
     
     protected GameObject FindClosestEnemy()
     {
+        // return BattleManager.Instance.GetAllMonsters().OrderByDescending(monster =>
+        // {
+        //     return Vector3.Distance(transform.position, monster.transform.position);
+        // }).First().gameObject;
+        
         GameObject closestEnemy = null;
         float closestDistance = float.MaxValue;
-
-        foreach (var monster in BattleManager.GetAllMonsters())
+        foreach (var monster in BattleManager.Instance.GetAllMonsters())
         {
             float distance = Vector3.Distance(transform.position, monster.transform.position);
             if (distance < closestDistance)
@@ -91,7 +95,7 @@ public abstract class HeroProjectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (BattleManager.GetMonsterBy(other, out Monster monster))
+        if (BattleManager.TryGetMonsterBy(other, out Monster monster))
         {
             Hit(monster);
         }
