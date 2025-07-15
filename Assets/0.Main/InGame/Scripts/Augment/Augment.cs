@@ -26,11 +26,13 @@ public abstract class Augment
     public abstract string GetGrade();
 
     public abstract string GetDescription();
+    
+    public abstract int GetOptionID();
 }
 
 public abstract class ClassAugment : Augment
 {
-    public abstract int Next();
+    public abstract int GetLevel();
 }
 
 public class AugmentData
@@ -77,6 +79,8 @@ public class CommonAugment : Augment
     {
         return ID;
     }
+    
+  
 
     public override string GetName()
     {
@@ -97,16 +101,23 @@ public class CommonAugment : Augment
     {
         return Description;
     }
+
+    public override int GetOptionID()
+    {
+        return OptionID;
+    }
 }
 
 public class WarriorAugment : ClassAugment
 {
     public int ID { get; set; }
     public string Name { get; set; }
+    public int OptionID { get; set; }
+
     public int Level { get; set; }
     public string Description { get; set; }
     public string FinalDescription { get; set; }
-    public int NextAugmentID { get; set; }
+
     
     public int DashCoolDown { get; set; }
     public int KnockbackBonus { get; set; }
@@ -141,9 +152,14 @@ public class WarriorAugment : ClassAugment
         return Description; // Assuming Description is a string that describes the augment
     }
 
-    public override int Next()
+    public override int GetLevel()
     {
-        return NextAugmentID; // Assuming NextAugmentID is set to the next augment's ID
+        return Level; // Assuming Level is an integer that represents the level of the augment
+    }
+
+    public override int GetOptionID()
+    {
+        return OptionID; // Assuming OptionID is the identifier for the augment option
     }
 }
 
@@ -151,10 +167,12 @@ public class ArcherAugment : ClassAugment
 {
     public int ID { get; set; }
     public string Name { get; set; }
+    public int OptionID { get; set; }
+
     public int Level { get; set; }
     public string Description { get; set; }
     public string FinalDescription { get; set; }
-    public int NextAugmentID { get; set; }
+
     public float AttackSpeedIncreasedRate { get; set; }
     public float SmallArrowAttackRatio { get; set; }
     public float AttackSpeedIncreased { get; set; }
@@ -188,9 +206,14 @@ public class ArcherAugment : ClassAugment
         return Description; // Assuming Description is a string that describes the augment
     }
 
-    public override int Next()
+    public override int GetLevel()
     {
-        return NextAugmentID; // Assuming NextAugmentID is set to the next augment's ID
+        return Level; // Assuming Level is an integer that represents the level of the augment
+    }
+
+    public override int GetOptionID()
+    {
+        return OptionID; // Assuming OptionID is the identifier for the augment option
     }
 }
 
@@ -198,10 +221,10 @@ public class WizardAugment : ClassAugment
 {
     public int ID { get; set; }
     public string Name { get; set; }
+    public int OptionID { get; set; }
     public int Level { get; set; }
     public string Description { get; set; }
     public string FinalDescription { get; set; }
-    public int NextAugmentID { get; set; }
     
     public int Increased_Projectiles { get; set; }
     public float AttackRatio_ReductionRate  { get; set; }
@@ -240,9 +263,13 @@ public class WizardAugment : ClassAugment
         return Description; // Assuming Description is a string that describes the augment
     }
 
-    public override int Next()
+    public override int GetLevel()
     {
-        return NextAugmentID; // Assuming NextAugmentID is set to the next augment's ID
+        return Level; // Assuming Level is an integer that represents the level of the augment
     }
-    
+
+    public override int GetOptionID()
+    {
+        return OptionID; // Assuming OptionID is the identifier for the augment option
+    }
 }

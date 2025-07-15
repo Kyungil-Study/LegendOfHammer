@@ -5,36 +5,6 @@ using System.Threading.Tasks;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class AugmentOptionGroup
-{
-    private static int s_idGenerator = 1;
-    public AugmentOptionGroup()
-    {
-        OptionID = s_idGenerator++;
-    }
-    public int OptionID { get; set; } 
-    
-    public void Add(ClassAugment augment)
-    {
-        AugmentSet.Add(augment);
-        
-    }
-    public HashSet<ClassAugment> AugmentSet { get; set; } = new HashSet<ClassAugment>();
-
-    public bool IsIn(int id)
-    {
-        foreach (var augment in AugmentSet)
-        {
-            if (augment.Next() == id)
-            {
-                return true;
-            }
-            
-        }
-        return false;
-    }
-    
-}
 
 public class ClassAugmentManager : SingletonBase<ClassAugmentManager> , ILoadable
 {
@@ -52,27 +22,35 @@ public class ClassAugmentManager : SingletonBase<ClassAugmentManager> , ILoadabl
     public IReadOnlyDictionary<int, WarriorAugment> WarriorAugments => WarriorAugmentManager.Records;
     public IReadOnlyDictionary<int, WizardAugment> WizardAugments => WizardAugmentManager.Records;
     
+    List<ClassAugment> AllAugments;
+    
+    // 게임 시작할때는 직업 상관 없이 랜덤하게 두개 
+    Dictionary<int, List<ClassAugment>> augmentGroupByOption = new Dictionary<int, List<ClassAugment>>();
+    public IReadOnlyDictionary<int, List<ClassAugment>> AugmentGroupByOption => augmentGroupByOption;
+    
+    Dictionary<AugmentType , HashSet<int>> optionGroupByClass = new Dictionary<AugmentType,HashSet<int>>();
+    public IReadOnlyDictionary<AugmentType, HashSet<int>> OptionGroupByClass => optionGroupByClass;
+    
+    Dictionary<int, List<ClassAugment>> augmentGroupByLevel = new Dictionary<int, List<ClassAugment>>();
+    
     public void Load(Action<LoadCompleteEventArg> onComplete = null)
     {
         throw new NotImplementedException();
     }
-    
-    List<AugmentOptionGroup> augmentOptionGroups = new List<AugmentOptionGroup>();
-    public IReadOnlyList<AugmentOptionGroup> AugmentOptionGroups => augmentOptionGroups;
 
-    
-    private AugmentOptionGroup SearchGroupOrNull(ClassAugment augment)
+    public ClassAugment NextAugment(ClassAugment augment)
     {
-        foreach (var group in augmentOptionGroups)
-        {
-            if (group.IsIn(augment.Next()))
-            {
-                return group;
-            }
-        }
+        var currentLevel = augment.GetLevel();
+        var nextLevel = currentLevel + 1;
+
+        var result = AllAugments.FirstOrDefault( a => 
+            a.GetAugmentType() == augment.GetAugmentType() &&
+            a.GetLevel() == nextLevel && 
+            a.GetOptionID() == augment.GetOptionID());
+
         return null;
-        
     }
+    
 
     public async Task<LoadCompleteEventArg> LoadAsync()
     {
@@ -100,25 +78,35 @@ public class ClassAugmentManager : SingletonBase<ClassAugmentManager> , ILoadabl
 
         if (IsLoaded)
         {
-            void UpdateGroup<T>(List<T> augments) where T : ClassAugment
+            void RegistSubTable<T>(IReadOnlyDictionary<int, T> records)  where T : ClassAugment
             {
-                foreach (var augment in augments)
+                foreach (var record in records.Values)
                 {
-                    var group = SearchGroupOrNull(augment);
+                    AllAugments.Add(record);
                     
-                    if (group == null)
+                    if (!augmentGroupByOption.ContainsKey(record.GetOptionID()))
                     {
-                        group = new AugmentOptionGroup();
-                        augmentOptionGroups.Add(group);
+                        augmentGroupByOption[record.GetOptionID()] = new List<ClassAugment>();
                     }
+                    augmentGroupByOption[record.GetOptionID()].Add(record);
+                
+                    if (!optionGroupByClass.ContainsKey(record.GetAugmentType()))
+                    {
+                        optionGroupByClass[record.GetAugmentType()] = new HashSet<int>();
+                    }
+                    optionGroupByClass[record.GetAugmentType()].Add(record.GetID());
                     
-                    group.Add(augment);
+                    if (!augmentGroupByLevel.ContainsKey(record.GetLevel()))
+                    {
+                        augmentGroupByLevel[record.GetLevel()] = new List<ClassAugment>();
+                    }
+                    augmentGroupByLevel[record.GetLevel()].Add(record);
                 }
             }
             
-            UpdateGroup(ArcherAugments.Values.ToList());
-            UpdateGroup(WarriorAugments.Values.ToList());
-            UpdateGroup(WizardAugments.Values.ToList());
+            RegistSubTable(ArcherAugments);
+            RegistSubTable(WarriorAugments);
+            RegistSubTable(WizardAugments);
         }
 
         return new LoadCompleteEventArg(IsLoaded);
@@ -174,5 +162,14 @@ public class ClassAugmentManager : SingletonBase<ClassAugmentManager> , ILoadabl
             return record.ID;
         }
     }
-    
+
+    public bool IsMaxLevel(int id, int optionID, int level)
+    {
+        var next = level + 1;
+        var result = AllAugments.FirstOrDefault(a =>( 
+            a.GetOptionID() == optionID && 
+            a.GetLevel() == next) );
+        
+        return result == null;
+    }
 }
