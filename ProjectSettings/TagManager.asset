@@ -16,7 +16,7 @@ TagManager:
   - Monster
   - Border
   - Clear
-  - 
+  - Projectile
   - 
   - 
   - 
@@ -42,8 +42,8 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Lever
-    uniqueID: 2714712515
+  - name: Sqaud
+    uniqueID: 146912833
     locked: 0
   - name: Projectile
     uniqueID: 3777063909

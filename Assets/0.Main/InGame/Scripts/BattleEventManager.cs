@@ -12,6 +12,7 @@ public class BattleEventManager : MonoSingleton<BattleEventManager>
         public Action<StartBattleEventArgs> OnStartBattle;
         public Action<EndBattleEventArgs> OnEndBattle;
         public Action<TakeDamageEventArgs> OnTakeDamage;
+        public Action<ReceiveDamageEventArgs> OnSendDamage;
         public Action<AliveMonsterEventArgs> OnAliveMonster;
         public Action<DeathEventArgs> OnDeath;
         public Action<NextPageEventArgs> OnNextPage;
@@ -48,6 +49,10 @@ public class BattleEventManager : MonoSingleton<BattleEventManager>
         {
             damageEvent.Target.TakeDamage(damageEvent);
             Callbacks.OnTakeDamage?.Invoke(damageEvent);
+        }
+        else if (eventArgs is ReceiveDamageEventArgs sendEvent)
+        {
+            Callbacks.OnSendDamage?.Invoke(sendEvent);
         }
         else if(eventArgs is AliveMonsterEventArgs aliveMonsterEvent)
         {

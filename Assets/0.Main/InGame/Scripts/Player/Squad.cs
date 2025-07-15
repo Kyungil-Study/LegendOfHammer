@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -50,6 +51,7 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
             return;
         }
         stats.CurrentHealth -= eventArgs.Damage;
+        BattleEventManager.Instance.CallEvent(new ReceiveDamageEventArgs(this, eventArgs.Damage));
     }
 
     private void Die()
@@ -59,7 +61,7 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (warrior.IsCharging && BattleManager.GetMonsterBy(other, out Monster monster))
+        if (warrior.IsCharging && BattleManager.TryGetMonsterBy(other, out Monster monster))
         {
             warrior.Impact(monster);
         }

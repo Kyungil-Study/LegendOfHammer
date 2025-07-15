@@ -21,6 +21,10 @@ public class MonsterScale : MonoBehaviour
     [SerializeField] private Appearance[] appearances;
     [Header("콜라이더 크기 조정 계수")]
     [SerializeField][Range(0.1f, 2f)] private float mHitBoxSize = 1f;
+    [Header("피격 이펙트")]
+    [SerializeField] private GameObject hitEffect;
+    [SerializeField] private float PlayCount = 4f;
+    [SerializeField] private float PlayInterval = 0.2f;
     
     private SpriteRenderer  mSpriteRenderer;
     private BoxCollider2D   mCollider;
@@ -43,6 +47,50 @@ public class MonsterScale : MonoBehaviour
         
         ApplyModelScale(mScaleFactor);
         ApplyColliderFromPhysicsShape(mScaleFactor);
+    }
+
+    private void OnEnable()
+    {
+        BattleEventManager.Instance.Callbacks.OnTakeDamage += PlayDamageEffect;
+    }
+
+    private void OnDisable()
+    {
+        BattleEventManager.Instance.Callbacks.OnTakeDamage -= PlayDamageEffect;
+    }
+
+    private void PlayDamageEffect(TakeDamageEventArgs eventArgs)
+    {
+        var targetMonster = eventArgs.Target as Monster;
+        
+        if (targetMonster == null)
+        {
+            return;
+        }
+
+        if (targetMonster.gameObject != gameObject)
+        {
+            return;
+        }
+        
+        StopCoroutine(PlayDamageEffectCoroutine());
+        StartCoroutine(PlayDamageEffectCoroutine());
+    }
+    
+    private IEnumerator PlayDamageEffectCoroutine()
+    {
+        Color original = mSpriteRenderer.color;
+
+        for (int i = 0; i < PlayCount; i++)
+        {
+            mSpriteRenderer.color = new Color(1f, 1f, 1f, 0.5f);
+            yield return new WaitForSeconds(PlayInterval);
+
+            mSpriteRenderer.color = original;
+            yield return new WaitForSeconds(PlayInterval);
+        }
+
+        mSpriteRenderer.color = original;
     }
     
     private void PickRandomSprite()

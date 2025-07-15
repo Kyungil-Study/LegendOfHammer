@@ -3,8 +3,7 @@ using UnityEngine.UI;
 
 public class SquadHP : MonoBehaviour
 {
-    [SerializeField] private RectTransform fillRect;       // Fill 오브젝트의 RectTransform
-    [SerializeField] private RectTransform backgroundRect; // Background 기준 너비
+    [SerializeField] private Image fillImage;       // Fill 오브젝트의 RectTransformz
     [SerializeField] private Transform target;             // 체력바 띄울 대상
     [SerializeField] private Vector3 offset = new Vector3(0, -0.7f, 0);
     [SerializeField] private Camera mainCamera;
@@ -21,18 +20,43 @@ public class SquadHP : MonoBehaviour
         Debug.Log(squad.stats.CurrentHealth);
     }
 
+    // private void Update()
+    // {
+    //     // 1. UI를 대상 위에 위치시키기 (2D에서 정상 작동)
+    //     Vector3 screenPos = mainCamera.WorldToScreenPoint(target.position + offset);
+    //     rectTransform.position = screenPos;
+    //
+    //     // 2. fillAmount 조절 (Image.type = Filled 일 때 작동)
+    //     float ratio = (float)squad.stats.CurrentHealth / squad.stats.MaxHealth;
+    //     fillImage.fillAmount = ratio;
+    // }
+    
     private void Update()
     {
-        // 1. 체력바 위치를 캐릭터 위로 이동
-        Vector3 screenPos = mainCamera.WorldToScreenPoint(target.position + offset);
-        rectTransform.position = screenPos;
+        if (target == null || mainCamera == null) return;
 
-        // 2. 체력 비율 계산
+        Vector3 worldPos = target.position + offset;
+
+        // 캔버스 렌더모드에 따라 위치 계산
+        Canvas canvas = GetComponentInParent<Canvas>();
+        if (canvas != null)
+        {
+            if (canvas.renderMode == RenderMode.WorldSpace)
+            {
+                // World Space: 직접 월드 위치 지정
+                rectTransform.position = worldPos;
+            }
+            else
+            {
+                // Screen Space: 카메라 기준 스크린 좌표로 변환
+                Vector3 screenPos = mainCamera.WorldToScreenPoint(worldPos);
+                rectTransform.position = screenPos;
+            }
+        }
+
+        // 체력 비율 적용
         float ratio = (float)squad.stats.CurrentHealth / squad.stats.MaxHealth;
-        ratio = Mathf.Clamp01(ratio);
-
-        // 3. Fill 오브젝트의 width 조정 (Sliced 타입 유지)
-        float maxWidth = backgroundRect.rect.width;
-        fillRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, maxWidth * ratio);
+        fillImage.fillAmount = Mathf.Clamp01(ratio);
     }
+
 }
