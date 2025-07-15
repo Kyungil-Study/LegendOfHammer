@@ -29,24 +29,24 @@ public class MonsterHPUIManager : MonoBehaviour
 
     void LateUpdate()
     {
-        foreach (var pair in activeBars)
-        {
-            var monster = pair.Key;
-            var bar = pair.Value;
+        var keys = new List<MonoBehaviour>(activeBars.Keys);
 
+        foreach (var monster in keys)
+        {
             if (monster == null)
             {
-                UnregisterMonster(pair.Key);
+                UnregisterMonster(monster);
                 continue;
             }
 
+            var bar = activeBars[monster];
             bar.UpdatePosition();
 
-            // 🔥 체력 업데이트
             float ratio = GetHealthRatio(monster);
             bar.SetRatio(ratio);
         }
     }
+
 
     private float GetHealthRatio(MonoBehaviour monster)
     {
