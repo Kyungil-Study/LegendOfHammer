@@ -51,6 +51,7 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
             return;
         }
         stats.CurrentHealth -= eventArgs.Damage;
+        BattleEventManager.Instance.CallEvent(new ReceiveDamageEventArgs(this, eventArgs.Damage));
     }
 
     private void Die()
