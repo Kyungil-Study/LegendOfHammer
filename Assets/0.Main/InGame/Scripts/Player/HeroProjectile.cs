@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public abstract class HeroProjectile : MonoBehaviour
@@ -72,9 +73,13 @@ public abstract class HeroProjectile : MonoBehaviour
     
     protected GameObject FindClosestEnemy()
     {
+        // return BattleManager.Instance.GetAllMonsters().OrderByDescending(monster =>
+        // {
+        //     return Vector3.Distance(transform.position, monster.transform.position);
+        // }).First().gameObject;
+        
         GameObject closestEnemy = null;
         float closestDistance = float.MaxValue;
-
         foreach (var monster in BattleManager.Instance.GetAllMonsters())
         {
             float distance = Vector3.Distance(transform.position, monster.transform.position);
