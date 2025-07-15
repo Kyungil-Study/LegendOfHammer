@@ -82,6 +82,8 @@ public class Warrior : Hero
     }
 
     private List<Monster> m_HitMonsters = new List<Monster>();
+    // TODO: 증강 구현하면 수정할 것
+    private bool tmp_AugmentFlag = false;
     public void Impact(Monster monster)
     {
         if (m_HitMonsters.Contains(monster))
@@ -91,7 +93,14 @@ public class Warrior : Hero
         m_HitMonsters.Add(monster);
         TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(squad, monster, Damage);
         BattleEventManager.Instance.CallEvent(eventArgs);
-        BattleEventManager.Instance.CallEvent(new ChargeCollisionArgs(squad, monster, chargeKnockbackDistance));
+
+        var monsterRank = EnemyDataManager.Instance.Records[monster.EnemyID].Enemy_Rank;
+        if (monsterRank is EnemyRank.Boss or EnemyRank.Elite && tmp_AugmentFlag == false)
+        {
+            return;
+        }
+        
+        BattleEventManager.Instance.CallEvent(new ChargeCollisionArgs(squad, monster, chargeKnockbackDistance * Distance.STANDARD_DISTANCE));
     }
 
     // 몬스터 넉백은 몬스터 쪽에서 처리하기로 함
