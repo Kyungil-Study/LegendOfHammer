@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -9,10 +10,23 @@ public class ArcherArrow : HeroProjectile
     public int penetrateLimit = 0;
     public Monster targetMonster;
     
-    // TODO: Find strongest enemy
-    // 1보스
-    // 2엘리트
-    // 3최대체력
+    protected override GameObject FindTarget()
+    {
+       var monsters =  BattleManager.Instance.GetAllMonsters();
+       if (monsters.Any() == false)
+       {
+           Debug.Log("No monsters found to target.");
+           return null;
+       }
+       monsters = monsters.OrderByDescending(monster =>
+       {
+           var id = monster.EnemyID;
+           var data = EnemyDataManager.Instance.Records[id];
+           return data.Enemy_Rank;
+       }).ThenByDescending(monster => monster.MaxHP);
+       return monsters.First().gameObject;
+    }
+
     protected override void Hit(Monster target)
     {
         penetrateLimit--;
