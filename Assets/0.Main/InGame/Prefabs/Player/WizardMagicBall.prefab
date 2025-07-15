@@ -117,7 +117,7 @@ GameObject:
   - component: {fileID: 6896306705554865749}
   - component: {fileID: -9055637960358438273}
   - component: {fileID: 6132343659481482561}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: WizardMagicBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
