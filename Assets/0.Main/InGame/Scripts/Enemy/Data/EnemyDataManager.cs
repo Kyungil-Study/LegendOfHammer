@@ -11,5 +11,4 @@ public class EnemyDataManager : GenericDictionaryResourceManager<EnemyData, Enem
     {
         return record.Enemy_ID;
     }
-
 }
