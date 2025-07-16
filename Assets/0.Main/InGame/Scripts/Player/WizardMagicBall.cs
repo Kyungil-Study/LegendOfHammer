@@ -21,7 +21,7 @@ public class WizardMagicBall : HeroProjectile
             TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(
                 Squad.Instance,
                 enemy, 
-                damage
+                Damage
             );
             BattleEventManager.Instance.CallEvent(eventArgs);
         }
