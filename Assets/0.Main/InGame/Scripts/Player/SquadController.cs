@@ -51,6 +51,16 @@ public class SquadController : MonoBehaviour
             innerCircle.transform.position = lever.transform.position;
             m_DisappearTime = disappearTime;
         };
+
+        var callbacks = BattleEventManager.Instance.Callbacks;
+
+        callbacks.OnStartBattle += (args) =>
+        {
+            gameObject.SetActive(true);
+            lever.SetActive(true);
+        };
+        callbacks.OnEndBattle += (args) => { gameObject.SetActive(false); };
+        gameObject.SetActive(false); // Initially hide the controller
     }
 
     private void StartMove(InputAction.CallbackContext context)
