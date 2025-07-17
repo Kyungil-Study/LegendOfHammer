@@ -6,21 +6,19 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 
-public class ClassAugmentManager : SingletonBase<ClassAugmentManager> , ILoadable
+public class ClassAugmentManager : SingletonBase<ClassAugmentManager>
 {
     [SerializeField] private string archerAugmentPath = "ArcherAugment";
     [SerializeField] private string warriorAugmentPath = "WarriorAugment";
     [SerializeField] private string wizardAugmentPath = "WizardAugment";
 
+    Dictionary<int, ArcherAugment> archerAugments = new Dictionary<int, ArcherAugment>();
+    Dictionary<int, WarriorAugment> warriorAugments = new Dictionary<int, WarriorAugment>();
+    Dictionary<int, WizardAugment> wizardAugments = new Dictionary<int, WizardAugment>();
     
-    public bool IsLoaded => ArcherAugmentManager.IsLoaded && WarriorAugmentManager.IsLoaded && WizardAugmentManager.IsLoaded;
-    private InlineArcherAugmentManager ArcherAugmentManager = new InlineArcherAugmentManager();
-    private InlineWarriorAugmentManager WarriorAugmentManager = new InlineWarriorAugmentManager();
-    private InlineWizardAugmentManager WizardAugmentManager = new InlineWizardAugmentManager();
-    
-    public IReadOnlyDictionary<int, ArcherAugment> ArcherAugments => ArcherAugmentManager.Records;
-    public IReadOnlyDictionary<int, WarriorAugment> WarriorAugments => WarriorAugmentManager.Records;
-    public IReadOnlyDictionary<int, WizardAugment> WizardAugments => WizardAugmentManager.Records;
+    public IReadOnlyDictionary<int, ArcherAugment> ArcherAugments => archerAugments;
+    public IReadOnlyDictionary<int, WarriorAugment> WarriorAugments => warriorAugments;
+    public IReadOnlyDictionary<int, WizardAugment> WizardAugments => wizardAugments;
     
     List<ClassAugment> allAugments = new List<ClassAugment>();
     Dictionary<int,ClassAugment> allAugmentsByID = new Dictionary<int, ClassAugment>();
@@ -35,11 +33,50 @@ public class ClassAugmentManager : SingletonBase<ClassAugmentManager> , ILoadabl
     Dictionary<AugmentType , HashSet<int>> optionGroupByClass = new Dictionary<AugmentType,HashSet<int>>();
     public IReadOnlyDictionary<AugmentType, HashSet<int>> OptionGroupByClass => optionGroupByClass;
     
-    Dictionary<int, List<ClassAugment>> augmentGroupByLevel = new Dictionary<int, List<ClassAugment>>();
-    
-    public void Load(Action<LoadCompleteEventArg> onComplete = null)
+    public override void OnInitialize()
     {
-        throw new NotImplementedException();
+        if (string.IsNullOrEmpty(archerAugmentPath) || 
+            string.IsNullOrEmpty(warriorAugmentPath) || 
+            string.IsNullOrEmpty(wizardAugmentPath))
+        {
+            throw new ArgumentNullException("Augment paths cannot be null or empty.");
+        }
+
+        archerAugments = TSVLoader.LoadTableToDictionary<int, ArcherAugment>(archerAugmentPath, a => a.GetID());
+        warriorAugments = TSVLoader.LoadTableToDictionary<int, WarriorAugment>(warriorAugmentPath, a => a.GetID());
+        wizardAugments = TSVLoader.LoadTableToDictionary<int, WizardAugment>(wizardAugmentPath, a => a.GetID());
+        Debug.Log($"Successfully loaded augments: Archer({archerAugments.Count}), Warrior({warriorAugments.Count}), Wizard({wizardAugments.Count})");
+        // Combine all augments into a single list and dictionary
+        allAugments.AddRange(archerAugments.Values);
+        allAugments.AddRange(warriorAugments.Values);
+        allAugments.AddRange(wizardAugments.Values);
+        foreach (var augment in allAugments)
+        {
+            if (!allAugmentsByID.ContainsKey(augment.GetID()))
+            {
+                allAugmentsByID.Add(augment.GetID(), augment);
+            }
+            else
+            {
+                Debug.LogWarning($"Duplicate augment ID found: {augment.GetID()}");
+            }
+            
+            // Group by option ID
+            if (!augmentGroupByOption.ContainsKey(augment.GetOptionID()))
+            {
+                augmentGroupByOption[augment.GetOptionID()] = new List<ClassAugment>();
+            }
+            augmentGroupByOption[augment.GetOptionID()].Add(augment);
+            
+            // Group by class type
+            if (!optionGroupByClass.ContainsKey(augment.GetAugmentType()))
+            {
+                optionGroupByClass[augment.GetAugmentType()] = new HashSet<int>();
+            }
+            optionGroupByClass[augment.GetAugmentType()].Add(augment.GetOptionID());
+            
+        
+        }
     }
 
     public IReadOnlyList<int> GetAllOption()
@@ -51,133 +88,7 @@ public class ClassAugmentManager : SingletonBase<ClassAugmentManager> , ILoadabl
     {
         return optionGroupByClass[type].ToList();
     }
-
-    public ClassAugment NextAugment(ClassAugment augment)
-    {
-        var currentLevel = augment.GetLevel();
-        var nextLevel = currentLevel + 1;
-
-        var result = allAugments.FirstOrDefault( a => 
-            a.GetAugmentType() == augment.GetAugmentType() &&
-            a.GetLevel() == nextLevel && 
-            a.GetOptionID() == augment.GetOptionID());
-
-        return null;
-    }
-    
-
-    public async Task<LoadCompleteEventArg> LoadAsync()
-    {
-        ArcherAugmentManager = new InlineArcherAugmentManager(archerAugmentPath);
-        WarriorAugmentManager = new InlineWarriorAugmentManager(warriorAugmentPath);
-        WizardAugmentManager = new InlineWizardAugmentManager(wizardAugmentPath);
-        
-        var archerResult = await ArcherAugmentManager.LoadAsync();
-        if (!archerResult.Success)
-        {
-            return new LoadCompleteEventArg(false, "Failed to load Archer Augments: " + archerResult.ErrorMessage);
-        }
-        
-        var warriorResult = await WarriorAugmentManager.LoadAsync();
-        if (!warriorResult.Success)
-        {
-            return new LoadCompleteEventArg(false, "Failed to load Warrior Augments: " + warriorResult.ErrorMessage);
-        }
-        
-        var wizardResult = await WizardAugmentManager.LoadAsync();
-        if (!wizardResult.Success)
-        {
-            return new LoadCompleteEventArg(false, "Failed to load Wizard Augments: " + wizardResult.ErrorMessage);
-        }
-
-        if (IsLoaded)
-        {
-            void RegistSubTable<T>(IReadOnlyDictionary<int, T> records)  where T : ClassAugment
-            {
-                foreach (var record in records.Values)
-                {
-                    allAugments.Add(record);
-                    allAugmentsByID[record.GetID()] = record;
-                    
-                    if (!augmentGroupByOption.ContainsKey(record.GetOptionID()))
-                    {
-                        augmentGroupByOption[record.GetOptionID()] = new List<ClassAugment>();
-                    }
-                    augmentGroupByOption[record.GetOptionID()].Add(record);
-                
-                    if (!optionGroupByClass.ContainsKey(record.GetAugmentType()))
-                    {
-                        optionGroupByClass[record.GetAugmentType()] = new HashSet<int>();
-                    }
-                    optionGroupByClass[record.GetAugmentType()].Add(record.GetOptionID());
-                    
-                    if (!augmentGroupByLevel.ContainsKey(record.GetLevel()))
-                    {
-                        augmentGroupByLevel[record.GetLevel()] = new List<ClassAugment>();
-                    }
-                    augmentGroupByLevel[record.GetLevel()].Add(record);
-                }
-            }
-            
-            RegistSubTable(ArcherAugments);
-            RegistSubTable(WarriorAugments);
-            RegistSubTable(WizardAugments);
-        }
-
-        return new LoadCompleteEventArg(IsLoaded);
-    }
-    
-    private class InlineWarriorAugmentManager : GenericDictionaryResourceManager<WarriorAugment, int, InlineWarriorAugmentManager>
-    {
-        public InlineWarriorAugmentManager(string resourcePath)
-        {
-            this.resourcePath = resourcePath;
-        }
-
-        public InlineWarriorAugmentManager()
-        {
-        }
-
-
-        protected override int GetKey(WarriorAugment record)
-        {
-            return record.ID;
-        }
-    }
-    
-    private class InlineWizardAugmentManager : GenericDictionaryResourceManager<WizardAugment, int, InlineWizardAugmentManager>
-    {
-        public InlineWizardAugmentManager(string resourcePath )
-        {
-            this.resourcePath = resourcePath;
-        }
-
-        public InlineWizardAugmentManager()
-        {
-        }
-
-        protected override int GetKey(WizardAugment record)
-        {
-            return record.ID;
-        }
-    }
-    
-    
-    private class InlineArcherAugmentManager : GenericDictionaryResourceManager<ArcherAugment, int, InlineArcherAugmentManager>
-    {
-        public InlineArcherAugmentManager(string resourcePath)
-        {
-            this.resourcePath = resourcePath;
-        }
-
-        public InlineArcherAugmentManager() {}
-
-        protected override int GetKey(ArcherAugment record)
-        {
-            return record.ID;
-        }
-    }
-
+   
     public bool IsMaxLevel(int optionID, int level)
     {
         var next = level + 1;
