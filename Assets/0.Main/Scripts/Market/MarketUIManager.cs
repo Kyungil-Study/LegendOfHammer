@@ -51,20 +51,19 @@ public class MarketUIManager : MonoBehaviour
     public TextMeshProUGUI pointText;
     public string resourcePath;
 
-    private GenericResourceManager<MarketData, DummyContainer> marketManager;
+    private List<MarketData> marketDatas = new();
 
-    private async void Start()
+    private void Start()
     {
-        marketManager = new InlineMarketManager(resourcePath);
-        var result = await marketManager.LoadAsync();
+        marketDatas = TSVLoader.LoadTable<MarketData>(resourcePath);
 
-        if (result.Success == false || marketManager.Records == null || marketManager.Records.Count == 0)
+        if (marketDatas == null || marketDatas.Count == 0)
         {
             Debug.LogWarning("[MarketUIManager] 마켓 데이터를 불러오지 못했습니다.");
             return;
         }
 
-        foreach (var item in marketManager.Records)
+        foreach (var item in marketDatas)
         {
             GameObject slot = Instantiate(itemSlotPrefab, contentParent);
             var ui = slot.GetComponent<ItemSlotUI>();
@@ -85,16 +84,4 @@ public class MarketUIManager : MonoBehaviour
             pointText.text = "보유 포인트: 0P";
         }
     }
-
-    // 내부 전용 리소스 매니저 구현체
-    private class InlineMarketManager : GenericResourceManager<MarketData, DummyContainer>
-    {
-        public InlineMarketManager(string path)
-        {
-            this.resourcePath = path;
-        }
-    }
-
-    // 더미 타입 (싱글톤 미사용용도)
-    private class DummyContainer : GenericResourceManager<MarketData, DummyContainer> { }
 }
