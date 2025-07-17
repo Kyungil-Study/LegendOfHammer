@@ -5,8 +5,8 @@ using UnityEngine.Serialization;
 
 public class Wizard : Hero
 {
-    public float BonusAttackSpeed { get; set; }
-    protected override float AttackCooldown => 1 / (attackPerSec * BonusAttackSpeed);
+    [field:SerializeField] public float BonusAttackSpeed { get; set; }
+    protected override float AttackCooldown => 1 / (attackPerSec * (1 + BonusAttackSpeed));
     
     public Transform projectileSpawnPoint;
     public WizardMagicBall projectilePrefab;
@@ -15,6 +15,7 @@ public class Wizard : Hero
     protected override void Attack()
     {
         WizardMagicBall projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
+        projectile.Owner = this;
         projectile.explosionRadius = ExplosionRadius;
         projectile.IsCritical = Random.Range(0f,1f) <= squadStats.CriticalChance;
         projectile.Fire();
