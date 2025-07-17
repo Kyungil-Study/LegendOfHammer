@@ -5,8 +5,8 @@ using UnityEngine.Serialization;
 
 public class Archer : Hero
 {
-    public float BonusAttackSpeed { get; set; }
-    protected override float AttackCooldown => 1 / (attackPerSec * BonusAttackSpeed);
+    [field:SerializeField] public float BonusAttackSpeed { get; set; }
+    protected override float AttackCooldown => 1 / (attackPerSec * (1 + BonusAttackSpeed));
     public int pierceLimit = 0;
 
     public Transform projectileSpawnPoint;
@@ -15,6 +15,7 @@ public class Archer : Hero
     protected override void Attack()
     {
         ArcherArrow projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
+        projectile.Owner = this;
         projectile.pierceLimit = pierceLimit;
         projectile.IsCritical = Random.Range(0f,1f) <= squadStats.CriticalChance;
         projectile.Fire();
@@ -26,12 +27,6 @@ public class Archer : Hero
     {
         float critFactor = isCritical ? squadStats.CriticalDamage : 1f;
         return (int)(((baseAttackDamage * critFactor) + squadStats.BonusDamagePerHit + (baseAttackDamage * GetArcheryBonusEffectFactor()) * squadStats.FinalDamageFactor));
-    }
-    
-    // TODO: 관통 증강 최종 효과에 따른 대상 추가 피해 계산
-    public override int CalculateDamage(params object[] prms)
-    {
-        return base.CalculateDamage(prms);
     }
 
     // TODO: 증강에 의한 추가 계수
