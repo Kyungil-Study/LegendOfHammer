@@ -95,6 +95,17 @@ public class BattleManager : MonoSingleton<BattleManager>
         var tasks = loadables.Select(l => l.LoadAsync()).ToArray();
 
         LoadCompleteEventArg[] results = await Task.WhenAll(tasks);
+        foreach (var it in loadables)
+        {
+            if (it.IsLoaded)
+            {
+                Debug.Log($"[BattleManager] {it.GetType().Name} loaded successfully.");
+            }
+            else
+            {
+                Debug.LogError($"[BattleManager] {it.GetType().Name} failed to load.");
+            }
+        }
 
         // 결과 처리 (성공/실패 여부)
         if (results.All(r => r.Success))

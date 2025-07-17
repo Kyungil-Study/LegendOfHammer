@@ -12,6 +12,7 @@ public enum AugmentType
 
 public enum AugmentRarity
 {
+    None,
     Normal,
     Rare,
     Hero,
@@ -34,29 +35,6 @@ public abstract class ClassAugment : Augment
 {
     public abstract int GetLevel();
 }
-
-public class AugmentData
-{
-    public int AugmentID { get; set; }
-    public string AugmentName { get; set; }
-    public int OptionID { get; set; }
-    public AugmentRarity AugmentRarity { get; set; }
-    public string AugmentText { get; set; }
-
-    // 옵션별 효과 수치
-    public float AtkIncrease { get; set; }
-    public float AtkSpeedDecrease { get; set; }
-    public float CriticalRateIncrease { get; set; }
-    public float CriticalDamageIncrease { get; set; }
-    public int AdditionalHit { get; set; }
-    public int SquadMaxHpIncrease { get; set; }
-    public float IncreasedTakenDamage { get; set; }
-    public float IncreasedFinalDamage { get; set; }
-    public float MoveSpeedIncrease { get; set; }
-
-    // 생성자, ToString 등 필요에 따라 추가
-}
-
 public class CommonAugment : Augment
 {
     public int ID { get; set; }
