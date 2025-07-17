@@ -25,70 +25,27 @@ public class ClassAugmentProbability
     public float Probability { get; set; }
 }
 
-public class AugmentProbability : MonoSingleton<AugmentProbability> , ILoadable
+public class AugmentProbability : SingletonBase<AugmentProbability> 
 {
-    public Dictionary<AugmentRarity, AugmentRarityProbability> rarityRecords = new Dictionary<AugmentRarity, AugmentRarityProbability>();
+    public Dictionary<AugmentRarity, AugmentRarityProbability> rarityRecords = new Dictionary<AugmentRarity, AugmentRarityProbability>(  );
     public Dictionary<int, AugmentOptionProbability> commonOptionRecords = new Dictionary<int, AugmentOptionProbability>();
     public Dictionary<int, ClassAugmentProbability> classRecords = new Dictionary<int, ClassAugmentProbability>();
     
     [SerializeField] private string rarityPath = "AugmentProbability";
     [SerializeField] private string commonOptionPath = "CommonAugmentOptionProbability";
     [SerializeField] private string classOptionPath = "ClassAugmentProbability";
-    
-    bool isLoaded = false;
-    public bool IsLoaded => isLoaded;
-    public void Load(Action<LoadCompleteEventArg> onComplete = null)
-    {
-    }
 
-    public async Task<LoadCompleteEventArg> LoadAsync()
+
+    public override void OnInitialize()
     {
-        isLoaded = true;
+        base.OnInitialize();
+        if (string.IsNullOrEmpty(rarityPath) || string.IsNullOrEmpty(commonOptionPath) || string.IsNullOrEmpty(classOptionPath))
         {
-            var result = await TSVLoader.LoadTableAsync<AugmentRarityProbability>(rarityPath);
-            if (result != null)
-            {
-                rarityRecords = result.ToDictionary(r => r.Rarity, r => r);
-            }
-            else
-            {
-                Debug.LogError("Failed to load Augment Rarity Probability data from " + rarityPath);
-                isLoaded = false;
-            }
+            throw new ArgumentNullException("Resource paths cannot be null or empty.");
         }
-        
-        {
-            var result = await TSVLoader.LoadTableAsync<AugmentOptionProbability>(commonOptionPath);
-            if (result != null)
-            {
-                commonOptionRecords = result.ToDictionary(r => r.OptionID, r => r);
-            }
-            else
-            {
-                Debug.LogError("Failed to load Common Augment Option Probability data from " + commonOptionPath);
-                isLoaded = false;
-            }
-        }
-        
-        {
-            var result = await TSVLoader.LoadTableAsync<ClassAugmentProbability>(classOptionPath);
-            if (result != null)
-            {
-                classRecords = result.ToDictionary(r => r.AugmentID, r => r);
-            }
-            else
-            {
-                Debug.LogError("Failed to load Class Augment Probability data from " + classOptionPath);
-                isLoaded = false;
-            }
-        }
-        
-        Debug.Log($" Loaded Augment Probability Data: " +
-                  $"{rarityRecords.Count} rarities, " +
-                  $"{commonOptionRecords.Count} common options, " +
-                  $"{classRecords.Count} class options.");
-        return new LoadCompleteEventArg(isLoaded); 
-        
-        
+        rarityRecords = TSVLoader.LoadTableToDictionary<AugmentRarity,AugmentRarityProbability>(rarityPath, r => r.Rarity);
+        commonOptionRecords = TSVLoader.LoadTableToDictionary<int, AugmentOptionProbability>(commonOptionPath, r => r.OptionID);
+        classRecords = TSVLoader.LoadTableToDictionary<int, ClassAugmentProbability>(classOptionPath, r => r.AugmentID);
     }
+    
 }
