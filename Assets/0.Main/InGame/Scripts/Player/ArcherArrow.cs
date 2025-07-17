@@ -8,7 +8,7 @@ public class ArcherArrow : HeroProjectile
 {
     public int pierceLimit = 0;
     public Monster targetMonster;
-    public override int Damage => Owner.CalculateDamage(IsCritical, targetMonster);
+    public override int Damage => Owner.CalculateDamage(IsCritical);
 
     /// <summary>
     /// 등급, 최대 체력, 거리를 기준으로 정렬 후 가장 먼저 나오는 몬스터를 타겟으로 설정합니다.
