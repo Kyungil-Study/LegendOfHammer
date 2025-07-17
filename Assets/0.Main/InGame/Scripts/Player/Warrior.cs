@@ -9,9 +9,10 @@ public class Warrior : Hero
     public Image cooldownIndicator;
     public float chargeDistance = 2f;
     public float chargeDuration = 0.2f;
-    private float ChargeSpeed => Squad.STANDARD_DISTANCE * chargeDistance / chargeDuration;
+    [SerializeField] [Tooltip("돌진 넉백 세기")]
     public float chargeKnockbackDistance = 1f;
     private bool _isCharging = false;
+    
     public bool IsCharging
     {
         get => _isCharging;
@@ -32,7 +33,7 @@ public class Warrior : Hero
     }
 
     protected override void Update()
-    {
+    {  
         base.Update();
         if (cooldownIndicator != null)
         {
@@ -60,7 +61,7 @@ public class Warrior : Hero
         IsCharging = true;
         m_ChargeDirection = direction.normalized;
         
-        Vector3 endPosition = squad.transform.position + direction.normalized * (Squad.STANDARD_DISTANCE * chargeDistance);
+        Vector3 endPosition = squad.transform.position + direction.normalized * (Distance.STANDARD_DISTANCE * chargeDistance);
         StartCoroutine(ChargeCoroutine(endPosition));
         ApplyCooldown();
     }
@@ -81,6 +82,8 @@ public class Warrior : Hero
     }
 
     private List<Monster> m_HitMonsters = new List<Monster>();
+    // TODO: 증강 구현하면 수정할 것
+    private bool tmp_AugmentFlag = false;
     public void Impact(Monster monster)
     {
         if (m_HitMonsters.Contains(monster))
@@ -90,7 +93,14 @@ public class Warrior : Hero
         m_HitMonsters.Add(monster);
         TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(squad, monster, Damage);
         BattleEventManager.Instance.CallEvent(eventArgs);
-        // TODO: monster.Knockback(Vector3 direction, float distance);
+
+        var monsterRank = EnemyDataManager.Instance.Records[monster.EnemyID].Enemy_Rank;
+        if (monsterRank is EnemyRank.Boss or EnemyRank.Elite && tmp_AugmentFlag == false)
+        {
+            return;
+        }
+        
+        BattleEventManager.Instance.CallEvent(new ChargeCollisionArgs(squad, monster, chargeKnockbackDistance * Distance.STANDARD_DISTANCE));
     }
 
     // 몬스터 넉백은 몬스터 쪽에서 처리하기로 함

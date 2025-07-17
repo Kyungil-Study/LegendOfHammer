@@ -4,6 +4,13 @@ using UnityEngine;
 
 public static class JsonWriter
 {
+    public static string Write<T>(T data, bool prettyPrint = false)
+    {
+        var formatting = prettyPrint ? Formatting.Indented : Formatting.None;
+        string json = JsonConvert.SerializeObject(data, formatting);
+        return json;
+    }
+    
     /// <summary>
     /// 데이터를 Json으로 저장합니다. 파일명은 자동으로 .json 확장자가 붙습니다.
     /// </summary>

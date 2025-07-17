@@ -71,7 +71,22 @@ public class BattleManager : MonoSingleton<BattleManager>
         Debug.Log("[BattleManager] Start called. Loading all resources.");
         loadUI.SetActive(true);
         await LoadAllResourcesAsync();
-        StartGame();
+        ReadyGame();
+    }
+
+    private void ReadyGame()
+    {
+        loadUI.SetActive(false);
+        if(BackendStageGameData.stage == null)
+        {
+            // Debug.LogWarning("[BattleManager] BackendStageGameData.stage is null. Using default stage index 1.");
+        }
+        else
+        {
+            StageIndex = BackendStageGameData.stage.Currentstage;; // For testing purposes, remove later
+        }
+        
+        BattleEventManager.Instance.CallEvent(new ReadyBattleEventArgs(stageIndex: StageIndex));
     }
 
     public async Task LoadAllResourcesAsync()
@@ -80,6 +95,17 @@ public class BattleManager : MonoSingleton<BattleManager>
         var tasks = loadables.Select(l => l.LoadAsync()).ToArray();
 
         LoadCompleteEventArg[] results = await Task.WhenAll(tasks);
+        foreach (var it in loadables)
+        {
+            if (it.IsLoaded)
+            {
+                Debug.Log($"[BattleManager] {it.GetType().Name} loaded successfully.");
+            }
+            else
+            {
+                Debug.LogError($"[BattleManager] {it.GetType().Name} failed to load.");
+            }
+        }
 
         // 결과 처리 (성공/실패 여부)
         if (results.All(r => r.Success))
@@ -97,17 +123,6 @@ public class BattleManager : MonoSingleton<BattleManager>
 
     public void StartGame() // todo: 로딩 연동 필요
     {
-        loadUI.SetActive(false);
-        
-        if(BackendStageGameData.stage == null)
-        {
-            // Debug.LogWarning("[BattleManager] BackendStageGameData.stage is null. Using default stage index 1.");
-        }
-        else
-        {
-            StageIndex = BackendStageGameData.stage.Currentstage;; // For testing purposes, remove later
-        }
-        
         Debug.Log($"[BattleManager] Starting game for stage {StageIndex}.");
         StartBattleEventArgs startEventArgs = new StartBattleEventArgs(StageIndex);
         BattleEventManager.Instance.CallEvent(startEventArgs);
@@ -136,16 +151,31 @@ public class BattleManager : MonoSingleton<BattleManager>
         BattleEventManager.Instance.CallEvent(endEventArgs);
     }
     
-    // TODO: Implement logic to get monster by collider
-    public static bool GetMonsterBy(Collider2D collider ,out Monster monster)
+    private List<Monster> m_WholeMonsters = new List<Monster>();
+    public IEnumerable<Monster> GetAllMonsters()
     {
-        return collider.TryGetComponent(out monster);
+        return m_WholeMonsters;
     }
     
-    // TODO: Implement logic to get all monsters in the battle
-    public static IEnumerable<Monster> GetAllMonsters()
+    public void RegisterMonster(Monster monster)
     {
-        return null;
+        if (m_WholeMonsters.Contains(monster) == false)
+        {
+            m_WholeMonsters.Add(monster);
+        }
+    }
+
+    public void UnregisterMonster(Monster monster)
+    {
+        if (m_WholeMonsters.Contains(monster))
+        {
+            m_WholeMonsters.Remove(monster);
+        }
+    }
+    
+    public static bool TryGetMonsterBy(Collider2D collider ,out Monster monster)
+    {
+        return collider.TryGetComponent(out monster);
     }
     
     public static List<Monster> GetAllEnemyInRadius(Vector3 position, float radius)
@@ -154,7 +184,7 @@ public class BattleManager : MonoSingleton<BattleManager>
         List<Monster> enemies = new List<Monster>();
         foreach (var collider in inRadius)
         {
-            if (GetMonsterBy(collider, out Monster monster))
+            if (TryGetMonsterBy(collider, out Monster monster))
             {
                 enemies.Add(monster);
             }

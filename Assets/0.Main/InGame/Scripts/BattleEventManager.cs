@@ -17,12 +17,27 @@ public class BattleEventManager : MonoSingleton<BattleEventManager>
         public Action<DeathEventArgs> OnDeath;
         public Action<NextPageEventArgs> OnNextPage;
         public Action<ChargeCollisionArgs> OnChargeCollision; // 충돌 시 이벤트 처리하기
+        public Action<ReadyBattleEventArgs> OnReadyBattle;
+        
+        public Action<SelectAugmentEventArgs> OnSelectAugment;
     }
     public EventCallbacks Callbacks { get; private set; } = new EventCallbacks();
 
     public void CallEvent(BattleEventArgs eventArgs)
     {
-        if(eventArgs is StartBattleEventArgs startEvent)
+        if(eventArgs is SelectAugmentEventArgs selectAugmentEvent)
+        {
+            Debug.Log($"[BattleEventManager] Select Augment: {selectAugmentEvent.Data.GetID()}, Name: {selectAugmentEvent.Data.GetName()}");
+            Callbacks.OnSelectAugment?.Invoke(selectAugmentEvent);
+            return;
+        }
+        
+        if(eventArgs is ReadyBattleEventArgs readyEvent)
+        {
+            Debug.Log($"[BattleEventManager] Ready for battle on stage {readyEvent.StageIndex}");
+            Callbacks.OnReadyBattle?.Invoke(readyEvent);
+        }
+        else if(eventArgs is StartBattleEventArgs startEvent)
         {
             Callbacks.OnStartBattle?.Invoke(startEvent);
         }
@@ -37,7 +52,7 @@ public class BattleEventManager : MonoSingleton<BattleEventManager>
         }
         else if (eventArgs is ReceiveDamageEventArgs sendEvent)
         {
-            
+            Callbacks.OnSendDamage?.Invoke(sendEvent);
         }
         else if(eventArgs is AliveMonsterEventArgs aliveMonsterEvent)
         {
@@ -61,3 +76,4 @@ public class BattleEventManager : MonoSingleton<BattleEventManager>
         }
     }
 }
+

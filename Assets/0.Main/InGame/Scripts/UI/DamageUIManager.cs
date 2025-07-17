@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -6,54 +7,61 @@ public class DamageUIManager : MonoBehaviour
 {
     public static DamageUIManager Instance { get; private set; }
 
-    [SerializeField] private GameObject damageUITextPrefab; // TMP Text prefab
+    [SerializeField] private GameObject damageUITextPrefab;
+    [SerializeField] private int initialPoolSize = 10;
     [SerializeField] private float floatDuration = 1f;
-    [SerializeField] private float floatHeight = 0f;
+    [SerializeField] private float floatHeight   = 30f;
 
-    private Canvas canvas;
-    private Camera mainCam;
+    private Canvas        canvas;
+    private Camera        mainCam;
+    private Stack<GameObject> pool = new Stack<GameObject>();
 
     void Awake()
     {
         Instance = this;
-        canvas = GetComponentInParent<Canvas>();       
+        canvas  = GetComponentInParent<Canvas>();
         mainCam = Camera.main;
+
+        // 1. 풀 초기화
+        for (int i = 0; i < initialPoolSize; i++)
+        {
+            var go = Instantiate(damageUITextPrefab, canvas.transform);
+            go.SetActive(false);
+            pool.Push(go);
+        }
     }
 
     public void ShowDamage(int damage, Vector3 worldPos)
     {
-        // 1) 월드 → 스크린
-        Vector2 screenPt = mainCam.WorldToScreenPoint(worldPos);
-        Debug.Log($"[DamageUIManager] ScreenPt: {screenPt}");
+        // 2. 풀에서 꺼내기
+        GameObject go = pool.Count > 0 
+            ? pool.Pop() 
+            : Instantiate(damageUITextPrefab, canvas.transform);
 
-        // 2) 스크린 → 로컬(Canvas)
+        // 3. 활성화 및 초기 세팅
+        var rt  = go.GetComponent<RectTransform>();
+        var tmp = go.GetComponent<TextMeshProUGUI>();
+        tmp.text = damage.ToString();
+        go.SetActive(true);
+
+        // 4. 위치 변환
+        Vector2 screenPt = mainCam.WorldToScreenPoint(worldPos);
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvas.transform as RectTransform,
             screenPt,
             canvas.worldCamera,
             out Vector2 localPos
         );
-        Debug.Log($"[DamageUIManager] LocalPos: {localPos}");
+        rt.anchoredPosition = localPos;
 
-        // 이후 기존 로직…
-        var go = Instantiate(damageUITextPrefab, canvas.transform);
-        var tmp = go.GetComponent<TextMeshProUGUI>();
-        if (tmp == null)
-        {
-            Debug.LogError("[DamageUIManager] 프리팹에 TextMeshProUGUI가 없습니다.");
-            Destroy(go);
-            return;
-        }
-        tmp.text = damage.ToString();
-        var rt = go.GetComponent<RectTransform>();
-        StartCoroutine(FloatAndDestroy(rt, localPos));
+        // 5. 애니메이션 후 풀로 반납
+        StartCoroutine(FloatAndReturn(rt, go));
     }
 
-
-    private IEnumerator FloatAndDestroy(RectTransform rt, Vector2 startPos)
+    private IEnumerator FloatAndReturn(RectTransform rt, GameObject go)
     {
         float elapsed = 0f;
-        rt.anchoredPosition = startPos;
+        Vector2 startPos = rt.anchoredPosition;
 
         while (elapsed < floatDuration)
         {
@@ -63,6 +71,8 @@ public class DamageUIManager : MonoBehaviour
             yield return null;
         }
 
-        Destroy(rt.gameObject);
+        // 반납 처리
+        go.SetActive(false);
+        pool.Push(go);
     }
 }
