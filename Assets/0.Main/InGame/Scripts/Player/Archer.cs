@@ -26,6 +26,6 @@ public class Archer : Hero
     // TODO: 증강에 의한 추가 계수
     private float GetArcheryBonusEffectFactor()
     {
-        return 1;
+        return 0;
     }
 }

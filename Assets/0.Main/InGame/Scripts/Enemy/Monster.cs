@@ -7,15 +7,14 @@ using Random = UnityEngine.Random;
 
 public class Monster : MonoBehaviour, IBattleCharacter
 {
-    [Header("데이터 연동")]
-    [Tooltip("몬스터 유형 체크")] 
+    [Header("데이터 연동")] [Tooltip("몬스터 유형 체크")] 
     [SerializeField] private EnemyID enemyID;
     
     // todo: 종류별 Prefab생성해서 관리하도록 수정필요. 수정 후 제거
     public EnemyID EnemyID { get { return enemyID;} set { enemyID = value; } } 
     
     [Header("플레이어 테스트")] [Tooltip("추적/충돌할 플레이어 오브젝트")]
-    public GameObject testPlayer;
+    public GameObject Player;
     [Tooltip("플레이어 레이어")]
     [SerializeField] private LayerMask playerLayerMask;
     [SerializeField] private LayerMask projectileLayerMask;
@@ -40,6 +39,10 @@ public class Monster : MonoBehaviour, IBattleCharacter
     [SerializeField] private GameObject explosionPrefab;
     private bool mIsDetected;
     private bool mIsSuicide;
+
+    [Header("분사형")] [Tooltip("분사형 몬스터 발사 간격, 발사 횟수 설정")] 
+    [SerializeField] private float spreadFireInterval = 0.2f;
+    [SerializeField] private int spreadFireCount = 3;
     
     [Header("체공형")] [Tooltip("하강 후 멈출 거리 설정")]
     [SerializeField] private float distanceToStop = 3f;
@@ -52,21 +55,22 @@ public class Monster : MonoBehaviour, IBattleCharacter
     [SerializeField] private Vector2 shieldPivotOffset;
     private float mShieldRate = 1;
     
-    [Header("넉백 설정")] [Tooltip("넉백 세기, 지속 시간")]
-    [SerializeField] private float knockbackForce    = 2.5f;    // 넉백 세기
+    [Header("넉백 설정")] [Tooltip("지속 시간, 넉백 세기는 Squad에")]
     [SerializeField] private float knockbackDuration = 0.2f;  // 넉백 지속 시간
-
+    private float knockbackForce;
+    
     private Rigidbody2D rigid;
     
     private float mMoveSpeed;
     private int   mAttackPower;
-    private int   mMaxHP;
     private int   mCurrentHP;
+    private int   mMaxHP;
+    public int MaxHP => mMaxHP;
     
     private EnemyMovementPattern mMovementPattern;
     private EnemyAttackPattern   mAttackPattern;
     
-    public void SetPlayer(GameObject player) => testPlayer = player;
+    public void SetPlayer(GameObject player) => Player = player;
     
     void Awake()
     {
@@ -76,36 +80,38 @@ public class Monster : MonoBehaviour, IBattleCharacter
     void OnEnable()
     {
         BattleEventManager.Instance.Callbacks.OnChargeCollision += OnChargeCollision;
+        BattleManager.Instance.RegisterMonster(this);
     }
 
     void OnDisable()
     {
         BattleEventManager.Instance.Callbacks.OnChargeCollision -= OnChargeCollision;
+        BattleManager.Instance.UnregisterMonster(this);
     }
     
     private void OnChargeCollision(ChargeCollisionArgs args)
     {
-        if (ReferenceEquals(args.Target, this) == false) return;
+        if (ReferenceEquals(args.Target, this) == false)
+        {
+            return;
+        }
 
         StartCoroutine(ApplyKnockback(args));
     }
 
-    // 넉백 관련 코드, 나중에 테스트 해볼 필요 있음
     private IEnumerator ApplyKnockback(ChargeCollisionArgs args)
     {
-        var attackerMb = args.Attacker as MonoBehaviour;
-        if (attackerMb == null)
-        {
-            Debug.Log("넉백 에러, 코드 수정 필요");
-            yield break;
-        }
+        var attackerMono = args.Attacker as MonoBehaviour;
+        
+        if (attackerMono == null) yield break;
 
-        Vector2 dir = ((Vector2)transform.position - (Vector2)attackerMb.transform.position).normalized;
+        Vector2 dir = ((Vector2)transform.position - (Vector2)attackerMono.transform.position).normalized;
+        float speed = args.KnockBackDistance / knockbackDuration;
         float timer = 0f;
 
         while (timer < knockbackDuration)
         {
-            rigid.velocity = dir * knockbackForce;
+            rigid.velocity = dir * speed;
             timer += Time.deltaTime;
             yield return null;
         }
@@ -119,14 +125,14 @@ public class Monster : MonoBehaviour, IBattleCharacter
         
         mMoveSpeed       = data.Move_Speed;
         mAttackPower     = data.Atk_Power;
-        mMaxHP           = data.HP ?? 0;
+        mMaxHP           = data.HP;
         mCurrentHP       = mMaxHP;
         
         mMovementPattern = data.EnemyMovementPattern;
         mAttackPattern   = data.Atk_Pattern;
         
-        mInitialX = transform.position.x; // 지그재그 초기 X 좌표 저장
-        mFlyStartY = transform.position.y; // 체공형 초기 Y 좌표 저장
+        mInitialX = transform.position.x; // 지그재그 초기 X 좌표
+        mFlyStartY = transform.position.y; // 체공형 초기 Y 좌표
     }
 
     void Update()
@@ -139,9 +145,9 @@ public class Monster : MonoBehaviour, IBattleCharacter
     {
         int damage = Mathf.RoundToInt(eventArgs.Damage * mShieldRate);
         
-        mCurrentHP -= damage;
+        BattleEventManager.Instance.CallEvent(new ReceiveDamageEventArgs(this, damage));
         
-        Debug.Log($"[Moster:TakeDamage] 받은 데미지 = {damage} // 남은 HP = {mCurrentHP} // 쉴드? {mShieldRate == 0.5f}");
+        mCurrentHP -= damage;
         
         if (mCurrentHP <= 0) // HP가 줄어서 사망했을 경우
         {
@@ -167,11 +173,10 @@ public class Monster : MonoBehaviour, IBattleCharacter
         {
             mInitialX = transform.position.x;
 
-            // 좌/우 벽 판단
-            float x = transform.position.x;
+            float width = transform.position.x;
             float mid = (MapManager.Instance.LeftBoundX + MapManager.Instance.RightBoundX) * 0.5f;
 
-            if (x < mid)
+            if (width < mid)
             {
                 // 왼쪽 벽: 위상 0 → 오른쪽으로 튕기도록
                 mZigzagTime = 0f;
@@ -197,7 +202,6 @@ public class Monster : MonoBehaviour, IBattleCharacter
                             damage: mAttackPower
                         )
                 );
-                Debug.Log($"플레이어 받은 데미지 : {mAttackPower}");
             }
         }
         
@@ -246,12 +250,12 @@ public class Monster : MonoBehaviour, IBattleCharacter
                     break;
                 }
                 
-                if (testPlayer != null)
+                if (Player != null)
                 {
                     transform.position = Vector2.MoveTowards
                     (
                         transform.position,
-                        testPlayer.transform.position,
+                        Player.transform.position,
                         mMoveSpeed * Time.deltaTime
                     );
                 }
@@ -351,8 +355,8 @@ public class Monster : MonoBehaviour, IBattleCharacter
         // 추가 : Fade 처리하면 좋을 듯, 빨간색으로 깜빡깜빡
         yield return new WaitForSeconds(suicideDelay);
 
-        var expObj = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
-        var explosion = expObj.GetComponent<EnemyExplosion>();
+        var exposionObject = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        var explosion = exposionObject.GetComponent<EnemyExplosion>();
 
         explosion.Initialize
         (
@@ -437,7 +441,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
             (
                 count:    3,
                 interval: 0.15f,
-                aim: i => (testPlayer.transform.position - transform.position).normalized
+                aim: i => (Player.transform.position - transform.position).normalized
             );
             
             yield return new WaitForSeconds(fireInterval);
@@ -446,18 +450,19 @@ public class Monster : MonoBehaviour, IBattleCharacter
     
     private IEnumerator SpreadAttackLoop()
     {
-        while (true)
+        for (int i = 0; i < spreadFireCount; i++)
         {
-            bool isLeft = testPlayer.transform.position.x < transform.position.x;
-            float[] angles = isLeft ? new[] {  0f, -27.5f, -45f } : new[] {  0f,  27.5f,  45f };
+            bool isLeft = Player.transform.position.x < transform.position.x;
+            float[] angles = isLeft ? new[] {  0f, -15f, -30f, -45f } : new[] {  0f, 15f, 30f,  45f };
             
             yield return FireProjectiles
             (
-                count:    3,
-                interval: 0.2f,
+                count:    4,
+                interval: 0f,
                 aim: i => SetFireAngle(Vector2.down, angles[i])
             );
-            yield return new WaitForSeconds(fireInterval);
+            
+            yield return new WaitForSeconds(spreadFireInterval);
         }
     }
     
@@ -516,7 +521,6 @@ public class Monster : MonoBehaviour, IBattleCharacter
             Gizmos.DrawWireSphere(transform.position, attackRange);
         }
         
-        // Shield 원뿔 범위 시각화
         if (mAttackPattern == EnemyAttackPattern.Shield)
         {
             Gizmos.color = Color.blue;

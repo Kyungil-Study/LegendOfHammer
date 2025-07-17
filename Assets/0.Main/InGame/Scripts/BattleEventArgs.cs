@@ -7,6 +7,27 @@ public class BattleEventArgs : System.EventArgs
     
 }
 
+public class SelectAugmentEventArgs : BattleEventArgs
+{ 
+    public Augment Data { get; private set; }
+    public SelectAugmentEventArgs(Augment data)
+    {
+        this.Data = data;
+    }
+}
+
+
+
+public class ReadyBattleEventArgs : BattleEventArgs
+{
+    public int StageIndex { get; private set; }
+    
+    public ReadyBattleEventArgs(int stageIndex)
+    {
+        this.StageIndex = stageIndex;
+    }
+}
+
 public class StartBattleEventArgs : BattleEventArgs
 {
     public int StageIndex { get; private set; }
@@ -42,11 +63,11 @@ public class TakeDamageEventArgs : BattleEventArgs
 public class ReceiveDamageEventArgs : BattleEventArgs
 {
     public IBattleCharacter Self {get; set; }
-    public int Damage {get;set; }
-    public ReceiveDamageEventArgs(IBattleCharacter self, int damage)
+    public int ActualDamage {get;set; }
+    public ReceiveDamageEventArgs(IBattleCharacter self, int actualDamage)
     {
         this.Self = self;
-        this.Damage = damage;
+        this.ActualDamage = actualDamage;
     }
 }
 
@@ -82,10 +103,13 @@ public class ChargeCollisionArgs : BattleEventArgs
 {
     public IBattleCharacter Attacker { get; private set; }
     public IBattleCharacter Target { get; private set; }
+    
+    public float KnockBackDistance { get; private set; }
 
-    public ChargeCollisionArgs(IBattleCharacter attacker, IBattleCharacter target)
+    public ChargeCollisionArgs(IBattleCharacter attacker, IBattleCharacter target, float distance)
     {
         this.Attacker = attacker;
         this.Target = target;
+        this.KnockBackDistance = distance;
     }
 }

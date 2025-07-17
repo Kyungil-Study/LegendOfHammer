@@ -27,11 +27,13 @@ public class Projectile : MonoBehaviour
     void OnTriggerEnter2D(Collider2D col)
     {
         int bit = 1 << col.gameObject.layer;
+        
         if ((targetMask.value & bit) == 0) return;
 
         if (col.TryGetComponent<IBattleCharacter>(out var target))
         {
-            BattleEventManager.Instance.CallEvent(
+            BattleEventManager.Instance.CallEvent
+            (
                 new TakeDamageEventArgs(attacker, target, damage)
             );
         }
