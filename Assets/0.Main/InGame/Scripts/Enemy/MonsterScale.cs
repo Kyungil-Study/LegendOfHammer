@@ -32,12 +32,17 @@ public class MonsterScale : MonoBehaviour
     
     private int mAppearanceIndex;
     private float mScaleFactor;
+    
+    private Coroutine damageRoutine;
+    private Color    originalColor;
 
     private void Awake()
     {
         mSpriteRenderer = model.GetComponent<SpriteRenderer>();
         mAnimator       = model.GetComponent<Animator>();
         mCollider       = GetComponent<BoxCollider2D>();
+        
+        originalColor   = mSpriteRenderer.color;
     }
 
     private void Start()
@@ -73,24 +78,28 @@ public class MonsterScale : MonoBehaviour
             return;
         }
         
-        StopCoroutine(PlayDamageEffectCoroutine());
-        StartCoroutine(PlayDamageEffectCoroutine());
+        if (damageRoutine != null)
+        {
+            StopCoroutine(damageRoutine);
+            mSpriteRenderer.color = originalColor;
+        }
+        
+        damageRoutine = StartCoroutine(PlayDamageEffectCoroutine());
     }
     
     private IEnumerator PlayDamageEffectCoroutine()
     {
-        Color original = mSpriteRenderer.color;
-
         for (int i = 0; i < PlayCount; i++)
         {
             mSpriteRenderer.color = new Color(1f, 1f, 1f, 0.5f);
             yield return new WaitForSeconds(PlayInterval);
 
-            mSpriteRenderer.color = original;
+            mSpriteRenderer.color = originalColor;
             yield return new WaitForSeconds(PlayInterval);
         }
-
-        mSpriteRenderer.color = original;
+        
+        mSpriteRenderer.color = originalColor;
+        damageRoutine = null;
     }
     
     private void PickRandomSprite()
