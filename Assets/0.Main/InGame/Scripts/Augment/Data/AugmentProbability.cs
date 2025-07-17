@@ -29,7 +29,7 @@ public class AugmentProbability : MonoSingleton<AugmentProbability> , ILoadable
 {
     public Dictionary<AugmentRarity, AugmentRarityProbability> rarityRecords = new Dictionary<AugmentRarity, AugmentRarityProbability>();
     public Dictionary<int, AugmentOptionProbability> commonOptionRecords = new Dictionary<int, AugmentOptionProbability>();
-    public Dictionary<int, ClassAugmentProbability> classOptionRecords = new Dictionary<int, ClassAugmentProbability>();
+    public Dictionary<int, ClassAugmentProbability> classRecords = new Dictionary<int, ClassAugmentProbability>();
     
     [SerializeField] private string rarityPath = "AugmentProbability";
     [SerializeField] private string commonOptionPath = "CommonAugmentOptionProbability";
@@ -74,7 +74,7 @@ public class AugmentProbability : MonoSingleton<AugmentProbability> , ILoadable
             var result = await TSVLoader.LoadTableAsync<ClassAugmentProbability>(classOptionPath);
             if (result != null)
             {
-                classOptionRecords = result.ToDictionary(r => r.AugmentID, r => r);
+                classRecords = result.ToDictionary(r => r.AugmentID, r => r);
             }
             else
             {
@@ -83,6 +83,10 @@ public class AugmentProbability : MonoSingleton<AugmentProbability> , ILoadable
             }
         }
         
+        Debug.Log($" Loaded Augment Probability Data: " +
+                  $"{rarityRecords.Count} rarities, " +
+                  $"{commonOptionRecords.Count} common options, " +
+                  $"{classRecords.Count} class options.");
         return new LoadCompleteEventArg(isLoaded); 
         
         

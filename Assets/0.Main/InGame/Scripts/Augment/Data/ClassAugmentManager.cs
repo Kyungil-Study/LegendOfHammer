@@ -22,7 +22,11 @@ public class ClassAugmentManager : SingletonBase<ClassAugmentManager> , ILoadabl
     public IReadOnlyDictionary<int, WarriorAugment> WarriorAugments => WarriorAugmentManager.Records;
     public IReadOnlyDictionary<int, WizardAugment> WizardAugments => WizardAugmentManager.Records;
     
-    List<ClassAugment> AllAugments;
+    List<ClassAugment> allAugments = new List<ClassAugment>();
+    Dictionary<int,ClassAugment> allAugmentsByID = new Dictionary<int, ClassAugment>();
+    public IReadOnlyList<ClassAugment> AllAugments => allAugments;
+    public IReadOnlyDictionary<int, ClassAugment> AllAugmentsByID => allAugmentsByID;
+    
     
     // 게임 시작할때는 직업 상관 없이 랜덤하게 두개 
     Dictionary<int, List<ClassAugment>> augmentGroupByOption = new Dictionary<int, List<ClassAugment>>();
@@ -38,12 +42,22 @@ public class ClassAugmentManager : SingletonBase<ClassAugmentManager> , ILoadabl
         throw new NotImplementedException();
     }
 
+    public IReadOnlyList<int> GetAllOption()
+    {
+        return augmentGroupByOption.Keys.ToList();
+    }
+    
+    public IReadOnlyList<int> GetOptionsByClass(AugmentType type)
+    {
+        return optionGroupByClass[type].ToList();
+    }
+
     public ClassAugment NextAugment(ClassAugment augment)
     {
         var currentLevel = augment.GetLevel();
         var nextLevel = currentLevel + 1;
 
-        var result = AllAugments.FirstOrDefault( a => 
+        var result = allAugments.FirstOrDefault( a => 
             a.GetAugmentType() == augment.GetAugmentType() &&
             a.GetLevel() == nextLevel && 
             a.GetOptionID() == augment.GetOptionID());
@@ -82,7 +96,8 @@ public class ClassAugmentManager : SingletonBase<ClassAugmentManager> , ILoadabl
             {
                 foreach (var record in records.Values)
                 {
-                    AllAugments.Add(record);
+                    allAugments.Add(record);
+                    allAugmentsByID[record.GetID()] = record;
                     
                     if (!augmentGroupByOption.ContainsKey(record.GetOptionID()))
                     {
@@ -94,7 +109,7 @@ public class ClassAugmentManager : SingletonBase<ClassAugmentManager> , ILoadabl
                     {
                         optionGroupByClass[record.GetAugmentType()] = new HashSet<int>();
                     }
-                    optionGroupByClass[record.GetAugmentType()].Add(record.GetID());
+                    optionGroupByClass[record.GetAugmentType()].Add(record.GetOptionID());
                     
                     if (!augmentGroupByLevel.ContainsKey(record.GetLevel()))
                     {
@@ -163,13 +178,43 @@ public class ClassAugmentManager : SingletonBase<ClassAugmentManager> , ILoadabl
         }
     }
 
-    public bool IsMaxLevel(int id, int optionID, int level)
+    public bool IsMaxLevel(int optionID, int level)
     {
         var next = level + 1;
-        var result = AllAugments.FirstOrDefault(a =>( 
+        var result = allAugments.FirstOrDefault(a =>( 
             a.GetOptionID() == optionID && 
             a.GetLevel() == next) );
         
         return result == null;
+    }
+
+    public ClassAugment GetAugment(int id)
+    {
+        if (allAugmentsByID.TryGetValue(id, out var augment))
+        {
+            return augment;
+        }
+        Debug.LogWarning($"Augment with ID {id} not found.");
+        return null;
+    }
+
+    public ClassAugment GetAugmentWithOptionAndLevel(int optionID, int level)
+    {
+        var result = allAugments.FirstOrDefault(a => 
+            a.GetOptionID() == optionID && 
+            a.GetLevel() == level);
+        return result;
+        
+    }
+
+
+    
+    public ClassAugment GetAugment(int id, int optionID, int level)
+    {
+        var result = allAugments.FirstOrDefault(a => 
+            a.GetID() == id && 
+            a.GetOptionID() == optionID && 
+            a.GetLevel() == level);
+        return result;
     }
 }
