@@ -68,13 +68,14 @@ public class BattleManager : MonoSingleton<BattleManager>
 
     private void Start()
     {
-        Debug.Log("[BattleManager] Start called. Loading all resources.");
-        loadUI.SetActive(true);
-        ReadyGame();
+        StartCoroutine(ReadyGame()); ;
     }
 
-    private void ReadyGame()
+    private IEnumerator ReadyGame()
     {
+        yield return new WaitForEndOfFrame();
+        Debug.Log("[BattleManager] ReadyGame called.");
+
         loadUI.SetActive(false);
         if(BackendStageGameData.stage == null)
         {
