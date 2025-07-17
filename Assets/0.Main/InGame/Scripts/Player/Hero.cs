@@ -15,7 +15,6 @@ public abstract class Hero : MonoBehaviour
 
     protected virtual void Attack() { }
     public abstract int CalculateDamage(bool isCritical = false);
-    public virtual int CalculateDamage(params System.Object[] prms) { return default; }
 
     private void Awake()
     {
