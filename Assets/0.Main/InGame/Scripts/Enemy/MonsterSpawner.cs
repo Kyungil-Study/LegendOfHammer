@@ -31,7 +31,7 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
     [SerializeField] Monster[] monsterPrefabs; 
     [SerializeField] Monster monsterPrefab;
     
-    [SerializeField] GameObject TestPlayer; // For testing purposes, remove later
+    [SerializeField] GameObject player;
     [Header("Spawn Points Reference")]
     [SerializeField] private Transform[] spawnPoints; // Maximum number of monsters allowed on screen
     [SerializeField] private Transform midSpawnPoints; // Maximum number of monsters allowed on screen
@@ -64,7 +64,7 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
             // 테스트용, 나중에 지우기
             Monster testMonster = Instantiate(TestEnemyPrefab, spawnPoints[2]);
             testMonster.EnemyID = testSpawnID; 
-            testMonster.GetComponent<Monster>().SetPlayer(TestPlayer);
+            testMonster.GetComponent<Monster>().SetPlayer(player);
         }
     }
 
@@ -132,12 +132,7 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
         // todo: 몬스터 ID 세팅을 prefab 변경으로 수정
         Monster newMonster = Instantiate(TestEnemyPrefab, position, Quaternion.identity);
         newMonster.EnemyID = filteredRecords[UnityEngine.Random.Range(0, filteredRecords.Count)].Enemy_ID;
-        newMonster.GetComponent<Monster>().SetPlayer(TestPlayer);
-        
-        // Monster newMonster = Instantiate(TestEnemyPrefab, position, Quaternion.identity);
-        // todo: 테스트용, 병합 시 각주처리 제거하고 EnemyID 맞게 Instantiate하기 !!
-        // newMonster.EnemyID = filteredRecords[UnityEngine.Random.Range(0, filteredRecords.Count)].Enemy_ID;
-        // newMonster.GetComponent<Monster>().SetPlayer(TestPlayer);   // For testing purposes, remove later
+        newMonster.GetComponent<Monster>().SetPlayer(player);
     }
     
 
