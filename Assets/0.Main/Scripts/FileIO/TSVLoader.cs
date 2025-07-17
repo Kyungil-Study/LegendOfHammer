@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CsvHelper;
@@ -59,6 +60,54 @@ public static class TSVLoader
         }
         
         return filePath;
+    }
+
+    public static Dictionary<TKey, TRecord> LoadTableToDictionary<TKey, TRecord>(string tableName, Func<TRecord,TKey> getKeyFunc,  bool isStreamingAssetPath = true)
+    {
+        try
+        {
+            var result = LoadTable<TRecord>(tableName, isStreamingAssetPath);
+            if (result == null || result.Count == 0)
+            {
+                Debug.LogWarning($"[TableLoader] {tableName}.tsv 파일이 비어있거나 로딩에 실패했습니다.");
+                return new Dictionary<TKey, TRecord>();
+            }
+            return result.ToDictionary(getKeyFunc);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[TableLoader] {tableName}.tsv 로딩 실패: {e.Message}");
+            return new Dictionary<TKey, TRecord>();
+        }
+        
+    }
+    
+    public static List<T> LoadTable<T>(string tableName, bool isStreamingAssetPath = true)
+    {
+        try
+        {
+            string filePath = ResolvePath(tableName, isStreamingAssetPath);
+            using StreamReader reader = BetterStreamingAssets.OpenText(filePath); 
+            //using var reader = new StreamReader(filePath);
+            // 첫 번째 줄(1행) 스킵 (데이터 사용처에 대한 설명)
+            reader.ReadLine();
+            // 두 번째 줄(2행) 스킵 (데이터 타입에 대한 설명)
+            reader.ReadLine();
+            using var csv = new CsvReader(reader, TsvConfig);
+
+            var records = new List<T>();
+            while (csv.Read())
+            {
+                var record = csv.GetRecord<T>();
+                records.Add(record);
+            }
+            return records;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[TableLoader] {tableName}.tsv 로딩 실패: {e.Message}");
+            return null;
+        }
     }
     
     /// <summary>

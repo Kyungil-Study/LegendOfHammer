@@ -39,6 +39,10 @@ public class Monster : MonoBehaviour, IBattleCharacter
     [SerializeField] private GameObject explosionPrefab;
     private bool mIsDetected;
     private bool mIsSuicide;
+
+    [Header("분사형")] [Tooltip("분사형 몬스터 발사 간격, 발사 횟수 설정")] 
+    [SerializeField] private float spreadFireInterval = 0.2f;
+    [SerializeField] private int spreadFireCount = 3;
     
     [Header("체공형")] [Tooltip("하강 후 멈출 거리 설정")]
     [SerializeField] private float distanceToStop = 3f;
@@ -98,17 +102,16 @@ public class Monster : MonoBehaviour, IBattleCharacter
     private IEnumerator ApplyKnockback(ChargeCollisionArgs args)
     {
         var attackerMono = args.Attacker as MonoBehaviour;
-        if (attackerMono == null)
-        {
-            yield break;
-        }
+        
+        if (attackerMono == null) yield break;
 
         Vector2 dir = ((Vector2)transform.position - (Vector2)attackerMono.transform.position).normalized;
+        float speed = args.KnockBackDistance / knockbackDuration;
         float timer = 0f;
 
         while (timer < knockbackDuration)
         {
-            rigid.velocity = dir * args.KnockBackDistance;
+            rigid.velocity = dir * speed;
             timer += Time.deltaTime;
             yield return null;
         }
@@ -447,18 +450,19 @@ public class Monster : MonoBehaviour, IBattleCharacter
     
     private IEnumerator SpreadAttackLoop()
     {
-        while (true)
+        for (int i = 0; i < spreadFireCount; i++)
         {
             bool isLeft = Player.transform.position.x < transform.position.x;
-            float[] angles = isLeft ? new[] {  0f, -27.5f, -45f } : new[] {  0f,  27.5f,  45f };
+            float[] angles = isLeft ? new[] {  0f, -15f, -30f, -45f } : new[] {  0f, 15f, 30f,  45f };
             
             yield return FireProjectiles
             (
-                count:    3,
-                interval: 0.2f,
+                count:    4,
+                interval: 0f,
                 aim: i => SetFireAngle(Vector2.down, angles[i])
             );
-            yield return new WaitForSeconds(fireInterval);
+            
+            yield return new WaitForSeconds(spreadFireInterval);
         }
     }
     
