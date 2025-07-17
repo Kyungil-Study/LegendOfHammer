@@ -1771,8 +1771,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uB098 \uB2E4\uC2DC \uB3CC\uC544\uAC08\uB798~~~~~~~"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 7156a140b8981f14d8ce23750f491b70, type: 2}
-  m_sharedMaterial: {fileID: 4837802498603122393, guid: 7156a140b8981f14d8ce23750f491b70, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1338c3027f89a7641a27d8a66d1c2f32, type: 2}
+  m_sharedMaterial: {fileID: 4837802498603122393, guid: 1338c3027f89a7641a27d8a66d1c2f32, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
