@@ -71,7 +71,22 @@ public class BattleManager : MonoSingleton<BattleManager>
         Debug.Log("[BattleManager] Start called. Loading all resources.");
         loadUI.SetActive(true);
         await LoadAllResourcesAsync();
-        StartGame();
+        ReadyGame();
+    }
+
+    private void ReadyGame()
+    {
+        loadUI.SetActive(false);
+        if(BackendStageGameData.stage == null)
+        {
+            // Debug.LogWarning("[BattleManager] BackendStageGameData.stage is null. Using default stage index 1.");
+        }
+        else
+        {
+            StageIndex = BackendStageGameData.stage.Currentstage;; // For testing purposes, remove later
+        }
+        
+        BattleEventManager.Instance.CallEvent(new ReadyBattleEventArgs(stageIndex: StageIndex));
     }
 
     public async Task LoadAllResourcesAsync()
@@ -80,6 +95,17 @@ public class BattleManager : MonoSingleton<BattleManager>
         var tasks = loadables.Select(l => l.LoadAsync()).ToArray();
 
         LoadCompleteEventArg[] results = await Task.WhenAll(tasks);
+        foreach (var it in loadables)
+        {
+            if (it.IsLoaded)
+            {
+                Debug.Log($"[BattleManager] {it.GetType().Name} loaded successfully.");
+            }
+            else
+            {
+                Debug.LogError($"[BattleManager] {it.GetType().Name} failed to load.");
+            }
+        }
 
         // 결과 처리 (성공/실패 여부)
         if (results.All(r => r.Success))
@@ -97,17 +123,6 @@ public class BattleManager : MonoSingleton<BattleManager>
 
     public void StartGame() // todo: 로딩 연동 필요
     {
-        loadUI.SetActive(false);
-        
-        if(BackendStageGameData.stage == null)
-        {
-            // Debug.LogWarning("[BattleManager] BackendStageGameData.stage is null. Using default stage index 1.");
-        }
-        else
-        {
-            StageIndex = BackendStageGameData.stage.Currentstage;; // For testing purposes, remove later
-        }
-        
         Debug.Log($"[BattleManager] Starting game for stage {StageIndex}.");
         StartBattleEventArgs startEventArgs = new StartBattleEventArgs(StageIndex);
         BattleEventManager.Instance.CallEvent(startEventArgs);

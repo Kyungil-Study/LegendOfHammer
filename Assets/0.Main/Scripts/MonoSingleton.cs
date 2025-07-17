@@ -8,6 +8,7 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;
     private static bool applicationIsQuitting = false;
+    private bool isInitialized = false;
 
     public static T Instance
     {
@@ -26,14 +27,39 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
                 {
                     Debug.LogError($"[MonoSingleton] {typeof(T).Name} 인스턴스가 존재하지 않습니다. 씬에 추가해주세요.");
                 }
+                else
+                {
+                    (_instance as MonoSingleton<T>).Initialize(); // Ensure the instance is of type MonoSingleton<T>
+                }
+                
             }
             return _instance;
         }
     }
 
 
-    private void OnApplicationQuit()
+    protected virtual void OnApplicationQuit()
     {
         applicationIsQuitting = true;
+    }
+
+    protected virtual void Initialize()
+    {
+        isInitialized = true;
+    }
+    
+    protected virtual void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this as T;
+            DontDestroyOnLoad(gameObject);
+            Initialize();
+        }
+        else if (_instance != this)
+        {
+            Debug.LogWarning($"[MonoSingleton] {typeof(T).Name} 인스턴스가 이미 존재합니다. 중복 생성 방지.");
+            Destroy(gameObject);
+        }
     }
 }
