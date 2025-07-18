@@ -272,7 +272,7 @@ MonoBehaviour:
     <TakeDamageFactor>k__BackingField: 1
     <FinalDamageFactor>k__BackingField: 1
   warrior: {fileID: 3228702557338661824}
-  isInvincible: 0
+  invincible: []
 --- !u!50 &8790931689560328816
 Rigidbody2D:
   serializedVersion: 4
@@ -471,8 +471,8 @@ MonoBehaviour:
   cooldownIndicator: {fileID: 5601146472650972066}
   chargeDistance: 2
   chargeDuration: 0.2
+  invincibleDurationAfterCharge: 0.5
   chargeKnockbackDistance: 1
-  knockbackForce: 2.5
 --- !u!1 &4852727541690639173
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,7 +520,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5507e2e31dec48f42b4bd9f03414668b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  squad: {fileID: 2359132699372548322}
   squadRigidbody: {fileID: 8790931689560328816}
   warrior: {fileID: 3228702557338661824}
   multiTapGap: 0.2
@@ -1034,6 +1033,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseAttackDamage: 250
   attackPerSec: 2
+  <BonusAttackSpeed>k__BackingField: 0
+  pierceLimit: 0
   projectileSpawnPoint: {fileID: 386511076734694341}
   projectilePrefab: {fileID: 2213334373689080831, guid: 06e33e6d1b33be646a96d05a5b3f79ed, type: 3}
 --- !u!1 &8017550666460364170
@@ -1333,8 +1334,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseAttackDamage: 300
   attackPerSec: 1
+  <BonusAttackSpeed>k__BackingField: 0
   projectileSpawnPoint: {fileID: 2844217813709663506}
   projectilePrefab: {fileID: -9055637960358438273, guid: fcfc5c6fe3d83bb4c9aafffa60046a6b, type: 3}
+  <ExplosionRadius>k__BackingField: 0.5
 --- !u!1 &8363186298606022421
 GameObject:
   m_ObjectHideFlags: 0
