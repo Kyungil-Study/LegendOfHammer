@@ -18,25 +18,47 @@ public class BattleUIController : MonoBehaviour
     [Header("증강 메뉴")]
     [LabelText("증강 메뉴 오브젝트"), SerializeField] private Button augmentMenuObject;
     
+    [Header("게임 결과")]
+    [SerializeField] RectTransform clearMenuObject;
+    [SerializeField] Button clearNextButton;
+    [SerializeField] Button clearExitButton;
+    
+    [SerializeField] RectTransform gameOverMenuObject;
+    [SerializeField] Button gameOverReviveButton;
+    [SerializeField] Button gameOverExitButton;
+    
+    
     private Dictionary<EnemyID ,int> scoreMap = new Dictionary<EnemyID, int>();
     private int currentScore = 0;
     private int maxScore = 0;
-    
+    bool isVictory;
+
     // Start is called before the first frame update
     void Start()
     {
         var callbacks = BattleEventManager.Instance.Callbacks;
         callbacks.OnReadyBattle += OnReadBattle;
         callbacks.OnDeath += OnDeath; 
-
-        // 초기화
+        clearNextButton.onClick.AddListener(NextGame);
         
+        clearExitButton.onClick.AddListener(ExitGame);
+        gameOverExitButton.onClick.AddListener(ExitGame);
 
-        /*augmentMenuObject.onClick.AddListener(() => 
+        callbacks.OnEndBattle += OnEndBattle;
+
+    }
+
+    private void OnEndBattle(EndBattleEventArgs args)
+    {
+        isVictory = args.IsVictory;
+        if (isVictory)
         {
-            BattleEventManager.Instance.CallEvent(new OpenAugmentMenuEventArgs());
-        });*/
-        
+            clearMenuObject.gameObject.SetActive(true);
+        }
+        else
+        {
+            clearExitButton.gameObject.SetActive(false);
+        }
     }
 
     private void OnReadBattle(ReadyBattleEventArgs args)
@@ -59,6 +81,16 @@ public class BattleUIController : MonoBehaviour
             currentScoreText.text = currentScore.ToString();
             maxScoreText.text = maxScore.ToString();
         }
+    }
+    
+    private void NextGame()
+    {
+        SessionManager.Instance.NextGame();
+    }
+
+    void ExitGame()
+    {
+        SessionManager.Instance.EndGame(isVictory);
     }
 
 }
