@@ -414,7 +414,7 @@ GameObject:
   - component: {fileID: 1360148574242939700}
   - component: {fileID: 8176137156098001794}
   m_Layer: 5
-  m_Name: PannelLetter
+  m_Name: PanelLetter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
