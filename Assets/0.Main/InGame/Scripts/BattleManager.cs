@@ -21,9 +21,8 @@ public class BattleManager : MonoSingleton<BattleManager>
     private float chaseGuage = 0f; // 0 to 100
 
     private bool isEnded = false;
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
         BattleEventManager.Instance.Callbacks.OnAliveMonster += OnAliveMonster;
         BattleEventManager.Instance.Callbacks.OnDeath += OnDeath;
         
