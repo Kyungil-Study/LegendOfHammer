@@ -26,19 +26,25 @@ public class BattleUIController : MonoBehaviour
     void Start()
     {
         var callbacks = BattleEventManager.Instance.Callbacks;
+        callbacks.OnReadyBattle += OnReadBattle;
         callbacks.OnDeath += OnDeath; 
 
         // 초기화
-        stageNumberText.text = "0";
-        maxStageNumberText.text = "0";
-        currentScoreText.text = "0";
-        maxScoreText.text = "0";
+        
 
         /*augmentMenuObject.onClick.AddListener(() => 
         {
             BattleEventManager.Instance.CallEvent(new OpenAugmentMenuEventArgs());
         });*/
         
+    }
+
+    private void OnReadBattle(ReadyBattleEventArgs args)
+    {
+        stageNumberText.text = args.StageIndex.ToString();
+        maxStageNumberText.text = args.MaxStageIndex.ToString();
+        currentScoreText.text = "0";
+        maxScoreText.text = "0";
     }
 
     private void OnDeath(DeathEventArgs args)
