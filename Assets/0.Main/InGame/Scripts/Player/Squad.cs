@@ -50,7 +50,7 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
     public List<string> invincible = new List<string>();
     public bool IsInvincible => invincible.Count > 0;
 
-    private void Awake()
+    protected override void Awake()
     {
         stats.CurrentHealth = stats.MaxHealth;
     }
