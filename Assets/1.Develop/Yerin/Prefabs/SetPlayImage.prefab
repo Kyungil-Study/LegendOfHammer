@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -14.9, y: 68}
-  m_SizeDelta: {x: 70, y: 20}
+  m_SizeDelta: {x: 100, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5794321425675738313
 CanvasRenderer:
@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: userName
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 679e8f93fefe4ba4faecb3bf14eedd5e, type: 2}
-  m_sharedMaterial: {fileID: 573688343734881096, guid: 679e8f93fefe4ba4faecb3bf14eedd5e, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1338c3027f89a7641a27d8a66d1c2f32, type: 2}
+  m_sharedMaterial: {fileID: 4837802498603122393, guid: 1338c3027f89a7641a27d8a66d1c2f32, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 966295779116330875}
   - component: {fileID: 2595232656236417201}
   m_Layer: 5
-  m_Name: PlayerImage (1)
+  m_Name: SetPlayImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

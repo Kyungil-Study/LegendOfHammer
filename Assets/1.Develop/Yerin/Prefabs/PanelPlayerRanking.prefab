@@ -641,7 +641,7 @@ GameObject:
   - component: {fileID: 5610657633873122540}
   - component: {fileID: 7696184495637645042}
   m_Layer: 5
-  m_Name: Player Ranking Panel
+  m_Name: PanelPlayerRanking
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
