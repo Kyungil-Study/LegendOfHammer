@@ -28,7 +28,7 @@ public class StageDataManager : SingletonBase<StageDataManager>
         {
             throw new ArgumentNullException(nameof(resourcePath), "Resource path cannot be null or empty.");
         }
-        records = new List<StageWave>();
+        records = TSVLoader.LoadTable<StageWave>(resourcePath);
     }
 
 }
