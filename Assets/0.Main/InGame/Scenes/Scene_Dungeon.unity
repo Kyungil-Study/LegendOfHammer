@@ -977,6 +977,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 192030469}
+    - target: {fileID: 3940422002704632492, guid: cf1c8b0d30ff0be428c9353fa9e67d88, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8592751778208886167, guid: cf1c8b0d30ff0be428c9353fa9e67d88, type: 3}
       propertyPath: m_Name
       value: HPCanvas
@@ -1136,6 +1140,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 57902397338766103, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.26
+      objectReference: {fileID: 0}
     - target: {fileID: 1912313772269553298, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
       propertyPath: player
       value: 
@@ -1146,11 +1154,15 @@ PrefabInstance:
       objectReference: {fileID: 634876930}
     - target: {fileID: 1912313772269553298, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
       propertyPath: testSpawnID
-      value: 12007
+      value: 11002
       objectReference: {fileID: 0}
     - target: {fileID: 2057616619765667853, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
       propertyPath: m_Name
       value: MonsterSpawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 4562884616346416316, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.53
       objectReference: {fileID: 0}
     - target: {fileID: 4804347391342857170, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1353,6 +1365,10 @@ PrefabInstance:
     - target: {fileID: 7511207680696367698, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 7511207680696367698, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8187177615337158848, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: baseAttackDamage
