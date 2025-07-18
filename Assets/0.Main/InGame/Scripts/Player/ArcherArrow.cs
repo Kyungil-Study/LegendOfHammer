@@ -6,10 +6,10 @@ using UnityEngine.Serialization;
 
 public class ArcherArrow : HeroProjectile
 {
-    public bool b_CanPenetrate = false;
-    public int penetrateLimit = 0;
+    public int pierceLimit = 0;
     public Monster targetMonster;
-    
+    public override int Damage => Owner.CalculateDamage(IsCritical);
+
     /// <summary>
     /// 등급, 최대 체력, 거리를 기준으로 정렬 후 가장 먼저 나오는 몬스터를 타겟으로 설정합니다.
     /// <br />* 등급이 높은 몬스터가 우선
@@ -35,21 +35,23 @@ public class ArcherArrow : HeroProjectile
            })
            .ThenByDescending(monster => monster.MaxHP)
            .ThenBy(monster => Vector3.Distance(monster.transform.position, transform.position));
-       return monsters.First().gameObject;
+       targetMonster = monsters.First();
+       return targetMonster.gameObject;
     }
 
     protected override void Hit(Monster target)
     {
-        penetrateLimit--;
+        OnHit?.Invoke();
+        pierceLimit--;
         
         TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(
             Squad.Instance,
             target,
-            damage
+            Damage
         );
         BattleEventManager.Instance.CallEvent(eventArgs);
         
-        if (penetrateLimit <= 0)
+        if (pierceLimit <= 0)
         {
             Destroy(gameObject);
         }

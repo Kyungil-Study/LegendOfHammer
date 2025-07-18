@@ -155,7 +155,7 @@ MonoBehaviour:
   damage: 10
   speed: 4
   explosionEffectPrefab: {fileID: 4859452286414634588, guid: aee187a5adca69a43a7ab606a2888ba8, type: 3}
-  explosionRadius: 1
+  explosionRadius: 0.5
 --- !u!61 &6132343659481482561
 BoxCollider2D:
   m_ObjectHideFlags: 0

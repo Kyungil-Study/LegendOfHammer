@@ -47,16 +47,17 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
 
     public SquadStats stats = new SquadStats();
     public Warrior warrior;
-    public bool isInvincible = false;
+    public List<string> invincible = new List<string>();
+    public bool IsInvincible => invincible.Count > 0;
 
-    private void Awake()
+    protected override void Awake()
     {
         stats.CurrentHealth = stats.MaxHealth;
     }
 
     public void TakeDamage(TakeDamageEventArgs eventArgs)
     {
-        if (warrior.IsCharging)
+        if (IsInvincible)
         {
             return;
         }
