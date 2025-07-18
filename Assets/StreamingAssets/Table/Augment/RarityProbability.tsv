@@ -1,0 +1,6 @@
+Augment_Rarity (증강 등급)	Rarity_Probability (희귀도 확률)  - 순서대로 일반, 희귀, 영웅, 전설
+enum	float (%)
+Normal	0.3
+Rare	0.45
+Hero	0.2
+Legendary	0.05

@@ -7,6 +7,27 @@ public class BattleEventArgs : System.EventArgs
     
 }
 
+public class SelectAugmentEventArgs : BattleEventArgs
+{ 
+    public Augment Data { get; private set; }
+    public SelectAugmentEventArgs(Augment data)
+    {
+        this.Data = data;
+    }
+}
+
+
+
+public class ReadyBattleEventArgs : BattleEventArgs
+{
+    public int StageIndex { get; private set; }
+    
+    public ReadyBattleEventArgs(int stageIndex)
+    {
+        this.StageIndex = stageIndex;
+    }
+}
+
 public class StartBattleEventArgs : BattleEventArgs
 {
     public int StageIndex { get; private set; }

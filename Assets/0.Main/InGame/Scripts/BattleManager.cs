@@ -21,8 +21,9 @@ public class BattleManager : MonoSingleton<BattleManager>
     private float chaseGuage = 0f; // 0 to 100
 
     private bool isEnded = false;
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         BattleEventManager.Instance.Callbacks.OnAliveMonster += OnAliveMonster;
         BattleEventManager.Instance.Callbacks.OnDeath += OnDeath;
         
@@ -66,48 +67,31 @@ public class BattleManager : MonoSingleton<BattleManager>
         }*/
     }
 
-    private async void Start()
+    private void Start()
     {
-        Debug.Log("[BattleManager] Start called. Loading all resources.");
-        loadUI.SetActive(true);
-        await LoadAllResourcesAsync();
-        StartGame();
+        StartCoroutine(ReadyGame()); ;
     }
 
-    public async Task LoadAllResourcesAsync()
+    private IEnumerator ReadyGame()
     {
-        var loadables = FindObjectsOfType<MonoBehaviour>().OfType<ILoadable>().Where(l => !l.IsLoaded).ToList();
-        var tasks = loadables.Select(l => l.LoadAsync()).ToArray();
+        yield return new WaitForEndOfFrame();
+        Debug.Log("[BattleManager] ReadyGame called.");
 
-        LoadCompleteEventArg[] results = await Task.WhenAll(tasks);
-
-        // 결과 처리 (성공/실패 여부)
-        if (results.All(r => r.Success))
-        {
-            Debug.Log("모든 리소스 로드 완료");
-        }
-        else
-        {
-            foreach(var r in results.Where(r => !r.Success))
-                Debug.LogError($"로드 실패: {r.ErrorMessage}");
-            // 실패시 처리
-        }
-        
-    }
-
-    public void StartGame() // todo: 로딩 연동 필요
-    {
         loadUI.SetActive(false);
-        
         if(BackendStageGameData.stage == null)
         {
-            // Debug.LogWarning("[BattleManager] BackendStageGameData.stage is null. Using default stage index 1.");
+            Debug.LogWarning("[BattleManager] BackendStageGameData.stage is null. Using default stage index 1.");
         }
         else
         {
             StageIndex = BackendStageGameData.stage.Currentstage;; // For testing purposes, remove later
         }
         
+        BattleEventManager.Instance.CallEvent(new ReadyBattleEventArgs(stageIndex: StageIndex));
+    }
+
+    public void StartGame() // todo: 로딩 연동 필요
+    {
         Debug.Log($"[BattleManager] Starting game for stage {StageIndex}.");
         StartBattleEventArgs startEventArgs = new StartBattleEventArgs(StageIndex);
         BattleEventManager.Instance.CallEvent(startEventArgs);
