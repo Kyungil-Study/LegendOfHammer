@@ -57,7 +57,7 @@ public class BattleUIController : MonoBehaviour
         }
         else
         {
-            clearExitButton.gameObject.SetActive(false);
+            gameOverMenuObject.gameObject.SetActive(true);
         }
     }
 
