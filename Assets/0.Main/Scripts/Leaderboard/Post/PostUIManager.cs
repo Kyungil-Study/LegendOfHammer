@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using BackEnd;
 using UnityEngine;
@@ -9,28 +10,41 @@ public class PostUIManager : MonoBehaviour
     public Transform contentParent;
     public GameObject postSlotPrefab;
 
-    public Button rankTabBtn;
-    public Button userTabBtn;
-    public Button adminTabBtn;
-    public Button couponTabBtn;
+    // public Button rankTabBtn;
+    // public Button userTabBtn;
+    // public Button adminTabBtn;
+    // public Button couponTabBtn;
     public Button receiveAllBtn;
 
     private PostType currentPostType;
 
     private void Start()
     {
-        rankTabBtn.onClick.AddListener(() => LoadPostTab(PostType.Rank));
-        userTabBtn.onClick.AddListener(() => LoadPostTab(PostType.User));
-        adminTabBtn.onClick.AddListener(() => LoadPostTab(PostType.Admin));
-        couponTabBtn.onClick.AddListener(() => LoadPostTab(PostType.Coupon));
+        // rankTabBtn.onClick.AddListener(() => LoadPostTab(PostType.Rank));
+        // userTabBtn.onClick.AddListener(() => LoadPostTab(PostType.User));
+        // adminTabBtn.onClick.AddListener(() => LoadPostTab(PostType.Admin));
+        // couponTabBtn.onClick.AddListener(() => LoadPostTab(PostType.Coupon));
 
-        receiveAllBtn.onClick.AddListener(() =>
+        if (receiveAllBtn != null)
         {
-            BackendPost.Instance.PostReceiveAll(currentPostType);
-            Invoke(nameof(ReloadCurrentTab), 0.1f); // 약간의 딜레이 후 UI 갱신
-        });
+            receiveAllBtn.onClick.AddListener(() =>
+            {
+                BackendPost.Instance.PostReceiveAll(currentPostType);
+                Invoke(nameof(ReloadCurrentTab), 0.1f); // 약간의 딜레이 후 UI 갱신
+            });
+        }
 
-        LoadPostTab(PostType.Admin); // 기본은 랭크 우편
+        LoadPostTab(PostType.Rank); // 기본은 랭크 우편
+    }
+
+    private void OnEnable()
+    {
+        LoadPostTab(PostType.Rank);
+    }
+
+    private void OnDisable()
+    {
+        ClearList();
     }
 
     private void LoadPostTab(PostType type)

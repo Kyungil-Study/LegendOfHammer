@@ -1967,7 +1967,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2039
 --- !u!114 &7045852184664163577
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1982,10 +1982,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   contentParent: {fileID: 939087759225881128}
   postSlotPrefab: {fileID: 7638527476346694673, guid: ad6dd4c53d39ff343a7708368ff5b54f, type: 3}
-  rankTabBtn: {fileID: 1980035067482201877}
-  userTabBtn: {fileID: 9182502918906167523}
-  adminTabBtn: {fileID: 8889602266352711576}
-  couponTabBtn: {fileID: 3689174768710671180}
   receiveAllBtn: {fileID: 5913680999283162863}
 --- !u!1 &7285940211270719420
 GameObject:
