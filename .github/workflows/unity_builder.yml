@@ -1,6 +1,21 @@
 name: Build project
 
-on: [workflow_dispatch, push, pull_request]
+on:
+  schedule:
+      # 전날 21시(한국 6시)
+      - cron: '0 21 * * 1-5'
+      # 전날 23시(한국 8시)
+      - cron: '0 23 * * 1-5'
+      # 당일 1시(한국 10시)
+      - cron: '0 1 * * 1-5'
+      # 당일 3시(한국 12시)
+      - cron: '0 3 * * 1-5'
+      # 당일 5시(한국 14시)
+      - cron: '0 5 * * 1-5'
+      # 당일 7시(한국 16시)
+      - cron: '0 7 * * 1-5'
+      # 당일 9시(한국 18시)
+      - cron: '0 9 * * 1-5'
 
 jobs:
   buildForAllSupportedPlatforms:
