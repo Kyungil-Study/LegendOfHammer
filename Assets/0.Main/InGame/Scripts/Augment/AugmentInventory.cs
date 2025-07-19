@@ -264,4 +264,21 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
         }
         status.CurrentHealth = status.MaxHealth; // Reset current health to max after applying augments
     }
+
+    public void ApplyAugmentsToArcher(Archer archer)
+    {
+        foreach (var archerAugment in archerAugments)
+        {
+            var data = archerAugment.GetData() as ArcherAugment;
+            if (data == null)
+            {
+                Debug.LogWarning($"[AugmentInventory] Archer Augment with ID {archerAugment.ID} not found.");
+                continue;
+            }
+            
+            data.Apply(archer);
+            Debug.Log($"[AugmentInventory] Applied Archer Augment: {data.GetName()} to Archer.");
+            
+        }
+    }
 }
