@@ -1,19 +1,21 @@
-name: LegendOfHammer
+name: Build project
 
 on: [push, pull_request]
 
 jobs:
-  buildForAndroid:
-    name: Build for Android
-    runs-on: ubuntu-latest    
+  buildForAllSupportedPlatforms:
+    name: Build for ${{ matrix.targetPlatform }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - Android # Build an Android .apk standalone app.
     steps:
-      - name: Check Out
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           lfs: true
-
-      - name: Cache Library          
       - uses: actions/cache@v3
         with:
           path: Library
