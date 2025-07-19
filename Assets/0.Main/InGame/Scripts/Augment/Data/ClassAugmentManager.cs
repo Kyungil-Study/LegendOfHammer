@@ -41,7 +41,11 @@ public class ClassAugmentManager : SingletonBase<ClassAugmentManager>
             throw new ArgumentNullException("Augment paths cannot be null or empty.");
         }
 
-        archerAugments = TSVLoader.LoadTableToDictionary<int, ArcherAugment>(archerAugmentPath, a => a.GetID());
+        var archerTsvList = TSVLoader.LoadTable<ArcherAugmentTSV>(archerAugmentPath);
+        archerAugments = archerTsvList.ToDictionary(a => a.ID, ArcherAugmentFactory.CreateAugment);
+        
+        
+        
         warriorAugments = TSVLoader.LoadTableToDictionary<int, WarriorAugment>(warriorAugmentPath, a => a.GetID());
         wizardAugments = TSVLoader.LoadTableToDictionary<int, WizardAugment>(wizardAugmentPath, a => a.GetID());
         Debug.Log($"Successfully loaded augments: Archer({archerAugments.Count}), Warrior({warriorAugments.Count}), Wizard({wizardAugments.Count})");
