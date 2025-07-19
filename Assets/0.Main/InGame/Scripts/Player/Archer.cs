@@ -7,8 +7,15 @@ public class Archer : Hero
 {
     [field:SerializeField] public float BonusAttackSpeed { get; set; }
     protected override float AttackCooldown => 1 / (attackPerSec * (1 + BonusAttackSpeed));
-    public int pierceLimit = 0;
+    public int pierceLimit = 0; // 관통횟수
+    public int projectileCountPerAttack = 1; // 공격당 화살 개수
 
+    // 법사 공속 버프용 계수
+    public float mageAttackSpeedFactor = 0f; // 마법사 화살의 공격 속도 계수
+    
+    public float subProjectileAttackFactor = 1f; // 서브 화살의 공격력 계수
+    public int targetAdditionalDamageFactor = 0; // 표적 대상 추가 피해 계수
+    
     public Transform projectileSpawnPoint;
     public ArcherArrow projectilePrefab;
     
