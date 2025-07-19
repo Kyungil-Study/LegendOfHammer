@@ -151,12 +151,21 @@ public class ArcherAugment : ClassAugment
     public string Description { get; set; }
     public string FinalDescription { get; set; }
 
+    // 공격속도 증가율
     public float AttackSpeedIncreasedRate { get; set; }
+    // 소형화살 공격력 계수
     public float SmallArrowAttackRatio { get; set; }
-    public float AttackSpeedIncreased { get; set; }
+    
+    // 마법사 공격속도 증가율 
+    public float MageAttackSpeedIncreased { get; set; }
+    
+    // 추가 투사체 공격력 계수 증가
     public float AdditionalProjectileAttackRatioIncreased { get; set; }
+    // 추가 화살 공격력 계수 // 중복되는건지 확인 필요
     public float AdditionalArrowAttackRatio { get; set; }
+    // 관통 횟수 증가
     public int PenetrationIncreased { get; set; }
+    // 목표 대상 추가 피해 계수
     public float TargetAdditionalDamageRatio  { get; set; }
     public string FinalUpgrade { get; set; }
     
