@@ -96,6 +96,11 @@ public abstract class WarriorAugment : ClassAugment
         FinalDescription = tsv.FinalDescription;
     }
     
+    public sealed override void Apply(Hero hero, bool isFinalUpgrade)
+    {
+        Apply(hero as Warrior, isFinalUpgrade);
+    }
+    
     public abstract void Apply(Warrior warrior, bool isFinalUpgrade);
     
     public override int GetID()

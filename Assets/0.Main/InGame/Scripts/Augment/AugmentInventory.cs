@@ -297,4 +297,20 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
             Debug.Log($"[AugmentInventory] Applied Warrior Augment: {data.GetName()} to Warrior.");
         }
     }
+
+    public void ApplyAugmentsToWizard(Wizard wizard)
+    {
+        foreach (var wizardAugment in wizardAugments)
+        {
+            var data = wizardAugment.GetData() as WizardAugment;
+            if (data == null)
+            {
+                Debug.LogWarning($"[AugmentInventory] Wizard Augment with ID {wizardAugment.ID} not found.");
+                continue;
+            }
+            
+            data.Apply(wizard, wizardAugment.IsMaxLevel());
+            Debug.Log($"[AugmentInventory] Applied Wizard Augment: {data.GetName()} to Wizard.");
+        }
+    }
 }
