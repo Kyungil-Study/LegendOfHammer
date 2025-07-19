@@ -64,6 +64,11 @@ public class CommonAugmentUserData
     public int OptionID { get; set; }
     public AugmentRarity Rarity { get; set; }
     public int Count { get; set; }
+    
+    public CommonAugment GetData()
+    {
+        return CommonAugmentManager.Instance.GetAugmentFiltered(Rarity, OptionID);
+    }
 
     public CommonAugmentUserData() {}
     public CommonAugmentUserData(int id, int optionId, AugmentRarity rarity, int count)
@@ -231,5 +236,30 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
         classAugments.AddRange(archerAugments);
         classAugments.AddRange(warriorAugments);
         return classAugments;
+    }
+
+    public void ApplyAugmentsToSquad(Squad squad)
+    {
+        var status = squad.stats;
+        foreach (var commonAugment in commonAugments)
+        {
+            var data = commonAugment.GetData();
+            if (data == null)
+            {
+                Debug.LogWarning($"[AugmentInventory] Common Augment with ID {commonAugment.ID} not found.");
+                continue;
+            }
+            status.MaxHealth += data.SquadMaxHpIncrease;
+            status.AttackDamageFactor += data.AtkIncrease;
+            status.AttackSpeed += data.AtkSpeedDecrease;
+            status.MoveSpeed += data.MoveSpeedIncrease;
+            status.CriticalChance += data.CriticalRateIncrease;
+            status.CriticalDamage += data.CriticalDamageIncrease;
+            status.BonusDamagePerHit += data.AdditionalHit;
+            status.TakeDamageFactor += data.IncreasedTakenDamage;
+            status.FinalDamageFactor += data.IncreasedFinalDamage;
+            Debug.Log($"[AugmentInventory] Applied Common Augment: {data.GetName()} to Squad.");
+        }
+        status.CurrentHealth = status.MaxHealth; // Reset current health to max after applying augments
     }
 }
