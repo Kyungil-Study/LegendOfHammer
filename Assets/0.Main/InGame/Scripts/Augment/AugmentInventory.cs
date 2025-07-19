@@ -249,16 +249,18 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
                 Debug.LogWarning($"[AugmentInventory] Common Augment with ID {commonAugment.ID} not found.");
                 continue;
             }
-            status.MaxHealth += data.SquadMaxHpIncrease;
-            status.AttackDamageFactor += data.AtkIncrease;
-            status.AttackSpeed += data.AtkSpeedDecrease;
-            status.MoveSpeed += data.MoveSpeedIncrease;
-            status.CriticalChance += data.CriticalRateIncrease;
-            status.CriticalDamage += data.CriticalDamageIncrease;
-            status.BonusDamagePerHit += data.AdditionalHit;
-            status.TakeDamageFactor += data.IncreasedTakenDamage;
-            status.FinalDamageFactor += data.IncreasedFinalDamage;
-            Debug.Log($"[AugmentInventory] Applied Common Augment: {data.GetName()} to Squad.");
+            var upgradeFactor = commonAugment.Count;
+            status.MaxHealth += data.SquadMaxHpIncrease * upgradeFactor;
+            status.AttackDamageFactor += data.AtkIncrease * upgradeFactor;
+            status.AttackSpeed += data.AtkSpeedDecrease * upgradeFactor;
+            status.MoveSpeed += data.MoveSpeedIncrease * upgradeFactor;
+            status.CriticalChance += data.CriticalRateIncrease * upgradeFactor;
+            status.CriticalDamage += data.CriticalDamageIncrease * upgradeFactor;
+            status.BonusDamagePerHit += data.AdditionalHit * upgradeFactor;
+            status.TakeDamageFactor += data.IncreasedTakenDamage * upgradeFactor;
+            status.FinalDamageFactor += data.IncreasedFinalDamage * upgradeFactor;
+        
+            Debug.Log($"[AugmentInventory] Applied Common Augment: {data.GetName()} Count {commonAugment.Count} to Squad.");
         }
         status.CurrentHealth = status.MaxHealth; // Reset current health to max after applying augments
     }
