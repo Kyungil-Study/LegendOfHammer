@@ -38,7 +38,7 @@ public abstract class ClassAugment : Augment
 }
 
 
-public class WarriorAugment : ClassAugment
+public class WarriorAugmentTSV : ClassAugment
 {
     public int ID { get; set; }
     public string Name { get; set; }
@@ -123,7 +123,7 @@ public class ArcherAugmentTSV
     public string FinalUpgrade { get; set; }
 }
 
-public class WizardAugment : ClassAugment
+public class WizardAugmentTSV : ClassAugment
 {
     public int ID { get; set; }
     public string Name { get; set; }

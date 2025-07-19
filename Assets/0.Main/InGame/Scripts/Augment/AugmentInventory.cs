@@ -281,4 +281,20 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
             
         }
     }
+
+    public void ApplyAugmentsToWarrior(Warrior warrior)
+    {
+        foreach (var warriorAugment in warriorAugments)
+        {
+            var data = warriorAugment.GetData() as WarriorAugment;
+            if (data == null)
+            {
+                Debug.LogWarning($"[AugmentInventory] Warrior Augment with ID {warriorAugment.ID} not found.");
+                continue;
+            }
+            
+            data.Apply(warrior,warriorAugment.IsMaxLevel() );
+            Debug.Log($"[AugmentInventory] Applied Warrior Augment: {data.GetName()} to Warrior.");
+        }
+    }
 }

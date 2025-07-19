@@ -28,6 +28,18 @@ public class Warrior : Hero
     }
     private Vector3 m_ChargeDirection;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        var callbacks = BattleEventManager.Instance.Callbacks;
+        callbacks.OnStartBattle += OnStartBattle;
+    }
+
+    private void OnStartBattle(StartBattleEventArgs args)
+    {
+        AugmentInventory.Instance.ApplyAugmentsToWarrior(this);
+    }
+
     private void Start()
     {
         bAutoFire = false;
