@@ -101,6 +101,10 @@ public abstract class ArcherAugment : ClassAugment
     public string Description { get; set; }
     public string FinalDescription { get; set; }
 
+    public sealed override void Apply(Hero hero, bool isFinalUpgrade)
+    {
+        Apply(hero as Archer);
+    }
     public abstract void Apply(Archer archer);
 
     public ArcherAugment(ArcherAugmentTSV tsv)

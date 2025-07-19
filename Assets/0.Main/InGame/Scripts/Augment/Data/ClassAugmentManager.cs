@@ -13,11 +13,11 @@ public class ClassAugmentManager : SingletonBase<ClassAugmentManager>
 
     Dictionary<int, ArcherAugment> archerAugments = new Dictionary<int, ArcherAugment>();
     Dictionary<int, WarriorAugment> warriorAugments = new Dictionary<int, WarriorAugment>();
-    Dictionary<int, WizardAugmentTSV> wizardAugments = new Dictionary<int, WizardAugmentTSV>();
+    Dictionary<int, WizardAugment> wizardAugments = new Dictionary<int, WizardAugment>();
     
     public IReadOnlyDictionary<int, ArcherAugment> ArcherAugments => archerAugments;
     public IReadOnlyDictionary<int, WarriorAugment> WarriorAugments => warriorAugments;
-    public IReadOnlyDictionary<int, WizardAugmentTSV> WizardAugments => wizardAugments;
+    public IReadOnlyDictionary<int, WizardAugment> WizardAugments => wizardAugments;
     
     List<ClassAugment> allAugments = new List<ClassAugment>();
     Dictionary<int,ClassAugment> allAugmentsByID = new Dictionary<int, ClassAugment>();
@@ -47,7 +47,9 @@ public class ClassAugmentManager : SingletonBase<ClassAugmentManager>
         var warriorTsvList = TSVLoader.LoadTable<WarriorAugmentTSV>(warriorAugmentPath);
         warriorAugments = warriorTsvList.ToDictionary(a => a.ID, WarriorAugmentFactory.CreateAugment);
         
-        wizardAugments = TSVLoader.LoadTableToDictionary<int, WizardAugmentTSV>(wizardAugmentPath, a => a.GetID());
+        var wizardTsvList = TSVLoader.LoadTable<WizardAugmentTSV>(wizardAugmentPath);
+        wizardAugments = wizardTsvList.ToDictionary(a => a.ID, WizardAugmentFactory.CreateAugment);
+        
         Debug.Log($"Successfully loaded augments: Archer({archerAugments.Count}), Warrior({warriorAugments.Count}), Wizard({wizardAugments.Count})");
         // Combine all augments into a single list and dictionary
         allAugments.AddRange(archerAugments.Values);
