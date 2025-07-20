@@ -1,0 +1,21 @@
+name: Test For Notify
+
+on: [workflow_dispatch,push]
+
+jobs:
+  buildForAllSupportedPlatforms:
+    name: Build for Android
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false      
+    steps:               
+      - name: Discord notification
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        with:
+          args: |
+            ✅ 빌드 메시지: ${{ github.repository }} (${{ github.ref }})
+            워크플로: ${{ github.workflow }}    
+            실행 페이지: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      
