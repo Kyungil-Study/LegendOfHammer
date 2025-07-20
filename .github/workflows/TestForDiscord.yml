@@ -36,7 +36,7 @@ jobs:
           path: build/${{ matrix.targetPlatform }}
           
       - name: Discord notification   
-        uses: Ilshidur/action-discord@0.3.2
+        uses: appleboy/discord-action@v1.2.0
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
