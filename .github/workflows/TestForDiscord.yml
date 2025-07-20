@@ -41,6 +41,6 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
           args: |
-            ✅ 빌드 결과: ${{ github.repository }} (${{ github.ref }})
+            빌드 결과: ${{ github.repository }} (${{ github.ref }})
             워크플로: ${{ github.workflow }}    
             실행 페이지: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
