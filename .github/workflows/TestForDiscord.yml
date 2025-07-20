@@ -1,9 +1,9 @@
-name: Test For Notify
+name: Build and Notify
 
 on: [workflow_dispatch,push]
 
 jobs:
-  buildForAllSupportedPlatforms:
+  buildForAndroid:
     name: Build for ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
     strategy:
@@ -35,24 +35,12 @@ jobs:
           name: Build-${{ matrix.targetPlatform }}
           path: build/${{ matrix.targetPlatform }}
           
-      - name: Discord notification (on success)
-        if: ${{ success() }}
+      - name: Discord notification
         uses: Ilshidur/action-discord@master
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
           args: |
-            ✅ 빌드 성공: ${{ github.repository }} (${{ github.ref }})
-            워크플로: ${{ github.workflow }}    
-            실행 페이지: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-
-      - name: Discord notification (on failure)
-        if: ${{ failure() }}
-        uses: Ilshidur/action-discord@master
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        with:
-          args: |
-            ❌ 빌드 실패: ${{ github.repository }} (${{ github.ref }})
+            ✅ 빌드 결과: ${{ github.repository }} (${{ github.ref }})
             워크플로: ${{ github.workflow }}    
             실행 페이지: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
