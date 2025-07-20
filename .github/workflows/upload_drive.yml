@@ -23,7 +23,7 @@ jobs:
           credentials: ${{ secrets.credentials }}
           filename: "archive.zip"
           folderId: ${{ secrets.folderId }}
-          name: "documentation.zip" # optional string
+          # name: "documentation.zip" # optional string
           overwrite: "true" # optional boolean
       - name: Make Directory Structure
         run: |
