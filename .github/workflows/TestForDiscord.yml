@@ -35,12 +35,11 @@ jobs:
           name: Build-${{ matrix.targetPlatform }}
           path: build/${{ matrix.targetPlatform }}
           
-      - name: Discord notification   
+      - name: Discord notification
         uses: appleboy/discord-action@v1.2.0
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          args: |
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+          message: |
             빌드 결과: ${{ github.repository }} (${{ github.ref }})
             워크플로: ${{ github.workflow }}    
             실행 페이지: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
