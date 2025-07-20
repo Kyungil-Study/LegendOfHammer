@@ -35,9 +35,8 @@ jobs:
           name: Build-${{ matrix.targetPlatform }}
           path: build/${{ matrix.targetPlatform }}
           
-      - name: Discord notification
-        run: sudo docker run -d -p 3002:3002 --name ${{ env.DOCKER_CONTAINER_NAME }} ${{ env.DOCKER_REGISTRY_URL }}:${{ env.DOCKER_IMAGE_TAG_NAME }}      
-        uses: Ilshidur/action-discord@master        
+      - name: Discord notification   
+        uses: Ilshidur/action-discord@0.3.2
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
