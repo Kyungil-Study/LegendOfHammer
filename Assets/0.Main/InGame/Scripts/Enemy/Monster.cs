@@ -29,8 +29,17 @@ public class Monster : MonoBehaviour, IBattleCharacter
     [Header("지그재그")] [Tooltip("zigzagAmplitude: 진동폭, zigzagFrequency: 주기")]
     [SerializeField] private float zigzagAmplitude = 1f;
     [SerializeField] private float zigzagFrequency = 2f;
-    private float mInitialX;
+    [SerializeField] private float OffsetX = 0.5f; // 지그재그 이동 시 벽에 닿았을 때 X 좌표 오프셋
+
+    private float mBaseLineX;        // 현재 진동 중심
+    private float mTargetBaseLineX;  // 목표 진동 중심
     private float mZigzagTime;
+
+    private float mNewBaseLineX; // 새 기준선
+    private float mCycleLength;  // 1 사이클 = 2π/ω
+    private int   mNextCycle;      
+    private bool  mHasHitted;         
+    private float mShiftSpeed;   // 수평 이동 속도
 
     [Header("자폭")] [Tooltip("자폭 딜레이, 탐지 범위, 데미지 처리 범위, 폭발 이펙트 설정")]
     [SerializeField] private float suicideDelay = 2f;
@@ -131,7 +140,12 @@ public class Monster : MonoBehaviour, IBattleCharacter
         mMovementPattern = data.EnemyMovementPattern;
         mAttackPattern   = data.Atk_Pattern;
         
-        mInitialX = transform.position.x; // 지그재그 초기 X 좌표
+        mBaseLineX        = transform.position.x;
+        mTargetBaseLineX  = mBaseLineX;
+        mCycleLength       = 2f * Mathf.PI / zigzagFrequency;
+        mHasHitted     = false;
+        mShiftSpeed  = 0f;
+        
         mFlyStartY = transform.position.y; // 체공형 초기 Y 좌표
     }
 
@@ -171,21 +185,12 @@ public class Monster : MonoBehaviour, IBattleCharacter
         // Border Object 충돌 시 (지그재그 처리)
         if (mMovementPattern == EnemyMovementPattern.Zigzag && collision.gameObject.layer == 8)
         {
-            mInitialX = transform.position.x;
-
-            float width = transform.position.x;
-            float mid = (MapManager.Instance.LeftBoundX + MapManager.Instance.RightBoundX) * 0.5f;
-
-            if (width < mid)
-            {
-                // 왼쪽 벽: 위상 0 → 오른쪽으로 튕기도록
-                mZigzagTime = 0f;
-            }
-            else
-            {
-                // 오른쪽 벽: 위상을 π/ω 로 → 왼쪽으로 튕기도록
-                mZigzagTime = Mathf.PI / zigzagFrequency;
-            }
+            float middle = (MapManager.Instance.LeftBoundX + MapManager.Instance.RightBoundX) * 0.5f;
+            float shift = (transform.position.x < middle) ? OffsetX : -OffsetX;
+        
+            mHasHitted    = true;
+            mNewBaseLineX = mBaseLineX + shift;
+            mNextCycle    = Mathf.FloorToInt(mZigzagTime / mCycleLength);
         }
         
         int bit = 1 << collision.gameObject.layer;
@@ -232,10 +237,29 @@ public class Monster : MonoBehaviour, IBattleCharacter
             case EnemyMovementPattern.Zigzag:
                 
                 mZigzagTime += Time.deltaTime;
-                
-                float x = mInitialX + Mathf.Sin(mZigzagTime * zigzagFrequency) * zigzagAmplitude;
+
+                // 벽 부딪히면 OffsetX만큼 기준선 이동
+                if (mHasHitted)
+                {
+                    int currentCycle = Mathf.FloorToInt(mZigzagTime / mCycleLength);
+                    
+                    if (currentCycle >= mNextCycle)
+                    {
+                        mHasHitted      = false;
+                        mTargetBaseLineX    = mNewBaseLineX;
+                        float shiftDist    = mTargetBaseLineX - mBaseLineX;
+                        mShiftSpeed   = Mathf.Abs(shiftDist) / mCycleLength;    // 기준선 이동 속도
+                    }
+                }
+
+                // 수평 기준선 이동
+                mBaseLineX = Mathf.MoveTowards
+                (
+                    mBaseLineX, mTargetBaseLineX, mShiftSpeed * Time.deltaTime
+                );
+
+                float x = mBaseLineX + Mathf.Sin(mZigzagTime * zigzagFrequency) * zigzagAmplitude;
                 float y = transform.position.y - mMoveSpeed * Time.deltaTime;
-                
                 transform.position = new Vector2(x, y);
                 
                 break;

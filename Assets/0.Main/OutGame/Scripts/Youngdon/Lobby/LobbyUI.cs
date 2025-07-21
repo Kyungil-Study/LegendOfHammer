@@ -26,7 +26,7 @@ public class LobbyUI : MonoBehaviour
     {
         // User 정보 세팅
         userIdText.text     = $"UserID: {UserData.Instance.UserID}";
-        nicknameText.text   = $"Nickname: {UserData.Instance.Nickname}";
+        nicknameText.text   = $"{UserData.Instance.Nickname}";
         
         // 시작 시 서버에서 스테이지 정보 가져오기
         BackendStageGameData.Instance.GetStage();
@@ -64,8 +64,8 @@ public class LobbyUI : MonoBehaviour
     public void RefreshStageUI()
     {
         var stage = BackendStageGameData.stage;
-        currentStageText.text = $"CurStage: {stage.Currentstage}";
-        maxStageText.text     = $"MaxStage: {stage.Maxstage}";
+        currentStageText.text = $"{stage.Currentstage}";
+        maxStageText.text     = $"{stage.Maxstage}";
     }
 
     public void GoDungeonScene()

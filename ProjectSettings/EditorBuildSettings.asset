@@ -8,6 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/0.Main/OutGame/Scenes/Scene_Login.unity
     guid: ab90cb58bb57e694ca023fae88219e7a
+  - enabled: 0
+    path: Assets/1.Develop/Yerin/Scenes/Dungeon_Run_Lobby_20101.unity
+    guid: 60fd9fd4011c4214ab06dbd5f6a09e24
   - enabled: 1
     path: Assets/0.Main/OutGame/Scenes/Scene_Lobby.unity
     guid: 70e2f651a31012842abae1c69b147c6b
