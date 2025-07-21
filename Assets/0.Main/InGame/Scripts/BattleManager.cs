@@ -13,6 +13,7 @@ public class BattleManager : MonoSingleton<BattleManager>
     [SerializeField] GameObject loadUI;
 
     public int StageIndex = 0;
+    public int MaxStageNumber = 0;
     
     [Header("추격 게이지 세팅")]
     [SerializeField] private float chaseGuageDecreaseRate = 0.5f; // Increase rate per second
@@ -21,9 +22,8 @@ public class BattleManager : MonoSingleton<BattleManager>
     private float chaseGuage = 0f; // 0 to 100
 
     private bool isEnded = false;
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
         BattleEventManager.Instance.Callbacks.OnAliveMonster += OnAliveMonster;
         BattleEventManager.Instance.Callbacks.OnDeath += OnDeath;
         
@@ -81,13 +81,18 @@ public class BattleManager : MonoSingleton<BattleManager>
         if(BackendStageGameData.stage == null)
         {
             Debug.LogWarning("[BattleManager] BackendStageGameData.stage is null. Using default stage index 1.");
+            MaxStageNumber = StageIndex;
         }
         else
         {
             StageIndex = BackendStageGameData.stage.Currentstage;; // For testing purposes, remove later
+            MaxStageNumber = BackendStageGameData.stage.Maxstage;
         }
         
-        BattleEventManager.Instance.CallEvent(new ReadyBattleEventArgs(stageIndex: StageIndex));
+        
+        BattleEventManager.Instance.CallEvent(new ReadyBattleEventArgs(
+            stageIndex: StageIndex,
+            maxStageIndex: MaxStageNumber));
     }
 
     public void StartGame() // todo: 로딩 연동 필요
