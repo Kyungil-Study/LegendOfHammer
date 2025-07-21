@@ -8,9 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/0.Main/OutGame/Scenes/Scene_Login.unity
     guid: ab90cb58bb57e694ca023fae88219e7a
-  - enabled: 0
-    path: Assets/1.Develop/Yerin/Scenes/Dungeon_Run_Lobby_20101.unity
-    guid: 60fd9fd4011c4214ab06dbd5f6a09e24
   - enabled: 1
     path: Assets/0.Main/OutGame/Scenes/Scene_Lobby.unity
     guid: 70e2f651a31012842abae1c69b147c6b
@@ -23,9 +20,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/0.Main/Scenes/MainScene.unity
     guid: b93509faa417a014088eafccb44933ce
-  - enabled: 1
-    path: Assets/1.Develop/Scenes/DevScene.unity
-    guid: 0b5d475a2fd6bd742a3e6e2943724107
   - enabled: 1
     path: Assets/0.Main/OutGame/Scenes/Scene_Menu.unity
     guid: 74d18304649f9ad48abf009fb17b8653
