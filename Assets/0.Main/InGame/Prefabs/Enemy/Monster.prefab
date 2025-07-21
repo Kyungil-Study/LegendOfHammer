@@ -227,7 +227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyID: 12009
-  testPlayer: {fileID: 0}
+  Player: {fileID: 0}
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -237,17 +237,19 @@ MonoBehaviour:
   projectilePrefab: {fileID: 5122971031347301392, guid: 623e67ce00306e349ac9d084a76d79d4, type: 3}
   projectileSpeed: 5
   fireInterval: 3
-  zigzagAmplitude: 1
+  zigzagAmplitude: 0.5
   zigzagFrequency: 2
+  OffsetX: 0.75
   suicideDelay: 1
   detectRange: 0.5
   attackRange: 0.75
   explosionPrefab: {fileID: 6111301031846871093, guid: 9a3809abee10ab54188078ab046f1168, type: 3}
+  spreadFireInterval: 0.2
+  spreadFireCount: 3
   distanceToStop: 3
   shieldRadius: 1.2
   shieldAngleDeg: 90
   shieldPivotOffset: {x: 0, y: -0.2}
-  knockbackForce: 2.5
   knockbackDuration: 0.2
 --- !u!114 &5546129984101200141
 MonoBehaviour:
@@ -276,3 +278,6 @@ MonoBehaviour:
   - sprite: {fileID: 21300000, guid: 15156f945630f164aba991226f4c0b5f, type: 3}
     idleClip: {fileID: 7400000, guid: 9211ac6bf910282488d2880bfbd869ed, type: 2}
   mHitBoxSize: 1
+  hitEffect: {fileID: 0}
+  PlayCount: 4
+  PlayInterval: 0.2
