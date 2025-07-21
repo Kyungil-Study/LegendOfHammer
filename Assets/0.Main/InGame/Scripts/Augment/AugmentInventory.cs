@@ -64,6 +64,11 @@ public class CommonAugmentUserData
     public int OptionID { get; set; }
     public AugmentRarity Rarity { get; set; }
     public int Count { get; set; }
+    
+    public CommonAugment GetData()
+    {
+        return CommonAugmentManager.Instance.GetAugmentFiltered(Rarity, OptionID);
+    }
 
     public CommonAugmentUserData() {}
     public CommonAugmentUserData(int id, int optionId, AugmentRarity rarity, int count)
@@ -231,5 +236,81 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
         classAugments.AddRange(archerAugments);
         classAugments.AddRange(warriorAugments);
         return classAugments;
+    }
+
+    public void ApplyAugmentsToSquad(Squad squad)
+    {
+        var status = squad.stats;
+        foreach (var commonAugment in commonAugments)
+        {
+            var data = commonAugment.GetData();
+            if (data == null)
+            {
+                Debug.LogWarning($"[AugmentInventory] Common Augment with ID {commonAugment.ID} not found.");
+                continue;
+            }
+            var upgradeFactor = commonAugment.Count;
+            status.MaxHealth += data.SquadMaxHpIncrease * upgradeFactor;
+            status.AttackDamageFactor += data.AtkIncrease * upgradeFactor;
+            status.AttackSpeed += data.AtkSpeedDecrease * upgradeFactor;
+            status.MoveSpeed += data.MoveSpeedIncrease * upgradeFactor;
+            status.CriticalChance += data.CriticalRateIncrease * upgradeFactor;
+            status.CriticalDamage += data.CriticalDamageIncrease * upgradeFactor;
+            status.BonusDamagePerHit += data.AdditionalHit * upgradeFactor;
+            status.TakeDamageFactor += data.IncreasedTakenDamage * upgradeFactor;
+            status.FinalDamageFactor += data.IncreasedFinalDamage * upgradeFactor;
+        
+            Debug.Log($"[AugmentInventory] Applied Common Augment: {data.GetName()} Count {commonAugment.Count} to Squad.");
+        }
+        status.CurrentHealth = status.MaxHealth; // Reset current health to max after applying augments
+    }
+
+    public void ApplyAugmentsToArcher(Archer archer)
+    {
+        foreach (var archerAugment in archerAugments)
+        {
+            var data = archerAugment.GetData() as ArcherAugment;
+            if (data == null)
+            {
+                Debug.LogWarning($"[AugmentInventory] Archer Augment with ID {archerAugment.ID} not found.");
+                continue;
+            }
+            
+            data.Apply(archer);
+            Debug.Log($"[AugmentInventory] Applied Archer Augment: {data.GetName()} to Archer.");
+            
+        }
+    }
+
+    public void ApplyAugmentsToWarrior(Warrior warrior)
+    {
+        foreach (var warriorAugment in warriorAugments)
+        {
+            var data = warriorAugment.GetData() as WarriorAugment;
+            if (data == null)
+            {
+                Debug.LogWarning($"[AugmentInventory] Warrior Augment with ID {warriorAugment.ID} not found.");
+                continue;
+            }
+            
+            data.Apply(warrior,warriorAugment.IsMaxLevel() );
+            Debug.Log($"[AugmentInventory] Applied Warrior Augment: {data.GetName()} to Warrior.");
+        }
+    }
+
+    public void ApplyAugmentsToWizard(Wizard wizard)
+    {
+        foreach (var wizardAugment in wizardAugments)
+        {
+            var data = wizardAugment.GetData() as WizardAugment;
+            if (data == null)
+            {
+                Debug.LogWarning($"[AugmentInventory] Wizard Augment with ID {wizardAugment.ID} not found.");
+                continue;
+            }
+            
+            data.Apply(wizard, wizardAugment.IsMaxLevel());
+            Debug.Log($"[AugmentInventory] Applied Wizard Augment: {data.GetName()} to Wizard.");
+        }
     }
 }

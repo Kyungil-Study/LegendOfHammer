@@ -1,2 +1,10 @@
 Assets/2.Resources/Fonts/Maplestory_Bold_SDF.asset filter=lfs diff=lfs merge=lfs -text
 Assets/2.Resources/Fonts/Maplestory_Light_SDF.asset filter=lfs diff=lfs merge=lfs -text
+Assets/2.Resources/Fonts/Galmuri11_SDF.asset filter=lfs diff=lfs merge=lfs -text
+Assets/Plugins/Sirenix/Assemblies/Sirenix.OdinInspector.Editor.dll filter=lfs diff=lfs merge=lfs -text
+Assets/2.Resources/2DPixelQuestVol.3-TheUI-GUI/Font/Fantasypixelfont_SDF.asset filter=lfs diff=lfs merge=lfs -text
+Assets/2.Resources/FastSolution/PixelUIPlus/PSDSource/PSDSource.zip filter=lfs diff=lfs merge=lfs -text
+Assets/2.Resources/FastSolution/PixelUIPlus/Fonts/Dark_outline_Gamer.asset filter=lfs diff=lfs merge=lfs -text
+Assets/2.Resources/FastSolution/PixelUIPlus/Fonts/Gamer_No_Shadow.asset filter=lfs diff=lfs merge=lfs -text
+Assets/2.Resources/FastSolution/PixelUIPlus/Fonts/Gamer_SDF.asset filter=lfs diff=lfs merge=lfs -text
+Assets/2.Resources/FastSolution/PixelUIPlus/Sprites/Buttons/bg.png filter=lfs diff=lfs merge=lfs -text
