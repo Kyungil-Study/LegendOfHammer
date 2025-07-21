@@ -14,7 +14,6 @@ public class LobbyUI : MonoBehaviour
     public TMP_Text currentStageText;
     public TMP_Text maxStageText;
 
-    public TMP_InputField stageNameInput;
     public Button playButton;
 
     private void Awake()
