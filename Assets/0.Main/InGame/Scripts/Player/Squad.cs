@@ -36,6 +36,8 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
             }
         }
         [field:SerializeField] public int MaxHealth { get; set; }
+        
+        [field:SerializeField] public float AttackDamageFactor { get; set; }
         [field:SerializeField] public float AttackSpeed { get; set; } = 1;
         [field:SerializeField] public float MoveSpeed { get; set; } = 1;
         [field:SerializeField] public float CriticalChance { get; set; } = 0;
@@ -50,9 +52,16 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
     public List<string> invincible = new List<string>();
     public bool IsInvincible => invincible.Count > 0;
 
-    protected override void Awake()
+    private void Awake()
     {
         stats.CurrentHealth = stats.MaxHealth;
+        var callbacks = BattleEventManager.Instance.Callbacks;
+        callbacks.OnStartBattle += OnStartBattle;
+    }
+
+    private void OnStartBattle(StartBattleEventArgs args)
+    {
+        AugmentInventory.Instance.ApplyAugmentsToSquad(this);
     }
 
     public void TakeDamage(TakeDamageEventArgs eventArgs)

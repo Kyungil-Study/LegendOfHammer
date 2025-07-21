@@ -16,7 +16,7 @@ public abstract class Hero : MonoBehaviour
     protected virtual void Attack() { }
     public abstract int CalculateDamage(bool isCritical = false);
 
-    private void Awake()
+    protected virtual void Awake()
     {
         squad = Squad.Instance;
         squadStats = Squad.Instance.stats;

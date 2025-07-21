@@ -29,5 +29,6 @@ public class CommonAugmentManager : SingletonBase<CommonAugmentManager>
         Records = TSVLoader.LoadTableToDictionary<int, CommonAugment>(resourcePath, augment => augment.ID);
     }
 
+    
 }
 
