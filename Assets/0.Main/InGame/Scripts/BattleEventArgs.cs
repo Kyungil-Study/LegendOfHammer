@@ -21,10 +21,12 @@ public class SelectAugmentEventArgs : BattleEventArgs
 public class ReadyBattleEventArgs : BattleEventArgs
 {
     public int StageIndex { get; private set; }
+    public int MaxStageIndex { get; private set; }
     
-    public ReadyBattleEventArgs(int stageIndex)
+    public ReadyBattleEventArgs(int stageIndex, int maxStageIndex)
     {
         this.StageIndex = stageIndex;
+        this.MaxStageIndex = maxStageIndex;
     }
 }
 

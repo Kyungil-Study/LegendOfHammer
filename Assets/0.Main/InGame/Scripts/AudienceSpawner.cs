@@ -18,11 +18,17 @@ public class AudienceSpawner : MonoBehaviour
     [Header("Spawn Range Settings")]
     [SerializeField] Transform spawnRangeStart;
     [SerializeField] Transform spawnRangeEnd;
+    
+    [Header("Tilemap Settings")]
+    [SerializeField] private TilemapRenderer tilemapRenderer; // 타일맵 컴포넌트
+
     private Grid grid;
     private Tilemap tilemap;
     // Start is called before the first frame update
     void Start()
     {
+        tilemapRenderer = GetComponent<TilemapRenderer>();
+        tilemapRenderer.enabled = false;
         tilemap = GetComponent<Tilemap>();
         grid = GetComponentInParent<Grid>();
         

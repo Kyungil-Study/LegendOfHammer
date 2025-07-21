@@ -4,17 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class CommonAugmentManager : GenericDictionaryResourceManager< CommonAugment,int, CommonAugmentManager>
+public class CommonAugmentManager : SingletonBase<CommonAugmentManager>
 {
-    protected override int GetKey(CommonAugment record)
+    
+    public IReadOnlyDictionary<int,CommonAugment> Records
     {
-        return record.ID;
-    }
+        get;
+        private set;
+    } = new Dictionary<int, CommonAugment>();
 
-    public virtual void Load(Action<LoadCompleteEventArg> onComplete)
-    {
-        base.Load(onComplete);
-    }
+    [SerializeField] private string resourcePath = "CommonAugmentData";
     
     public CommonAugment GetAugmentFiltered(AugmentRarity rarity, int optionID)
     {
@@ -23,6 +22,13 @@ public class CommonAugmentManager : GenericDictionaryResourceManager< CommonAugm
             augment.OptionID == optionID
             );
     }
+
+    public override void OnInitialize()
+    {
+        base.OnInitialize();
+        Records = TSVLoader.LoadTableToDictionary<int, CommonAugment>(resourcePath, augment => augment.ID);
+    }
+
     
 }
 
