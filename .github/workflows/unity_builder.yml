@@ -47,6 +47,11 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
+          androidKeystoreName: debug.keystore
+          androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          androidKeystorePass: android
+          androidKeyaliasName: androiddebugkey
+          androidKeyaliasPass: android          
           developmentBuild: true # <<-- Development Build 적용
       # Upload Artifact
       - uses: actions/upload-artifact@v4
