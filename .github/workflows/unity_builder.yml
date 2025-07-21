@@ -1,6 +1,8 @@
 name: Build project
 
 on:
+  push : 
+    branches : Develop
   schedule:
       # 전날 21시(한국 6시)
       - cron: '0 21 * * 1-5'
