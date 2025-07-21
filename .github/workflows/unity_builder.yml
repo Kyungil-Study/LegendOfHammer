@@ -2,7 +2,7 @@ name: Build Develope Branch Project
 
 on:
   push : 
-    branches : Develop, Build
+    branches : Develop
 jobs:
   buildForAllSupportedPlatforms:
     name: Build for ${{ matrix.targetPlatform }}
