@@ -482,6 +482,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2093327232}
     m_Modifications:
+    - target: {fileID: 4943746662406331512, guid: b9f6b43b588931a40ae2f078f879a92d, type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 2039
+      objectReference: {fileID: 0}
     - target: {fileID: 5056972910757313336, guid: b9f6b43b588931a40ae2f078f879a92d, type: 3}
       propertyPath: m_Name
       value: SceneLoadUI
@@ -1139,6 +1143,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1162305642958701716, guid: cf1c8b0d30ff0be428c9353fa9e67d88, type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 2039
+      objectReference: {fileID: 0}
     - target: {fileID: 2434741627675638777, guid: cf1c8b0d30ff0be428c9353fa9e67d88, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1151,6 +1159,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 192030469}
+    - target: {fileID: 3940422002704632492, guid: cf1c8b0d30ff0be428c9353fa9e67d88, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8592751778208886167, guid: cf1c8b0d30ff0be428c9353fa9e67d88, type: 3}
       propertyPath: m_Name
       value: HPCanvas
@@ -1282,6 +1294,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 3143145693073960549}
+    - target: {fileID: 8234418459163125946, guid: 82f4e9ace469fb04fa4998df157afb82, type: 3}
+      propertyPath: StageIndex
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8234418459163125946, guid: 82f4e9ace469fb04fa4998df157afb82, type: 3}
       propertyPath: endGameButton
       value: 
@@ -1480,6 +1496,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3228702557338661824, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
+      propertyPath: attackPerSec
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3228702557338661824, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
+      propertyPath: chargeDistance
+      value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3228702557338661824, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
+      propertyPath: baseAttackDamage
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 3802666634613209644, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1520,9 +1548,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6134312133047931347, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
+      propertyPath: attackPerSec
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6134312133047931347, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
+      propertyPath: baseAttackDamage
+      value: 400
+      objectReference: {fileID: 0}
     - target: {fileID: 7511207680696367698, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 8187177615337158848, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
+      propertyPath: baseAttackDamage
+      value: 300
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1727,6 +1767,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: BattleCamera
       objectReference: {fileID: 0}
+    - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
+      propertyPath: m_NormalizedViewPortRect.width
+      value: 0.9991072
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
+      propertyPath: m_NormalizedViewPortRect.height
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1740,6 +1788,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2245862092379814627, guid: 46740cc5ebe907f4982725147ef7aa18, type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 2039
+      objectReference: {fileID: 0}
     - target: {fileID: 3597634781296342244, guid: 46740cc5ebe907f4982725147ef7aa18, type: 3}
       propertyPath: m_Pivot.x
       value: 0
