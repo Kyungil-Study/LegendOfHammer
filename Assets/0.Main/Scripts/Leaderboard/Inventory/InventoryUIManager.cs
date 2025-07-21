@@ -15,11 +15,6 @@ public class InventoryUIManager : MonoBehaviour
     {
         RefreshInventory();
     }
-    
-    // private void Start() //테스트용
-    // {
-    //     RefreshInventory();
-    // }
 
     public void RefreshInventory()
     {

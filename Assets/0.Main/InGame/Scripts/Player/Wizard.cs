@@ -12,6 +12,19 @@ public class Wizard : Hero
     public WizardMagicBall projectilePrefab;
     [field:SerializeField]private float ExplosionRadius { get; set; } = 0.5f;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        var callbacks = BattleEventManager.Instance.Callbacks;
+        callbacks.OnStartBattle += OnStartBattle;
+        
+    }
+
+    private void OnStartBattle(StartBattleEventArgs obj)
+    {
+        AugmentInventory.Instance.ApplyAugmentsToWizard(this);
+    }
+
     protected override void Attack()
     {
         WizardMagicBall projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
