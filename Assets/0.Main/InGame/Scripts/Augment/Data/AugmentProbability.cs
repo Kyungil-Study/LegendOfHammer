@@ -25,7 +25,7 @@ public class ClassAugmentProbability
     public float Probability { get; set; }
 }
 
-public class AugmentProbability : SingletonBase<AugmentProbability> 
+public class AugmentProbability : MonoSingleton<AugmentProbability> 
 {
     public Dictionary<AugmentRarity, AugmentRarityProbability> rarityRecords = new Dictionary<AugmentRarity, AugmentRarityProbability>(  );
     public Dictionary<int, AugmentOptionProbability> commonOptionRecords = new Dictionary<int, AugmentOptionProbability>();
@@ -36,9 +36,9 @@ public class AugmentProbability : SingletonBase<AugmentProbability>
     [SerializeField] private string classOptionPath = "ClassAugmentProbability";
 
 
-    public override void OnInitialize()
+    protected override void Initialize()
     {
-        base.OnInitialize();
+        base.Initialize();
         if (string.IsNullOrEmpty(rarityPath) || string.IsNullOrEmpty(commonOptionPath) || string.IsNullOrEmpty(classOptionPath))
         {
             throw new ArgumentNullException("Resource paths cannot be null or empty.");

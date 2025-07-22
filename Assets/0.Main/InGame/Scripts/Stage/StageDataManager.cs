@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class StageDataManager : SingletonBase<StageDataManager>
+public class StageDataManager : MonoSingleton<StageDataManager>
 {
     [SerializeField] private string resourcePath = "StageData";
     private List<StageWave> records = new();
@@ -21,9 +21,9 @@ public class StageDataManager : SingletonBase<StageDataManager>
         }
     }
 
-    public override void OnInitialize()
+    protected override void Initialize()
     {
-        base.OnInitialize();
+        base.Initialize();
         if (string.IsNullOrEmpty(resourcePath))
         {
             throw new ArgumentNullException(nameof(resourcePath), "Resource path cannot be null or empty.");

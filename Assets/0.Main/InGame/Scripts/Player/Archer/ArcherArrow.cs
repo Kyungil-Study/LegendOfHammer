@@ -30,7 +30,7 @@ public class ArcherArrow : HeroProjectile
        var monsters =  BattleManager.Instance.GetAllMonsters();
        if (monsters.Any() == false)
        {
-           Debug.Log("No monsters found to target.");
+           //Debug.Log("No monsters found to target.");
            return null;
        }
 
