@@ -117,6 +117,7 @@ GameObject:
   - component: {fileID: 7613585881291570754}
   - component: {fileID: 319402234662238148}
   - component: {fileID: 3874214853159092470}
+  - component: {fileID: -9079445034953795936}
   - component: {fileID: 7494431464099580550}
   - component: {fileID: 5546129984101200141}
   m_Layer: 7
@@ -214,6 +215,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &-9079445034953795936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8015743650478422896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 388b8d60cb6ec3843ac33db0821ea88e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyID: 0
+  HP:
+    Override: 0
+    Value: 0
+  Atk:
+    Override: 0
+    Value: 0
+  MoveSpeed:
+    Override: 0
+    Value: 0
 --- !u!114 &7494431464099580550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,6 +260,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 5122971031347301392, guid: 623e67ce00306e349ac9d084a76d79d4, type: 3}
   projectileSpeed: 5
   fireInterval: 3
+  deathAnimationPrefab: {fileID: 0}
   zigzagAmplitude: 0.5
   zigzagFrequency: 2
   OffsetX: 0.75
