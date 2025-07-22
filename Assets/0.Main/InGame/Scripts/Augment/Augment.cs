@@ -26,6 +26,10 @@ public abstract class Augment
     
     public abstract int GetOptionID();
     
+    public bool IsCommon() 
+    {
+        return GetAugmentType() == AugmentType.Common;
+    }
 }
 
 public abstract class ClassAugment : Augment
