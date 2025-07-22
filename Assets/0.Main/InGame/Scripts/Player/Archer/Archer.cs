@@ -10,7 +10,8 @@ public class Archer : Hero
 {
     [field:SerializeField] public float BonusAttackSpeed { get; set; }
     protected override float AttackCooldown => 1 / (attackPerSec * (1 + BonusAttackSpeed));
-    public int pierceLimit = 0; // 관통횟수
+    
+    
 
     public float BonusAttackFactor = 1; // 추가 화살 공격력 계수
     // 법사 공속 버프용 계수
@@ -18,6 +19,9 @@ public class Archer : Hero
     
     public float subProjectileAttackFactor = 0; // 서브 화살의 공격력 계수
     public float targetAdditionalDamageFactor = 0; // 표적 대상 추가 피해 계수
+    
+    public bool IsFinalPenetration { get; set; } = false; // 최종 관통 여부
+    public int pierceLimit = 0; // 관통횟수
     
     [Header("Projectile Settings")]
     
@@ -140,11 +144,11 @@ public class Archer : Hero
         {
             ArcherArrow subProjectile = Instantiate(sample, spawPoint.position, spawPoint.rotation);
             subProjectile.Owner = this;
-            subProjectile.pierceLimit = IsFinalSubProjectile ? pierceLimit : 1;
+            subProjectile.pierceLimit = IsFinalSubProjectile ? pierceLimit : 0;
             var critical = Random.Range(0f, 1f) <= squadStats.CriticalChance;
             subProjectile.IsCritical = IsFinalSubProjectile ? critical : false;
             subProjectile.FindTargetFunc = findFunc;
-            subProjectile.DamageCalculationFunc = IsFinalSubProjectile ? CalculateDamage : CalculateSubProjectileDamage;
+            subProjectile.DamageCalculationFunc = CalculateSubProjectileDamage;
             subProjectile.Fire();
         }
         #endregion
@@ -163,8 +167,7 @@ public class Archer : Hero
     
     public int CalculateSubProjectileDamage(bool isCritical = false)
     {
-        float critFactor = isCritical ? squadStats.CriticalDamage : 1f;
-        return (int)(((baseAttackDamage * critFactor) + squadStats.BonusDamagePerHit + (baseAttackDamage * subProjectileAttackFactor) * squadStats.FinalDamageFactor));
+        return (int)(CalculateDamage() * subProjectileAttackFactor);
     }
 
     // TODO: 증강에 의한 추가 계수
