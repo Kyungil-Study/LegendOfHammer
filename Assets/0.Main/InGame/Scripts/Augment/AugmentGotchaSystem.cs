@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AugmentGotchaSystem : MonoBehaviour
+public class AugmentGotchaSystem : MonoSingleton<AugmentGotchaSystem>
 {
     [SerializeField] private RectTransform augmentPanel;
     [SerializeField] private AugmentSlot[] augmentSlots;
@@ -20,7 +20,6 @@ public class AugmentGotchaSystem : MonoBehaviour
     void Start()
     {
         BattleEventManager.Instance.Callbacks.OnReadyBattle += OnReadyBattle;
-        BattleEventManager.Instance.Callbacks.OnSelectAugment += OnSelectAugment;
         
         warriorSlot.onClick.AddListener(() => {
             Debug.Log("Warrior slot selected.");
@@ -62,9 +61,10 @@ public class AugmentGotchaSystem : MonoBehaviour
         }
     }
 
-    private void OnSelectAugment(SelectAugmentEventArgs args)
+    public void OnSelectAugment(Augment augment)
     {
         augmentPanel.gameObject.SetActive(false);
+        BattleEventManager.Instance.CallEvent(new SelectAugmentEventArgs(augment));
         BattleManager.Instance.StartGame();
     }
 

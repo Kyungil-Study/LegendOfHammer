@@ -1,5 +1,7 @@
 
 
+using UnityEngine;
+
 public static class ArcherAugmentFactory
 {
     public static ArcherAugment CreateAugment(ArcherAugmentTSV tsv)
@@ -37,12 +39,16 @@ public class ArcherSpeedAugment : ArcherAugment
         MageAttackSpeedIncreased = tsv.MageAttackSpeedIncreased;
     }
 
-    public override void Apply(Archer archer)
+    public override void Apply(Archer archer, bool isFinalUpgrade)
     {
+        Debug.Log("Applying Archer Speed Augment");
         // 공격속도 증가 적용
         archer.BonusAttackSpeed = AttackSpeedIncreasedRate;
         archer.mageAttackSpeedFactor = MageAttackSpeedIncreased;
         archer.BonusAttackFactor = SmallArrowAttackRatio;
+        
+        archer.IsFinalProjectile = isFinalUpgrade;
+        
     }
 }
 
@@ -62,7 +68,7 @@ public class ArcherProjectileAugment : ArcherAugment
         TargetAdditionalDamageRatio = tsv.TargetAdditionalDamageRatio;
     }
 
-    public override void Apply(Archer archer)
+    public override void Apply(Archer archer, bool isFinalUpgrade)
     {
         // 추가 투사체 공격력 계수 증가 적용
         archer.subProjectileAttackFactor = AdditionalProjectileAttackRatioIncreased;
@@ -84,7 +90,7 @@ public class ArcherPenetrationAugment : ArcherAugment
         PenetrationCountIncreased = tsv.PenetrationIncreased;
     }
 
-    public override void Apply(Archer archer)
+    public override void Apply(Archer archer, bool isFinalUpgrade)
     {
         // 관통 횟수 증가 적용
         archer.pierceLimit += PenetrationCountIncreased;
@@ -103,9 +109,9 @@ public abstract class ArcherAugment : ClassAugment
 
     public sealed override void Apply(Hero hero, bool isFinalUpgrade)
     {
-        Apply(hero as Archer);
+        Apply(hero as Archer, isFinalUpgrade);
     }
-    public abstract void Apply(Archer archer);
+    public abstract void Apply(Archer archer, bool isFinalUpgrade);
 
     public ArcherAugment(ArcherAugmentTSV tsv)
     {
