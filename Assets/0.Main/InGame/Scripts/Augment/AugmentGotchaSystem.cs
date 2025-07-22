@@ -7,13 +7,20 @@ using UnityEngine.UI;
 
 public class AugmentGotchaSystem : MonoSingleton<AugmentGotchaSystem>
 {
-    [SerializeField] private RectTransform augmentPanel;
-    [SerializeField] private AugmentSlot[] augmentSlots;
+    [Header("Common Augment")]
+    [SerializeField] private RectTransform commonAugmentPanel;
+    [SerializeField] private AugmentSlot[] commonAugmentSlots;
+    [SerializeField] private Button commonRerollAugmentButton;
+
+    [Space(10), Header("Class Augment")]
+    [SerializeField] private RectTransform classAugmentPanel;
+    [SerializeField] private AugmentSlot[] classAugmentSlots;
     [SerializeField] private Button warriorSlot;
     [SerializeField] private Button wizardSlot;
     [SerializeField] private Button archerSlot;
     
-    [SerializeField] private Button rerollAugmentButton;
+    [SerializeField] private Button classRerollAugmentButton;
+    
     
     AugmentType rerollAugmentType = AugmentType.Common;
     // Start is called before the first frame update
@@ -37,33 +44,24 @@ public class AugmentGotchaSystem : MonoSingleton<AugmentGotchaSystem>
             // Handle archer slot selection logic here
         });
         
-        rerollAugmentButton.onClick.AddListener(() => {
+        classRerollAugmentButton.onClick.AddListener(() => {
             Debug.Log("Reroll augment button clicked.");
             // Handle reroll logic here
-            RerollGotchaAugment();
+            RerollClassAugment();
         });
-    }
-
-    private void RerollGotchaAugment()
-    {
-        switch (rerollAugmentType)
-        {
-            case AugmentType.Warrior:
-            case AugmentType.Archer:
-            case AugmentType.Wizard:
-                RerollClassAugment();
-                break;
-            case AugmentType.Common:
+        
+        commonRerollAugmentButton.onClick.AddListener(() =>
+            {
+                Debug.Log("Reroll common augment button clicked.");
+                // Handle reroll logic here
                 GotchaCommonAugment();
-                break;
-            default:
-                throw new System.NotImplementedException();
-        }
+            });
     }
 
     public void OnSelectAugment(Augment augment)
     {
-        augmentPanel.gameObject.SetActive(false);
+        commonAugmentPanel.gameObject.SetActive(false);
+        classAugmentPanel.gameObject.SetActive(false);
         BattleEventManager.Instance.CallEvent(new SelectAugmentEventArgs(augment));
         BattleManager.Instance.StartGame();
     }
@@ -91,7 +89,7 @@ public class AugmentGotchaSystem : MonoSingleton<AugmentGotchaSystem>
 
     private void OnReadyBattle(ReadyBattleEventArgs args)
     {
-        augmentPanel.gameObject.SetActive(true);
+        classAugmentPanel.gameObject.SetActive(true);
         GotchaClassAugment( ClassAugmentManager.Instance.GetAllOption());
         //GotchaCommonAugment();
     }
@@ -172,8 +170,8 @@ public class AugmentGotchaSystem : MonoSingleton<AugmentGotchaSystem>
         }
         
         Debug.Log($"Selected augment IDs: {selectedID0.ID}, {selectedID1.ID}");
-        augmentSlots[0].SetAugment(ClassAugmentManager.Instance.GetAugment(selectedID0.ID));
-        augmentSlots[1].SetAugment(ClassAugmentManager.Instance.GetAugment(selectedID1.ID));
+        classAugmentSlots[0].SetAugment(ClassAugmentManager.Instance.GetAugment(selectedID0.ID));
+        classAugmentSlots[1].SetAugment(ClassAugmentManager.Instance.GetAugment(selectedID1.ID));
     }
     
     private void RerollClassAugment()
@@ -271,8 +269,8 @@ public class AugmentGotchaSystem : MonoSingleton<AugmentGotchaSystem>
             Debug.LogError($"Failed to get augment for rarity {rarityRecord.ID} and option {optionRecord2.ID}");
             return;
         }
-        augmentSlots[0].SetAugment(slot1);
-        augmentSlots[1].SetAugment(slot2);
+        commonAugmentSlots[0].SetAugment(slot1);
+        commonAugmentSlots[1].SetAugment(slot2);
     }
 
     
