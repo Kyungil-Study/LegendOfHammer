@@ -2,7 +2,7 @@ name: Build Develope Branch Project
 
 on:
   push : 
-    branches : Develop 
+    branches : Develop
 jobs:
   buildForAllSupportedPlatforms:
     name: Build for ${{ matrix.targetPlatform }}
@@ -11,17 +11,32 @@ jobs:
       fail-fast: false
       matrix:
         targetPlatform:
-          - Android # Build an Android .apk standalone app.
+          - Android # Build an Android .apk standalone app.      
     steps:
-      - uses: actions/checkout@v4
+      # Checkout (without LFS)
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      # Git LFS
+      - name: Create LFS file list
+        run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+      - name: Restore LFS cache
+        uses: actions/cache@v3
+        id: lfs-cache
         with:
-          fetch-depth: 0
-          lfs: true
+          path: .git/lfs
+          key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
+      - name: Git LFS Pull
+        run: |
+          git lfs pull
+          git add .
+          git reset --hard
+      # Cache
       - uses: actions/cache@v3
         with:
           path: Library
-          key: Library-${{ matrix.targetPlatform }}
-          restore-keys: Library-
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
       - if: matrix.targetPlatform == 'Android'
         uses: jlumbroso/free-disk-space@v1.3.1
       # Build Project
@@ -32,6 +47,12 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
+          androidKeystoreName: debug.keystore
+          androidKeystoreBase64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          androidKeystorePass: android
+          androidKeyaliasName: androiddebugkey
+          androidKeyaliasPass: android          
+          developmentBuild: true # <<-- Development Build 적용
       # Upload Artifact
       - uses: actions/upload-artifact@v4
         with:
