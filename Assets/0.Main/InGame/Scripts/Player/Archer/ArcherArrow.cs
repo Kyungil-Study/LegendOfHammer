@@ -51,7 +51,7 @@ public class ArcherArrow : HeroProjectile
         OnHit?.Invoke();
         pierceLimit--;
 
-        bool isSuccesHitTarget = targetMonster.Equals(target);
+        bool isSuccesHitTarget = targetMonster != null ? targetMonster.Equals(target) : false;
         targetMonster = target;
 
         float tagetFactor = isSuccesHitTarget ? 1 : targetAdditionalDamageFactor;

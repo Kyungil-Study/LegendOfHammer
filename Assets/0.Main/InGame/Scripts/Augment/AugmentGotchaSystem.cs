@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class AugmentGotchaSystem : MonoSingleton<AugmentGotchaSystem>
 {
@@ -58,12 +60,21 @@ public class AugmentGotchaSystem : MonoSingleton<AugmentGotchaSystem>
             });
     }
 
+    
+
     public void OnSelectAugment(Augment augment)
     {
         commonAugmentPanel.gameObject.SetActive(false);
         classAugmentPanel.gameObject.SetActive(false);
         BattleEventManager.Instance.CallEvent(new SelectAugmentEventArgs(augment));
-        BattleManager.Instance.StartGame();
+        if (augment.IsCommon())
+        {
+            BattleUIController.Instance.OnClear();
+        }
+        else // 전용 증강 게임시작
+        {
+            BattleManager.Instance.StartGame();
+        }
     }
 
     public struct ProbabilityRecord<T>
@@ -84,7 +95,12 @@ public class AugmentGotchaSystem : MonoSingleton<AugmentGotchaSystem>
             // Check if the value is within the range of minProbability and maxProbability
             return value >= minProbability && value <= maxProbability;
         }
-        
+    }
+    
+    public void OnOpenCommonAugment()
+    {
+        commonAugmentPanel.gameObject.SetActive(true);
+        GotchaCommonAugment();
     }
 
     private void OnReadyBattle(ReadyBattleEventArgs args)

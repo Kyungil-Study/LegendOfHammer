@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BattleUIController : MonoBehaviour
+public class BattleUIController : MonoSingleton<BattleUIController>
 {
     [Header("스테이지")]
     [LabelText("스테이지 번호"), SerializeField] private TMP_Text stageNumberText;
@@ -48,12 +48,24 @@ public class BattleUIController : MonoBehaviour
 
     }
 
+    public void OnClear()
+    {
+        isVictory = true;
+        clearMenuObject.gameObject.SetActive(true);
+    }
+    
+    public void OnGameOver()
+    {
+        isVictory = false;
+        gameOverMenuObject.gameObject.SetActive(true);
+    }
+
     private void OnEndBattle(EndBattleEventArgs args)
     {
         isVictory = args.IsVictory;
         if (isVictory)
         {
-            clearMenuObject.gameObject.SetActive(true);
+            AugmentGotchaSystem.Instance.OnOpenCommonAugment();
         }
         else
         {
