@@ -1,0 +1,5 @@
+-keep class io.thebackend.android.** { *; }
+-keep class io.thebackend.googlelogin.GoogleLogin { *; }
+-keep class io.thebackend.googlelogin.BackendGoogleLoginCallback { *; }
+-keep class io.thebackend.googlelogin.BackendOnUnityCallback { *; }
+-keep class io.thebackend.unity.** { *; }   
