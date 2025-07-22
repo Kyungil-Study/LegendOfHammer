@@ -9,7 +9,7 @@ public class ArcherArrow : HeroProjectile
 {
     public int pierceLimit = 0;
     public Monster targetMonster;
-    
+    public float targetAdditionalDamageFactor = 1;
     
     public Func<bool,int> DamageCalculationFunc { get; set; }
     public override int Damage => 
@@ -50,11 +50,16 @@ public class ArcherArrow : HeroProjectile
     {
         OnHit?.Invoke();
         pierceLimit--;
-        
+
+        bool isSuccesHitTarget = targetMonster.Equals(target);
+        targetMonster = target;
+
+        float tagetFactor = isSuccesHitTarget ? 1 : targetAdditionalDamageFactor;
+        int FinalDamage = (int)(Damage * tagetFactor);
         TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(
             Squad.Instance,
             target,
-            Damage
+            FinalDamage 
         );
         BattleEventManager.Instance.CallEvent(eventArgs);
         

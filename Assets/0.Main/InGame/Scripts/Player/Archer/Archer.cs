@@ -20,7 +20,6 @@ public class Archer : Hero
     public float subProjectileAttackFactor = 0; // 서브 화살의 공격력 계수
     public float targetAdditionalDamageFactor = 0; // 표적 대상 추가 피해 계수
     
-    public bool IsFinalPenetration { get; set; } = false; // 최종 관통 여부
     public int pierceLimit = 0; // 관통횟수
     
     [Header("Projectile Settings")]
@@ -72,6 +71,7 @@ public class Archer : Hero
             projectile.Owner = this;
             projectile.pierceLimit = pierceLimit;
             projectile.IsCritical = Random.Range(0f,1f) <= squadStats.CriticalChance;
+            projectile.targetAdditionalDamageFactor = targetAdditionalDamageFactor;
             projectile.Fire();
         }
     }
@@ -149,6 +149,7 @@ public class Archer : Hero
             subProjectile.IsCritical = IsFinalSubProjectile ? critical : false;
             subProjectile.FindTargetFunc = findFunc;
             subProjectile.DamageCalculationFunc = CalculateSubProjectileDamage;
+            subProjectile.targetAdditionalDamageFactor = targetAdditionalDamageFactor;
             subProjectile.Fire();
         }
         #endregion
@@ -167,7 +168,7 @@ public class Archer : Hero
     
     public int CalculateSubProjectileDamage(bool isCritical = false)
     {
-        return (int)(CalculateDamage() * subProjectileAttackFactor);
+        return (int)(CalculateDamage(isCritical) * subProjectileAttackFactor);
     }
 
     // TODO: 증강에 의한 추가 계수
