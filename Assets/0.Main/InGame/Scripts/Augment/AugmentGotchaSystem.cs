@@ -118,6 +118,7 @@ public class AugmentGotchaSystem : MonoSingleton<AugmentGotchaSystem>
             var includeInventory = inventoryAugments.Any(a => a.OptionID == option);
             if (includeInventory)
             {
+                Debug.Log($" Option {option} exists in inventory.");
                 var data = inventoryAugments.First(a => a.OptionID == option );
                 if (data.IsMaxLevel())
                 {
