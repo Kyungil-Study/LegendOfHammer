@@ -10,15 +10,23 @@ public class Archer : Hero
     public int pierceLimit = 0; // 관통횟수
     public int projectileCountPerAttack = 1; // 공격당 화살 개수
 
-    public float BonusAttackFactor = 0; // 추가 화살 공격력 계수
+    public float BonusAttackFactor = 1; // 추가 화살 공격력 계수
     // 법사 공속 버프용 계수
     public float mageAttackSpeedFactor = 0f; // 마법사 화살의 공격 속도 계수
     
     public float subProjectileAttackFactor = 0; // 서브 화살의 공격력 계수
     public float targetAdditionalDamageFactor = 0; // 표적 대상 추가 피해 계수
     
-    public Transform projectileSpawnPoint;
-    public ArcherArrow projectilePrefab;
+    [Header("Projectile Settings")]
+    
+    [Space(10),Header("Noraml Projectile")]
+    public Transform NormalProjectileSpawnPoint;
+    public ArcherArrow NormalProjectilePrefab;
+    [Space(10),Header("Final Projectile")]
+    public Transform[] finalProjectileSpawnPoints; // 최종 화살 발사 위치들
+    public ArcherArrow finalProjectilePrefab;
+    public bool IsFinalProjectile { get; set; } = false; // 최종 화살 여부
+    
 
     protected override void Awake()
     {
@@ -34,11 +42,19 @@ public class Archer : Hero
 
     protected override void Attack()
     {
-        ArcherArrow projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
-        projectile.Owner = this;
-        projectile.pierceLimit = pierceLimit;
-        projectile.IsCritical = Random.Range(0f,1f) <= squadStats.CriticalChance;
-        projectile.Fire();
+        var projectileSample = IsFinalProjectile ? finalProjectilePrefab : NormalProjectilePrefab;
+        var projectileSpawn = IsFinalProjectile ? finalProjectileSpawnPoints : new Transform[] { NormalProjectileSpawnPoint };
+
+        foreach (var spawPoint in projectileSpawn)
+        {
+            ArcherArrow projectile = Instantiate(projectileSample, spawPoint.position, spawPoint.rotation);
+            projectile.Owner = this;
+            projectile.pierceLimit = pierceLimit;
+            projectile.IsCritical = Random.Range(0f,1f) <= squadStats.CriticalChance;
+            projectile.Fire();
+            
+        }
+       
     }
     
 
