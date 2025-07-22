@@ -70,13 +70,21 @@ public class ArcherProjectileAugment : ArcherAugment
 
     public override void Apply(Archer archer, bool isFinalUpgrade)
     {
+        Debug.Log("Applying Archer Projectile Augment");
+        
+        archer.IsSubProjectile = true;
+        
+        archer.subProjectileCount = Level; // 서브 화살 개수 초기화
+        
         // 추가 투사체 공격력 계수 증가 적용
         archer.subProjectileAttackFactor = AdditionalProjectileAttackRatioIncreased;
         
         // 추가 화살 공격력 계수 적용
         archer.subProjectileAttackFactor = AdditionalArrowAttackRatio;
-        // 관통 횟수 증가 적용
+        
         archer.targetAdditionalDamageFactor = TargetAdditionalDamageRatio;
+        
+        archer.IsFinalSubProjectile = isFinalUpgrade;
     }
 }
 
