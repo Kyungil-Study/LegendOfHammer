@@ -30,6 +30,7 @@ public class SessionManager : SingletonBase<SessionManager>
         Debug.Log($"[SessionManager] Starting game");
         
         SceneManager.LoadScene("Scene_Dungeon", LoadSceneMode.Single);
+        BackendStageGameData.Instance.PlayGame();
 
     }
 
@@ -52,7 +53,6 @@ public class SessionManager : SingletonBase<SessionManager>
         {
             BackendStageGameData.Instance.ResetStage();
         }
-
         BackendStageGameData.Instance.UpdateStage();
         Debug.Log($"[SessionManager] Ending game");
         SceneManager.LoadScene("Scene_Lobby", LoadSceneMode.Single);
