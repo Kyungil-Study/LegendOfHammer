@@ -26,6 +26,9 @@ public class Monster : MonoBehaviour, IBattleCharacter
     private float mProjectileDamage;
     private bool mIsFirng = false;
     
+    [Header("사망 시 애니메이션")]  // 직접 애니메이션 오브젝트 생성
+    [SerializeField] private GameObject deathAnimationPrefab;
+    
     [Header("지그재그")] [Tooltip("zigzagAmplitude: 진동폭, zigzagFrequency: 주기")]
     [SerializeField] private float zigzagAmplitude = 1f;
     [SerializeField] private float zigzagFrequency = 2f;
@@ -66,7 +69,6 @@ public class Monster : MonoBehaviour, IBattleCharacter
     
     [Header("넉백 설정")] [Tooltip("지속 시간, 넉백 세기는 Squad에")]
     [SerializeField] private float knockbackDuration = 0.2f;  // 넉백 지속 시간
-    private float knockbackForce;
     
     private Rigidbody2D rigid;
     
@@ -74,11 +76,11 @@ public class Monster : MonoBehaviour, IBattleCharacter
     private int   mAttackPower;
     private int   mCurrentHP;
     private int   mMaxHP;
-    public int MaxHP => mMaxHP;
     
     private EnemyMovementPattern mMovementPattern;
     private EnemyAttackPattern   mAttackPattern;
     
+    public int MaxHP => mMaxHP;
     public void SetPlayer(GameObject player) => Player = player;
     
     void Awake()
@@ -171,6 +173,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
     public void OnDeath()
     {
+        // 죽음 이펙트 생성 후 파괴시키기 ? Instantiate(deathAnimationPrefab);
         BattleEventManager.Instance.CallEvent(new DeathEventArgs(this)); 
         Destroy(gameObject);
     }
@@ -376,7 +379,9 @@ public class Monster : MonoBehaviour, IBattleCharacter
     
     IEnumerator OnSuicide()
     {
-        // 추가 : Fade 처리하면 좋을 듯, 빨간색으로 깜빡깜빡
+        // 추가 : Fade 처리하면 좋을 듯, 빨간색으로 깜빡깜빡,
+        // BattleEventManager.Instance.CallEvent(new SuicideEvent(this, suicideDelay)); 이런 식으로 ?
+        
         yield return new WaitForSeconds(suicideDelay);
 
         var exposionObject = Instantiate(explosionPrefab, transform.position, Quaternion.identity);

@@ -85,6 +85,7 @@ public class AliveMonsterEventArgs : BattleEventArgs
 
 public class DeathEventArgs : BattleEventArgs
 {
+    // 사망시 사망한 위치에 사망 이펙트 처리하도록?
     public IBattleCharacter Target { get; private set; }
 
     public DeathEventArgs(IBattleCharacter target)
