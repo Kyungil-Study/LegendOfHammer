@@ -59,13 +59,11 @@ public class ArcherProjectileAugment : ArcherAugment
     // 추가 화살 공격력 계수 // 중복되는건지 확인 필요
     public float AdditionalArrowAttackRatio { get; set; }
     
-    public float TargetAdditionalDamageRatio  { get; set; }
 
     public ArcherProjectileAugment(ArcherAugmentTSV tsv) : base(tsv)
     {
         AdditionalProjectileAttackRatioIncreased = tsv.AdditionalProjectileAttackRatioIncreased;
         AdditionalArrowAttackRatio = tsv.AdditionalArrowAttackRatio;
-        TargetAdditionalDamageRatio = tsv.TargetAdditionalDamageRatio;
     }
 
     public override void Apply(Archer archer, bool isFinalUpgrade)
@@ -82,8 +80,6 @@ public class ArcherProjectileAugment : ArcherAugment
         // 추가 화살 공격력 계수 적용
         archer.subProjectileAttackFactor = AdditionalArrowAttackRatio;
         
-        archer.targetAdditionalDamageFactor = TargetAdditionalDamageRatio;
-        
         archer.IsFinalSubProjectile = isFinalUpgrade;
     }
 }
@@ -92,16 +88,23 @@ public class ArcherPenetrationAugment : ArcherAugment
 {
     // 관통 횟수 증가
     public int PenetrationCountIncreased { get; set; }
-    
+    public float TargetAdditionalDamageRatio  { get; set; }
+
     public ArcherPenetrationAugment(ArcherAugmentTSV tsv) : base(tsv)
     {
         PenetrationCountIncreased = tsv.PenetrationIncreased;
+        TargetAdditionalDamageRatio = tsv.TargetAdditionalDamageRatio;
     }
 
     public override void Apply(Archer archer, bool isFinalUpgrade)
     {
         // 관통 횟수 증가 적용
         archer.pierceLimit += PenetrationCountIncreased;
+        archer.targetAdditionalDamageFactor = TargetAdditionalDamageRatio;
+        if (isFinalUpgrade)
+        {
+            archer.pierceLimit = 1000000; // 최종 업그레이드 시 관통 횟수 무제한  
+        }
     }
 }
 
