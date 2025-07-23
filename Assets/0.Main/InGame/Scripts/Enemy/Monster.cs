@@ -9,10 +9,9 @@ using UnityEngine;
 
 public class Monster : MonoBehaviour, IBattleCharacter
 {
-    // ====== Runtime ======
-    [SerializeField] private EnemyID enemyID;            // <- 진짜 보관
-    public EnemyID EnemyID => enemyID;                   // 외부 읽기용
-    public void SetEnemyID(EnemyID id) => enemyID = id;  // 스포너에서 세팅
+    [SerializeField] private EnemyID enemyID;           
+    public EnemyID EnemyID => enemyID;                  
+    public void SetEnemyID(EnemyID id) => enemyID = id; 
     public MonsterStat Stat => stat;
     public class MonsterRuntimeState
     {
@@ -21,33 +20,29 @@ public class Monster : MonoBehaviour, IBattleCharacter
         public float ShieldRate = 1f;
     }
     public MonsterRuntimeState State { get; } = new MonsterRuntimeState();
-    public void SetPlayer(GameObject player) => this.player = player;
     public GameObject Player => player;
-
-    // ====== Serialize ======
+    public void SetPlayer(GameObject player) => this.player = player;
     
-    [Header("플레이어")]
-    [SerializeField] private GameObject player;
+    [Header("충돌 레이어 설정")]
+    private GameObject player;
     [SerializeField] private LayerMask playerLayerMask;
     [SerializeField] private LayerMask projectileLayerMask;
     public LayerMask PlayerLayerMask      => playerLayerMask;
     public LayerMask ProjectileLayerMask  => projectileLayerMask;
 
-    [Header("Move Configs")]
-    [SerializeField] private ZigzagMoveConfig zigzagCfg = new();
-    [SerializeField] private ChaseMoveConfig  chaseCfg  = new();
-    [SerializeField] private FlyingMoveConfig flyingCfg = new();
+    [Header("이동 설정 : 지그재그")] [SerializeField] private ZigzagMoveConfig zigzagCfg = new();
+    [Header("이동 설정 : 추적형")]  [SerializeField] private ChaseMoveConfig  chaseCfg  = new();
+    [Header("이동 설정 : 체공형")]  [SerializeField] private FlyingMoveConfig flyingCfg = new();
     public ZigzagMoveConfig  ZigzagConfig      => zigzagCfg;
     public ChaseMoveConfig   ChaseConfig       => chaseCfg;
     public FlyingMoveConfig  FlyingMoveConfig  => flyingCfg;
 
-    [Header("Attack Configs")]
-    [SerializeField] private SuicideAttackConfig suicideCfg;
-    [SerializeField] private ShieldConfig       shieldCfg;
-    [SerializeField] private SniperAttackConfig sniperCfg;
-    [SerializeField] private SpreadAttackConfig spreadCfg;
-    [SerializeField] private RadialAttackConfig radialCfg;
-    [SerializeField] private FlyingAttackConfig flyingAtkCfg;
+    [Header("공격 설정 : 자폭형")] [SerializeField] private SuicideAttackConfig suicideCfg;
+    [Header("공격 설정 : 쉴드형")] [SerializeField] private ShieldConfig shieldCfg;
+    [Header("공격 설정 : 저격형")] [SerializeField] private SniperAttackConfig sniperCfg;
+    [Header("공격 설정 : 분사형")] [SerializeField] private SpreadAttackConfig spreadCfg;
+    [Header("공격 설정 : 방사형")] [SerializeField] private RadialAttackConfig radialCfg;
+    [Header("공격 설정 : 체공형")] [SerializeField] private FlyingAttackConfig flyingAtkCfg;
     public SuicideAttackConfig SuicideCfg   => suicideCfg;
     public ShieldConfig       ShieldCfg     => shieldCfg;
     public SniperAttackConfig SniperCfg     => sniperCfg;
@@ -55,12 +50,12 @@ public class Monster : MonoBehaviour, IBattleCharacter
     public RadialAttackConfig RadialCfg     => radialCfg;
     public FlyingAttackConfig FlyingAtkCfg  => flyingAtkCfg;
 
-    [Header("Knockback")]
-    [SerializeField] private float knockbackDuration = 0.2f;
+    [Header("넉백 설정")] [SerializeField] private float knockbackDuration = 0.2f;
 
-    private IMoveBehaviour   move;
     private IAttackBehaviour attack;
-    private Rigidbody2D      rigid;
+    private IMoveBehaviour move;
+    
+    private Rigidbody2D rigid;
     private MonsterStat stat;
 
     void Awake()
@@ -108,7 +103,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
         move?.OnTriggerEnter2D(col);
         attack?.OnTriggerEnter2D(col);
 
-        if ((attack is SuicideAttack) == false) // 자폭 노딜
+        if ((attack is SuicideAttack) == false) // SuicideAttack는 딜 무시
         {
             int bit = 1 << col.gameObject.layer;
             if ((playerLayerMask.value & bit) != 0 && col.TryGetComponent<IBattleCharacter>(out var target))
@@ -120,7 +115,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
             }
         }
 
-        if (col.gameObject.layer == 9)  // 클리어존
+        if (col.gameObject.layer == 9)  // ClearZone
         {
             BattleEventManager.Instance.CallEvent(new AliveMonsterEventArgs(this));
             Destroy(gameObject);
@@ -173,18 +168,18 @@ public class Monster : MonoBehaviour, IBattleCharacter
         rigid.velocity = Vector2.zero;
     }
 
-    // === (선택) 디버그 Gizmos ===
+    // === 디버그 Gizmos ===
     void OnDrawGizmosSelected()
     {
         // Chase 감지 범위
-        if (chaseCfg != null)
+        if (move is ChaseMove chaseMove && chaseCfg != null)
         {
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(transform.position, chaseCfg.detectRange);
         }
 
         // Shield 방어각
-        if (shieldCfg != null)
+        if (attack is ShieldAttack shieldAttack && shieldCfg != null)
         {
             Gizmos.color = Color.blue;
             Vector2 origin = (Vector2)transform.position + shieldCfg.pivotOffset;

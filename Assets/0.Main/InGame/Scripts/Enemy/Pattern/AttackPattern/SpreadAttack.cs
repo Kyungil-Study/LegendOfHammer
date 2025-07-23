@@ -30,7 +30,7 @@ public class SpreadAttack : ProjectileAttackBase
             (
                 angles.Length,
                 0f,
-                idx => Rotate(Vector2.down, angles[idx]),
+                idx => SetAngle(Vector2.down, angles[idx]),
                 mConfig.projectilePrefab,
                 mConfig.projectileSpeed,
                 mMonster.Stat.FinalStat.Atk,
