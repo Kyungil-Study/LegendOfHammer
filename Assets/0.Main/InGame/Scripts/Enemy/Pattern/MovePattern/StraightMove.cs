@@ -11,9 +11,9 @@ public class StraightMove : IMoveBehaviour
         mMonster = monster;
     }
 
-    public void Tick(float dt)
+    public void Tick(float time)
     {
-        mMonster.transform.position += Vector3.down * (mMonster.Stat.FinalStat.MoveSpeed * dt);
+        mMonster.transform.position += Vector3.down * (mMonster.Stat.FinalStat.MoveSpeed * time);
     }
 
     public void OnTriggerEnter2D(Collider2D col) { }

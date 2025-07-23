@@ -16,7 +16,8 @@ public class MonsterStat : MonoBehaviour
     public StatField<int>   Atk;
     public StatField<float> MoveSpeed;
 
-    public EnemyID   EnemyID   => enemyID;
+    public EnemyID EnemyID => enemyID;
+    public void SetID(EnemyID id) => enemyID = id;
     public StatBlock FinalStat { get; private set; }
     public int CurrentHP { get; private set; }
     
@@ -65,7 +66,10 @@ public class MonsterStat : MonoBehaviour
     {
         for (int i = modifiers.Count - 1; i >= 0; i--)
         {
-            if (modifiers[i].IsExpired) modifiers.RemoveAt(i);
+            if (modifiers[i].IsExpired)
+            {
+                modifiers.RemoveAt(i);
+            }
         }
     }
     
