@@ -117,6 +117,7 @@ GameObject:
   - component: {fileID: 7613585881291570754}
   - component: {fileID: 319402234662238148}
   - component: {fileID: 3874214853159092470}
+  - component: {fileID: 9037222963213603796}
   - component: {fileID: 7494431464099580550}
   - component: {fileID: 5546129984101200141}
   m_Layer: 7
@@ -214,6 +215,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &9037222963213603796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8015743650478422896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 388b8d60cb6ec3843ac33db0821ea88e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyID: 0
+  HP:
+    Modify: 0
+    Value: 0
+  Atk:
+    Modify: 0
+    Value: 0
+  MoveSpeed:
+    Modify: 0
+    Value: 0
 --- !u!114 &7494431464099580550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -226,31 +249,61 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3380768c582997f41b7fda6a7ab1e040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyID: 12009
-  Player: {fileID: 0}
+  player: {fileID: 0}
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 64
   projectileLayerMask:
     serializedVersion: 2
     m_Bits: 1024
-  projectilePrefab: {fileID: 5122971031347301392, guid: 623e67ce00306e349ac9d084a76d79d4, type: 3}
-  projectileSpeed: 5
-  fireInterval: 3
-  deathAnimationPrefab: {fileID: 0}
-  zigzagAmplitude: 0.5
-  zigzagFrequency: 2
-  OffsetX: 0.75
-  suicideDelay: 1
-  detectRange: 0.5
-  attackRange: 0.75
-  explosionPrefab: {fileID: 6111301031846871093, guid: 9a3809abee10ab54188078ab046f1168, type: 3}
-  spreadFireInterval: 0.2
-  spreadFireCount: 3
-  distanceToStop: 3
-  shieldRadius: 1.2
-  shieldAngleDeg: 90
-  shieldPivotOffset: {x: 0, y: -0.2}
+  zigzagCfg:
+    amplitude: 1
+    frequency: 2
+    offsetX: 0.5
+  chaseCfg:
+    detectRange: 0.5
+  flyingCfg:
+    distanceToStop: 3
+  suicideCfg:
+    delay: 2
+    detectRange: 0.5
+    attackRange: 0.75
+    explosionPrefab: {fileID: 0}
+  shieldCfg:
+    radius: 1.2
+    angleDeg: 90
+    pivotOffset: {x: 0, y: 0}
+  sniperCfg:
+    burstCount: 3
+    burstInterval: 0.15
+    fireInterval: 3
+    projectilePrefab: {fileID: 0}
+    projectileSpeed: 5
+  spreadCfg:
+    burstCount: 3
+    burstInterval: 0.2
+    leftAngles:
+    - 0
+    - -15
+    - -30
+    - -45
+    rightAngles:
+    - 0
+    - 15
+    - 30
+    - 45
+    projectilePrefab: {fileID: 0}
+    projectileSpeed: 5
+  radialCfg:
+    projectileCount: 12
+    betweenAngle: 30
+    fireInterval: 3
+    projectilePrefab: {fileID: 0}
+    projectileSpeed: 5
+  flyingAtkCfg:
+    fireInterval: 1
+    projectilePrefab: {fileID: 0}
+    projectileSpeed: 5
   knockbackDuration: 0.2
 --- !u!114 &5546129984101200141
 MonoBehaviour:
