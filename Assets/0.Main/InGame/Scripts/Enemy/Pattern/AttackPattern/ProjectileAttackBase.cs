@@ -26,7 +26,7 @@ public abstract class ProjectileAttackBase : CoroutineAttackBase
         }
     }
 
-    protected Vector2 Rotate(Vector2 vec, float deg)
+    protected Vector2 SetAngle(Vector2 vec, float deg)
     {
         float rad = deg * Mathf.Deg2Rad;
         float cosX  = Mathf.Cos(rad);

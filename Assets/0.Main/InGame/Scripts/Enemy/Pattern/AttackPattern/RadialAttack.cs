@@ -24,7 +24,7 @@ public class RadialAttack : ProjectileAttackBase
             (
                 mConfig.projectileCount,
                 0f,
-                i => Rotate(Vector2.down, i * mConfig.betweenAngle),
+                i => SetAngle(Vector2.down, i * mConfig.betweenAngle),
                 mConfig.projectilePrefab,
                 mConfig.projectileSpeed,
                 mMonster.Stat.FinalStat.Atk,

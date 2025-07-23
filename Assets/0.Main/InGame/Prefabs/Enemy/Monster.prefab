@@ -53,7 +53,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 54012f0b0a64e59449f75d5b095da903, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -227,7 +227,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 388b8d60cb6ec3843ac33db0821ea88e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyID: 0
   HP:
     Modify: 0
     Value: 0
@@ -249,7 +248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3380768c582997f41b7fda6a7ab1e040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  enemyID: 0
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -321,16 +320,22 @@ MonoBehaviour:
   appearances:
   - sprite: {fileID: 21300000, guid: c560acba54139134b91efb372b8c8790, type: 3}
     idleClip: {fileID: 7400000, guid: 40e1d67f75e9b7845828af50e865e9d6, type: 2}
+    hitBoxSize: 0
   - sprite: {fileID: 21300000, guid: 276e7cb5c55bc224ebbc1305cd62570f, type: 3}
     idleClip: {fileID: 7400000, guid: 087312862b422cc4cb21e44844b3be07, type: 2}
+    hitBoxSize: 0
   - sprite: {fileID: 21300000, guid: 216e16886fee16f419df3566cc393aaa, type: 3}
     idleClip: {fileID: 7400000, guid: 36aa87f86d5a0a44f89a12bc1b94d94a, type: 2}
+    hitBoxSize: 0
   - sprite: {fileID: 21300000, guid: fbb752f4fd0eea04b8ab2ff2aa86ee65, type: 3}
     idleClip: {fileID: 7400000, guid: e272bf485008c6040bcd2da0524c2f9e, type: 2}
+    hitBoxSize: 0
   - sprite: {fileID: 21300000, guid: 4df5556191c164a4a92326b55d60d51c, type: 3}
     idleClip: {fileID: 7400000, guid: 0a0a2209e757e0840a605a988a82fb1c, type: 2}
+    hitBoxSize: 0
   - sprite: {fileID: 21300000, guid: 15156f945630f164aba991226f4c0b5f, type: 3}
     idleClip: {fileID: 7400000, guid: 9211ac6bf910282488d2880bfbd869ed, type: 2}
+    hitBoxSize: 0
   mHitBoxSize: 1
   hitEffect: {fileID: 0}
   PlayCount: 4
