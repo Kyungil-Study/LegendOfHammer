@@ -1139,6 +1139,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1162305642958701716, guid: cf1c8b0d30ff0be428c9353fa9e67d88, type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 2039
+      objectReference: {fileID: 0}
     - target: {fileID: 2434741627675638777, guid: cf1c8b0d30ff0be428c9353fa9e67d88, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -1151,6 +1155,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 192030469}
+    - target: {fileID: 3940422002704632492, guid: cf1c8b0d30ff0be428c9353fa9e67d88, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8592751778208886167, guid: cf1c8b0d30ff0be428c9353fa9e67d88, type: 3}
       propertyPath: m_Name
       value: HPCanvas
@@ -1322,6 +1330,10 @@ PrefabInstance:
       propertyPath: testSpawnID
       value: 12007
       objectReference: {fileID: 0}
+    - target: {fileID: 1912313772269553298, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
+      propertyPath: TestEnemyPrefab
+      value: 
+      objectReference: {fileID: 7494431464099580550, guid: 6829797761ff95b4584334c4f0a4d211, type: 3}
     - target: {fileID: 2057616619765667853, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
       propertyPath: m_Name
       value: MonsterSpawner
