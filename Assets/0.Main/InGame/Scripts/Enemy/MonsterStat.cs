@@ -9,27 +9,22 @@ using UnityEngine.Serialization;
 
 public class MonsterStat : MonoBehaviour
 {
-    [SerializeField] private EnemyID enemyID;
-
     [Header("몬스터 기본 스탯")] [Tooltip("기본 스탯 수정용")]
     public StatField<int>   HP;
     public StatField<int>   Atk;
     public StatField<float> MoveSpeed;
-
-    public EnemyID EnemyID => enemyID;
-    public void SetID(EnemyID id) => enemyID = id;
+    
     public StatBlock FinalStat { get; private set; }
     public int CurrentHP { get; private set; }
+    public int MaxHP { get; private set; }
     
     readonly List<IDamageModifier> modifiers = new();
     
     public void AddModifier(IDamageModifier mod) => modifiers.Add(mod);
     
     /// <summary> TSV값 불러오기 + 변경하기 (스테이지 스케일링은 나중에 필요 시 내부에서 처리)</summary>
-    public void Initialize(int stageIndex)
+    public void Initialize(EnemyData data, int stageIndex)
     {
-        var data = EnemyDataManager.Instance.Records[enemyID];
-
         var baseStat = new StatBlock
         {
             HP        = data.HP,
@@ -37,17 +32,15 @@ public class MonsterStat : MonoBehaviour
             MoveSpeed = data.Move_Speed
         };
 
-        // (선택) 스테이지 HP 보정이 필요해지면 여기서 직접 처리
-        // baseStat.HP = Mathf.RoundToInt(baseStat.HP * GetStageHpMultiplier(stageIndex));
-
         FinalStat = new StatBlock
         {
             HP        = HP.Apply(baseStat.HP),
             Atk       = Atk.Apply(baseStat.Atk),
             MoveSpeed = MoveSpeed.Apply(baseStat.MoveSpeed)
         };
-        
-        CurrentHP = FinalStat.HP; // 여기서 HP도 세팅
+
+        MaxHP = FinalStat.HP;
+        CurrentHP = MaxHP;
     }
     
     public int ApplyIncomingDamage(int dmg)

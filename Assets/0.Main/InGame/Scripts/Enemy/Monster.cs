@@ -10,14 +10,10 @@ using UnityEngine;
 public class Monster : MonoBehaviour, IBattleCharacter
 {
     // ====== Runtime ======
-    public EnemyID EnemyID
-    {
-        get => stat.EnemyID;
-        set => stat.SetID(value);
-    }
+    [SerializeField] private EnemyID enemyID;            // <- 진짜 보관
+    public EnemyID EnemyID => enemyID;                   // 외부 읽기용
+    public void SetEnemyID(EnemyID id) => enemyID = id;  // 스포너에서 세팅
     public MonsterStat Stat => stat;
-    
-    // ====== 런타임 공유 필드 ======
     public class MonsterRuntimeState
     {
         public bool  Detected;
@@ -25,7 +21,6 @@ public class Monster : MonoBehaviour, IBattleCharacter
         public float ShieldRate = 1f;
     }
     public MonsterRuntimeState State { get; } = new MonsterRuntimeState();
-    public void SetEnemyID(EnemyID id)   => stat.SetID(id);
     public void SetPlayer(GameObject player) => this.player = player;
     public GameObject Player => player;
 
@@ -88,9 +83,10 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
     void Start()
     {
-        stat.Initialize(BattleManager.Instance.StageIndex);
-
-        var data = EnemyDataManager.Instance.Records[stat.EnemyID];
+        var data = EnemyDataManager.Instance.Records[enemyID];
+        var stage = BattleManager.Instance.StageIndex;
+        
+        stat.Initialize(data, stage);
 
         move   = MovementFactory.Create(data.EnemyMovementPattern, this);
         attack = AttackFactory.Create(data.Atk_Pattern, this);
@@ -112,8 +108,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
         move?.OnTriggerEnter2D(col);
         attack?.OnTriggerEnter2D(col);
 
-        // 자폭형은 공격 패턴 내부에서 처리하므로 충돌 딜 제외
-        if ((attack is SuicideAttack) == false)
+        if ((attack is SuicideAttack) == false) // 자폭 노딜
         {
             int bit = 1 << col.gameObject.layer;
             if ((playerLayerMask.value & bit) != 0 && col.TryGetComponent<IBattleCharacter>(out var target))
@@ -125,8 +120,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
             }
         }
 
-        // ClearZone 처리 (Layer 9)
-        if (col.gameObject.layer == 9)
+        if (col.gameObject.layer == 9)  // 클리어존
         {
             BattleEventManager.Instance.CallEvent(new AliveMonsterEventArgs(this));
             Destroy(gameObject);
