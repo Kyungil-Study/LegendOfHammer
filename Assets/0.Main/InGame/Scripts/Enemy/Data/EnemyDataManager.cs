@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using System.Threading.Tasks;
 
-public class EnemyDataManager : SingletonBase<EnemyDataManager>
+public class EnemyDataManager : MonoSingleton<EnemyDataManager>
 {
     [SerializeField] private string resourcePath = "EnemyData";
     
@@ -22,9 +22,9 @@ public class EnemyDataManager : SingletonBase<EnemyDataManager>
         }
     }
 
-    public override void OnInitialize()
+    protected override void Initialize()
     {
-        base.OnInitialize();
+        base.Initialize();
         if (string.IsNullOrEmpty(resourcePath))
         {
             throw new ArgumentNullException(nameof(resourcePath), "Resource path cannot be null or empty.");

@@ -57,7 +57,7 @@ public class BattleManager : MonoSingleton<BattleManager>
         var data = EnemyDataManager.Instance.Records[monster.EnemyID];
         if (data.Enemy_Rank.Equals(EnemyRank.Boss))
         {
-            EndGame(false);
+            EndGame(true);
         }
         // todo: UI 완료되면 활성화
         /*chaseGuage += chaseIncreaseRate;

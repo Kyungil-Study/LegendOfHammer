@@ -32,9 +32,10 @@ public class ClassAugmentUserData
     {
         if (IsMaxLevel())
         {
-            return null; // Cannot get next level data if already at max level
+            Debug.LogWarning($" [ClassAugmentUserData] Cannot get next level data for {ID} at level {Level}. Already at max level.");
+            return ClassAugmentManager.Instance.GetAugmentWithOptionAndLevel(OptionID, Level);
         }
-        return ClassAugmentManager.Instance.GetAugment(ID, OptionID, Level + 1);
+        return ClassAugmentManager.Instance.GetAugmentWithOptionAndLevel(OptionID, Level + 1);
     }
 
     public bool IsMaxLevel()
@@ -105,6 +106,7 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
 
     private void OnSelectAugment(SelectAugmentEventArgs args)
     {
+        Debug.Log("[AugmentInventory] OnSelectAugment called with data: " + args.Data);
         var augment = args.Data;
 
         switch (augment.GetAugmentType())
@@ -114,11 +116,13 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
                 var commonExist = commonAugments.Any(a => a.Rarity == commonArgument.Rarity && a.OptionID == commonArgument.OptionID);
                 if (commonExist == false)
                 {
+                    Debug.Log($"[AugmentInventory] Adding new Common Augment: {commonArgument.GetName()}");
                     var commonData = new CommonAugmentUserData(commonArgument.GetID(), commonArgument.GetOptionID(), commonArgument.Rarity, 1);
                     commonAugments.Add(commonData);
                 }
                 else
                 {
+                    Debug.Log($"[AugmentInventory] Upgrading existing Common Augment: {commonArgument.GetName()}");
                     var existing = commonAugments.First(a => a.ID == commonArgument.ID && a.OptionID == commonArgument.OptionID);
                     existing.Count++;
                 }
@@ -127,11 +131,13 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
                 var exist = warriorAugments.Any(a => a.ID == augment.GetID() && a.OptionID == augment.GetOptionID());
                 if (exist == false)
                 {
+                    Debug.Log($"[AugmentInventory] Adding new Warrior Augment: {augment.GetName()}");
                     var warriorData = new ClassAugmentUserData(augment.GetID(), augment.GetOptionID(), 1);
                     warriorAugments.Add(warriorData);
                 }
                 else
                 {
+                    Debug.Log($"[AugmentInventory] Upgrading existing Warrior Augment: {augment.GetName()}");
                     var existing = warriorAugments.First(a => a.ID == augment.GetID() && a.OptionID == augment.GetOptionID());
                     existing.NextLevel();
                 }
@@ -140,11 +146,13 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
                 var archerExist = archerAugments.Any(a => a.ID == augment.GetID() && a.OptionID == augment.GetOptionID());
                 if (archerExist == false)
                 {
+                    Debug.Log($"[AugmentInventory] Adding new Archer Augment: {augment.GetName()}");
                     var archerData = new ClassAugmentUserData(augment.GetID(), augment.GetOptionID(), 1);
                     archerAugments.Add(archerData);
                 }
                 else
                 {
+                    Debug.Log($"[AugmentInventory] Upgrading existing Archer Augment: {augment.GetName()}");
                     var existing = archerAugments.First(a => a.ID == augment.GetID() && a.OptionID == augment.GetOptionID());
                     existing.NextLevel();
                 }
@@ -153,11 +161,13 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
                 var wizardExist = wizardAugments.Any(a => a.ID == augment.GetID() && a.OptionID == augment.GetOptionID());
                 if (wizardExist == false)
                 {
+                    Debug.Log($"[AugmentInventory] Adding new Wizard Augment: {augment.GetName()}");
                     var wizardData = new ClassAugmentUserData(augment.GetID(), augment.GetOptionID(), 1);
                     wizardAugments.Add(wizardData);
                 }
                 else
                 {
+                    Debug.Log($"[AugmentInventory] Upgrading existing Wizard Augment: {augment.GetName()}");
                     var existing = wizardAugments.First(a => a.ID ==  augment.GetID() && a.OptionID == augment.GetOptionID());
                     existing.NextLevel();
                 }
@@ -189,6 +199,8 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
 
         void RegistUserData<T>(string backendData, List<T> userData)
         {
+            if (string.IsNullOrEmpty(backendData)) return;
+            
             var result = JsonReader.Read<List<T>>(backendData);
             userData.AddRange(result);
         }
@@ -267,6 +279,7 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
 
     public void ApplyAugmentsToArcher(Archer archer)
     {
+        Debug.Log($"[AugmentInventory] Applying Augments {archerAugments.Count} to Archer...");
         foreach (var archerAugment in archerAugments)
         {
             var data = archerAugment.GetData() as ArcherAugment;
@@ -276,7 +289,7 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
                 continue;
             }
             
-            data.Apply(archer);
+            data.Apply(archer, archerAugment.IsMaxLevel());
             Debug.Log($"[AugmentInventory] Applied Archer Augment: {data.GetName()} to Archer.");
             
         }
