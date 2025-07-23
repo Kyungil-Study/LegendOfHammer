@@ -109,6 +109,11 @@ public class BackendStageGameData
         stage.Maxstage += 1;
         // stage.StageAttemptCount += 1;
     }
+    
+    public void ResetCurrentStage()
+    {
+        stage.Currentstage = 1;
+    }
 
     // 랭킹 시스템 도입후 사용
     public void ResetStage()
