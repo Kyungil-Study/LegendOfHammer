@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,13 @@ public class ArcherArrow : HeroProjectile
 {
     public int pierceLimit = 0;
     public Monster targetMonster;
-    public override int Damage => Owner.CalculateDamage(IsCritical);
+    public float targetAdditionalDamageFactor = 1;
+    
+    public Func<bool,int> DamageCalculationFunc { get; set; }
+    public override int Damage => 
+        DamageCalculationFunc == null ? 
+            Owner.CalculateDamage(IsCritical) : 
+            DamageCalculationFunc.Invoke(IsCritical);
 
     /// <summary>
     /// 등급, 최대 체력, 거리를 기준으로 정렬 후 가장 먼저 나오는 몬스터를 타겟으로 설정합니다.
@@ -23,7 +30,7 @@ public class ArcherArrow : HeroProjectile
        var monsters =  BattleManager.Instance.GetAllMonsters();
        if (monsters.Any() == false)
        {
-           Debug.Log("No monsters found to target.");
+           //Debug.Log("No monsters found to target.");
            return null;
        }
 
@@ -43,11 +50,16 @@ public class ArcherArrow : HeroProjectile
     {
         OnHit?.Invoke();
         pierceLimit--;
-        
+
+        bool isSuccesHitTarget = targetMonster != null ? targetMonster.Equals(target) : false;
+        targetMonster = target;
+
+        float tagetFactor = isSuccesHitTarget ? 1 : targetAdditionalDamageFactor;
+        int FinalDamage = (int)(Damage * tagetFactor);
         TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(
             Squad.Instance,
             target,
-            Damage
+            FinalDamage 
         );
         BattleEventManager.Instance.CallEvent(eventArgs);
         
@@ -56,4 +68,5 @@ public class ArcherArrow : HeroProjectile
             Destroy(gameObject);
         }
     }
+
 }

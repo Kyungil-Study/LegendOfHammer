@@ -25,6 +25,6 @@ public class AugmentSlot : MonoBehaviour , IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        BattleEventManager.Instance.CallEvent(new SelectAugmentEventArgs(augment));
+        AugmentGotchaSystem.Instance.OnSelectAugment(augment);
     }
 }
