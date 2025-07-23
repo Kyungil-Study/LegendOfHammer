@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 // StatComponent 책임: “스탯 로딩/오버라이드/디버프 적용/HP관리”
 // 받는 피해 증가 디버프: IDamageModifier로 구현, 리스트에서 처리
 
-public class MonsterStatComponent : MonoBehaviour
+public class MonsterStat : MonoBehaviour
 {
     [SerializeField] private EnemyID enemyID;
 
@@ -16,15 +16,15 @@ public class MonsterStatComponent : MonoBehaviour
     public StatField<int>   Atk;
     public StatField<float> MoveSpeed;
 
-    [HideInInspector] public StatBlock FinalStat { get; private set; }
-    [HideInInspector] public EnemyID   EnemyID   => enemyID;
-
-    // (선택) 현재 HP를 여기서 관리한다면:
+    public EnemyID   EnemyID   => enemyID;
+    public StatBlock FinalStat { get; private set; }
     public int CurrentHP { get; private set; }
     
     readonly List<IDamageModifier> modifiers = new();
-
-    /// <summary>TSV값을 읽어와 최종값을 만든다. (스테이지 스케일링은 나중에 필요 시 내부에서 처리)</summary>
+    
+    public void AddModifier(IDamageModifier mod) => modifiers.Add(mod);
+    
+    /// <summary> TSV값 불러오기 + 변경하기 (스테이지 스케일링은 나중에 필요 시 내부에서 처리)</summary>
     public void Initialize(int stageIndex)
     {
         var data = EnemyDataManager.Instance.Records[enemyID];
@@ -48,9 +48,7 @@ public class MonsterStatComponent : MonoBehaviour
         
         CurrentHP = FinalStat.HP; // 여기서 HP도 세팅
     }
-
-    public void AddModifier(IDamageModifier mod) => modifiers.Add(mod);
-
+    
     public int ApplyIncomingDamage(int dmg)
     {
         float damage = dmg;
@@ -58,21 +56,33 @@ public class MonsterStatComponent : MonoBehaviour
         for (int i = modifiers.Count - 1; i >= 0; i--)
         {
             damage = modifiers[i].ModifyIncoming(damage);
-            
-            if (modifiers[i].IsExpired)
-            {
-                modifiers.RemoveAt(i);
-            }
         }
         return Mathf.RoundToInt(damage);
     }
     
-    /// <summary>HP 감소 및 죽음 여부 반환</summary>
+    // 디버프 Monster.cs의 Update()에서 시간 체크
+    public void Tick(float time)
+    {
+        for (int i = modifiers.Count - 1; i >= 0; i--)
+        {
+            if (modifiers[i].IsExpired) modifiers.RemoveAt(i);
+        }
+    }
+    
+    // HP 감소 및 죽음 여부 반환
     public bool ReduceHP(int amount)
     {
         CurrentHP -= amount;
         return CurrentHP <= 0;
     }
+}
+
+[Serializable]
+public struct StatBlock
+{
+    public int HP;
+    public int Atk;
+    public float MoveSpeed;
 }
 
 [Serializable]
@@ -84,14 +94,6 @@ public struct StatField<T>
     public T Apply(T baseValue) => Modify? Value : baseValue;
 }
 
-[Serializable]
-public struct StatBlock
-{
-    public int HP;
-    public int Atk;
-    public float MoveSpeed;
-}
-
 public interface IDamageModifier
 {
     float ModifyIncoming(float baseDamage); 
@@ -101,14 +103,14 @@ public interface IDamageModifier
 // 받는 피해 증가 디버프용
 public class DamageAmpModifier : IDamageModifier
 {
-    private readonly float mul;
+    private readonly float multipleValue;
     private readonly float endTime;
     
-    public DamageAmpModifier(float mul, float duration) // 언제까지 ?
+    public DamageAmpModifier(float value, float duration)
     {
-        this.mul = mul;
+        this.multipleValue = value;
         endTime  = Time.time + duration;
     }
-    public float ModifyIncoming(float baseDamage) => baseDamage * mul;
+    public float ModifyIncoming(float baseDamage) => baseDamage * multipleValue;
     public bool IsExpired => Time.time >= endTime;
 }

@@ -7,6 +7,12 @@ using Random = UnityEngine.Random;
 
 public class Monster : MonoBehaviour, IBattleCharacter
 {
+    private MonsterStat stat;
+    public MonsterStat Stat => stat;
+
+    private IMoveBehaviour move;
+    private IAttackBehaviour attack;
+    
     [Header("데이터 연동")] [Tooltip("몬스터 유형 체크")] 
     [SerializeField] private EnemyID enemyID;
     
@@ -86,6 +92,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
+        stat = GetComponent<MonsterStat>();
     }
 
     void OnEnable()
