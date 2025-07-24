@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EnemyDeathEffect : MonoBehaviour
 {
-    [Tooltip("Spawn 시 스케일을 곱해 줄 값")]
+    [Tooltip("이펙트 크기 조절")]
     [SerializeField] private float effectScaleMultiplier = 1f;
 
     private Animator animator;
