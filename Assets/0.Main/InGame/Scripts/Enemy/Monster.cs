@@ -189,6 +189,12 @@ public class Monster : MonoBehaviour, IBattleCharacter
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(transform.position, chaseCfg.detectRange);
         }
+        
+        if (attack is SuicideAttack suicideAttack && suicideCfg != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, suicideCfg.attackRange);
+        }
 
         // Shield 방어각
         if (attack is ShieldAttack shieldAttack && shieldCfg != null)

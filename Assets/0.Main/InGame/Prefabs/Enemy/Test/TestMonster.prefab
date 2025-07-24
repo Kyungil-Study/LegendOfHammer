@@ -264,7 +264,7 @@ MonoBehaviour:
   flyingCfg:
     distanceToStop: 3
   suicideCfg:
-    delay: 3
+    delay: 2
     detectRange: 0.5
     attackRange: 0.75
     explosionPrefab: {fileID: 6111301031846871093, guid: 9a3809abee10ab54188078ab046f1168, type: 3}
@@ -338,5 +338,4 @@ MonoBehaviour:
     idleClip: {fileID: 7400000, guid: 9211ac6bf910282488d2880bfbd869ed, type: 2}
     hitBoxSize: 1
   mHitBoxSize: 1
-  hitFlashCount: 4
   hitFlashInterval: 0.2
