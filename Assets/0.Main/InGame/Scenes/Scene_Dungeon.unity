@@ -1328,7 +1328,7 @@ PrefabInstance:
       objectReference: {fileID: 634876930}
     - target: {fileID: 1912313772269553298, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
       propertyPath: testSpawnID
-      value: 12009
+      value: 22008
       objectReference: {fileID: 0}
     - target: {fileID: 1912313772269553298, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
       propertyPath: TestEnemyPrefab
