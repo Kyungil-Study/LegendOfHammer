@@ -195,8 +195,6 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
     {
         base.Initialize();
 
-        var classManager = ClassAugmentManager.Instance;
-
         void RegistUserData<T>(string backendData, List<T> userData)
         {
             if (string.IsNullOrEmpty(backendData)) return;
@@ -204,42 +202,28 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
             var result = JsonReader.Read<List<T>>(backendData);
             userData.AddRange(result);
         }
+
         
-        if(BackendAugmentData.augment == null)
-        {
-            Debug.LogWarning("BackendAugmentData.augment is null. Please check the backend data initialization.");
-            return;
-        }
-        
-        
-        // Load Augment Data from Backend
-        var archerData = BackendAugmentData.augment.ArcherAugmentData;
-        RegistUserData(archerData, archerAugments);
-        
-        var warriorData = BackendAugmentData.augment.WarriorAugmentData;
-        RegistUserData(warriorData, warriorAugments);
-        
-        var wizardData = BackendAugmentData.augment.WizardAugmentData;
-        RegistUserData(wizardData, wizardAugments);
-        
-        var commonData = BackendAugmentData.augment.CommonAugmentData;
-        RegistUserData(wizardData, commonAugments);
+        var es3Manager = ES3Manager.Instance;
+        var es3UserAugmentData = es3Manager.AugmentData;
+        RegistUserData(es3UserAugmentData.ArcherAugment, archerAugments);
+        RegistUserData(es3UserAugmentData.WarriorAugment, warriorAugments);
+        RegistUserData(es3UserAugmentData.WizardAugment, wizardAugments);
+        RegistUserData(es3UserAugmentData.CommonAugment, commonAugments);
     }
 
 
     public void SaveData()
     {
-        if (BackendAugmentData.augment == null)
-        {
-            return;
-        }
         
-        BackendAugmentData.augment.ArcherAugmentData = JsonWriter.Write(archerAugments);
-        BackendAugmentData.augment.WarriorAugmentData = JsonWriter.Write(warriorAugments);
-        BackendAugmentData.augment.WizardAugmentData = JsonWriter.Write(wizardAugments);
-        BackendAugmentData.augment.CommonAugmentData = JsonWriter.Write(commonAugments);
+        var es3Manager = ES3Manager.Instance;
+        var backendAugmentData = es3Manager.AugmentData;
+        backendAugmentData.ArcherAugment = JsonWriter.Write(archerAugments);
+        backendAugmentData.WarriorAugment = JsonWriter.Write(warriorAugments);
+        backendAugmentData.WizardAugment = JsonWriter.Write(wizardAugments);
+        backendAugmentData.CommonAugment = JsonWriter.Write(commonAugments);
+        es3Manager.SaveAumgents();
     }
-
 
     public List<ClassAugmentUserData> GetAllClassAugments()
     {
