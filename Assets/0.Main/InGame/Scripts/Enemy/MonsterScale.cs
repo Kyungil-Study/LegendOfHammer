@@ -24,8 +24,10 @@ public class MonsterScale : MonoBehaviour
     [SerializeField] private Appearance[] appearances;
     [Header("콜라이더 크기 조정 계수 : 기본값")]
     [SerializeField][Range(0.1f, 2f)] private float mHitBoxSize = 1f;
-    [Header("플래시 세팅 (피격)")]
+    [Header("이펙트 세팅 (피격 & 자폭)")]
     [SerializeField] private float  hitFlashInterval = 0.2f;
+    [SerializeField] private Color hitFlashColor = Color.white;
+    [SerializeField] private Color suicideFlashColor = Color.red;  // 빨간색
     
     private SpriteRenderer  mSpriteRenderer;
     private BoxCollider2D   mCollider;
@@ -102,7 +104,7 @@ public class MonsterScale : MonoBehaviour
     private void PlayHitFlash()
     {
         if (flashRoutine != null) StopCoroutine(flashRoutine);
-        flashRoutine = StartCoroutine(FlashCoroutine(Color.white, 1, hitFlashInterval));
+        flashRoutine = StartCoroutine(FlashCoroutine(hitFlashColor, 1, hitFlashInterval));
     }
     
     public void StartSuicideFlash(float delay, float interval)
@@ -134,7 +136,7 @@ public class MonsterScale : MonoBehaviour
         while (elapsed < delay)
         {
             mMaterial.EnableKeyword("HITEFFECT_ON");
-            mMaterial.SetColor ("_HitEffectColor", Color.red);
+            mMaterial.SetColor ("_HitEffectColor", suicideFlashColor);
             mMaterial.SetFloat("_HitEffectBlend", 1f);
             yield return new WaitForSeconds(interval);
 
