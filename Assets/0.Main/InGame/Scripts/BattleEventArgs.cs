@@ -43,9 +43,11 @@ public class StartBattleEventArgs : BattleEventArgs
 public class EndBattleEventArgs : BattleEventArgs
 {
     public bool IsVictory { get; private set; }
-    public EndBattleEventArgs( bool isVictory)
+    public bool IsBoosDead { get; set; }
+    public EndBattleEventArgs( bool isVictory, bool isBossDead)
     {
         this.IsVictory = isVictory;
+        this.IsBoosDead = isBossDead;
     }
 }
 

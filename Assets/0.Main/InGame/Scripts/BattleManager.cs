@@ -35,7 +35,7 @@ public class BattleManager : MonoSingleton<BattleManager>
         if (args.Target as Squad)
         {
             Debug.Log("Player has died. Ending game.");
-            EndGame(false);
+            EndGame(false,false);
         }
         else if(args.Target is Monster monster)
         {
@@ -45,7 +45,7 @@ public class BattleManager : MonoSingleton<BattleManager>
             if( data.Enemy_Rank.Equals(EnemyRank.Boss))
             {
                 Debug.Log($"Boss Monster has died.");
-                EndGame(true);
+                EndGame(true, true);
             }
         }
     }
@@ -57,7 +57,7 @@ public class BattleManager : MonoSingleton<BattleManager>
         var data = EnemyDataManager.Instance.Records[monster.EnemyID];
         if (data.Enemy_Rank.Equals(EnemyRank.Boss))
         {
-            EndGame(false);
+            EndGame(true, false);
         }
         // todo: UI 완료되면 활성화
         /*chaseGuage += chaseIncreaseRate;
@@ -114,14 +114,14 @@ public class BattleManager : MonoSingleton<BattleManager>
     }
 
     // Update is called once per frame
-    void EndGame(bool isVictory)
+    void EndGame(bool isVictory,bool isBossDead)
     {
         isEnded = true;
         // Here you can handle the end of the game, such as showing a UI or transitioning to another scene
         Debug.Log(isVictory ? "Battle ended with victory!" : "Battle ended with defeat!");
         
         // Call the end battle event
-        EndBattleEventArgs endEventArgs = new EndBattleEventArgs(isVictory); // Assuming victory for now
+        EndBattleEventArgs endEventArgs = new EndBattleEventArgs(isVictory,isBossDead); // Assuming victory for now
         BattleEventManager.Instance.CallEvent(endEventArgs);
     }
     

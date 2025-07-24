@@ -21,7 +21,7 @@ public class PatternActivation
     public int DisappearStage { get; set; }
 }
 
-public class PatternActivationDataManager : SingletonBase<PatternActivationDataManager>
+public class PatternActivationDataManager : MonoSingleton<PatternActivationDataManager>
 {
     [SerializeField] private string resourcePath = "PatternActivationData";
     List<PatternActivation> records = new();
@@ -37,9 +37,9 @@ public class PatternActivationDataManager : SingletonBase<PatternActivationDataM
         }
     }
 
-    public override void OnInitialize()
+    protected override void Initialize()
     {
-        base.OnInitialize();
+        base.Initialize();
         records = TSVLoader.LoadTable<PatternActivation>(resourcePath);
     }
 }
