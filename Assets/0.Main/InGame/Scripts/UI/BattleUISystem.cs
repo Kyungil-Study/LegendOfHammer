@@ -21,7 +21,7 @@ public class BattleUIController : MonoSingleton<BattleUIController> ,IPageFlowMa
             pagesDict[page.UIPageType] = page;
         }
         
-        SwapPage(UIPageType.ClassAumgentSelection);
+        SwapPage(UIPageType.LobbyPage);
         
     }
 

@@ -10,8 +10,6 @@ using UnityEngine.UI;
 
 public class BattleManager : MonoSingleton<BattleManager>
 {
-    [SerializeField] GameObject loadUI;
-
     public int StageIndex = 0;
     public int MaxStageNumber = 0;
     
@@ -66,28 +64,15 @@ public class BattleManager : MonoSingleton<BattleManager>
         }*/
     }
 
-    private void Start()
-    {
-        StartCoroutine(ReadyGame()); ;
-    }
 
-    private IEnumerator ReadyGame()
+    public void ReadyGame()
     {
-        yield return new WaitForEndOfFrame();
         Debug.Log("[BattleManager] ReadyGame called.");
-
-        loadUI.SetActive(false);
-        if(BackendStageGameData.stage == null)
-        {
-            Debug.LogWarning("[BattleManager] BackendStageGameData.stage is null. Using default stage index 1.");
-            MaxStageNumber = StageIndex;
-        }
-        else
-        {
-            StageIndex = BackendStageGameData.stage.Currentstage;; // For testing purposes, remove later
-            MaxStageNumber = BackendStageGameData.stage.Maxstage;
-        }
+        var es3Manager = ES3Manager.Instance;
+        var stageData = es3Manager.StageData;
         
+        StageIndex = stageData.CurrentStage;
+        MaxStageNumber = stageData.MaxStage;
         
         BattleEventManager.Instance.CallEvent(new ReadyBattleEventArgs(
             stageIndex: StageIndex,
