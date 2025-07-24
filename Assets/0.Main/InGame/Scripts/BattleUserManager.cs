@@ -112,4 +112,11 @@ public class ES3Manager : SingletonBase<ES3Manager>
         ES3Manager.Instance.SaveBuffered("stage", StageData);
         CommitBuffered();
     }
+
+    public void ResetAugmentData()
+    {
+        AugmentData = new ES3UserAugmentData(); // AugmentData를 새로 생성
+        ES3Manager.Instance.SaveBuffered("augment", AugmentData);
+        CommitBuffered();
+    }
 }

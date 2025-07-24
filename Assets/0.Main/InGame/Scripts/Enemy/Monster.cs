@@ -12,7 +12,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
     [SerializeField] private EnemyID enemyID;           
     public EnemyID EnemyID => enemyID;                  
     public void SetEnemyID(EnemyID id) => enemyID = id; 
-    public MonsterStat Stat => stat;
+
     public class MonsterRuntimeState
     {
         public bool  Detected;
@@ -56,11 +56,17 @@ public class Monster : MonoBehaviour, IBattleCharacter
     private IMoveBehaviour move;
     
     private Rigidbody2D rigid;
+    
     private MonsterStat stat;
+    private MonsterScale scale;
+    
+    public MonsterStat Stat => stat;
 
     void Awake()
     {
+        scale = GetComponent<MonsterScale>();
         stat = GetComponent<MonsterStat>();
+        
         rigid = GetComponent<Rigidbody2D>();
     }
 
@@ -135,9 +141,15 @@ public class Monster : MonoBehaviour, IBattleCharacter
         }
     }
 
+    [Header("사망 이펙트")] [SerializeField] private GameObject deathEffectPrefab;
     public void OnDeath()
     {
-        // TODO: deathAnimationPrefab 사용 시 여기서 Instantiate 후 Destroy(gameObject)
+        if (deathEffectPrefab != null)
+        {
+            var effect = Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
+            effect.transform.localScale = Vector3.one * scale.ScaleFactor;
+        }
+        
         BattleEventManager.Instance.CallEvent(new DeathEventArgs(this));
         Destroy(gameObject);
     }
