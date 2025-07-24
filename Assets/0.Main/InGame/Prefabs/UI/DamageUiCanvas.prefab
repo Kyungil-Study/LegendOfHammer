@@ -179,6 +179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageUITextPrefab: {fileID: 582333473862088690}
+  initialPoolSize: 10
   floatDuration: 1
   floatHeight: 0
 --- !u!1 &7531126659306295738
@@ -284,7 +285,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2039
 --- !u!1 &7681962025830800043
 GameObject:
   m_ObjectHideFlags: 0
