@@ -1,4 +1,6 @@
 
+using UnityEngine;
+
 public static class WizardAugmentFactory
 {
     public static WizardAugment CreateAugment(WizardAugmentTSV tsv)
@@ -30,6 +32,7 @@ public class WizardProjectileAugment : WizardAugment
 
     public override void Apply(Wizard wizard, bool isFinalUpgrade)
     {
+        Debug.Log("마법사 개수 증가 선택");
         wizard.AttackCount = Increased_Projectiles;
         if (isFinalUpgrade)
         {
@@ -57,6 +60,7 @@ public class WizardDotAugment : WizardAugment
 
     public override void Apply(Wizard wizard, bool isFinalUpgrade)
     {
+        Debug.Log("마법사 디버프 선택");
         wizard.FinalDebuff = isFinalUpgrade;
         wizard.DebuffDuration = Debuff_Duration;
         wizard.DebuffRate = Debuff_Rate;
@@ -78,6 +82,7 @@ public class WizardExplosiveAugment : WizardAugment
 
     public override void Apply(Wizard wizard, bool isFinalUpgrade)
     {
+        Debug.Log("마법사 폭발범위증가 선택");
         wizard.FinalExplosive = isFinalUpgrade;
         wizard.CurrentExplosionRadius = wizard.ExplosionRadius * Incresed_ExplosiveRange;
     }
