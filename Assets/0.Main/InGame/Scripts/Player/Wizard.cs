@@ -10,14 +10,25 @@ public class Wizard : Hero
     
     public Transform projectileSpawnPoint;
     public WizardMagicBall projectilePrefab;
-    [field:SerializeField]private float ExplosionRadius { get; set; } = 0.5f;
+    [field:SerializeField]public float ExplosionRadius { get; set; } = 0.5f;
+
+    public int AttackCount = 1;
+    public float CurrentExplosionRadius;
+    
+    public float DebuffDuration;
+    public float DebuffRate;
+    
+    public bool FinalDebuff;
+    public bool FinalExplosive;
+    
+    
 
     protected override void Awake()
     {
         base.Awake();
         var callbacks = BattleEventManager.Instance.Callbacks;
         callbacks.OnStartBattle += OnStartBattle;
-        
+        CurrentExplosionRadius = ExplosionRadius;
     }
 
     private void OnStartBattle(StartBattleEventArgs obj)
@@ -27,11 +38,14 @@ public class Wizard : Hero
 
     protected override void Attack()
     {
-        WizardMagicBall projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
-        projectile.Owner = this;
-        projectile.explosionRadius = ExplosionRadius;
-        projectile.IsCritical = Random.Range(0f,1f) <= squadStats.CriticalChance;
-        projectile.Fire();
+        for (int i = 0; i < AttackCount; i++)
+        {
+            WizardMagicBall projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
+            projectile.Owner = this;
+            projectile.explosionRadius = CurrentExplosionRadius;
+            projectile.IsCritical = Random.Range(0f,1f) <= squadStats.CriticalChance;
+            projectile.Fire();
+        }
     }
 
     // TODO: 중복 공격 시 피해 감소율
