@@ -54,15 +54,12 @@ public class ArcherSpeedAugment : ArcherAugment
 
 public class ArcherProjectileAugment : ArcherAugment
 {
-    // 추가 투사체 공격력 계수 증가
-    public float AdditionalProjectileAttackRatioIncreased { get; set; }
-    // 추가 화살 공격력 계수 // 중복되는건지 확인 필요
+    // 추가 화살 공격력 계수
     public float AdditionalArrowAttackRatio { get; set; }
     
 
     public ArcherProjectileAugment(ArcherAugmentTSV tsv) : base(tsv)
     {
-        AdditionalProjectileAttackRatioIncreased = tsv.AdditionalProjectileAttackRatioIncreased;
         AdditionalArrowAttackRatio = tsv.AdditionalArrowAttackRatio;
     }
 
@@ -73,9 +70,6 @@ public class ArcherProjectileAugment : ArcherAugment
         archer.IsSubProjectile = true;
         
         archer.subProjectileCount = Level; // 서브 화살 개수 초기화
-        
-        // 추가 투사체 공격력 계수 증가 적용
-        archer.subProjectileAttackFactor = AdditionalProjectileAttackRatioIncreased;
         
         // 추가 화살 공격력 계수 적용
         archer.subProjectileAttackFactor = AdditionalArrowAttackRatio;

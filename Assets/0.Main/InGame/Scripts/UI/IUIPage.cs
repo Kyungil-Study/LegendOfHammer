@@ -15,6 +15,7 @@ public enum UIPageType
     ClearPage,
     GameOverPage,
     PausePage,
+    LobbyPage,
 }
 
 public abstract class UIPage : MonoBehaviour
