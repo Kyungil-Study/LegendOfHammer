@@ -1,8 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using CsvHelper.Configuration.Attributes;
-
 public class EnemyData
 {
     public EnemyID Enemy_ID { get; set; }
