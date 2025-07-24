@@ -53,7 +53,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 54012f0b0a64e59449f75d5b095da903, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -117,11 +117,11 @@ GameObject:
   - component: {fileID: 7613585881291570754}
   - component: {fileID: 319402234662238148}
   - component: {fileID: 3874214853159092470}
-  - component: {fileID: 9037222963213603796}
+  - component: {fileID: -9079445034953795936}
   - component: {fileID: 7494431464099580550}
   - component: {fileID: 5546129984101200141}
   m_Layer: 7
-  m_Name: Monster
+  m_Name: TestMonster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -215,7 +215,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &9037222963213603796
+--- !u!114 &-9079445034953795936
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
