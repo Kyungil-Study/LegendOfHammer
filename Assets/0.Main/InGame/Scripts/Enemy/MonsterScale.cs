@@ -10,16 +10,19 @@ public class MonsterScale : MonoBehaviour
     [Serializable]
     private struct Appearance
     {
+        [Header("몬스터 외형 스프라이트")]
         public Sprite sprite;
-        [Tooltip("Idle 상태용 클립")]
+        [Header("애니메이션 Idle 상태 클립")]
         public AnimationClip idleClip;
+        [Header("콜라이더 크기 조정 계수, 스프라이트에 맞게")]
+        [Range(0.1f, 2f)] public float hitBoxSize;
     }
     
     [Header("몬스터 모델 오브젝트 (자식)")]
     [SerializeField] private Transform model;
     [Header("몬스터 외형 세팅")] 
     [SerializeField] private Appearance[] appearances;
-    [Header("콜라이더 크기 조정 계수")]
+    [Header("콜라이더 크기 조정 계수, 기본값")]
     [SerializeField][Range(0.1f, 2f)] private float mHitBoxSize = 1f;
     [Header("피격 이펙트")]
     [SerializeField] private GameObject hitEffect;
@@ -35,6 +38,9 @@ public class MonsterScale : MonoBehaviour
     
     private Coroutine damageRoutine;
     private Color    originalColor;
+    
+    Sprite lastSprite;
+    float  lastHitBox;
 
     private void Awake()
     {
@@ -49,9 +55,7 @@ public class MonsterScale : MonoBehaviour
     {
         PickRandomSprite();
         mScaleFactor = CalculateScaleFactor();
-        
         ApplyModelScale(mScaleFactor);
-        ApplyColliderFromPhysicsShape(mScaleFactor);
     }
 
     private void OnEnable()
@@ -63,7 +67,20 @@ public class MonsterScale : MonoBehaviour
     {
         BattleEventManager.Instance.Callbacks.OnTakeDamage -= PlayDamageEffect;
     }
+    
+    void LateUpdate()
+    {
+        float currentHitBox = (appearances != null && mAppearanceIndex < appearances.Length)
+            ? appearances[mAppearanceIndex].hitBoxSize : mHitBoxSize;
 
+        if (mSpriteRenderer.sprite != lastSprite || Mathf.Approximately(currentHitBox, lastHitBox) == false)
+        {
+            lastSprite = mSpriteRenderer.sprite;
+            lastHitBox = currentHitBox;
+            ApplyColliderFromPhysicsShape(mScaleFactor, currentHitBox);
+        }
+    }
+    
     private void PlayDamageEffect(TakeDamageEventArgs eventArgs)
     {
         var targetMonster = eventArgs.Target as Monster;
@@ -91,13 +108,12 @@ public class MonsterScale : MonoBehaviour
     {
         for (int i = 0; i < PlayCount; i++)
         {
-            mSpriteRenderer.color = new Color(1f, 1f, 1f, 0.5f);
+            mSpriteRenderer.color = Color.white;
             yield return new WaitForSeconds(PlayInterval);
-
-            mSpriteRenderer.color = originalColor;
-            yield return new WaitForSeconds(PlayInterval);
-        }
         
+            mSpriteRenderer.color = originalColor;
+            yield return new WaitForSeconds(PlayInterval * 0.5f);
+        }
         mSpriteRenderer.color = originalColor;
         damageRoutine = null;
     }
@@ -121,6 +137,10 @@ public class MonsterScale : MonoBehaviour
             overrideCtrl["Idle"] = appearance.idleClip;  
             mAnimator.runtimeAnimatorController = overrideCtrl;
         }
+        
+        mScaleFactor = CalculateScaleFactor();
+        ApplyModelScale(mScaleFactor);
+        ApplyColliderFromPhysicsShape(mScaleFactor, appearance.hitBoxSize);
     }
 
     private float CalculateScaleFactor()
@@ -144,9 +164,9 @@ public class MonsterScale : MonoBehaviour
         model.localScale = Vector3.one * scaleFactor;
     }
     
-    private void ApplyColliderFromPhysicsShape(float scaleFactor)
+    private void ApplyColliderFromPhysicsShape(float scaleFactor, float hitBoxSize)
     {
-        var sprite    = mSpriteRenderer.sprite;
+        var sprite = mSpriteRenderer.sprite;
         int count  = sprite.GetPhysicsShapeCount();
         var allPoints = new List<Vector2>();
 
@@ -156,21 +176,18 @@ public class MonsterScale : MonoBehaviour
             sprite.GetPhysicsShape(i, path);
             allPoints.AddRange(path);
         }
-
         if (allPoints.Count == 0) return;
 
         float minX = allPoints[0].x, maxX = allPoints[0].x;
         float minY = allPoints[0].y, maxY = allPoints[0].y;
-        
-        foreach (var points in allPoints)
+
+        foreach (var p in allPoints)
         {
-            if (points.x < minX) minX = points.x;
-            if (points.x > maxX) maxX = points.x;
-            if (points.y < minY) minY = points.y;
-            if (points.y > maxY) maxY = points.y;
+            if (p.x < minX) minX = p.x; if (p.x > maxX) maxX = p.x;
+            if (p.y < minY) minY = p.y; if (p.y > maxY) maxY = p.y;
         }
 
-        Vector2 size   = new Vector2(maxX - minX, maxY - minY) * scaleFactor * mHitBoxSize;
+        Vector2 size   = new Vector2(maxX - minX, maxY - minY) * (scaleFactor * hitBoxSize);
         Vector2 center = new Vector2((minX + maxX) * 0.5f, (minY + maxY) * 0.5f) * scaleFactor
                          + (Vector2)model.localPosition;
 
