@@ -51,6 +51,7 @@ public class SessionManager : SingletonBase<SessionManager>
         else
         {
             ES3Manager.Instance.ResetCurrentStage();
+            ES3Manager.Instance.ResetAugmentData();
         }
         SceneManager.LoadScene("Scene_Dungeon", LoadSceneMode.Single);
     }

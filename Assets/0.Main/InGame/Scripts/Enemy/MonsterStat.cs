@@ -98,6 +98,7 @@ public interface IDamageModifier
 }
 
 // 받는 피해 증가 디버프용
+// 디버프 중에는 적용되지 않도록 수정하기
 public class DamageAmpModifier : IDamageModifier
 {
     private readonly float multipleValue;
@@ -109,5 +110,21 @@ public class DamageAmpModifier : IDamageModifier
         endTime  = Time.time + duration;
     }
     public float ModifyIncoming(float baseDamage) => baseDamage * multipleValue;
+    public bool IsExpired => Time.time >= endTime;
+}
+
+// 도트 딜도 필요함.. 최대체력의 1.5%
+public class DamageOverTimeModifier : IDamageModifier
+{
+    private readonly float damagePerSecond;
+    private readonly float endTime;
+    
+    public DamageOverTimeModifier(float value, float duration)
+    {
+        this.damagePerSecond = value;
+        endTime  = Time.time + duration;
+    }
+    
+    public float ModifyIncoming(float baseDamage) => baseDamage + damagePerSecond * Time.deltaTime;
     public bool IsExpired => Time.time >= endTime;
 }
