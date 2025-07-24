@@ -30,14 +30,13 @@ public class SessionManager : SingletonBase<SessionManager>
         Debug.Log($"[SessionManager] Starting game");
         
         SceneManager.LoadScene("Scene_Dungeon", LoadSceneMode.Single);
-        BackendStageGameData.Instance.PlayGame();
+        //BackendStageGameData.Instance.PlayGame();
 
     }
 
     public void NextGame()
     {
-        BackendStageGameData.Instance.NextStage();
-        BackendStageGameData.Instance.UpdateStage();
+        ES3Manager.Instance.NextStage();
         Debug.Log($"[SessionManager] Proceeding to next game stage");
         SceneManager.LoadScene("Scene_Dungeon", LoadSceneMode.Single);
     }
@@ -47,15 +46,13 @@ public class SessionManager : SingletonBase<SessionManager>
         if (success)
         {
             Debug.Log("Game completed successfully.");
-            BackendStageGameData.Instance.NextStage();
+            ES3Manager.Instance.NextStage();
         }
         else
         {
-            BackendStageGameData.Instance.ResetCurrentStage();
+            ES3Manager.Instance.ResetCurrentStage();
+            ES3Manager.Instance.ResetAugmentData();
         }
-        BackendRank.Instance.RankInsert(BackendStageGameData.stage.Maxstage);
-        BackendStageGameData.Instance.UpdateStage();
-        Debug.Log($"[SessionManager] Ending game");
-        SceneManager.LoadScene("Scene_Lobby", LoadSceneMode.Single);
+        SceneManager.LoadScene("Scene_Dungeon", LoadSceneMode.Single);
     }
 }

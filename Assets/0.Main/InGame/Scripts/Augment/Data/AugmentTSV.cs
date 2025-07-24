@@ -45,9 +45,7 @@ public class ArcherAugmentTSV
     // 마법사 공격속도 증가율 
     public float MageAttackSpeedIncreased { get; set; }
     
-    // 추가 투사체 공격력 계수 증가
-    public float AdditionalProjectileAttackRatioIncreased { get; set; }
-    // 추가 화살 공격력 계수 // 중복되는건지 확인 필요
+    // 추가 화살 공격력 계수 
     public float AdditionalArrowAttackRatio { get; set; }
     // 관통 횟수 증가
     public int PenetrationIncreased { get; set; }
