@@ -27,11 +27,12 @@ public class MonsterScale : MonoBehaviour
     [Header("피격 이펙트")]
     [SerializeField] private GameObject hitEffect;
     [SerializeField] private float PlayCount = 4f;
-    [SerializeField] private float PlayInterval = 0.2f;
+    [SerializeField] private float PlayInterval = 1f;
     
     private SpriteRenderer  mSpriteRenderer;
     private BoxCollider2D   mCollider;
     private Animator        mAnimator;
+    private Material        mMaterial;
     
     private int mAppearanceIndex;
     private float mScaleFactor;
@@ -49,6 +50,7 @@ public class MonsterScale : MonoBehaviour
         mSpriteRenderer = model.GetComponent<SpriteRenderer>();
         mAnimator       = model.GetComponent<Animator>();
         mCollider       = GetComponent<BoxCollider2D>();
+        mMaterial       = model.GetComponent<Renderer>().material;
         
         originalColor   = mSpriteRenderer.color;
     }
@@ -108,15 +110,15 @@ public class MonsterScale : MonoBehaviour
     
     private IEnumerator PlayDamageEffectCoroutine()
     {
-        for (int i = 0; i < PlayCount; i++)
-        {
-            mSpriteRenderer.color = Color.white;
-            yield return new WaitForSeconds(PlayInterval);
-        
-            mSpriteRenderer.color = originalColor;
-            yield return new WaitForSeconds(PlayInterval * 0.5f);
-        }
-        mSpriteRenderer.color = originalColor;
+        mMaterial.EnableKeyword("HITEFFECT_ON");
+
+        mMaterial.SetColor ("_HitEffectColor", Color.white);
+        mMaterial.SetFloat("_HitEffectBlend", 1f);
+
+        yield return new WaitForSeconds(PlayInterval);
+
+        mMaterial.SetFloat("_HitEffectBlend", 0f);
+
         damageRoutine = null;
     }
     
