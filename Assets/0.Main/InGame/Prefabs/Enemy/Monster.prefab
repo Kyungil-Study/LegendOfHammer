@@ -267,7 +267,7 @@ MonoBehaviour:
     delay: 2
     detectRange: 0.5
     attackRange: 0.75
-    explosionPrefab: {fileID: 0}
+    explosionPrefab: {fileID: 6111301031846871093, guid: 9a3809abee10ab54188078ab046f1168, type: 3}
   shieldCfg:
     radius: 1.2
     angleDeg: 90
@@ -276,7 +276,7 @@ MonoBehaviour:
     burstCount: 3
     burstInterval: 0.15
     fireInterval: 3
-    projectilePrefab: {fileID: 0}
+    projectilePrefab: {fileID: 5122971031347301392, guid: 623e67ce00306e349ac9d084a76d79d4, type: 3}
     projectileSpeed: 5
   spreadCfg:
     burstCount: 3
@@ -291,17 +291,17 @@ MonoBehaviour:
     - 15
     - 30
     - 45
-    projectilePrefab: {fileID: 0}
+    projectilePrefab: {fileID: 5122971031347301392, guid: 623e67ce00306e349ac9d084a76d79d4, type: 3}
     projectileSpeed: 5
   radialCfg:
     projectileCount: 12
     betweenAngle: 30
     fireInterval: 3
-    projectilePrefab: {fileID: 0}
+    projectilePrefab: {fileID: 5122971031347301392, guid: 623e67ce00306e349ac9d084a76d79d4, type: 3}
     projectileSpeed: 5
   flyingAtkCfg:
     fireInterval: 1
-    projectilePrefab: {fileID: 0}
+    projectilePrefab: {fileID: 5122971031347301392, guid: 623e67ce00306e349ac9d084a76d79d4, type: 3}
     projectileSpeed: 5
   knockbackDuration: 0.2
 --- !u!114 &5546129984101200141

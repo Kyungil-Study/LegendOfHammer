@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 
-public class ClassAugmentManager : SingletonBase<ClassAugmentManager>
+public class ClassAugmentManager : MonoSingleton<ClassAugmentManager>
 {
     [SerializeField] private string archerAugmentPath = "ArcherAugment";
     [SerializeField] private string warriorAugmentPath = "WarriorAugment";
@@ -32,8 +32,10 @@ public class ClassAugmentManager : SingletonBase<ClassAugmentManager>
     Dictionary<AugmentType , HashSet<int>> optionGroupByClass = new Dictionary<AugmentType,HashSet<int>>();
     public IReadOnlyDictionary<AugmentType, HashSet<int>> OptionGroupByClass => optionGroupByClass;
     
-    public override void OnInitialize()
+    protected override void Initialize()
     {
+        Debug.Log("Initializing ClassAugmentManager");
+        base.Initialize();
         if (string.IsNullOrEmpty(archerAugmentPath) || 
             string.IsNullOrEmpty(warriorAugmentPath) || 
             string.IsNullOrEmpty(wizardAugmentPath))
@@ -120,17 +122,6 @@ public class ClassAugmentManager : SingletonBase<ClassAugmentManager>
             a.GetOptionID() == optionID && 
             a.GetLevel() == level);
         return result;
-        
     }
-
-
-    
-    public ClassAugment GetAugment(int id, int optionID, int level)
-    {
-        var result = allAugments.FirstOrDefault(a => 
-            a.GetID() == id && 
-            a.GetOptionID() == optionID && 
-            a.GetLevel() == level);
-        return result;
-    }
+   
 }

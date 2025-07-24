@@ -30,6 +30,7 @@ public class SessionManager : SingletonBase<SessionManager>
         Debug.Log($"[SessionManager] Starting game");
         
         SceneManager.LoadScene("Scene_Dungeon", LoadSceneMode.Single);
+        BackendStageGameData.Instance.PlayGame();
 
     }
 
@@ -50,9 +51,9 @@ public class SessionManager : SingletonBase<SessionManager>
         }
         else
         {
-            BackendStageGameData.Instance.ResetStage();
+            BackendStageGameData.Instance.ResetCurrentStage();
         }
-
+        BackendRank.Instance.RankInsert(BackendStageGameData.stage.Maxstage);
         BackendStageGameData.Instance.UpdateStage();
         Debug.Log($"[SessionManager] Ending game");
         SceneManager.LoadScene("Scene_Lobby", LoadSceneMode.Single);

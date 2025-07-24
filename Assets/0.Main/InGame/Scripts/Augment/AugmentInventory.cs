@@ -32,9 +32,10 @@ public class ClassAugmentUserData
     {
         if (IsMaxLevel())
         {
-            return null; // Cannot get next level data if already at max level
+            Debug.LogWarning($" [ClassAugmentUserData] Cannot get next level data for {ID} at level {Level}. Already at max level.");
+            return ClassAugmentManager.Instance.GetAugmentWithOptionAndLevel(OptionID, Level);
         }
-        return ClassAugmentManager.Instance.GetAugment(ID, OptionID, Level + 1);
+        return ClassAugmentManager.Instance.GetAugmentWithOptionAndLevel(OptionID, Level + 1);
     }
 
     public bool IsMaxLevel()
@@ -198,6 +199,8 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
 
         void RegistUserData<T>(string backendData, List<T> userData)
         {
+            if (string.IsNullOrEmpty(backendData)) return;
+            
             var result = JsonReader.Read<List<T>>(backendData);
             userData.AddRange(result);
         }
