@@ -24,6 +24,7 @@ public class WizardMagicBall : HeroProjectile
                 Damage
             );
             BattleEventManager.Instance.CallEvent(eventArgs);
+            // enemy.Stat.AddModifier(new DamageAmpModifier(1.5f, 10f));
         }
 
         var explosionEffect = Instantiate(explosionEffectPrefab, position, Quaternion.identity);
