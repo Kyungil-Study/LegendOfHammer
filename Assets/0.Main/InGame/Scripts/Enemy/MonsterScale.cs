@@ -42,6 +42,8 @@ public class MonsterScale : MonoBehaviour
     Sprite lastSprite;
     float  lastHitBox;
 
+    public float ScaleFactor => mScaleFactor;
+    
     private void Awake()
     {
         mSpriteRenderer = model.GetComponent<SpriteRenderer>();
