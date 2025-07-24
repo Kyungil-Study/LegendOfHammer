@@ -22,12 +22,10 @@ public class MonsterScale : MonoBehaviour
     [SerializeField] private Transform model;
     [Header("몬스터 외형 세팅")] 
     [SerializeField] private Appearance[] appearances;
-    [Header("콜라이더 크기 조정 계수, 기본값")]
+    [Header("콜라이더 크기 조정 계수 : 기본값")]
     [SerializeField][Range(0.1f, 2f)] private float mHitBoxSize = 1f;
-    [Header("피격 이펙트")]
-    [SerializeField] private GameObject hitEffect;
-    [SerializeField] private float PlayCount = 4f;
-    [SerializeField] private float PlayInterval = 1f;
+    [Header("플래시 세팅 (피격)")]
+    [SerializeField] private float  hitFlashInterval = 0.2f;
     
     private SpriteRenderer  mSpriteRenderer;
     private BoxCollider2D   mCollider;
@@ -44,6 +42,10 @@ public class MonsterScale : MonoBehaviour
     float  lastHitBox;
 
     public float ScaleFactor => mScaleFactor;
+    
+    // 자폭 이펙트
+    private Coroutine flashRoutine;
+    private bool      isSuicideMode;
     
     private void Awake()
     {
@@ -84,44 +86,67 @@ public class MonsterScale : MonoBehaviour
             ApplyColliderFromPhysicsShape(mScaleFactor, currentHitBox);
         }
     }
+
+    public void EnterSuicideMode()
+    {
+        isSuicideMode = true;
+    }
     
     private void PlayDamageEffect(TakeDamageEventArgs eventArgs)
     {
-        var targetMonster = eventArgs.Target as Monster;
-        
-        if (targetMonster == null)
-        {
-            return;
-        }
-
-        if (targetMonster.gameObject != gameObject)
-        {
-            return;
-        }
-        
-        if (damageRoutine != null)
-        {
-            StopCoroutine(damageRoutine);
-            mSpriteRenderer.color = originalColor;
-        }
-        
-        damageRoutine = StartCoroutine(PlayDamageEffectCoroutine());
+        if ((eventArgs.Target as Monster)?.gameObject != gameObject) return;
+        if (isSuicideMode) return;               
+        PlayHitFlash();                          
     }
     
-    private IEnumerator PlayDamageEffectCoroutine()
+    private void PlayHitFlash()
     {
-        mMaterial.EnableKeyword("HITEFFECT_ON");
-
-        mMaterial.SetColor ("_HitEffectColor", Color.white);
-        mMaterial.SetFloat("_HitEffectBlend", 1f);
-
-        yield return new WaitForSeconds(PlayInterval);
-
-        mMaterial.SetFloat("_HitEffectBlend", 0f);
-
-        damageRoutine = null;
+        if (flashRoutine != null) StopCoroutine(flashRoutine);
+        flashRoutine = StartCoroutine(FlashCoroutine(Color.white, 1, hitFlashInterval));
     }
     
+    public void StartSuicideFlash(float delay, float interval)
+    {
+        if (flashRoutine != null) StopCoroutine(flashRoutine);
+        isSuicideMode = true;
+        flashRoutine = StartCoroutine(SuicideFlashCoroutine(delay, interval));
+    }
+    
+    private IEnumerator FlashCoroutine(Color color, int count, float interval)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            mMaterial.EnableKeyword("HITEFFECT_ON");
+            mMaterial.SetColor ("_HitEffectColor", color);
+            mMaterial.SetFloat("_HitEffectBlend", 1f);
+
+            yield return new WaitForSeconds(interval);
+
+            mMaterial.SetFloat("_HitEffectBlend", 0f);
+            yield return new WaitForSeconds(interval * 0.5f);
+        }
+        flashRoutine = null;
+    }
+
+    private IEnumerator SuicideFlashCoroutine(float delay, float interval)
+    {
+        float elapsed = 0f;
+        while (elapsed < delay)
+        {
+            mMaterial.EnableKeyword("HITEFFECT_ON");
+            mMaterial.SetColor ("_HitEffectColor", Color.red);
+            mMaterial.SetFloat("_HitEffectBlend", 1f);
+            yield return new WaitForSeconds(interval);
+
+            mMaterial.SetFloat("_HitEffectBlend", 0f);
+            yield return new WaitForSeconds(interval);
+
+            elapsed += interval * 2f;
+        }
+        
+        isSuicideMode = false;
+        flashRoutine  = null;
+    }
     private void PickRandomSprite()
     {
         if (appearances == null || appearances.Length == 0)

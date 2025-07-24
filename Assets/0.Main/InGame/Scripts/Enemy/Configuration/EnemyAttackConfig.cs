@@ -12,7 +12,7 @@ public class NormalAttackConfig
 [Serializable]
 public class SuicideAttackConfig
 {
-    public float delay       = 2f;
+    public float delay       = 3f;
     public float detectRange = 0.5f;
     public float attackRange = 0.75f;
     public GameObject explosionPrefab;

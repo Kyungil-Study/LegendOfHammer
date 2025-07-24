@@ -1791,7 +1791,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6134312133047931347, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: baseAttackDamage
-      value: 400
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7511207680696367698, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_Name
@@ -1803,7 +1803,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8187177615337158848, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: baseAttackDamage
-      value: 300
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1899,7 +1899,7 @@ PrefabInstance:
       objectReference: {fileID: 699577101}
     - target: {fileID: 1912313772269553298, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
       propertyPath: testSpawnID
-      value: 22008
+      value: 11003
       objectReference: {fileID: 0}
     - target: {fileID: 1912313772269553298, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
       propertyPath: TestEnemyPrefab
