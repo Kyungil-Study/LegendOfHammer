@@ -26,7 +26,6 @@ public class BattleManager : MonoSingleton<BattleManager>
     {
         BattleEventManager.Instance.Callbacks.OnAliveMonster += OnAliveMonster;
         BattleEventManager.Instance.Callbacks.OnDeath += OnDeath;
-        
     }
 
     private void OnDeath(DeathEventArgs args)
