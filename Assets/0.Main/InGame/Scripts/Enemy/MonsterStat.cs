@@ -98,6 +98,7 @@ public interface IDamageModifier
 }
 
 // 받는 피해 증가 디버프용
+// 디버프 중에는 적용되지 않도록 수정하기
 public class DamageAmpModifier : IDamageModifier
 {
     private readonly float multipleValue;
