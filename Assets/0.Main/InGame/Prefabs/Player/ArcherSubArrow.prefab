@@ -130,9 +130,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a08aadb5e6ab1294ca1f827de5f45aa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8.5
+  speed: 3.7
   pierceLimit: 0
   targetMonster: {fileID: 0}
+  targetAdditionalDamageFactor: 1
 --- !u!61 &236663793788924572
 BoxCollider2D:
   m_ObjectHideFlags: 0

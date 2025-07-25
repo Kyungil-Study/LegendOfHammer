@@ -3227,7 +3227,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3228702557338661824, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: attackPerSec
-      value: 0.1
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 3228702557338661824, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: chargeDistance
@@ -3279,11 +3279,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6134312133047931347, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: attackPerSec
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6134312133047931347, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: baseAttackDamage
-      value: 400
+      value: 450
       objectReference: {fileID: 0}
     - target: {fileID: 7511207680696367698, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_Name
@@ -3294,8 +3294,12 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8187177615337158848, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
+      propertyPath: attackPerSec
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8187177615337158848, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: baseAttackDamage
-      value: 300
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 8187177615337158848, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: deathExplosionRadius
@@ -3305,6 +3309,10 @@ PrefabInstance:
       propertyPath: deathExplosionEffectPrefab
       value: 
       objectReference: {fileID: 4859452286414634588, guid: ec17d51d81d872e41891be4e954175f2, type: 3}
+    - target: {fileID: 8187177615337158848, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
+      propertyPath: <ExplosionRadius>k__BackingField
+      value: 0.3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3507,10 +3515,6 @@ PrefabInstance:
     - target: {fileID: 6803538738591350387, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_Name
       value: BattleCamera
-      objectReference: {fileID: 0}
-    - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
-      propertyPath: m_NormalizedViewPortRect.width
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
