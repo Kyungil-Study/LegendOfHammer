@@ -35,7 +35,7 @@ public class DamageUIListener : MonoBehaviour
        Vector3 worldPos = mono.transform.position + Vector3.up * (halfHeight + verticalOffset);
 
        // **로그 추가**: 월드 좌표
-       Debug.Log($"[DamageUIListener] WorldPos: {worldPos}");
+       //Debug.Log($"[DamageUIListener] WorldPos: {worldPos}");
 
        DamageUIManager.Instance.ShowDamage(eventArgs.ActualDamage, worldPos);
    }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -19,6 +20,11 @@ public class MonsterStat : MonoBehaviour
     public int MaxHP { get; private set; }
     
     readonly List<IDamageModifier> modifiers = new();
+    
+    public bool HasModifier<T>() where T : IDamageModifier
+    {
+        return modifiers.Any(m => m is T);
+    }
     
     public void AddModifier(IDamageModifier mod) => modifiers.Add(mod);
     
@@ -103,7 +109,7 @@ public class DamageAmpModifier : IDamageModifier
 {
     private readonly float multipleValue;
     private readonly float endTime;
-    
+
     public DamageAmpModifier(float value, float duration)
     {
         this.multipleValue = value;
