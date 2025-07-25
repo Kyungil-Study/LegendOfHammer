@@ -41,6 +41,7 @@ public abstract class HeroProjectile : MonoBehaviour
     protected virtual void SetDirection()
     {
         GameObject target = FindTargetFunc != null ? FindTargetFunc() : FindTarget();
+        
         if (target != null)
         {
             m_TargetDirection = target.transform.position - transform.position;
@@ -50,7 +51,6 @@ public abstract class HeroProjectile : MonoBehaviour
         {
             m_TargetDirection = Vector3.up;
         }
-
         transform.up = m_TargetDirection;
     }
 
