@@ -99,7 +99,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
     void Update()
     {
-        stat?.Tick(Time.deltaTime); // 디버프 만료 Tick 방식 도입 시 활성화
+        stat?.Tick(Time.deltaTime);
         move?.Tick(Time.deltaTime);
         attack?.Tick(Time.deltaTime);
     }

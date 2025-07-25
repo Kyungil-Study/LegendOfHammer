@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -63,5 +64,15 @@ public class GameLobbyPage : UIPage
 
     public override void Exit()
     {
+    }
+
+    private void OnEnable()
+    {
+        Time.timeScale = 0;
+    }
+    
+    private void OnDisable()
+    {
+        Time.timeScale = 1;
     }
 }
