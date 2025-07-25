@@ -57,70 +57,6 @@ public class Wizard : Hero
         return (int)(((baseAttackDamage * critFactor) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor);
     }
     
-    // private HashSet<Monster> alreadyProcessed = new HashSet<Monster>();
-    //
-    // private void OnAnyDeath(DeathEventArgs args)
-    // {
-    //     if (FinalDebuff == false) return;
-    //
-    //     // Monster deadMonster = args.Target as Monster;
-    //     // if (deadMonster == null) return;
-    //     //
-    //     // // 죽은 몬스터가 디버프 상태였는지 확인
-    //     // if (deadMonster.Stat.HasModifier<DamageAmpModifier>() == false) return;
-    //     
-    //     Monster deadMonster = args.Target as Monster;
-    //     if (deadMonster == null || !alreadyProcessed.Add(deadMonster))
-    //         return;
-    //
-    //     if (deadMonster.Stat.HasModifier<DamageAmpModifier>() == false)
-    //         return;
-    //
-    //     // 폭발 처리 (디버프 상태일 때만)
-    //     Vector3 pos = deadMonster.transform.position;
-    //     float radius = CurrentExplosionRadius * Distance.STANDARD_DISTANCE;
-    //
-    //     DebugDrawUtil.DrawCircle(pos, radius, Color.magenta);
-    //     var enemies = BattleManager.GetAllEnemyInRadius(pos, radius);
-    //
-    //     foreach (var m in enemies)
-    //     {
-    //         if (m == deadMonster) continue; // 자신 제외
-    //         var damageEvent = new TakeDamageEventArgs(Squad.Instance, m, CalculateDamage());
-    //         BattleEventManager.Instance.CallEvent(damageEvent);
-    //
-    //         m.Stat.AddModifier(new DamageAmpModifier(DebuffRate, DebuffDuration));
-    //     }
-    //     
-    //     // 폭발 이펙트
-    //     if (deathExplosionEffectPrefab != null)
-    //     {
-    //         GameObject effect = Instantiate(deathExplosionEffectPrefab, pos, Quaternion.identity);
-    //         SetExplosionEffectSize(effect, radius);
-    //         Destroy(effect, 2f);
-    //     }
-    //     Debug.Log("폭발은 예술이다");
-    // }
-
-    // public void OnAnyDeath(DeathEventArgs args)
-    // {
-    //     if(FinalDebuff == false) return;
-    //     
-    //     
-    // }
-    //
-    //
-    //
-    // // 이펙트 크기 조절
-    // private void SetExplosionEffectSize(GameObject effect, float radius)
-    // {
-    //     float targetSize = radius;
-    //     var spriteRenderer = effect.GetComponent<SpriteRenderer>();
-    //     float currentSize = spriteRenderer.sprite.rect.size.x / spriteRenderer.sprite.pixelsPerUnit;
-    //     float scaleFactor = targetSize / currentSize;
-    //     effect.transform.localScale = new Vector3(scaleFactor, scaleFactor, 1f);
-    // }
-    
     // 몬스터가 죽었을 때 폭발 처리
     private void OnAnyDeath(DeathEventArgs args)
     {
@@ -145,7 +81,7 @@ public class Wizard : Hero
                 Squad.Instance, enemy,
                 CalculateDamage() // 기본 공격력 기반 피해
             );
-            BattleEventManager.Instance.CallEvent(eventArgs);
+            //BattleEventManager.Instance.CallEvent(eventArgs);
             //enemy.Stat.AddModifier(new DamageAmpModifier(DebuffRate, DebuffDuration)); // 디버프 재적용
         }
 
@@ -169,37 +105,4 @@ public class Wizard : Hero
         float scaleFactor = targetSize / currentSize;
         effect.transform.localScale = new Vector3(scaleFactor, scaleFactor, 1f);
     }
-    
-    // private void Explode(Vector3 position, float radius)
-    // {
-    //     DebugDrawUtil.DrawCircle(position, radius, Color.red);
-    //     List<Monster> enemies = BattleManager.GetAllEnemyInRadius(position, radius);
-    //     foreach (var enemy in enemies)
-    //     {
-    //         TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(
-    //             Squad.Instance,
-    //             enemy, 
-    //             Damage
-    //         );
-    //         BattleEventManager.Instance.CallEvent(eventArgs);
-    //         enemy.Stat.AddModifier(new DamageAmpModifier(Owner.DebuffRate, Owner.DebuffDuration));
-    //         Debug.Log($"디버프 수치: {Owner.DebuffRate}, 디버프 시간: {Owner.DebuffDuration}");
-    //     }
-    //
-    //     var explosionEffect = Instantiate(explosionEffectPrefab, position, Quaternion.identity);
-    //     SetExplosionEffectSize(explosionEffect, radius);
-    //     Destroy(explosionEffect,2f);
-    //     Destroy(gameObject);
-    // }
-    //
-    // private void SetExplosionEffectSize(GameObject effect, float radius)
-    // {
-    //     float targetSize = radius * Distance.STANDARD_DISTANCE;
-    //     var spriteRenderer = effect.GetComponent<SpriteRenderer>();
-    //     float currentSize = spriteRenderer.sprite.rect.size.x / spriteRenderer.sprite.pixelsPerUnit;
-    //     float scaleFactor = targetSize / currentSize;
-    //     //Debug.Log($"{targetSize} / {currentSize} = {scaleFactor}");
-    //     effect.transform.localScale = new Vector3(scaleFactor, scaleFactor, 1f);
-    // }
-
 }
