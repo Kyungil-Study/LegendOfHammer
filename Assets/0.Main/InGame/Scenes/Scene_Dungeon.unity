@@ -130,6 +130,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3389810829772064450, guid: aaa160931bddeea4e9a2975bbb51a54e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -5
+      objectReference: {fileID: 0}
     - target: {fileID: 3865100631611112336, guid: aaa160931bddeea4e9a2975bbb51a54e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -174,10 +178,23 @@ PrefabInstance:
       propertyPath: m_Name
       value: BattleStage
       objectReference: {fileID: 0}
+    - target: {fileID: 6306307781735278349, guid: aaa160931bddeea4e9a2975bbb51a54e, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 3865100631611112336, guid: aaa160931bddeea4e9a2975bbb51a54e, type: 3}
+      insertIndex: 4
+      addedObject: {fileID: 2143365531}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2066349224846352625, guid: aaa160931bddeea4e9a2975bbb51a54e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1203669719}
+    - targetCorrespondingSourceObject: {fileID: 2066349224846352625, guid: aaa160931bddeea4e9a2975bbb51a54e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1203669718}
   m_SourcePrefab: {fileID: 100100000, guid: aaa160931bddeea4e9a2975bbb51a54e, type: 3}
 --- !u!20 &192030469 stripped
 Camera:
@@ -1118,6 +1135,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1201907370}
   m_CullTransparentMesh: 1
+--- !u!1 &1203669715 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2066349224846352625, guid: aaa160931bddeea4e9a2975bbb51a54e, type: 3}
+  m_PrefabInstance: {fileID: 54679700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1203669718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1203669715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01c2a75a0e2cf2a42aa8675d168bf943, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destination: {fileID: 2143365531}
+  chaseSpeed: 5
+  normalizedTriggerGauge: 0.3
+  chaseAttackInterval: 5
+--- !u!50 &1203669719
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1203669715}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1001 &1220273960
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1912,6 +1977,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1715f59b94aa1874eaa4c7ffd894320e, type: 3}
+--- !u!4 &2033655274 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3865100631611112336, guid: aaa160931bddeea4e9a2975bbb51a54e, type: 3}
+  m_PrefabInstance: {fileID: 54679700}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &2085638390 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8754637300072334089, guid: 96e35bc987d8f96469f79f67ad3c13fb, type: 3}
@@ -1979,6 +2049,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b0c07c3992bbc04791dd79becfc22d4, type: 3}
+--- !u!1 &2143365530
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2143365531}
+  m_Layer: 11
+  m_Name: ChaseCrowdDestination
+  m_TagString: Untagged
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2143365531
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2143365530}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2033655274}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1781639699784681340
 PrefabInstance:
   m_ObjectHideFlags: 0
