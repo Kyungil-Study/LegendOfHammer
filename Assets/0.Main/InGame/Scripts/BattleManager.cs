@@ -149,4 +149,21 @@ public class BattleManager : MonoSingleton<BattleManager>
         }
         return enemies;
     }
+    
+    private static readonly Collider2D[] colliderBuffer = new Collider2D[64]; // 캐시된 배열
+
+    public static void GetAllEnemyInRadiusNonAlloc(Vector3 position, float radius, List<Monster> result)
+    {
+        result.Clear(); // 결과 리스트 초기화
+
+        int count = Physics2D.OverlapCircleNonAlloc(position, radius, colliderBuffer, LayerMask.GetMask("Monster"));
+        for (int i = 0; i < count; i++)
+        {
+            if (TryGetMonsterBy(colliderBuffer[i], out Monster monster))
+            {
+                result.Add(monster);
+            }
+        }
+    }
+
 }
