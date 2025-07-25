@@ -23,7 +23,7 @@ public class SuicideAttack : CoroutineAttackBase
         var scale = mMonster.GetComponent<MonsterScale>();
 
         scale?.EnterSuicideMode();
-        scale.StartSuicideFlash(mConfig.delay, 0.1f);
+        scale?.StartSuicideFlash(mConfig.delay, mConfig.exlposionInverval);
 
         yield return new WaitForSeconds(mConfig.delay);
 

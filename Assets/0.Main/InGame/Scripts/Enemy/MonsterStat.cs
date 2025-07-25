@@ -25,9 +25,6 @@ public class MonsterStat : MonoBehaviour
     {
         return modifiers.Any(m => m is T);
     }
-
-    
-    // public void AddModifier(IDamageModifier mod) => modifiers.Add(mod);
     
     public void AddModifier(IDamageModifier newModifier)
     {
@@ -43,8 +40,12 @@ public class MonsterStat : MonoBehaviour
             }
         }
 
-        // 중복 디버프 없으면 추가
         modifiers.Add(newModifier);
+    }
+    
+    public IEnumerable<T> GetModifiersOfType<T>() where T : IDamageModifier
+    {
+        return modifiers.OfType<T>();
     }
     
     /// <summary> TSV값 불러오기 + 변경하기 (스테이지 스케일링은 나중에 필요 시 내부에서 처리)</summary>
@@ -79,7 +80,6 @@ public class MonsterStat : MonoBehaviour
         return Mathf.RoundToInt(damage);
     }
     
-    // 디버프 Monster.cs의 Update()에서 시간 체크
     public void Tick(float time)
     {
         for (int i = modifiers.Count - 1; i >= 0; i--)
@@ -91,7 +91,6 @@ public class MonsterStat : MonoBehaviour
         }
     }
     
-    // HP 감소 및 죽음 여부 반환
     public bool ReduceHP(int amount)
     {
         CurrentHP -= amount;
@@ -122,22 +121,6 @@ public interface IDamageModifier
     bool IsExpired{ get; }
 }
 
-// 받는 피해 증가 디버프용
-// 디버프 중에는 적용되지 않도록 수정하기
-// public class DamageAmpModifier : IDamageModifier
-// {
-//     private readonly float multipleValue;
-//     private readonly float endTime;
-//
-//     public DamageAmpModifier(float value, float duration)
-//     {
-//         this.multipleValue = value;
-//         endTime  = Time.time + duration;
-//     }
-//     public float ModifyIncoming(float baseDamage) => baseDamage * multipleValue;
-//     public bool IsExpired => Time.time >= endTime;
-// }
-
 public class DamageAmpModifier : IDamageModifier
 {
     private readonly float multipleValue;
@@ -149,9 +132,8 @@ public class DamageAmpModifier : IDamageModifier
         endTime = Time.time + duration;
     }
 
-    public float ModifyIncoming(float baseDamage) => baseDamage * multipleValue;
     public bool IsExpired => Time.time >= endTime;
-
+    public float ModifyIncoming(float baseDamage) => baseDamage * multipleValue;
     public void ExtendDuration(float additionalTime)
     {
         endTime = Mathf.Max(endTime, Time.time + additionalTime);
@@ -161,20 +143,26 @@ public class DamageAmpModifier : IDamageModifier
     public float Value => multipleValue;
 }
 
-
-
-// 도트 딜도 필요함.. 최대체력의 1.5%
 public class DamageOverTimeModifier : IDamageModifier
 {
-    private readonly float damagePerSecond;
-    private readonly float endTime;
-    
-    public DamageOverTimeModifier(float value, float duration)
+    private readonly float damagePerSecond; // 초당 피해량
+    private readonly float endTime;         // 만료 시각
+    private float accumulator;              // 누적 잔여 피해
+
+    public DamageOverTimeModifier(float dps, float duration)
     {
-        this.damagePerSecond = value;
-        endTime  = Time.time + duration;
+        damagePerSecond = dps;
+        endTime         = Time.time + duration;
+        accumulator     = 0f;
     }
-    
-    public float ModifyIncoming(float baseDamage) => baseDamage + damagePerSecond * Time.deltaTime;
+
     public bool IsExpired => Time.time >= endTime;
+    public float ModifyIncoming(float baseDamage) => baseDamage;
+    public int DamageTick(float deltaTime)
+    {
+        accumulator += damagePerSecond * deltaTime;
+        int toDeal = Mathf.FloorToInt(accumulator);
+        if (toDeal > 0) { accumulator -= toDeal; }
+        return toDeal;
+    }
 }

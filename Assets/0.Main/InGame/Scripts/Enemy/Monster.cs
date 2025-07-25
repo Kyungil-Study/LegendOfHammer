@@ -10,10 +10,6 @@ using UnityEngine;
 
 public class Monster : MonoBehaviour, IBattleCharacter
 {
-    [SerializeField] private EnemyID enemyID;           
-    public EnemyID EnemyID => enemyID;                  
-    public void SetEnemyID(EnemyID id) => enemyID = id; 
-
     public class MonsterRuntimeState
     {
         public bool  Detected;
@@ -21,6 +17,23 @@ public class Monster : MonoBehaviour, IBattleCharacter
         public float ShieldRate = 1f;
     }
     public MonsterRuntimeState State { get; } = new MonsterRuntimeState();
+    
+    private EnemyID enemyID;           
+    public EnemyID EnemyID => enemyID;                  
+    public void SetEnemyID(EnemyID id) => enemyID = id;
+    
+    public bool IsTestMode = false;
+    
+    public void MonsterTest(EnemyMovementPattern movePattern, EnemyAttackPattern attackPattern) 
+    {
+        move   = MovementFactory.Create(movePattern, this);
+        attack = AttackFactory.Create(attackPattern, this);
+
+        move?.Init(this);
+        attack?.Init(this);
+        attack?.Start();
+    }
+    
     public GameObject Player => player;
     public void SetPlayer(GameObject player) => this.player = player;
     
@@ -50,9 +63,10 @@ public class Monster : MonoBehaviour, IBattleCharacter
     public SpreadAttackConfig SpreadCfg     => spreadCfg;
     public RadialAttackConfig RadialCfg     => radialCfg;
     public FlyingAttackConfig FlyingAtkCfg  => flyingAtkCfg;
-
+    
     [Header("넉백 설정")] [SerializeField] private float knockbackDuration = 0.2f;
-
+    [Header("사망 이펙트")] [SerializeField] private GameObject deathEffectPrefab;
+    
     private IAttackBehaviour attack;
     private IMoveBehaviour move;
     
@@ -82,9 +96,11 @@ public class Monster : MonoBehaviour, IBattleCharacter
         BattleEventManager.Instance.Callbacks.OnChargeCollision -= OnChargeCollision;
         BattleManager.Instance.UnregisterMonster(this);
     }
-
+    
     void Start()
     {
+        if (IsTestMode) return;
+        
         var data = EnemyDataManager.Instance.Records[enemyID];
         var stage = BattleManager.Instance.StageIndex;
         
@@ -100,7 +116,8 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
     void Update()
     {
-        stat?.Tick(Time.deltaTime); // 디버프 만료 Tick 방식 도입 시 활성화
+        ApplyDoT(Time.deltaTime);
+        stat?.Tick(Time.deltaTime);
         move?.Tick(Time.deltaTime);
         attack?.Tick(Time.deltaTime);
     }
@@ -143,8 +160,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
             OnDeath();
         }
     }
-
-    [Header("사망 이펙트")] [SerializeField] private GameObject deathEffectPrefab;
+    
     public void OnDeath()
     {
         if (deathEffectPrefab != null)
@@ -164,6 +180,22 @@ public class Monster : MonoBehaviour, IBattleCharacter
             return;
         }
         StartCoroutine(ApplyKnockback(args));
+    }
+    
+    private void ApplyDoT(float time)
+    {
+        int totalDamage = 0;
+        
+        foreach (var dot in stat.GetModifiersOfType<DamageOverTimeModifier>())
+        {
+            totalDamage += dot.DamageTick(time);
+        }
+
+        if (totalDamage > 0)
+        {
+            var evt = new TakeDamageEventArgs(this, this, totalDamage);
+            BattleEventManager.Instance.CallEvent(evt);
+        }
     }
 
     IEnumerator ApplyKnockback(ChargeCollisionArgs args)
@@ -191,6 +223,12 @@ public class Monster : MonoBehaviour, IBattleCharacter
         {
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(transform.position, chaseCfg.detectRange);
+        }
+        
+        if (attack is SuicideAttack suicideAttack && suicideCfg != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, suicideCfg.attackRange);
         }
 
         // Shield 방어각
