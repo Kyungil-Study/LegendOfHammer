@@ -56,6 +56,7 @@ public class ArcherArrow : HeroProjectile
 
         float tagetFactor = isSuccesHitTarget ? 1 : targetAdditionalDamageFactor;
         int FinalDamage = (int)(Damage * tagetFactor);
+        //Debug.Log($" [ArcherArrow] Hit {target.EnemyID} with damage: {FinalDamage} (pierce limit: {pierceLimit})");
         TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(
             Squad.Instance,
             target,

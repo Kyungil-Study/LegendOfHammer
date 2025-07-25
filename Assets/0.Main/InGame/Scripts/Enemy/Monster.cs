@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 
 public class Monster : MonoBehaviour, IBattleCharacter
@@ -149,7 +150,9 @@ public class Monster : MonoBehaviour, IBattleCharacter
     {
         int raw   = Mathf.RoundToInt(eventArgs.Damage * State.ShieldRate); // ShieldAttack이 계산해서 넣어줌
         int final = stat.ApplyIncomingDamage(raw);
-
+        var attacker = eventArgs.Attacker as MonoBehaviour;
+        //Debug.Log($"[Monster] from {attacker.name} {EnemyID} took {eventArgs.Damage} * {State.ShieldRate} => {final} damage (raw: {raw}).");
+        
         BattleEventManager.Instance.CallEvent(new ReceiveDamageEventArgs(this, final));
 
         if (stat.ReduceHP(final))

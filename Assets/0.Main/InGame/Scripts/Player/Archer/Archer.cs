@@ -168,7 +168,10 @@ public class Archer : Hero
     
     public int CalculateSubProjectileDamage(bool isCritical = false)
     {
-        return (int)(CalculateDamage(isCritical) * subProjectileAttackFactor);
+        var finalDamage = (int)(CalculateDamage(isCritical) * subProjectileAttackFactor);
+        Debug.Log($"[Archer] SubProjectile Damage: {finalDamage}");
+        return finalDamage;
+        
     }
 
     // TODO: 증강에 의한 추가 계수
