@@ -799,6 +799,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   augmentNameText: {fileID: 2454719544721708381}
-  augmentIcon: {fileID: 0}
+  augmentIcon: {fileID: 8300852682578104133}
   augmentGradeText: {fileID: 2454719544721708381}
   augmentDescriptionText: {fileID: 6293122262588495039}
