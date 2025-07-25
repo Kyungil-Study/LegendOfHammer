@@ -53,7 +53,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 54012f0b0a64e59449f75d5b095da903, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -264,7 +264,7 @@ MonoBehaviour:
   flyingCfg:
     distanceToStop: 3
   suicideCfg:
-    delay: 2
+    delay: 3
     detectRange: 0.5
     attackRange: 0.75
     explosionPrefab: {fileID: 6111301031846871093, guid: 9a3809abee10ab54188078ab046f1168, type: 3}
@@ -338,6 +338,5 @@ MonoBehaviour:
     idleClip: {fileID: 7400000, guid: 9211ac6bf910282488d2880bfbd869ed, type: 2}
     hitBoxSize: 1
   mHitBoxSize: 1
-  hitEffect: {fileID: 0}
-  PlayCount: 4
-  PlayInterval: 0.2
+  hitFlashCount: 4
+  hitFlashInterval: 0.2
