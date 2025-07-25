@@ -45,7 +45,7 @@ public class Wizard : Hero
             projectile.IsCritical = Random.Range(0f,1f) <= squadStats.CriticalChance;
             projectile.Fire();
         }
-        Debug.Log($"공격 개수: {AttackCount}, 공격 범위: {CurrentExplosionRadius}");
+        // Debug.Log($"공격 개수: {AttackCount}, 공격 범위: {CurrentExplosionRadius}");
     }
 
     // TODO: 중복 공격 시 피해 감소율

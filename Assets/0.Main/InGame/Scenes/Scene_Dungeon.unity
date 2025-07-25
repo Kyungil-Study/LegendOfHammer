@@ -533,7 +533,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: [{targetCorrespondingSourceObject: {fileID: 8754637300072334089, guid: 96e35bc987d8f96469f79f67ad3c13fb, type: 3}, insertIndex: -1, addedObject: {fileID: 1555330771}}]
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 8754637300072334089, guid: 96e35bc987d8f96469f79f67ad3c13fb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1555330771}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96e35bc987d8f96469f79f67ad3c13fb, type: 3}
 --- !u!1001 &363794574
@@ -2087,7 +2090,7 @@ PrefabInstance:
     - target: {fileID: 1912313772269553298, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
       propertyPath: TestEnemyPrefab
       value: 
-      objectReference: {fileID: 7494431464099580550, guid: 6829797761ff95b4584334c4f0a4d211, type: 3}
+      objectReference: {fileID: 7494431464099580550, guid: cb7f568d296739141874983fa6d2c03d, type: 3}
     - target: {fileID: 2057616619765667853, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
       propertyPath: m_Name
       value: MonsterSpawner
@@ -2632,19 +2635,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
-      value: 0.9988636
-      objectReference: {fileID: 0}
-    - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
-      propertyPath: m_NormalizedViewPortRect.height
-      value: 0.99999994
-      objectReference: {fileID: 0}
-    - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
-      propertyPath: m_NormalizedViewPortRect.width
-      value: 0.9988118
-      objectReference: {fileID: 0}
-    - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
-      propertyPath: m_NormalizedViewPortRect.height
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
+      propertyPath: m_NormalizedViewPortRect.height
+      value: 0.99958074
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
