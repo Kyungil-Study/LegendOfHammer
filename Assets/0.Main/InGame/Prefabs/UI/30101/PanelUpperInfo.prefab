@@ -638,6 +638,7 @@ GameObject:
   - component: {fileID: 2955449257253487796}
   - component: {fileID: 1379655794053696963}
   - component: {fileID: 4269106173363516997}
+  - component: {fileID: 518880591418343321}
   m_Layer: 5
   m_Name: PanelUpperInfo
   m_TagString: Untagged
@@ -705,6 +706,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &518880591418343321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3052454423517671828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f85825fe0cd844df944cec96109d0318, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stageNumberText: {fileID: 6922530947358042101}
+  maxStageNumberText: {fileID: 6710058410974052894}
+  currentScoreText: {fileID: 1640520754675920119}
+  maxScoreText: {fileID: 1811117718621241196}
+  chasingSlider: {fileID: 0}
+  pauseButton: {fileID: 2049874402433840270}
 --- !u!1 &3580183423029805747
 GameObject:
   m_ObjectHideFlags: 0
