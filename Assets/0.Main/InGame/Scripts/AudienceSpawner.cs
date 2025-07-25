@@ -19,13 +19,7 @@ public class AudienceSpawner : MonoBehaviour
     [SerializeField] Transform spawnRangeStart;
     [SerializeField] Transform spawnRangeEnd;
     
-    [Header("Tilemap Settings")]
-    [SerializeField] private TilemapRenderer tilemapRenderer; // 타일맵 컴포넌트
 
-    private Grid grid;
-    private Tilemap tilemap;
-    // Start is called before the first frame update
-    
     [SerializeField] private AnimatorOverrideController audienceAOC;
     [SerializeField] private AnimationClip[] audienceAnimations;
     Dictionary<AnimationClip,AnimatorOverrideController> audienceAOCMap = new Dictionary<AnimationClip, AnimatorOverrideController>();
@@ -34,11 +28,6 @@ public class AudienceSpawner : MonoBehaviour
     
     void Start()
     {
-        tilemapRenderer = GetComponent<TilemapRenderer>();
-        tilemapRenderer.enabled = false;
-        tilemap = GetComponent<Tilemap>();
-        grid = GetComponentInParent<Grid>();
-
         foreach (AnimationClip audienceClip in audienceAnimations)
         {
             var animatorOverrideController = new AnimatorOverrideController(audienceAOC);
