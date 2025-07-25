@@ -2181,7 +2181,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
+<<<<<<< HEAD
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 8754637300072334089, guid: 96e35bc987d8f96469f79f67ad3c13fb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1555330771}
+=======
     m_AddedGameObjects: []
+>>>>>>> Develop
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96e35bc987d8f96469f79f67ad3c13fb, type: 3}
 --- !u!1001 &363794574
@@ -3510,10 +3517,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
+<<<<<<< HEAD
+=======
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
-      propertyPath: m_NormalizedViewPortRect.width
+      propertyPath: m_NormalizedViewPortRect.height
+>>>>>>> Develop
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
