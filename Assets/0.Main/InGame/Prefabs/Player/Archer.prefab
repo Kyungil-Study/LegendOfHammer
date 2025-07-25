@@ -344,12 +344,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseAttackDamage: 250
   attackPerSec: 2
+  DebuffDuration: 0
+  DebuffRate: 0
   <BonusAttackSpeed>k__BackingField: 0
-  pierceLimit: 0
   BonusAttackFactor: 0
   mageAttackSpeedFactor: 0
   subProjectileAttackFactor: 0
-  targetAdditionalDamageFactor: 0
+  targetAdditionalDamageFactor: 1
+  pierceLimit: 0
   NormalProjectileSpawnPoint: {fileID: 4781276068981626571}
   NormalProjectilePrefab: {fileID: 2213334373689080831, guid: 06e33e6d1b33be646a96d05a5b3f79ed, type: 3}
   finalProjectileSpawnPoints:
