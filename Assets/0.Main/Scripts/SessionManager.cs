@@ -41,6 +41,11 @@ public class SessionManager : SingletonBase<SessionManager>
         SceneManager.LoadScene("Scene_Dungeon", LoadSceneMode.Single);
     }
     
+    public void QuitGame()
+    {
+        SceneManager.LoadScene("Scene_Dungeon", LoadSceneMode.Single);
+    }
+    
     public void EndGame(bool success)
     {
         if (success)

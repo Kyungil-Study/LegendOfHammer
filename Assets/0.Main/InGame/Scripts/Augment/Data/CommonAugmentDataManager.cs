@@ -15,6 +15,9 @@ public class CommonAugmentManager : MonoSingleton<CommonAugmentManager>
 
     [SerializeField] private string resourcePath = "CommonAugmentData";
     
+    
+    
+    
     public CommonAugment GetAugmentFiltered(AugmentRarity rarity, int optionID)
     {
         return Records.Values.FirstOrDefault(augment => 
