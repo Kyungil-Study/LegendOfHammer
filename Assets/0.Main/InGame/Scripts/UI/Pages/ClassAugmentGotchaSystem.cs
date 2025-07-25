@@ -60,6 +60,7 @@ public class ClassAugmentGotchaSystem : UIPage
     public override void Exit()
     {
         gameObject.SetActive(false);
+        BattleManager.Instance.StartGame();
     }
     
     private void RerollClassAugment()
@@ -158,7 +159,6 @@ public class ClassAugmentGotchaSystem : UIPage
     private void OnSelectAugment(Augment augment)
     {
         BattleEventManager.Instance.CallEvent(new SelectAugmentEventArgs(augment));
-        BattleManager.Instance.StartGame();
         Owner.SwapPage(UIPageType.BattlePage);
     }
 
