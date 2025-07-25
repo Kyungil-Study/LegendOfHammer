@@ -21,6 +21,7 @@ public class SuicideAttackConfig
 [Serializable]
 public class ShieldConfig
 {
+    public float rate        = 0.5f;
     public float radius      = 1.2f;
     public float angleDeg    = 90f;
     public Vector2 pivotOffset;
