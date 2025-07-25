@@ -135,7 +135,7 @@ public class Wizard : Hero
         Vector3 pos = monster.transform.position;
         float radius = deathExplosionRadius * Distance.STANDARD_DISTANCE;
 
-        DebugDrawUtil.DrawCircle(pos, radius, Color.magenta);
+        DebugDrawUtil.DrawCircle(pos, radius, Color.green);
 
         // 주변 적 탐지
         List<Monster> enemies = BattleManager.GetAllEnemyInRadius(pos, radius);

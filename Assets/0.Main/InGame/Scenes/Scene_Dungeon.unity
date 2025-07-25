@@ -2021,7 +2021,7 @@ PrefabInstance:
     - target: {fileID: 8187177615337158848, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: deathExplosionEffectPrefab
       value: 
-      objectReference: {fileID: 4859452286414634588, guid: aee187a5adca69a43a7ab606a2888ba8, type: 3}
+      objectReference: {fileID: 4859452286414634588, guid: ec17d51d81d872e41891be4e954175f2, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
