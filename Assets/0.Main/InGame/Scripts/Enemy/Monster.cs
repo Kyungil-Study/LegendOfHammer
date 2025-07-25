@@ -49,9 +49,10 @@ public class Monster : MonoBehaviour, IBattleCharacter
     public SpreadAttackConfig SpreadCfg     => spreadCfg;
     public RadialAttackConfig RadialCfg     => radialCfg;
     public FlyingAttackConfig FlyingAtkCfg  => flyingAtkCfg;
-
+    
     [Header("넉백 설정")] [SerializeField] private float knockbackDuration = 0.2f;
-
+    [Header("사망 이펙트")] [SerializeField] private GameObject deathEffectPrefab;
+    
     private IAttackBehaviour attack;
     private IMoveBehaviour move;
     
@@ -99,6 +100,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
     void Update()
     {
+        ApplyDoT(Time.deltaTime);
         stat?.Tick(Time.deltaTime);
         move?.Tick(Time.deltaTime);
         attack?.Tick(Time.deltaTime);
@@ -140,8 +142,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
             OnDeath();
         }
     }
-
-    [Header("사망 이펙트")] [SerializeField] private GameObject deathEffectPrefab;
+    
     public void OnDeath()
     {
         if (deathEffectPrefab != null)
@@ -161,6 +162,22 @@ public class Monster : MonoBehaviour, IBattleCharacter
             return;
         }
         StartCoroutine(ApplyKnockback(args));
+    }
+    
+    private void ApplyDoT(float time)
+    {
+        int totalDamage = 0;
+        
+        foreach (var dot in stat.GetModifiersOfType<DamageOverTimeModifier>())
+        {
+            totalDamage += dot.DamageTick(time);
+        }
+
+        if (totalDamage > 0)
+        {
+            var evt = new TakeDamageEventArgs(this, this, totalDamage);
+            BattleEventManager.Instance.CallEvent(evt);
+        }
     }
 
     IEnumerator ApplyKnockback(ChargeCollisionArgs args)
