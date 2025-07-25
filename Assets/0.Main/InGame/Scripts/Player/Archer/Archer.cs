@@ -99,7 +99,7 @@ public class Archer : Hero
                     var data = EnemyDataManager.Instance.Records[id];
                     return data.Enemy_Rank;
                 })
-                .ThenByDescending(monster => monster.MaxHP)
+                .ThenByDescending(monster => monster.Stat.MaxHP)
                 .ThenBy(monster => Vector3.Distance(monster.transform.position, transform.position)).ToList();
 
             if (monstersOrdered.Count() < 2)

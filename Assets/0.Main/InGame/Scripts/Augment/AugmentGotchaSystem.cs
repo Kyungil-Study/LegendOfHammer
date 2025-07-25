@@ -7,6 +7,27 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
+
+public struct ProbabilityRecord<T>
+{
+    public T ID;
+    public int minProbability; // 확률
+    public int maxProbability;
+        
+    public ProbabilityRecord(T id, int min, int max)
+    {
+        ID = id;
+        minProbability = min;
+        maxProbability = max;
+    }
+        
+    public bool IsInRange(int value)
+    {
+        // Check if the value is within the range of minProbability and maxProbability
+        return value >= minProbability && value <= maxProbability;
+    }
+}
+
 public class AugmentGotchaSystem : MonoSingleton<AugmentGotchaSystem>
 {
     [Header("Common Augment")]
@@ -69,7 +90,6 @@ public class AugmentGotchaSystem : MonoSingleton<AugmentGotchaSystem>
         BattleEventManager.Instance.CallEvent(new SelectAugmentEventArgs(augment));
         if (augment.IsCommon())
         {
-            BattleUIController.Instance.OnClear();
         }
         else // 전용 증강 게임시작
         {
@@ -77,25 +97,7 @@ public class AugmentGotchaSystem : MonoSingleton<AugmentGotchaSystem>
         }
     }
 
-    public struct ProbabilityRecord<T>
-    {
-        public T ID;
-        public int minProbability; // 확률
-        public int maxProbability;
-        
-        public ProbabilityRecord(T id, int min, int max)
-        {
-            ID = id;
-            minProbability = min;
-            maxProbability = max;
-        }
-        
-        public bool IsInRange(int value)
-        {
-            // Check if the value is within the range of minProbability and maxProbability
-            return value >= minProbability && value <= maxProbability;
-        }
-    }
+    
     
     public void OnOpenCommonAugment()
     {
@@ -186,8 +188,8 @@ public class AugmentGotchaSystem : MonoSingleton<AugmentGotchaSystem>
         }
         
         Debug.Log($"Selected augment IDs: {selectedID0.ID}, {selectedID1.ID}");
-        classAugmentSlots[0].SetAugment(ClassAugmentManager.Instance.GetAugment(selectedID0.ID));
-        classAugmentSlots[1].SetAugment(ClassAugmentManager.Instance.GetAugment(selectedID1.ID));
+        classAugmentSlots[0].SetAugment(ClassAugmentManager.Instance.GetAugment(selectedID0.ID),OnSelectAugment);
+        classAugmentSlots[1].SetAugment(ClassAugmentManager.Instance.GetAugment(selectedID1.ID),OnSelectAugment);
     }
     
     private void RerollClassAugment()
@@ -285,8 +287,8 @@ public class AugmentGotchaSystem : MonoSingleton<AugmentGotchaSystem>
             Debug.LogError($"Failed to get augment for rarity {rarityRecord.ID} and option {optionRecord2.ID}");
             return;
         }
-        commonAugmentSlots[0].SetAugment(slot1);
-        commonAugmentSlots[1].SetAugment(slot2);
+        commonAugmentSlots[0].SetAugment(slot1,OnSelectAugment);
+        commonAugmentSlots[1].SetAugment(slot2,OnSelectAugment);
     }
 
     

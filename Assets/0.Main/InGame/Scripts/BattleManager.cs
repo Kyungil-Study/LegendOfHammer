@@ -10,24 +10,36 @@ using UnityEngine.UI;
 
 public class BattleManager : MonoSingleton<BattleManager>
 {
-    [SerializeField] GameObject loadUI;
-
     public int StageIndex = 0;
     public int MaxStageNumber = 0;
     
     [Header("추격 게이지 세팅")]
     [SerializeField] private float chaseGuageDecreaseRate = 0.5f; // Increase rate per second
     [SerializeField] private float chaseIncreaseRate = 1f; // Increase rate when monster is through clear zone
-    [SerializeField] private float chaseGuageMax = 100f; // Maximum value for chase gauge]
-    private float chaseGuage = 0f; // 0 to 100
+    [SerializeField] private float chaseGuageMax = 100f; // Maximum value for chase gauge
+    private ClampedFloat chaseGuage;
+    public ClampedFloat ChaseGuage => chaseGuage;
 
     private bool isEnded = false;
-    private void Awake()
+
+    protected override void Initialize()
     {
+        Debug.Log("[BattleManager] Initialize called.");
+        base.Initialize();
+        
+        // Initialize chase gauge
+        chaseGuage = new ClampedFloat(0f, chaseGuageMax, 0f);
+        
+        // Register event listeners
         BattleEventManager.Instance.Callbacks.OnAliveMonster += OnAliveMonster;
         BattleEventManager.Instance.Callbacks.OnDeath += OnDeath;
-        
+        chaseGuage.Events.OnMaxReached += (cur, max) =>
+        {
+            Debug.Log("[BattleManager] Chase gauge reached maximum value. Ending game.");
+            EndGame(false, false); // Game over if chase gauge is full
+        };
     }
+    
 
     private void OnDeath(DeathEventArgs args)
     {
@@ -35,7 +47,7 @@ public class BattleManager : MonoSingleton<BattleManager>
         if (args.Target as Squad)
         {
             Debug.Log("Player has died. Ending game.");
-            EndGame(false);
+            EndGame(false,false);
         }
         else if(args.Target is Monster monster)
         {
@@ -45,7 +57,7 @@ public class BattleManager : MonoSingleton<BattleManager>
             if( data.Enemy_Rank.Equals(EnemyRank.Boss))
             {
                 Debug.Log($"Boss Monster has died.");
-                EndGame(true);
+                EndGame(true, true);
             }
         }
     }
@@ -57,38 +69,22 @@ public class BattleManager : MonoSingleton<BattleManager>
         var data = EnemyDataManager.Instance.Records[monster.EnemyID];
         if (data.Enemy_Rank.Equals(EnemyRank.Boss))
         {
-            EndGame(true);
+            EndGame(true, false);
         }
         // todo: UI 완료되면 활성화
-        /*chaseGuage += chaseIncreaseRate;
-        if (chaseGuage >= chaseGuageMax)
-        {
-            EndGame(false);
-        }*/
+        var enemyData = EnemyDataManager.Instance.Records[monster.EnemyID];
+        chaseGuage.Increase(enemyData.Chasing_Increase);
     }
 
-    private void Start()
-    {
-        StartCoroutine(ReadyGame()); ;
-    }
 
-    private IEnumerator ReadyGame()
+    public void ReadyGame()
     {
-        yield return new WaitForEndOfFrame();
         Debug.Log("[BattleManager] ReadyGame called.");
-
-        loadUI.SetActive(false);
-        if(BackendStageGameData.stage == null)
-        {
-            Debug.LogWarning("[BattleManager] BackendStageGameData.stage is null. Using default stage index 1.");
-            MaxStageNumber = StageIndex;
-        }
-        else
-        {
-            StageIndex = BackendStageGameData.stage.Currentstage;; // For testing purposes, remove later
-            MaxStageNumber = BackendStageGameData.stage.Maxstage;
-        }
+        var es3Manager = ES3Manager.Instance;
+        var stageData = es3Manager.StageData;
         
+        StageIndex = stageData.CurrentStage;
+        MaxStageNumber = stageData.MaxStage;
         
         BattleEventManager.Instance.CallEvent(new ReadyBattleEventArgs(
             stageIndex: StageIndex,
@@ -109,19 +105,18 @@ public class BattleManager : MonoSingleton<BattleManager>
             return;
         }
         
-        chaseGuage -= chaseGuageDecreaseRate * Time.deltaTime;
-        chaseGuage = Mathf.Clamp(chaseGuage, 0f, chaseGuageMax);
+        chaseGuage.Decrease(chaseGuageDecreaseRate * Time.deltaTime);
     }
 
     // Update is called once per frame
-    void EndGame(bool isVictory)
+    void EndGame(bool isVictory,bool isBossDead)
     {
         isEnded = true;
         // Here you can handle the end of the game, such as showing a UI or transitioning to another scene
         Debug.Log(isVictory ? "Battle ended with victory!" : "Battle ended with defeat!");
         
         // Call the end battle event
-        EndBattleEventArgs endEventArgs = new EndBattleEventArgs(isVictory); // Assuming victory for now
+        EndBattleEventArgs endEventArgs = new EndBattleEventArgs(isVictory,isBossDead); // Assuming victory for now
         BattleEventManager.Instance.CallEvent(endEventArgs);
     }
     

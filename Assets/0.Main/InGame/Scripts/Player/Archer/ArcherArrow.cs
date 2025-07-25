@@ -40,7 +40,7 @@ public class ArcherArrow : HeroProjectile
                var data = EnemyDataManager.Instance.Records[id];
                return data.Enemy_Rank;
            })
-           .ThenByDescending(monster => monster.MaxHP)
+           .ThenByDescending(monster => monster.Stat.CurrentHP)
            .ThenBy(monster => Vector3.Distance(monster.transform.position, transform.position));
        targetMonster = monsters.First();
        return targetMonster.gameObject;
