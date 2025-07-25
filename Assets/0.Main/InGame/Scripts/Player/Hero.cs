@@ -12,6 +12,10 @@ public abstract class Hero : MonoBehaviour
     protected virtual float AttackCooldown => 1 / attackPerSec;
     protected float leftCooldown;
     protected bool bAutoFire = true;
+    
+    // 위자드 디버프
+    public float DebuffDuration;
+    public float DebuffRate;
 
     protected virtual void Attack() { }
     public abstract int CalculateDamage(bool isCritical = false);

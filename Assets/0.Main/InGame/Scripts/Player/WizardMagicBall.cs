@@ -24,7 +24,8 @@ public class WizardMagicBall : HeroProjectile
                 Damage
             );
             BattleEventManager.Instance.CallEvent(eventArgs);
-            // enemy.Stat.AddModifier(new DamageAmpModifier(1.5f, 10f));
+            enemy.Stat.AddModifier(new DamageAmpModifier(Owner.DebuffRate, Owner.DebuffDuration));
+            Debug.Log($"디버프 수치: {Owner.DebuffRate}, 디버프 시간: {Owner.DebuffDuration}");
         }
 
         var explosionEffect = Instantiate(explosionEffectPrefab, position, Quaternion.identity);

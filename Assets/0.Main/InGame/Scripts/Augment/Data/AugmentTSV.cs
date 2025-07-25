@@ -63,15 +63,15 @@ public class WizardAugmentTSV
     public string Description { get; set; }
     public string FinalDescription { get; set; }
     
-    public int Increased_Projectiles { get; set; }
-    public float AttackRatio_ReductionRate  { get; set; }
-    public float OverlapDamage_Reduction  { get; set; }
-    public float Incresed_ExplosiveRange { get; set; }
-    public float Dot_HP_Ratio_Duration  { get; set; }
-    public float Dot_HP_Ratio  { get; set; }
-    public float Debuff_Duration { get; set; }
-    public float Debuff_Rate { get; set; }
-    public float AdditionalExplosion  { get; set; }
-    public float AdditionalExplosion_Ratio { get; set; }
+    public int Increased_Projectiles { get; set; } //투사체
+    public float AttackRatio_ReductionRate  { get; set; } //투사체
+    public float OverlapDamage_Reduction  { get; set; } //투사체
+    public float Incresed_ExplosiveRange { get; set; } //폭발범위
+    public float Dot_HP_Ratio_Duration  { get; set; } //폭발범위
+    public float Dot_HP_Ratio  { get; set; } //폭발범위
+    public float Debuff_Duration { get; set; } //디버프
+    public float Debuff_Rate { get; set; } //디버프
+    public float AdditionalExplosion  { get; set; } //디버프
+    public float AdditionalExplosion_Ratio { get; set; } //디버프
 }
 
