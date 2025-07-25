@@ -43,6 +43,11 @@ public class MonsterStat : MonoBehaviour
         modifiers.Add(newModifier);
     }
     
+    public IEnumerable<T> GetModifiersOfType<T>() where T : IDamageModifier
+    {
+        return modifiers.OfType<T>();
+    }
+    
     /// <summary> TSV값 불러오기 + 변경하기 (스테이지 스케일링은 나중에 필요 시 내부에서 처리)</summary>
     public void Initialize(EnemyData data, int stageIndex)
     {
@@ -127,9 +132,8 @@ public class DamageAmpModifier : IDamageModifier
         endTime = Time.time + duration;
     }
 
-    public float ModifyIncoming(float baseDamage) => baseDamage * multipleValue;
     public bool IsExpired => Time.time >= endTime;
-
+    public float ModifyIncoming(float baseDamage) => baseDamage * multipleValue;
     public void ExtendDuration(float additionalTime)
     {
         endTime = Mathf.Max(endTime, Time.time + additionalTime);
@@ -141,15 +145,24 @@ public class DamageAmpModifier : IDamageModifier
 
 public class DamageOverTimeModifier : IDamageModifier
 {
-    private readonly float damagePerSecond;
-    private readonly float endTime;
-    
-    public DamageOverTimeModifier(float value, float duration)
+    private readonly float damagePerSecond; // 초당 피해량
+    private readonly float endTime;         // 만료 시각
+    private float accumulator;              // 누적 잔여 피해
+
+    public DamageOverTimeModifier(float dps, float duration)
     {
-        this.damagePerSecond = value;
-        endTime  = Time.time + duration;
+        damagePerSecond = dps;
+        endTime         = Time.time + duration;
+        accumulator     = 0f;
     }
-    
-    public float ModifyIncoming(float baseDamage) => baseDamage + damagePerSecond * Time.deltaTime;
+
     public bool IsExpired => Time.time >= endTime;
+    public float ModifyIncoming(float baseDamage) => baseDamage;
+    public int DamageTick(float deltaTime)
+    {
+        accumulator += damagePerSecond * deltaTime;
+        int toDeal = Mathf.FloorToInt(accumulator);
+        if (toDeal > 0) { accumulator -= toDeal; }
+        return toDeal;
+    }
 }
