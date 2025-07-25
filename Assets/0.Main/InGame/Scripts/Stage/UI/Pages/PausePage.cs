@@ -15,6 +15,12 @@ public class PausePage : UIPage
     {
         this.owner = owner;
         resumeButton.onClick.AddListener(()=>{owner.SwapPage(UIPageType.BattlePage);});
+        quitButton.onClick.AddListener(OnQuitGame);
+    }
+
+    private void OnQuitGame()
+    {
+        SessionManager.Instance.QuitGame();
     }
 
     public override void Enter()
