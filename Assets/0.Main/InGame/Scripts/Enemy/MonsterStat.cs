@@ -27,7 +27,25 @@ public class MonsterStat : MonoBehaviour
     }
 
     
-    public void AddModifier(IDamageModifier mod) => modifiers.Add(mod);
+    // public void AddModifier(IDamageModifier mod) => modifiers.Add(mod);
+    
+    public void AddModifier(IDamageModifier newModifier)
+    {
+        if (newModifier is DamageAmpModifier newAmp)
+        {
+            foreach (var modifier in modifiers)
+            {
+                if (modifier is DamageAmpModifier existingAmp && Mathf.Approximately(existingAmp.Value, newAmp.Value))
+                {
+                    existingAmp.ExtendDuration(newAmp.IsExpired ? 0 : (newAmp.endTime - Time.time)); // 시간 연장
+                    return;
+                }
+            }
+        }
+
+        // 중복 디버프 없으면 추가
+        modifiers.Add(newModifier);
+    }
     
     /// <summary> TSV값 불러오기 + 변경하기 (스테이지 스케일링은 나중에 필요 시 내부에서 처리)</summary>
     public void Initialize(EnemyData data, int stageIndex)
@@ -106,19 +124,44 @@ public interface IDamageModifier
 
 // 받는 피해 증가 디버프용
 // 디버프 중에는 적용되지 않도록 수정하기
+// public class DamageAmpModifier : IDamageModifier
+// {
+//     private readonly float multipleValue;
+//     private readonly float endTime;
+//
+//     public DamageAmpModifier(float value, float duration)
+//     {
+//         this.multipleValue = value;
+//         endTime  = Time.time + duration;
+//     }
+//     public float ModifyIncoming(float baseDamage) => baseDamage * multipleValue;
+//     public bool IsExpired => Time.time >= endTime;
+// }
+
 public class DamageAmpModifier : IDamageModifier
 {
     private readonly float multipleValue;
-    private readonly float endTime;
+    public float endTime;
 
     public DamageAmpModifier(float value, float duration)
     {
         this.multipleValue = value;
-        endTime  = Time.time + duration;
+        endTime = Time.time + duration;
     }
+
     public float ModifyIncoming(float baseDamage) => baseDamage * multipleValue;
     public bool IsExpired => Time.time >= endTime;
+
+    public void ExtendDuration(float additionalTime)
+    {
+        endTime = Mathf.Max(endTime, Time.time + additionalTime);
+    }
+
+    // 같은 종류의 디버프인지 확인용
+    public float Value => multipleValue;
 }
+
+
 
 // 도트 딜도 필요함.. 최대체력의 1.5%
 public class DamageOverTimeModifier : IDamageModifier
