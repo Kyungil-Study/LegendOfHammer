@@ -1,24 +1,33 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class ChaseCrowd : MonoBehaviour
 {
     Vector3 originPosition;
     [SerializeField] private Transform destination; // 추적할 대상 위치
+    [SerializeField] private float attackDelay = 0.5f; // 추적 공격 딜레이
     [SerializeField] private float chaseSpeed = 5f; // 추적 속도
     [Range(0,1), SerializeField] private float normalizedTriggerGauge = 0.3f; // 추적 게이지가 이 값 이상일 때 추적 시작
-    [SerializeField] private float chaseAttackInterval = 5f; // 추적 공격 간격
-    bool isChasing = false;
+    [SerializeField] private float chaseAttackInterval = 1f; // 추적 공격 간격
+    [SerializeField] bool isChasing = false;
+    [SerializeField] private Ease chaseEase = Ease.Linear; // 추적 속도 계수
     private void Awake()
     {
         var callbacks = BattleEventManager.Instance.Callbacks;
         originPosition = transform.position;
         
         BattleManager.Instance.ChaseGuage.Events.OnValueChanged += OnChaseGuageValueChanged;
+        
     }
-    
+
+    private void Start()
+    {
+        StartCoroutine(ChaseCoroutine());
+    }
+
 
     private void OnChaseGuageValueChanged(float arg1, float arg2)
     {
@@ -37,11 +46,12 @@ public class ChaseCrowd : MonoBehaviour
         {
             if (isChasing)
             {
-                yield return GoTo(destination.position);
-                // 추적 대상에게 도달했을 때 처리
-                Debug.Log($"Chasing to {destination.name} at position {destination.position}");
-                yield return GoTo(originPosition);
-
+                var gotoDestination = transform.DOMove( destination.position, chaseSpeed)
+                    .SetEase(chaseEase);
+                    //.OnComplete(() => Debug.Log($"Chased to {destination.name} at position {destination.position}"));
+                yield return gotoDestination.WaitForCompletion();
+                var gotoOrigin = transform.DOMove(originPosition, chaseSpeed).SetEase(Ease.Linear);
+                yield return gotoOrigin.WaitForCompletion();
                 yield return new WaitForSeconds(chaseAttackInterval);
             }
 
