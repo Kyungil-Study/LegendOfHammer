@@ -28,7 +28,7 @@ public class ShieldAttack : CoroutineAttackBase
 
             if (dot >= halfCos && distance <= mConfig.radius)
             {
-                rate = 0.5f;
+                rate = mConfig.rate;
                 break;
             }
         }
