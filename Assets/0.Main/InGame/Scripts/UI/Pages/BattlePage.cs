@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BattlePage : UIPage
 {
@@ -12,6 +13,9 @@ public class BattlePage : UIPage
     [Header("점수")]
     [LabelText("현재 점수"), SerializeField] private TMP_Text currentScoreText;
     [LabelText("최대 점수"), SerializeField] private TMP_Text maxScoreText;
+    
+    [Header("추격")]
+    [LabelText("추격 게이지"), SerializeField] private Slider chasingSlider;
     
     private Dictionary<EnemyID ,int> scoreMap = new Dictionary<EnemyID, int>();
     private int currentScore = 0;
@@ -30,7 +34,16 @@ public class BattlePage : UIPage
         var callbacks = BattleEventManager.Instance.Callbacks;
         callbacks.OnDeath += OnDeath; 
         callbacks.OnEndBattle += OnEndBattle;
+        
+        BattleManager.Instance.ChaseGuage.Events.OnValueChanged += OnChaseGuageChanged;
+        chasingSlider.maxValue = BattleManager.Instance.ChaseGuage.Max;
     }
+
+    private void OnChaseGuageChanged(float arg1, float arg2)
+    {
+        chasingSlider.value = arg1;
+    }
+
 
     private void OnEndBattle(EndBattleEventArgs args)
     {
