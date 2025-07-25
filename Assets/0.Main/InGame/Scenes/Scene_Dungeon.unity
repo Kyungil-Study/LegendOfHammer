@@ -3285,6 +3285,10 @@ PrefabInstance:
       propertyPath: baseAttackDamage
       value: 400
       objectReference: {fileID: 0}
+    - target: {fileID: 6134312133047931347, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
+      propertyPath: targetAdditionalDamageFactor
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7511207680696367698, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_Name
       value: Player
