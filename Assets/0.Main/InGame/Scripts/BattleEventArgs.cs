@@ -43,9 +43,11 @@ public class StartBattleEventArgs : BattleEventArgs
 public class EndBattleEventArgs : BattleEventArgs
 {
     public bool IsVictory { get; private set; }
-    public EndBattleEventArgs( bool isVictory)
+    public bool IsBoosDead { get; set; }
+    public EndBattleEventArgs( bool isVictory, bool isBossDead)
     {
         this.IsVictory = isVictory;
+        this.IsBoosDead = isBossDead;
     }
 }
 
@@ -85,6 +87,7 @@ public class AliveMonsterEventArgs : BattleEventArgs
 
 public class DeathEventArgs : BattleEventArgs
 {
+    // 사망시 사망한 위치에 사망 이펙트 처리하도록?
     public IBattleCharacter Target { get; private set; }
 
     public DeathEventArgs(IBattleCharacter target)

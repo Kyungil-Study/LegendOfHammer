@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -15,16 +16,22 @@ public class AugmentSlot : MonoBehaviour , IPointerClickHandler
 
     public Augment augment;
     
-    public void SetAugment(Augment augment)
+    Action<Augment> onClickAction;
+    
+    public void SetAugment(Augment augment, Action<Augment> onClickAction)
     {
         this.augment = augment;
         augmentNameText.text = augment.GetName();
         augmentGradeText.text = augment.GetGrade(); // Assuming ID is used as level for simplicity
         augmentDescriptionText.text = augment.GetDescription(); // Assuming GetAugmentType() returns a string representation
+        
+        
+        // Set the augment icon if available
+        this.onClickAction = onClickAction; 
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        AugmentGotchaSystem.Instance.OnSelectAugment(augment);
+        onClickAction?.Invoke(augment);
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 public class MonsterSpawner : MonoSingleton<MonsterSpawner>
 {
@@ -62,9 +63,9 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             // 테스트용, 나중에 지우기
-            Monster testMonster = Instantiate(TestEnemyPrefab, spawnPoints[2]);
-            testMonster.EnemyID = testSpawnID; 
-            testMonster.GetComponent<Monster>().SetPlayer(player);
+            var monster = Instantiate(TestEnemyPrefab, spawnPoints[2].position, Quaternion.identity);
+            monster.SetEnemyID(testSpawnID);
+            monster.SetPlayer(player);
         }
     }
 
@@ -130,11 +131,11 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
         }
         Debug.Log($"[MonsterSpawner] Spawned {filteredRecords.Count} monsters of rank {rank} and attack type {spawnAttackType} at position {position}");
         // todo: 몬스터 ID 세팅을 prefab 변경으로 수정
-        Monster newMonster = Instantiate(TestEnemyPrefab, position, Quaternion.identity);
-        newMonster.EnemyID = filteredRecords[UnityEngine.Random.Range(0, filteredRecords.Count)].Enemy_ID;
-        newMonster.GetComponent<Monster>().SetPlayer(player);
+        Monster newMonster = Instantiate(monsterPrefab, position, Quaternion.identity);
+        EnemyID pickedId = filteredRecords[Random.Range(0, filteredRecords.Count)].Enemy_ID;
+        newMonster.SetEnemyID(pickedId);
+        newMonster.SetPlayer(player);
     }
-    
 
     public void SpawnMonster(WaveRankType currentWaveWaveRank)
     {
