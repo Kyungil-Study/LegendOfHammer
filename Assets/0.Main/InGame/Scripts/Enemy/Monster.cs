@@ -9,10 +9,6 @@ using UnityEngine;
 
 public class Monster : MonoBehaviour, IBattleCharacter
 {
-    [SerializeField] private EnemyID enemyID;           
-    public EnemyID EnemyID => enemyID;                  
-    public void SetEnemyID(EnemyID id) => enemyID = id; 
-
     public class MonsterRuntimeState
     {
         public bool  Detected;
@@ -20,6 +16,23 @@ public class Monster : MonoBehaviour, IBattleCharacter
         public float ShieldRate = 1f;
     }
     public MonsterRuntimeState State { get; } = new MonsterRuntimeState();
+    
+    private EnemyID enemyID;           
+    public EnemyID EnemyID => enemyID;                  
+    public void SetEnemyID(EnemyID id) => enemyID = id;
+    
+    public bool IsTestMode = false;
+    
+    public void MonsterTest(EnemyMovementPattern movePattern, EnemyAttackPattern attackPattern) 
+    {
+        move   = MovementFactory.Create(movePattern, this);
+        attack = AttackFactory.Create(attackPattern, this);
+
+        move?.Init(this);
+        attack?.Init(this);
+        attack?.Start();
+    }
+    
     public GameObject Player => player;
     public void SetPlayer(GameObject player) => this.player = player;
     
@@ -82,9 +95,11 @@ public class Monster : MonoBehaviour, IBattleCharacter
         BattleEventManager.Instance.Callbacks.OnChargeCollision -= OnChargeCollision;
         BattleManager.Instance.UnregisterMonster(this);
     }
-
+    
     void Start()
     {
+        if (IsTestMode) return;
+        
         var data = EnemyDataManager.Instance.Records[enemyID];
         var stage = BattleManager.Instance.StageIndex;
         

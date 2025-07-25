@@ -53,8 +53,8 @@ public class MonsterScale : MonoBehaviour
     {
         mSpriteRenderer = model.GetComponent<SpriteRenderer>();
         mAnimator       = model.GetComponent<Animator>();
-        mCollider       = GetComponent<BoxCollider2D>();
         mMaterial       = model.GetComponent<Renderer>().material;
+        mCollider       = GetComponent<BoxCollider2D>();
         
         originalColor   = mSpriteRenderer.color;
     }
