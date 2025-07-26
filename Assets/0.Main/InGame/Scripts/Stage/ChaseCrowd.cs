@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class ChaseCrowd : MonoBehaviour
+[RequireComponent(typeof(BoxCollider2D))]
+public class ChaseCrowd : MonoBehaviour , IBattleCharacter
 {
     Vector3 originPosition;
     [SerializeField] private Transform destination; // 추적할 대상 위치
@@ -14,13 +16,21 @@ public class ChaseCrowd : MonoBehaviour
     [SerializeField] private float chaseAttackInterval = 1f; // 추적 공격 간격
     [SerializeField] bool isChasing = false;
     [SerializeField] private Ease chaseEase = Ease.Linear; // 추적 속도 계수
+    
+    [SerializeField] private AttackSignal attackSignal; // 추적 공격 시그널
+    [SerializeField] private BoxCollider2D attackCollider; // 추적 공격 콜라이더
+    
+    [SerializeField] private float attackPower = 10f; // 추적 공격력
+    
     private void Awake()
     {
         var callbacks = BattleEventManager.Instance.Callbacks;
+        BattleManager.Instance.ChaseGuage.Events.OnValueChanged += OnChaseGuageValueChanged;
         originPosition = transform.position;
         
-        BattleManager.Instance.ChaseGuage.Events.OnValueChanged += OnChaseGuageValueChanged;
+        attackCollider = GetComponent<BoxCollider2D>();
         
+        attackCollider.enabled = false;
     }
 
     private void Start()
@@ -46,12 +56,17 @@ public class ChaseCrowd : MonoBehaviour
         {
             if (isChasing)
             {
-                var gotoDestination = transform.DOMove( destination.position, chaseSpeed)
+                attackSignal.gameObject.SetActive(true);
+                yield return new WaitForSeconds(attackDelay);
+                attackCollider.enabled = true;
+                var gotoDestination = transform.DOMove(destination.position, chaseSpeed)
                     .SetEase(chaseEase);
                     //.OnComplete(() => Debug.Log($"Chased to {destination.name} at position {destination.position}"));
                 yield return gotoDestination.WaitForCompletion();
+                attackSignal.gameObject.SetActive(false);
                 var gotoOrigin = transform.DOMove(originPosition, chaseSpeed).SetEase(Ease.Linear);
                 yield return gotoOrigin.WaitForCompletion();
+                attackCollider.enabled = false;
                 yield return new WaitForSeconds(chaseAttackInterval);
             }
 
@@ -68,7 +83,14 @@ public class ChaseCrowd : MonoBehaviour
             {
                 // 영웅이 충돌했을 때 처리
                 Debug.Log($"Hero {squad.name} has entered the crowd.");
+                TakeDamageEventArgs takeDamageArgs = new TakeDamageEventArgs(this, squad, Mathf.RoundToInt(attackPower));
+                BattleEventManager.Instance.CallEvent(takeDamageArgs);
             }
         }
+    }
+
+    public void TakeDamage(TakeDamageEventArgs eventArgs)
+    {
+        // 추적 크라우드가 피해를 받았을 때 처리
     }
 }
