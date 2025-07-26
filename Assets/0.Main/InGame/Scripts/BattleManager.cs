@@ -98,16 +98,6 @@ public class BattleManager : MonoSingleton<BattleManager>
         BattleEventManager.Instance.CallEvent(startEventArgs);
     }
 
-    private void Update()
-    {
-        if (isEnded)
-        {
-            return;
-        }
-        
-        chaseGuage.Decrease(chaseGuageDecreaseRate * Time.deltaTime);
-    }
-
     // Update is called once per frame
     void EndGame(bool isVictory,bool isBossDead)
     {
