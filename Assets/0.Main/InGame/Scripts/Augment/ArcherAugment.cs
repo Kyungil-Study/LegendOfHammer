@@ -41,7 +41,7 @@ public class ArcherSpeedAugment : ArcherAugment
 
     public override void Apply(Archer archer, bool isFinalUpgrade)
     {
-        Debug.Log("Applying Archer Speed Augment");
+        Debug.Log($"Applying Archer Speed Augment: {AttackSpeedIncreasedRate}, Final Upgrade: {isFinalUpgrade}");
         // 공격속도 증가 적용
         archer.BonusAttackSpeed = AttackSpeedIncreasedRate;
         archer.mageAttackSpeedFactor = MageAttackSpeedIncreased;
@@ -65,7 +65,7 @@ public class ArcherProjectileAugment : ArcherAugment
 
     public override void Apply(Archer archer, bool isFinalUpgrade)
     {
-        Debug.Log("Applying Archer Projectile Augment");
+        Debug.Log($"Applying Archer Projectile Augment: {AdditionalArrowAttackRatio}, Final Upgrade: {isFinalUpgrade}");
         
         archer.IsSubProjectile = true;
         
@@ -92,6 +92,7 @@ public class ArcherPenetrationAugment : ArcherAugment
 
     public override void Apply(Archer archer, bool isFinalUpgrade)
     {
+        Debug.Log($" Applying Archer Penetration Augment: {PenetrationCountIncreased}, Final Upgrade: {isFinalUpgrade}");
         // 관통 횟수 증가 적용
         archer.pierceLimit += PenetrationCountIncreased;
         archer.targetAdditionalDamageFactor = TargetAdditionalDamageRatio;

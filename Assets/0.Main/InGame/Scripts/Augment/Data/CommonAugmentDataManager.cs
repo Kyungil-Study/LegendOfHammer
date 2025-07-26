@@ -44,8 +44,7 @@ public class CommonAugmentManager : MonoSingleton<CommonAugmentManager>
     protected override void Initialize()
     {
         base.Initialize();
-        var resultList = TSVLoader.LoadTableToDictionary<int, CommonAugmentTSV>(resourcePath, augment => augment.ID);
-        
+        Records = TSVLoader.LoadTableToDictionary<int, CommonAugment>(resourcePath, augment => augment.ID);        
     }
 
     
