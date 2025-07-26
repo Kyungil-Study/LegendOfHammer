@@ -64,7 +64,7 @@ public class Archer : Hero
         var projectileSample = IsFinalProjectile ? finalProjectilePrefab : NormalProjectilePrefab;
         var projectileSpawn = IsFinalProjectile ? finalProjectileSpawnPoints : new Transform[] { NormalProjectileSpawnPoint };
 
-        Debug.Log($" BasicAttack Sample Projectile: {projectileSample.name}, Spawn Points Count: {projectileSpawn.Length}");
+        Debug.Log($" BasicAttack Sample Projectile[IsFinal:{IsFinalProjectile}]: {projectileSample.name}, Spawn Points Count: {projectileSpawn.Length}");
         foreach (var spawPoint in projectileSpawn)
         {
             ArcherArrow projectile = Instantiate(projectileSample, spawPoint.position, spawPoint.rotation);

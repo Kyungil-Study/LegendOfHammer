@@ -70,7 +70,7 @@ public class CommonAugment : Augment
 
     public override Sprite GetIcon()
     {
-        return ClassAugmentManager.Instance.GetIcon(OptionID);
+        return CommonAugmentManager.Instance.GetIcon(OptionID);
     }
 }
 
