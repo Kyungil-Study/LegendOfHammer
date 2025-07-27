@@ -43,8 +43,7 @@ public class Archer : Hero
     protected override void Awake()
     {
         base.Awake();
-        var callbacks = BattleEventManager.Instance.Callbacks;
-        callbacks.OnStartBattle += OnStartBattle;
+        BattleEventManager.RegistEvent<StartBattleEventArgs>(OnStartBattle);
     }
 
     private void OnStartBattle(StartBattleEventArgs args)

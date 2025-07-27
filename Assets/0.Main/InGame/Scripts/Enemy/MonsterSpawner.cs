@@ -52,9 +52,8 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
     
     private void Awake()
     {
-        var callbacks = BattleEventManager.Instance.Callbacks;
-        callbacks.OnStartBattle += StartGame;
-        callbacks.OnEndBattle += EndGame;
+        BattleEventManager.RegistEvent<StartBattleEventArgs>(StartGame);
+        BattleEventManager.RegistEvent<EndBattleEventArgs>(EndGame);
         spawnPatternTableSao.Resolve();
     }
 

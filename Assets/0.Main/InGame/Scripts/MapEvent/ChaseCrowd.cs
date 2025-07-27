@@ -25,12 +25,8 @@ public class ChaseCrowd : MapEventExecutor , IBattleCharacter
     
     private void Awake()
     {
-        var callbacks = BattleEventManager.Instance.Callbacks;
-        BattleManager.Instance.ChaseGuage.Events.OnValueChanged += OnChaseGuageValueChanged;
         originPosition = transform.position;
-        
         attackCollider = GetComponent<BoxCollider2D>();
-        
         attackCollider.enabled = false;
     }
 
@@ -40,11 +36,6 @@ public class ChaseCrowd : MapEventExecutor , IBattleCharacter
     }
 
 
-    private void OnChaseGuageValueChanged(float arg1, float arg2)
-    {
-        var ratio = arg1 / arg2;
-        isChasing = ratio >= normalizedTriggerGauge;
-    }
     private IEnumerator ChaseCoroutine()
     {
         transform.position = originPosition;
@@ -71,7 +62,7 @@ public class ChaseCrowd : MapEventExecutor , IBattleCharacter
                 // 영웅이 충돌했을 때 처리
                 Debug.Log($"Hero {squad.name} has entered the crowd.");
                 TakeDamageEventArgs takeDamageArgs = new TakeDamageEventArgs(this, squad, Mathf.RoundToInt(attackPower));
-                BattleEventManager.Instance.CallEvent(takeDamageArgs);
+                BattleEventManager.CallEvent(takeDamageArgs);
             }
         }
     }

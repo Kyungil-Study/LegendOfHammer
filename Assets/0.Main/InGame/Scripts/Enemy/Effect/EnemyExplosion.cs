@@ -29,7 +29,7 @@ public class EnemyExplosion : MonoBehaviour
             
             if (target != null)
             {
-                BattleEventManager.Instance.CallEvent
+                BattleEventManager.CallEvent
                 (
                     new TakeDamageEventArgs(attacker, target, damage)
                 );
