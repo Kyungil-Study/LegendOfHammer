@@ -42,6 +42,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Alert
+    uniqueID: 1536309827
+    locked: 0
+  - name: MapEvent
+    uniqueID: 3327020695
+    locked: 0
   - name: Sqaud
     uniqueID: 146912833
     locked: 0
