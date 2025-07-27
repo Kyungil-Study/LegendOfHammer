@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
-using UnityEditor.Search.Providers;
 using UnityEngine;
 
 [RequireComponent(typeof(PolygonCollider2D))]
