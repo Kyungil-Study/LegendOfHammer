@@ -130,7 +130,7 @@ public class CommonAugmentGotchaSystem : UIPage
 
     private void OnSelectAugment(Augment augment)
     {
-        BattleEventManager.Instance.CallEvent(new SelectAugmentEventArgs(augment));
+        BattleEventManager.CallEvent(new SelectAugmentEventArgs(augment));
         Owner.SwapPage(UIPageType.ClearPage);
     }
 }

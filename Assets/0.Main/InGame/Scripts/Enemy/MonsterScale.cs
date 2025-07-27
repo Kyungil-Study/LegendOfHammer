@@ -68,12 +68,12 @@ public class MonsterScale : MonoBehaviour
 
     private void OnEnable()
     {
-        BattleEventManager.Instance.Callbacks.OnTakeDamage += PlayDamageEffect;
+        BattleEventManager.RegistEvent<TakeDamageEventArgs>(PlayDamageEffect);
     }
 
     private void OnDisable()
     {
-        BattleEventManager.Instance.Callbacks.OnTakeDamage -= PlayDamageEffect;
+        BattleEventManager.UnregistEvent<TakeDamageEventArgs>(PlayDamageEffect);
     }
     
     void LateUpdate()
