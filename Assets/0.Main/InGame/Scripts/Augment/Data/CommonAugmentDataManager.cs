@@ -14,6 +14,24 @@ public class CommonAugmentManager : MonoSingleton<CommonAugmentManager>
     } = new Dictionary<int, CommonAugment>();
 
     [SerializeField] private string resourcePath = "CommonAugmentData";
+    [SerializeField] private CommonAugmentIconTableSAO augmentIconTable;
+    
+    public Sprite GetIcon(int OptionId)
+    {
+        if (augmentIconTable == null)
+        {
+            Debug.LogError("CommonAugmentIconTableSAO is not assigned.");
+            return null;
+        }
+        
+       var icon = augmentIconTable.GetIconByOptionID(OptionId);
+        if (icon == null)
+        {
+            Debug.LogWarning($"Icon for CommonAugment with ID {OptionId} not found.");
+        }
+        
+        return icon;
+    }
     
     public CommonAugment GetAugmentFiltered(AugmentRarity rarity, int optionID)
     {
@@ -26,7 +44,7 @@ public class CommonAugmentManager : MonoSingleton<CommonAugmentManager>
     protected override void Initialize()
     {
         base.Initialize();
-        Records = TSVLoader.LoadTableToDictionary<int, CommonAugment>(resourcePath, augment => augment.ID);
+        Records = TSVLoader.LoadTableToDictionary<int, CommonAugment>(resourcePath, augment => augment.ID);        
     }
 
     

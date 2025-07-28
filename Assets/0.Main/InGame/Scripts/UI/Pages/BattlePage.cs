@@ -17,6 +17,9 @@ public class BattlePage : UIPage
     [Header("추격")]
     [LabelText("추격 게이지"), SerializeField] private Slider chasingSlider;
     
+    [Header("일시정지")]
+    [LabelText("일시정지 버튼"), SerializeField] private Button pauseButton;
+    
     private Dictionary<EnemyID ,int> scoreMap = new Dictionary<EnemyID, int>();
     private int currentScore = 0;
     private int maxScore = 0;
@@ -31,12 +34,18 @@ public class BattlePage : UIPage
         currentScoreText.text = "0";
         maxScoreText.text = "0";
         
-        var callbacks = BattleEventManager.Instance.Callbacks;
-        callbacks.OnDeath += OnDeath; 
-        callbacks.OnEndBattle += OnEndBattle;
+        BattleEventManager.RegistEvent<DeathEventArgs>(OnDeath);
+        BattleEventManager.RegistEvent<EndBattleEventArgs>(OnEndBattle);
         
         BattleManager.Instance.ChaseGuage.Events.OnValueChanged += OnChaseGuageChanged;
         chasingSlider.maxValue = BattleManager.Instance.ChaseGuage.Max;
+        
+        pauseButton.onClick.AddListener(OnPause);
+    }
+
+    private void OnPause()
+    {
+        owner.SwapPage(UIPageType.PausePage);
     }
 
     private void OnChaseGuageChanged(float arg1, float arg2)
