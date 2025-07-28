@@ -141,7 +141,8 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
         if (col.gameObject.layer == 9)  // ClearZone
         {
-            BattleEventManager.Instance.CallEvent(new AliveMonsterEventArgs(this));
+            int alivePoint = EnemyDataManager.Instance.Records[enemyID].Chasing_Increase; 
+            BattleEventManager.Instance.CallEvent(new AliveMonsterEventArgs(this,alivePoint));
             Destroy(gameObject);
         }
     }
