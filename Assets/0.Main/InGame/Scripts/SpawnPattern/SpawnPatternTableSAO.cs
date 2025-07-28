@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -21,6 +22,17 @@ public class SpawnPatternTableSAO : ScriptableObject
             spawnPattern.ResolveWaveSlots();
             
         }
+    }
+
+    public IReadOnlyList<SpawnPattern> FilteredSpawnPatterns(int stage, WaveRankType rank)
+    {
+        return spawnPatterns.Where( x =>
+            x.AppearMinStage <= stage 
+            &&
+            x.AppearMaxStage >= stage
+            &&
+            x.WaveRank == rank
+            ).ToList();
     }
 
     public SpawnPattern GetSpawnPattern(EnemySpawnPatternType key)
