@@ -64,16 +64,14 @@ public class BattleManager : MonoSingleton<BattleManager>
 
     private void OnAliveMonster(AliveMonsterEventArgs args)
     {
-        var monster = args.Monster as Monster;
+        var monster = args.AliveMonster;
         Debug.Log($"[BattleManager] Monster {monster.EnemyID} is alive.");
         var data = EnemyDataManager.Instance.Records[monster.EnemyID];
         if (data.Enemy_Rank.Equals(EnemyRank.Boss))
         {
             EndGame(true, false);
         }
-        // todo: UI 완료되면 활성화
-        var enemyData = EnemyDataManager.Instance.Records[monster.EnemyID];
-        chaseGuage.Increase(enemyData.Chasing_Increase);
+        chaseGuage.Increase(args.AlivePoint);
     }
 
 
