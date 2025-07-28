@@ -23,7 +23,7 @@ public class WizardMagicBall : HeroProjectile
                 enemy, 
                 Damage
             );
-            BattleEventManager.Instance.CallEvent(eventArgs);
+            BattleEventManager.CallEvent(eventArgs);
             enemy.Stat.AddModifier(new DamageAmpModifier(Owner.DebuffRate, Owner.DebuffDuration));
             // 도트딜 적용 (?)
             // float rate = 0.015f; // 1.5%

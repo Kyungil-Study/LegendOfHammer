@@ -438,6 +438,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseAttackDamage: 500
   attackPerSec: 0.1
+  DebuffDuration: 0
+  DebuffRate: 0
   cooldownIndicator: {fileID: 5601146472650972066}
   chargeDistance: 2
   chargeDuration: 0.2
@@ -1061,10 +1063,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseAttackDamage: 300
   attackPerSec: 1
+  DebuffDuration: 0
+  DebuffRate: 0
   <BonusAttackSpeed>k__BackingField: 0
   projectileSpawnPoint: {fileID: 2844217813709663506}
   projectilePrefab: {fileID: -9055637960358438273, guid: fcfc5c6fe3d83bb4c9aafffa60046a6b, type: 3}
   <ExplosionRadius>k__BackingField: 0.5
+  AttackCount: 1
+  CurrentExplosionRadius: 0
+  FinalDebuff: 0
+  FinalExplosive: 0
+  deathExplosionEffectPrefab: {fileID: 0}
+  deathExplosionRadius: 1
 --- !u!1 &8363186298606022421
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,8 +18,8 @@ public class StageManager : MonoBehaviour
 
     private void Awake()
     {
-        BattleEventManager.Instance.Callbacks.OnStartBattle += StartGame;
-        BattleEventManager.Instance.Callbacks.OnEndBattle += EndGame;
+        BattleEventManager.RegistEvent<StartBattleEventArgs>(StartGame);
+        BattleEventManager.RegistEvent<EndBattleEventArgs>(EndGame);
     }
 
     private void EndGame(EndBattleEventArgs args)
@@ -61,7 +61,7 @@ public class StageManager : MonoBehaviour
         yield return new WaitForSeconds(time);
         Debug.Log("Next page triggered.");
         NextPageEventArgs args = new NextPageEventArgs();
-        BattleEventManager.Instance.CallEvent(args);
+        BattleEventManager.CallEvent(args);
     }
 
     private IEnumerator UpdateWave_Coroutine()

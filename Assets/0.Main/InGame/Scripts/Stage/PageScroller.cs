@@ -14,8 +14,8 @@ public class PageScroller : MonoBehaviour
 
     private void Awake()
     {
-        reserveNextPage = Enumerable.Repeat(false, pages.Length).ToArray(); 
-        BattleEventManager.Instance.Callbacks.OnNextPage += OnNextPage;
+        reserveNextPage = Enumerable.Repeat(false, pages.Length).ToArray();
+        BattleEventManager.RegistEvent<NextPageEventArgs>(OnNextPage);
     }
 
     private void OnNextPage(NextPageEventArgs obj)
