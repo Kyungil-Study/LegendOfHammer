@@ -48,6 +48,11 @@ public class ArcherArrow : HeroProjectile
 
     protected override void Hit(Monster target)
     {
+        if (pierceLimit <= -1)
+        {
+            return;
+        }
+        
         OnHit?.Invoke();
         pierceLimit--;
 

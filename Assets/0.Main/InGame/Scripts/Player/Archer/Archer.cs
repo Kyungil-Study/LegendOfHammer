@@ -38,6 +38,7 @@ public class Archer : Hero
     
     public bool IsSubProjectile { get; set; } = false;
     public bool IsFinalSubProjectile { get; set; } = false;
+    public bool IsFinalPenetration { get; set; } = false; // 관통 증강 최종 여부
     
 
     protected override void Awake()
