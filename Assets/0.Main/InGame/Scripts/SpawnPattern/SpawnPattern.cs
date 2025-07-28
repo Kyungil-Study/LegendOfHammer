@@ -8,7 +8,8 @@ using UnityEngine.Serialization;
 public class SpawnPattern : MonoBehaviour
 {
     [LabelText("웨이브 종류 ID")] public int augmentTypeID = 0;
-    [LabelText("웨이브 등장 최소 스테이지")] public int AppearMinStage = 1;
+    [LabelText("웨이브 등급")] public WaveRankType WaveRank;
+    [LabelText("웨이브 등장 최소 스테이지")] public int AppearMinStage = 999;
     [LabelText("웨이브 등장 최종 스테이지")] public int AppearMaxStage = 999;
     
     [SerializeField] private bool onlyMid = false;

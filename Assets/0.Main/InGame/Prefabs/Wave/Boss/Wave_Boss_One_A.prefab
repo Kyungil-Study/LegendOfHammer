@@ -45,9 +45,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68453877945211844a7f70aa26ec0dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  augmentTypeID: 0
+  WaveRank: 2
+  AppearMinStage: 1
+  AppearMaxStage: 999
   onlyMid: 1
-  waveType: 25
-  waveSlots:
+  patternType: 0
+  patternSlots:
   - {fileID: 5529648747185831348}
 --- !u!1001 &9076524795405432412
 PrefabInstance:
