@@ -29,6 +29,15 @@ public class MonsterTester : MonoBehaviour
     [SerializeField] private int stageIndex = 1; // 스테이지 인덱스, 테스트용
     [SerializeField] private TextMeshProUGUI HPText;
     
+    [Space(10),Header("웨이브 세팅")]
+    [SerializeField] private SpawnPattern spawnPatternTestSample;
+    [SerializeField] private EnemyID normalMeleeID = EnemyID.Straight_Normal_001;
+    [SerializeField] private EnemyID normalRangeID = EnemyID.Zigzag_Normal_002;
+    [SerializeField] private EnemyID eliteMeleeID = EnemyID.Straight_Elite_001;
+    [SerializeField] private EnemyID eliteRangeID = EnemyID.Zigzag_Elite_002;
+    [SerializeField] private EnemyID bossMeleeID = EnemyID.Straight_Boss_001;
+    [SerializeField] private EnemyID bossRangeID = EnemyID.Zigzag_Boss_002;
+    
     private Camera cam;
     
     private Monster              spawnedMonster;
@@ -63,6 +72,45 @@ public class MonsterTester : MonoBehaviour
                 var enemyData = EnemyDataManager.Instance.EnemyHPScalingDatas[i];
                 Debug.Log($"HP 스케일링 테이블 연동 여부 확인 : {enemyData.Stage} / {enemyData.HP_Scaling}");
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            SpawnByWavePattern();
+        }
+    }
+
+    private void SpawnByWavePattern()
+    {
+        spawnPatternTestSample.ResolveWaveSlots();
+        if (spawnPatternTestSample == null)
+        {
+            Debug.LogError("[MonsterTester] SpawnPattern is null. Please assign a valid SpawnPattern.");
+            return;
+        }
+
+        foreach (var slots in spawnPatternTestSample.PatternSlots)
+        {
+            if (slots == null)
+            {
+                Debug.LogError("[MonsterTester] SpawnPatternSlot is null. Please check the SpawnPattern.");
+                continue;
+            }
+
+            Vector3 spawnPosition = slots.transform.position + spawnPoint.position;
+                
+            EnemyID enemyID = slots.SpawnRankType switch
+            {
+                EnemySpawnRankType.Normal => slots.SpawnAttackType == EnemySpawnAttackType.Melee ? normalMeleeID : normalRangeID,
+                EnemySpawnRankType.Elite  => slots.SpawnAttackType == EnemySpawnAttackType.Melee ? eliteMeleeID : eliteRangeID,
+                EnemySpawnRankType.Boss   => slots.SpawnAttackType == EnemySpawnAttackType.Melee ? bossMeleeID : bossRangeID,
+                _                          => normalMeleeID // 기본값 설정
+            };
+                
+            var monster = Instantiate(monsterPrefab, spawnPosition, Quaternion.identity);
+            monster.SetEnemyID(enemyID);
+            monster.SetPlayer(player);
+                
         }
     }
 
@@ -154,7 +202,9 @@ public class MonsterTester : MonoBehaviour
         GUILayout.BeginArea(new Rect(x, y, width, height), "Monster Test Info", GUI.skin.window);
 
         GUILayout.Label("마우스 클릭한 위치에 스폰 \nWASD로 캐릭터 이동 가능");
-        GUILayout.Label("테이블 기반 스폰 : Space키 \n패턴별 스폰 : 1번키 ");
+        GUILayout.Label("테이블 기반 스폰 : Space키 \n패턴별 스폰 : 1번키\n웨이브 기반 스폰 : 2번키");
+        
+        
         GUILayout.Space(8);
 
         if (spawnedMonster != null)
