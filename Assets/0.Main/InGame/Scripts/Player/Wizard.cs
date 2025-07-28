@@ -24,9 +24,8 @@ public class Wizard : Hero
     protected override void Awake()
     {
         base.Awake();
-        var callbacks = BattleEventManager.Instance.Callbacks;
-        callbacks.OnStartBattle += OnStartBattle;
-        callbacks.OnDeath += OnAnyDeath; // 몬스터 사망 감지
+        BattleEventManager.RegistEvent<StartBattleEventArgs>(OnStartBattle);
+        BattleEventManager.RegistEvent<DeathEventArgs>(OnAnyDeath);
         CurrentExplosionRadius = ExplosionRadius;
     }
 
@@ -45,7 +44,7 @@ public class Wizard : Hero
             projectile.IsCritical = Random.Range(0f,1f) <= squadStats.CriticalChance;
             projectile.Fire();
         }
-        Debug.Log($"공격 개수: {AttackCount}, 공격 범위: {CurrentExplosionRadius}");
+        // Debug.Log($"공격 개수: {AttackCount}, 공격 범위: {CurrentExplosionRadius}");
     }
 
     // TODO: 중복 공격 시 피해 감소율

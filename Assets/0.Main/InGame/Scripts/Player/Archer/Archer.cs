@@ -43,8 +43,7 @@ public class Archer : Hero
     protected override void Awake()
     {
         base.Awake();
-        var callbacks = BattleEventManager.Instance.Callbacks;
-        callbacks.OnStartBattle += OnStartBattle;
+        BattleEventManager.RegistEvent<StartBattleEventArgs>(OnStartBattle);
     }
 
     private void OnStartBattle(StartBattleEventArgs args)
@@ -64,7 +63,7 @@ public class Archer : Hero
         var projectileSample = IsFinalProjectile ? finalProjectilePrefab : NormalProjectilePrefab;
         var projectileSpawn = IsFinalProjectile ? finalProjectileSpawnPoints : new Transform[] { NormalProjectileSpawnPoint };
 
-        Debug.Log($" BasicAttack Sample Projectile: {projectileSample.name}, Spawn Points Count: {projectileSpawn.Length}");
+        Debug.Log($" BasicAttack Sample Projectile[IsFinal:{IsFinalProjectile}]: {projectileSample.name}, Spawn Points Count: {projectileSpawn.Length}");
         foreach (var spawPoint in projectileSpawn)
         {
             ArcherArrow projectile = Instantiate(projectileSample, spawPoint.position, spawPoint.rotation);
@@ -168,7 +167,10 @@ public class Archer : Hero
     
     public int CalculateSubProjectileDamage(bool isCritical = false)
     {
-        return (int)(CalculateDamage(isCritical) * subProjectileAttackFactor);
+        var finalDamage = (int)(CalculateDamage(isCritical) * subProjectileAttackFactor);
+        Debug.Log($"[Archer] SubProjectile Damage: {finalDamage}");
+        return finalDamage;
+        
     }
 
     // TODO: 증강에 의한 추가 계수

@@ -248,7 +248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3380768c582997f41b7fda6a7ab1e040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyID: 0
+  IsTestMode: 0
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -264,9 +264,9 @@ MonoBehaviour:
   flyingCfg:
     distanceToStop: 3
   suicideCfg:
-    delay: 3
-    detectRange: 0.5
+    delay: 2
     attackRange: 0.75
+    exlposionInverval: 0.2
     explosionPrefab: {fileID: 6111301031846871093, guid: 9a3809abee10ab54188078ab046f1168, type: 3}
   shieldCfg:
     radius: 1.2
@@ -277,7 +277,7 @@ MonoBehaviour:
     burstInterval: 0.15
     fireInterval: 3
     projectilePrefab: {fileID: 5122971031347301392, guid: 623e67ce00306e349ac9d084a76d79d4, type: 3}
-    projectileSpeed: 5
+    projectileSpeed: 3
   spreadCfg:
     burstCount: 3
     burstInterval: 0.2
@@ -338,5 +338,6 @@ MonoBehaviour:
     idleClip: {fileID: 7400000, guid: 9211ac6bf910282488d2880bfbd869ed, type: 2}
     hitBoxSize: 1
   mHitBoxSize: 1
-  hitFlashCount: 4
   hitFlashInterval: 0.2
+  hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
+  suicideFlashColor: {r: 1, g: 0, b: 0, a: 1}

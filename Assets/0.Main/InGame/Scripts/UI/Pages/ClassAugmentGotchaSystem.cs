@@ -3,6 +3,27 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+public struct ProbabilityRecord<T>
+{
+    public T ID;
+    public int minProbability; // 확률
+    public int maxProbability;
+        
+    public ProbabilityRecord(T id, int min, int max)
+    {
+        ID = id;
+        minProbability = min;
+        maxProbability = max;
+    }
+        
+    public bool IsInRange(int value)
+    {
+        // Check if the value is within the range of minProbability and maxProbability
+        return value >= minProbability && value <= maxProbability;
+    }
+}
+
 public class ClassAugmentGotchaSystem : UIPage
 {
     [Space(10), Header("Class Augment")]
@@ -54,6 +75,7 @@ public class ClassAugmentGotchaSystem : UIPage
     public override void Enter()
     {
         gameObject.SetActive(true);
+        
         GotchaClassAugment( ClassAugmentManager.Instance.GetAllOption());
     }
     
@@ -131,34 +153,42 @@ public class ClassAugmentGotchaSystem : UIPage
         }
         
         Debug.Log($"Total probability: {totalProbability}");
-        // first class augment
-        int randomIndex = UnityEngine.Random.Range(0, totalProbability);
-        var selectedID0 = probabilities.FirstOrDefault(r => r.IsInRange(randomIndex));
-        if (selectedID0.ID == 0)
+        for(int i= 0 ; i < classAugmentSlots.Length; i++)
         {
-            Debug.LogError("No valid augment found. Please check the augment records.");
+            GotchaSlot(i, totalProbability, probabilities);
+        }
+    }
+    
+    private void GotchaSlot(int slotIndex, int totalProbability, List<ProbabilityRecord<int>> probabilities)
+    {
+        if (probabilities.Count == 0) // 더이상 뽑을 증강이 없다.
+        {
+            classAugmentSlots[slotIndex].gameObject.SetActive(false);
+            Debug.Log("No probabilities available for the selected slot. Please check the augment records.");
             return;
         }
-        probabilities.Remove(selectedID0); // 중복 방지를 위해 제거
+        
+        int randomIndex = UnityEngine.Random.Range(0, totalProbability);
         do
         {
             randomIndex = UnityEngine.Random.Range(0, totalProbability);
         } while (probabilities.Any( r => r.IsInRange(randomIndex)) == false);
-        var selectedID1 = probabilities.FirstOrDefault(r => r.IsInRange(randomIndex));
-        if (selectedID1.ID == 0)
+        
+        var selectedID = probabilities.FirstOrDefault(r => r.IsInRange(randomIndex));
+        if (selectedID.ID == 0)
         {
             Debug.LogError("No valid augment found. Please check the augment records.");
             return;
         }
-        
-        Debug.Log($"Selected augment IDs: {selectedID0.ID}, {selectedID1.ID}");
-        classAugmentSlots[0].SetAugment(ClassAugmentManager.Instance.GetAugment(selectedID0.ID),OnSelectAugment);
-        classAugmentSlots[1].SetAugment(ClassAugmentManager.Instance.GetAugment(selectedID1.ID),OnSelectAugment);
+        probabilities.Remove(selectedID); // 중복 방지를 위해 제거
+        Debug.Log($"Selected Slot{slotIndex} augment IDs: {selectedID.ID}");
+        classAugmentSlots[slotIndex].gameObject.SetActive(true);
+        classAugmentSlots[slotIndex].SetAugment(ClassAugmentManager.Instance.GetAugment(selectedID.ID), OnSelectAugment);
     }
     
     private void OnSelectAugment(Augment augment)
     {
-        BattleEventManager.Instance.CallEvent(new SelectAugmentEventArgs(augment));
+        BattleEventManager.CallEvent(new SelectAugmentEventArgs(augment));
         Owner.SwapPage(UIPageType.BattlePage);
     }
 

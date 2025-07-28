@@ -6,7 +6,7 @@ public class DebugLogger : MonoBehaviour
 {
     private void Start()
     {
-        BattleEventManager.Instance.Callbacks.OnTakeDamage += DamageLog;
+        BattleEventManager.RegistEvent<TakeDamageEventArgs>(DamageLog);
     }
 
     private void DamageLog(TakeDamageEventArgs eventArgs)

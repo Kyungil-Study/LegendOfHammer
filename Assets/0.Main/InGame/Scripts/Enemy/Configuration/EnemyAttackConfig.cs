@@ -13,8 +13,8 @@ public class NormalAttackConfig
 public class SuicideAttackConfig
 {
     public float delay       = 3f;
-    public float detectRange = 0.5f;
     public float attackRange = 0.75f;
+    public float exlposionInverval = 0.2f;
     public GameObject explosionPrefab;
 }
 

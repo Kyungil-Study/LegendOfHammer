@@ -30,6 +30,5 @@ public class EnemyDataManager : MonoSingleton<EnemyDataManager>
             throw new ArgumentNullException(nameof(resourcePath), "Resource path cannot be null or empty.");
         }
         records = TSVLoader.LoadTableToDictionary<EnemyID, EnemyData>(resourcePath, data => data.Enemy_ID );
-        
     }
 }
