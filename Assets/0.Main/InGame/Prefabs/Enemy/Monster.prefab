@@ -292,7 +292,7 @@ MonoBehaviour:
     - 30
     - 45
     projectilePrefab: {fileID: 5122971031347301392, guid: 623e67ce00306e349ac9d084a76d79d4, type: 3}
-    projectileSpeed: 5
+    projectileSpeed: 3
   radialCfg:
     projectileCount: 12
     betweenAngle: 30
