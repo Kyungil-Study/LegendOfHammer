@@ -13,6 +13,12 @@ public class EnemyData
     public int First_Appear_Stage { get; set; }
 }
 
+public class EnemyHPScalingData
+{
+    public int Stage { get; set; }
+    public float HP_Scaling { get; set; }
+}
+
 public enum EnemyID
 {
     // Straight (ID: 11001, 21001, 31001)

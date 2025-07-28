@@ -236,6 +236,13 @@ MonoBehaviour:
   MoveSpeed:
     Modify: 0
     Value: 0
+  hpScaler:
+    oneto10Scale: 1.12
+    oneto20Scale: 1.12
+    oneto30Scale: 1.25
+    NormalMonsterScale: 20000
+    EliteMonsterScale: 50000
+    BossMonsterScale: 1000000
 --- !u!114 &7494431464099580550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,6 +276,7 @@ MonoBehaviour:
     exlposionInverval: 0.2
     explosionPrefab: {fileID: 6111301031846871093, guid: 9a3809abee10ab54188078ab046f1168, type: 3}
   shieldCfg:
+    rate: 0.5
     radius: 1.2
     angleDeg: 90
     pivotOffset: {x: 0, y: 0}
@@ -276,8 +284,9 @@ MonoBehaviour:
     burstCount: 3
     burstInterval: 0.15
     fireInterval: 3
-    projectilePrefab: {fileID: 5122971031347301392, guid: 623e67ce00306e349ac9d084a76d79d4, type: 3}
+    projectilePrefab: {fileID: 5122971031347301392, guid: 4eaa12e29b15cb348ae5e9ba05c912e3, type: 3}
     projectileSpeed: 3
+    isLookingForTarget: 1
   spreadCfg:
     burstCount: 3
     burstInterval: 0.2
@@ -293,16 +302,19 @@ MonoBehaviour:
     - 45
     projectilePrefab: {fileID: 5122971031347301392, guid: 623e67ce00306e349ac9d084a76d79d4, type: 3}
     projectileSpeed: 5
+    isLookingForTarget: 0
   radialCfg:
     projectileCount: 12
     betweenAngle: 30
     fireInterval: 3
     projectilePrefab: {fileID: 5122971031347301392, guid: 623e67ce00306e349ac9d084a76d79d4, type: 3}
     projectileSpeed: 5
+    isLookingForTarget: 0
   flyingAtkCfg:
     fireInterval: 1
     projectilePrefab: {fileID: 5122971031347301392, guid: 623e67ce00306e349ac9d084a76d79d4, type: 3}
     projectileSpeed: 5
+    isLookingForTarget: 0
   knockbackDuration: 0.2
   deathEffectPrefab: {fileID: 5101364894278023870, guid: 7deb5b3117b1a0745a129df969fae227, type: 3}
 --- !u!114 &5546129984101200141
