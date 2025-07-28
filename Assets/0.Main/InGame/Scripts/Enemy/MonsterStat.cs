@@ -2,11 +2,49 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 // StatComponent 책임: “스탯 로딩/오버라이드/디버프 적용/HP관리”
 // 받는 피해 증가 디버프: IDamageModifier로 구현, 리스트에서 처리
+
+[Serializable]
+public class HPScaler
+{
+    [Header("30 스테이지 이전 곱연산")]
+    [SerializeField] private float oneTo10Scale = 1.12f;
+    [SerializeField] private float tenTo20Scale = 1.12f;
+    [SerializeField] private float tewentyTo30Scale = 1.25f;
+    
+    [Header("30 스테이지 이후 합연산")]
+    [SerializeField] private float NormalMonsterScale = 20000f;
+    [SerializeField] private float EliteMonsterScale  = 50000f;
+    [SerializeField] private float BossMonsterScale   = 1000000f;
+    
+    public int ScaleHP(EnemyRank myRank, int baseHP, int stageIndex)
+    {
+        float hp = baseHP;
+
+        for (int i = 2; i <= stageIndex; i++)
+        {
+            if (i <= 10) { hp *= 1.12f; }
+            else if (i <= 20) { hp *= 1.20f; }
+            else if (i <= 30) { hp *= 1.25f; }
+            else
+            {
+                switch (myRank)
+                {
+                    case EnemyRank.Normal: hp += 200000f; break;
+                    case EnemyRank.Elite:  hp += 500000f; break;
+                    case EnemyRank.Boss:   hp += 1000000f; break;
+                }
+            }
+        }
+        
+        return Mathf.RoundToInt(hp);
+    }
+}
 
 public class MonsterStat : MonoBehaviour
 {
@@ -14,6 +52,9 @@ public class MonsterStat : MonoBehaviour
     public StatField<int>   HP;
     public StatField<int>   Atk;
     public StatField<float> MoveSpeed;
+    
+    [Header("몬스터 스탯 스케일링")] [Tooltip("스테이지에 따라 HP를 스케일링")]
+    [SerializeField] private HPScaler hpScaler = new HPScaler();
     
     readonly List<IDamageModifier> modifiers = new();
     
@@ -48,7 +89,6 @@ public class MonsterStat : MonoBehaviour
         return modifiers.OfType<T>();
     }
     
-    /// <summary> TSV값 불러오기 + 변경하기 (스테이지 스케일링은 나중에 필요 시 내부에서 처리)</summary>
     public void Initialize(EnemyData data, int stageIndex)
     {
         var baseStat = new StatBlock
@@ -57,7 +97,7 @@ public class MonsterStat : MonoBehaviour
             Atk       = data.Atk_Power,
             MoveSpeed = data.Move_Speed
         };
-
+        
         FinalStat = new StatBlock
         {
             HP        = HP.Apply(baseStat.HP),
@@ -65,6 +105,10 @@ public class MonsterStat : MonoBehaviour
             MoveSpeed = MoveSpeed.Apply(baseStat.MoveSpeed)
         };
 
+        var stat = FinalStat;
+        stat.HP = hpScaler.ScaleHP(data.Enemy_Rank, baseStat.HP, stageIndex);
+        FinalStat = stat;
+        
         MaxHP = FinalStat.HP;
         CurrentHP = MaxHP;
     }
