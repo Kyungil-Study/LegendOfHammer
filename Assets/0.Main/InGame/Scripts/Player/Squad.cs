@@ -55,8 +55,7 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
     private void Awake()
     {
         stats.CurrentHealth = stats.MaxHealth;
-        var callbacks = BattleEventManager.Instance.Callbacks;
-        callbacks.OnStartBattle += OnStartBattle;
+        BattleEventManager.RegistEvent<StartBattleEventArgs>(OnStartBattle);
     }
 
     private void OnStartBattle(StartBattleEventArgs args)
@@ -71,12 +70,12 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
             return;
         }
         stats.CurrentHealth -= eventArgs.Damage;
-        BattleEventManager.Instance.CallEvent(new ReceiveDamageEventArgs(this, eventArgs.Damage));
+        BattleEventManager.CallEvent(new ReceiveDamageEventArgs(this, eventArgs.Damage));
     }
 
     private void Die()
     {
-        BattleEventManager.Instance.CallEvent(new DeathEventArgs(this));
+        BattleEventManager.CallEvent(new DeathEventArgs(this));
     }
 
     private void OnTriggerEnter2D(Collider2D other)

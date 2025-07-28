@@ -24,9 +24,8 @@ public class Wizard : Hero
     protected override void Awake()
     {
         base.Awake();
-        var callbacks = BattleEventManager.Instance.Callbacks;
-        callbacks.OnStartBattle += OnStartBattle;
-        callbacks.OnDeath += OnAnyDeath; // 몬스터 사망 감지
+        BattleEventManager.RegistEvent<StartBattleEventArgs>(OnStartBattle);
+        BattleEventManager.RegistEvent<DeathEventArgs>(OnAnyDeath);
         CurrentExplosionRadius = ExplosionRadius;
     }
 

@@ -115,7 +115,7 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
 
     private void Start()
     {
-        BattleEventManager.Instance.Callbacks.OnSelectAugment += OnSelectAugment;
+        BattleEventManager.RegistEvent<SelectAugmentEventArgs>(OnSelectAugment);
     }
     
     public void ClearInventory()
