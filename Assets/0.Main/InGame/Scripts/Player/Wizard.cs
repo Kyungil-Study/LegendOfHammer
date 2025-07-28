@@ -53,7 +53,7 @@ public class Wizard : Hero
     public override int CalculateDamage(bool isCritical = false)
     {
         float critFactor = isCritical ? squadStats.CriticalDamage : 1f;
-        return (int)(((baseAttackDamage * critFactor) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor);
+        return Mathf.RoundToInt(((baseAttackDamage * critFactor) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor);
     }
     
     // 몬스터가 죽었을 때 폭발 처리

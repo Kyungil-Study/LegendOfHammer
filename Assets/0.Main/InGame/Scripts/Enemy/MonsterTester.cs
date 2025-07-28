@@ -90,7 +90,7 @@ public class MonsterTester : MonoBehaviour
         monster.SetPlayer(player);
         
         lastSpawned       = monster;
-        var data          = EnemyDataManager.Instance.Records[testEnemyID];
+        var data          = EnemyDataManager.Instance.EnemyDatas[testEnemyID];
         lastRank          = data.Enemy_Rank;
         lastMovePattern   = data.EnemyMovementPattern;
         lastAttackPattern = data.Atk_Pattern;
@@ -101,7 +101,7 @@ public class MonsterTester : MonoBehaviour
         var monster = Instantiate(monsterPrefab, spawnPoint.position, Quaternion.identity);
         monster.SetEnemyID(patternDefaultID);
 
-        if (EnemyDataManager.Instance.Records.TryGetValue(patternDefaultID, out var data))
+        if (EnemyDataManager.Instance.EnemyDatas.TryGetValue(patternDefaultID, out var data))
         {
             monster.Stat.Initialize(data, BattleManager.Instance.StageIndex);
             lastRank          = data.Enemy_Rank;

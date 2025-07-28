@@ -53,7 +53,7 @@ public class BattleManager : MonoSingleton<BattleManager>
         {
             Debug.Log($"[BattleManager] Monster {monster.EnemyID} has died.");
             var id = monster.EnemyID;
-            var data = EnemyDataManager.Instance.Records[id];
+            var data = EnemyDataManager.Instance.EnemyDatas[id];
             if( data.Enemy_Rank.Equals(EnemyRank.Boss))
             {
                 Debug.Log($"Boss Monster has died.");
@@ -64,15 +64,15 @@ public class BattleManager : MonoSingleton<BattleManager>
 
     private void OnAliveMonster(AliveMonsterEventArgs args)
     {
-        var monster = args.Monster as Monster;
+        var monster = args.AliveMonster;
         Debug.Log($"[BattleManager] Monster {monster.EnemyID} is alive.");
-        var data = EnemyDataManager.Instance.Records[monster.EnemyID];
+        var data = EnemyDataManager.Instance.EnemyDatas[monster.EnemyID];
         if (data.Enemy_Rank.Equals(EnemyRank.Boss))
         {
             EndGame(true, false);
         }
         // todo: UI 완료되면 활성화
-        var enemyData = EnemyDataManager.Instance.Records[monster.EnemyID];
+        var enemyData = EnemyDataManager.Instance.EnemyDatas[monster.EnemyID];
         chaseGuage.Increase(enemyData.Chasing_Increase);
     }
 

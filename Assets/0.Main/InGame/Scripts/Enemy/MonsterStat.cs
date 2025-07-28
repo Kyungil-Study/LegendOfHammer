@@ -15,15 +15,15 @@ public class MonsterStat : MonoBehaviour
     public StatField<int>   Atk;
     public StatField<float> MoveSpeed;
     
+    readonly List<IDamageModifier> modifiers = new();
+    
     public StatBlock FinalStat { get; private set; }
     public int CurrentHP { get; private set; }
     public int MaxHP { get; private set; }
     
-    readonly List<IDamageModifier> modifiers = new();
-    
     public bool HasModifier<T>() where T : IDamageModifier
     {
-        return modifiers.Any(m => m is T);
+        return modifiers.Any(modifier => modifier is T);
     }
     
     public void AddModifier(IDamageModifier newModifier)
@@ -39,7 +39,7 @@ public class MonsterStat : MonoBehaviour
                 }
             }
         }
-
+        
         modifiers.Add(newModifier);
     }
     
@@ -128,26 +128,24 @@ public class DamageAmpModifier : IDamageModifier
 
     public DamageAmpModifier(float value, float duration)
     {
-        this.multipleValue = value;
+        multipleValue = value;
         endTime = Time.time + duration;
     }
 
+    public float Value => multipleValue;
     public bool IsExpired => Time.time >= endTime;
     public float ModifyIncoming(float baseDamage) => baseDamage * multipleValue;
     public void ExtendDuration(float additionalTime)
     {
         endTime = Mathf.Max(endTime, Time.time + additionalTime);
     }
-
-    // 같은 종류의 디버프인지 확인용
-    public float Value => multipleValue;
 }
 
 public class DamageOverTimeModifier : IDamageModifier
 {
-    private readonly float damagePerSecond; // 초당 피해량
-    private readonly float endTime;         // 만료 시각
-    private float accumulator;              // 누적 잔여 피해
+    private readonly float damagePerSecond; 
+    private readonly float endTime;         
+    private float accumulator;              
 
     public DamageOverTimeModifier(float dps, float duration)
     {
