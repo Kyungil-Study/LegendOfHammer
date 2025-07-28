@@ -35,6 +35,7 @@ public class SniperAttackConfig
     public float fireInterval  = 3f;
     public GameObject projectilePrefab;
     public float projectileSpeed = 5f;
+    public bool isLookingForTarget = true;
 }
 
 [Serializable]
@@ -48,6 +49,7 @@ public class SpreadAttackConfig
 
     public GameObject projectilePrefab;
     public float projectileSpeed = 5f;
+    public bool isLookingForTarget = false;
 }
 
 [Serializable]
@@ -59,6 +61,7 @@ public class RadialAttackConfig
 
     public GameObject projectilePrefab;
     public float projectileSpeed = 5f;
+    public bool isLookingForTarget = false;
 }
 
 [Serializable]
@@ -67,4 +70,5 @@ public class FlyingAttackConfig
     public float fireInterval = 1f;
     public GameObject projectilePrefab;
     public float projectileSpeed = 5f;
+    public bool isLookingForTarget = false;
 }
