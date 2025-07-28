@@ -70,7 +70,6 @@ public class Warrior : Hero
             return;
         }
         
-        IsCharging = true;
         m_ChargeDirection = direction.normalized;
         
         Vector3 endPosition = squad.transform.position + direction.normalized * (Distance.STANDARD_DISTANCE * chargeDistance);
@@ -80,7 +79,8 @@ public class Warrior : Hero
 
     private IEnumerator ChargeCoroutine(Vector3 endPosition)
     {
-        squad.invincible.Add("WarriorCharge");
+        IsCharging = true;
+        squad.ApplyInvincibility("WarriorCharge", chargeDuration + invincibleDurationAfterCharge);
         
         Vector3 startPosition = transform.position;
         float elapsedTime = 0f;
@@ -91,12 +91,7 @@ public class Warrior : Hero
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
         IsCharging = false;
-
-        yield return new WaitForSeconds(invincibleDurationAfterCharge);
-        
-        squad.invincible.Remove("WarriorCharge");
     }
 
     private List<Monster> m_HitMonsters = new List<Monster>();
