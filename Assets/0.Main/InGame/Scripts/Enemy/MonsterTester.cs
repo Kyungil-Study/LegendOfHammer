@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using TMPro;
 using Random = UnityEngine.Random;
 
 public class MonsterTester : MonoBehaviour
@@ -23,12 +24,16 @@ public class MonsterTester : MonoBehaviour
     [SerializeField] private EnemyMovementPattern testMovePattern = EnemyMovementPattern.Straight;
     [SerializeField] private EnemyAttackPattern   testAttackPattern = EnemyAttackPattern.Normal;
     
+    [Header("HP 스케일링 확인")]
+    [SerializeField] private int stageIndex = 1; // 스테이지 인덱스, 테스트용
+    [SerializeField] private TextMeshProUGUI HPText;
+    
     private Camera cam;
     
-    private Monster              lastSpawned;
-    private EnemyRank            lastRank;
-    private EnemyMovementPattern lastMovePattern;
-    private EnemyAttackPattern   lastAttackPattern;
+    private Monster              spawnedMonster;
+    private EnemyRank            monsterRank;
+    private EnemyMovementPattern monsterMovePattern;
+    private EnemyAttackPattern   monsterAttackPattern;
     
     private void Awake()
     {
@@ -49,6 +54,22 @@ public class MonsterTester : MonoBehaviour
         {
             SpawnByPattern();
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            for (int i = 0; i < EnemyDataManager.Instance.EnemyHPScalingDatas.Count; i++)
+            {
+                var enemyData = EnemyDataManager.Instance.EnemyHPScalingDatas[i];
+                Debug.Log($"HP 스케일링 테이블 연동 여부 확인 : {enemyData.Stage} / {enemyData.HP_Scaling}");
+            }
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (spawnedMonster == null) return;
+        
+        HPText.text = "HP : " + spawnedMonster.Stat.CurrentHP + " / " + spawnedMonster.Stat.FinalStat.HP;
     }
 
     private void HandlePlayerMovement()
@@ -89,11 +110,11 @@ public class MonsterTester : MonoBehaviour
         monster.SetEnemyID(testEnemyID);
         monster.SetPlayer(player);
         
-        lastSpawned       = monster;
+        spawnedMonster       = monster;
         var data          = EnemyDataManager.Instance.EnemyDatas[testEnemyID];
-        lastRank          = data.Enemy_Rank;
-        lastMovePattern   = data.EnemyMovementPattern;
-        lastAttackPattern = data.Atk_Pattern;
+        monsterRank          = data.Enemy_Rank;
+        monsterMovePattern   = data.EnemyMovementPattern;
+        monsterAttackPattern = data.Atk_Pattern;
     }
 
     private void SpawnByPattern()
@@ -103,8 +124,8 @@ public class MonsterTester : MonoBehaviour
 
         if (EnemyDataManager.Instance.EnemyDatas.TryGetValue(patternDefaultID, out var data))
         {
-            monster.Stat.Initialize(data, BattleManager.Instance.StageIndex);
-            lastRank          = data.Enemy_Rank;
+            monster.Stat.Initialize(data, stageIndex);
+            monsterRank = data.Enemy_Rank;
         }
         else
         {
@@ -115,9 +136,9 @@ public class MonsterTester : MonoBehaviour
         monster.IsTestMode = true;
         monster.MonsterTest(testMovePattern, testAttackPattern);
         
-        lastSpawned       = monster;
-        lastMovePattern   = testMovePattern;
-        lastAttackPattern = testAttackPattern;
+        spawnedMonster       = monster;
+        monsterMovePattern   = testMovePattern;
+        monsterAttackPattern = testAttackPattern;
     }
 
     void OnGUI()
@@ -131,22 +152,17 @@ public class MonsterTester : MonoBehaviour
 
         GUILayout.BeginArea(new Rect(x, y, width, height), "Monster Test Info", GUI.skin.window);
 
-        GUILayout.Label("마우스 클릭한 위치에 스폰 + WASD 이동 가능");
+        GUILayout.Label("마우스 클릭한 위치에 스폰 \nWASD로 캐릭터 이동 가능");
         GUILayout.Label("테이블 기반 스폰 : Space키 \n패턴별 스폰 : 1번키 ");
         GUILayout.Space(8);
 
-        if (lastSpawned != null)
+        if (spawnedMonster != null)
         {
-            GUILayout.Label($"Enemy ID           : {lastSpawned.EnemyID}");
-            GUILayout.Label($"Enemy Rank         : {lastRank}");
-            GUILayout.Label($"Movement Pattern   : {lastMovePattern}");
-            GUILayout.Label($"Attack Pattern     : {lastAttackPattern}");
+            GUILayout.Label($"Enemy ID           : {spawnedMonster.EnemyID}");
+            GUILayout.Label($"Enemy Rank         : {monsterRank}");
+            GUILayout.Label($"Movement Pattern   : {monsterMovePattern}");
+            GUILayout.Label($"Attack Pattern     : {monsterAttackPattern}");
             GUILayout.Space(4);
-
-            // var s = lastSpawned.Stat.FinalStat;
-            // GUILayout.Label($"Stat - HP          : {s.HP}");
-            // GUILayout.Label($"Stat - Atk         : {s.Atk}");
-            // GUILayout.Label($"Stat - MoveSpeed   : {s.MoveSpeed:F2}");
         }
         else
         {
