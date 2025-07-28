@@ -7,8 +7,12 @@ using UnityEngine.Serialization;
 
 public abstract class HeroProjectile : MonoBehaviour
 {
+    public Action OnHit { get; set; }
+    
+    public Hero Owner { get; set; }
     private bool mb_IsFired = false;
-    public int damage;
+    public bool IsCritical { get; set; } = false;
+    public virtual int Damage => Owner.CalculateDamage(IsCritical);
     public Func<GameObject> FindTargetFunc { get; set; }
     private Vector3 m_TargetDirection;
     [Range(0,10)] public float speed;
@@ -37,6 +41,7 @@ public abstract class HeroProjectile : MonoBehaviour
     protected virtual void SetDirection()
     {
         GameObject target = FindTargetFunc != null ? FindTargetFunc() : FindTarget();
+        
         if (target != null)
         {
             m_TargetDirection = target.transform.position - transform.position;
@@ -46,7 +51,6 @@ public abstract class HeroProjectile : MonoBehaviour
         {
             m_TargetDirection = Vector3.up;
         }
-
         transform.up = m_TargetDirection;
     }
 

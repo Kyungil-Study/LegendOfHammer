@@ -6,7 +6,14 @@ public abstract class SingletonBase<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;
     private static bool applicationIsQuitting = false;
-    public virtual void OnInitialize() {}
+
+    public virtual void OnInitialize()
+    {
+        // This method can be overridden in derived classes for custom initialization logic.
+        // It is called when the instance is created or accessed for the first time.
+        Debug.Log($"[SingletonBase] {typeof(T).Name} initialized.");
+        
+    }
     
 
     public static T Instance

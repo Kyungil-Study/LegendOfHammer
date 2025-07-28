@@ -37,6 +37,14 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
+    protected virtual void OnDisable()
+    {
+        if (_instance != null && _instance == this)
+        {
+            _instance = null; // Clear the instance when this MonoSingleton is disabled
+        }
+    }
+
 
     protected virtual void OnApplicationQuit()
     {
@@ -53,7 +61,6 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
         if (_instance == null)
         {
             _instance = this as T;
-            DontDestroyOnLoad(gameObject);
             Initialize();
         }
         else if (_instance != this)

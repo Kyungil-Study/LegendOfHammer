@@ -36,6 +36,8 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
             }
         }
         [field:SerializeField] public int MaxHealth { get; set; }
+        
+        [field:SerializeField] public float AttackDamageFactor { get; set; }
         [field:SerializeField] public float AttackSpeed { get; set; } = 1;
         [field:SerializeField] public float MoveSpeed { get; set; } = 1;
         [field:SerializeField] public float CriticalChance { get; set; } = 0;
@@ -47,26 +49,57 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
 
     public SquadStats stats = new SquadStats();
     public Warrior warrior;
-    public bool isInvincible = false;
+    public List<object> invincible = new List<object>();
+    public float hitInvincibleDuration = 1f;
+    public bool IsInvincible => invincible.Count > 0;
 
     private void Awake()
     {
         stats.CurrentHealth = stats.MaxHealth;
+        BattleEventManager.RegistEvent<StartBattleEventArgs>(OnStartBattle);
+    }
+
+    private void OnStartBattle(StartBattleEventArgs args)
+    {
+        AugmentInventory.Instance.ApplyAugmentsToSquad(this);
     }
 
     public void TakeDamage(TakeDamageEventArgs eventArgs)
     {
-        if (warrior.IsCharging)
+        if (IsInvincible)
         {
             return;
         }
         stats.CurrentHealth -= eventArgs.Damage;
-        BattleEventManager.Instance.CallEvent(new ReceiveDamageEventArgs(this, eventArgs.Damage));
+        BattleEventManager.CallEvent(new ReceiveDamageEventArgs(this, eventArgs.Damage));
+        ApplyInvincibility("HitInvincible", hitInvincibleDuration);
+    }
+
+    public SpriteRenderer[] squadSprites;
+    public void ApplyInvincibility(object _tag, float duration)
+    {
+        StartCoroutine(InvincibleCoroutine());
+        return;
+
+        IEnumerator InvincibleCoroutine()
+        {
+            foreach (SpriteRenderer sprite in squadSprites)
+            {
+                sprite.color = new Color(1,1,1,0.4f);
+            }
+            invincible.Add(_tag);
+            yield return new WaitForSeconds(duration);
+            invincible.Remove(_tag);
+            foreach (SpriteRenderer sprite in squadSprites)
+            {
+                sprite.color = new Color(1,1,1,1f);
+            }
+        }
     }
 
     private void Die()
     {
-        BattleEventManager.Instance.CallEvent(new DeathEventArgs(this));
+        BattleEventManager.CallEvent(new DeathEventArgs(this));
     }
 
     private void OnTriggerEnter2D(Collider2D other)

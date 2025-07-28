@@ -127,6 +127,12 @@ public class BackEndAuth : MonoBehaviour
         string id = idInput.text.Trim();
         string pw = pwInput.text.Trim();
         string nick = nicknameInput.text.Trim();
+        
+        if (string.IsNullOrEmpty(nick))
+        {
+            DebugScreen.LogError("닉네임을 입력하세요.");
+            return;
+        }
 
         var signUpBro = Backend.BMember.CustomSignUp(id, pw);
         if (signUpBro.IsSuccess())

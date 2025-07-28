@@ -10,23 +10,36 @@ using UnityEngine.UI;
 
 public class BattleManager : MonoSingleton<BattleManager>
 {
-    [SerializeField] GameObject loadUI;
-
     public int StageIndex = 0;
+    public int MaxStageNumber = 0;
     
     [Header("추격 게이지 세팅")]
     [SerializeField] private float chaseGuageDecreaseRate = 0.5f; // Increase rate per second
     [SerializeField] private float chaseIncreaseRate = 1f; // Increase rate when monster is through clear zone
-    [SerializeField] private float chaseGuageMax = 100f; // Maximum value for chase gauge]
-    private float chaseGuage = 0f; // 0 to 100
+    [SerializeField] private float chaseGuageMax = 100f; // Maximum value for chase gauge
+    private ClampedFloat chaseGuage;
+    public ClampedFloat ChaseGuage => chaseGuage;
 
     private bool isEnded = false;
-    private void Awake()
+
+    protected override void Initialize()
     {
-        BattleEventManager.Instance.Callbacks.OnAliveMonster += OnAliveMonster;
-        BattleEventManager.Instance.Callbacks.OnDeath += OnDeath;
+        Debug.Log("[BattleManager] Initialize called.");
+        base.Initialize();
         
+        // Initialize chase gauge
+        chaseGuage = new ClampedFloat(0f, chaseGuageMax, 0f);
+        
+        // Register event listeners
+        BattleEventManager.RegistEvent<AliveMonsterEventArgs>(OnAliveMonster);
+        BattleEventManager.RegistEvent<DeathEventArgs>(OnDeath);;
+        chaseGuage.Events.OnMaxReached += (cur, max) =>
+        {
+            Debug.Log("[BattleManager] Chase gauge reached maximum value. Ending game.");
+            EndGame(false, false); // Game over if chase gauge is full
+        };
     }
+    
 
     private void OnDeath(DeathEventArgs args)
     {
@@ -34,17 +47,17 @@ public class BattleManager : MonoSingleton<BattleManager>
         if (args.Target as Squad)
         {
             Debug.Log("Player has died. Ending game.");
-            EndGame(false);
+            EndGame(false,false);
         }
         else if(args.Target is Monster monster)
         {
             Debug.Log($"[BattleManager] Monster {monster.EnemyID} has died.");
             var id = monster.EnemyID;
-            var data = EnemyDataManager.Instance.Records[id];
+            var data = EnemyDataManager.Instance.EnemyDatas[id];
             if( data.Enemy_Rank.Equals(EnemyRank.Boss))
             {
                 Debug.Log($"Boss Monster has died.");
-                EndGame(true);
+                EndGame(true, true);
             }
         }
     }
@@ -53,102 +66,48 @@ public class BattleManager : MonoSingleton<BattleManager>
     {
         var monster = args.Monster as Monster;
         Debug.Log($"[BattleManager] Monster {monster.EnemyID} is alive.");
-        var data = EnemyDataManager.Instance.Records[monster.EnemyID];
+        var data = EnemyDataManager.Instance.EnemyDatas[monster.EnemyID];
         if (data.Enemy_Rank.Equals(EnemyRank.Boss))
         {
-            EndGame(false);
+            EndGame(true, false);
         }
         // todo: UI 완료되면 활성화
-        /*chaseGuage += chaseIncreaseRate;
-        if (chaseGuage >= chaseGuageMax)
-        {
-            EndGame(false);
-        }*/
+        var enemyData = EnemyDataManager.Instance.EnemyDatas[monster.EnemyID];
+        chaseGuage.Increase(enemyData.Chasing_Increase);
     }
 
-    private async void Start()
-    {
-        Debug.Log("[BattleManager] Start called. Loading all resources.");
-        loadUI.SetActive(true);
-        await LoadAllResourcesAsync();
-        ReadyGame();
-    }
 
-    private void ReadyGame()
+    public void ReadyGame()
     {
-        loadUI.SetActive(false);
-        if(BackendStageGameData.stage == null)
-        {
-            // Debug.LogWarning("[BattleManager] BackendStageGameData.stage is null. Using default stage index 1.");
-        }
-        else
-        {
-            StageIndex = BackendStageGameData.stage.Currentstage;; // For testing purposes, remove later
-        }
+        Debug.Log("[BattleManager] ReadyGame called.");
+        var es3Manager = ES3Manager.Instance;
+        var stageData = es3Manager.StageData;
         
-        BattleEventManager.Instance.CallEvent(new ReadyBattleEventArgs(stageIndex: StageIndex));
-    }
-
-    public async Task LoadAllResourcesAsync()
-    {
-        var loadables = FindObjectsOfType<MonoBehaviour>().OfType<ILoadable>().Where(l => !l.IsLoaded).ToList();
-        var tasks = loadables.Select(l => l.LoadAsync()).ToArray();
-
-        LoadCompleteEventArg[] results = await Task.WhenAll(tasks);
-        foreach (var it in loadables)
-        {
-            if (it.IsLoaded)
-            {
-                Debug.Log($"[BattleManager] {it.GetType().Name} loaded successfully.");
-            }
-            else
-            {
-                Debug.LogError($"[BattleManager] {it.GetType().Name} failed to load.");
-            }
-        }
-
-        // 결과 처리 (성공/실패 여부)
-        if (results.All(r => r.Success))
-        {
-            Debug.Log("모든 리소스 로드 완료");
-        }
-        else
-        {
-            foreach(var r in results.Where(r => !r.Success))
-                Debug.LogError($"로드 실패: {r.ErrorMessage}");
-            // 실패시 처리
-        }
+        StageIndex = stageData.CurrentStage;
+        MaxStageNumber = stageData.MaxStage;
         
+        BattleEventManager.CallEvent(new ReadyBattleEventArgs(
+            stageIndex: StageIndex,
+            maxStageIndex: MaxStageNumber));
     }
 
     public void StartGame() // todo: 로딩 연동 필요
     {
         Debug.Log($"[BattleManager] Starting game for stage {StageIndex}.");
         StartBattleEventArgs startEventArgs = new StartBattleEventArgs(StageIndex);
-        BattleEventManager.Instance.CallEvent(startEventArgs);
-    }
-
-    private void Update()
-    {
-        if (isEnded)
-        {
-            return;
-        }
-        
-        chaseGuage -= chaseGuageDecreaseRate * Time.deltaTime;
-        chaseGuage = Mathf.Clamp(chaseGuage, 0f, chaseGuageMax);
+        BattleEventManager.CallEvent(startEventArgs);
     }
 
     // Update is called once per frame
-    void EndGame(bool isVictory)
+    void EndGame(bool isVictory,bool isBossDead)
     {
         isEnded = true;
         // Here you can handle the end of the game, such as showing a UI or transitioning to another scene
         Debug.Log(isVictory ? "Battle ended with victory!" : "Battle ended with defeat!");
         
         // Call the end battle event
-        EndBattleEventArgs endEventArgs = new EndBattleEventArgs(isVictory); // Assuming victory for now
-        BattleEventManager.Instance.CallEvent(endEventArgs);
+        EndBattleEventArgs endEventArgs = new EndBattleEventArgs(isVictory,isBossDead); // Assuming victory for now
+        BattleEventManager.CallEvent(endEventArgs);
     }
     
     private List<Monster> m_WholeMonsters = new List<Monster>();
@@ -157,19 +116,31 @@ public class BattleManager : MonoSingleton<BattleManager>
         return m_WholeMonsters;
     }
     
-    public void RegisterMonster(Monster monster)
+    public static void RegisterMonster(Monster monster)
     {
-        if (m_WholeMonsters.Contains(monster) == false)
+        if( Instance == null )
         {
-            m_WholeMonsters.Add(monster);
+            Debug.LogWarning("[BattleManager] Instance is null. Cannot register monster.");
+            return;
+        }
+        
+        if (Instance.m_WholeMonsters.Contains(monster) == false)
+        {
+            Instance.m_WholeMonsters.Add(monster);
         }
     }
 
-    public void UnregisterMonster(Monster monster)
+    public static void UnregisterMonster(Monster monster)
     {
-        if (m_WholeMonsters.Contains(monster))
+        if (Instance == null)
         {
-            m_WholeMonsters.Remove(monster);
+            Debug.LogWarning("[BattleManager] Instance is null. Cannot unregister monster.");
+            return;
+        }
+        
+        if (Instance.m_WholeMonsters.Contains(monster))
+        {
+            Instance.m_WholeMonsters.Remove(monster);
         }
     }
     
@@ -191,4 +162,21 @@ public class BattleManager : MonoSingleton<BattleManager>
         }
         return enemies;
     }
+    
+    private static readonly Collider2D[] colliderBuffer = new Collider2D[64]; // 캐시된 배열
+
+    public static void GetAllEnemyInRadiusNonAlloc(Vector3 position, float radius, List<Monster> result)
+    {
+        result.Clear(); // 결과 리스트 초기화
+
+        int count = Physics2D.OverlapCircleNonAlloc(position, radius, colliderBuffer, LayerMask.GetMask("Monster"));
+        for (int i = 0; i < count; i++)
+        {
+            if (TryGetMonsterBy(colliderBuffer[i], out Monster monster))
+            {
+                result.Add(monster);
+            }
+        }
+    }
+
 }

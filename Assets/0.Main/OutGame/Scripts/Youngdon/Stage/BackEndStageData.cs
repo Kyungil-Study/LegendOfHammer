@@ -9,16 +9,22 @@ public class Stage
 {
     public int Currentstage = 1;
     public int Maxstage = 1;
+    
+    // 플레이어 스테이지 도전 횟수
+    public int StageAttemptCount = 0;
 
     public override string ToString()
     {
         StringBuilder result = new StringBuilder();
         result.AppendLine($"currentstage : {Currentstage}");
         result.AppendLine($"maxstage : {Maxstage}");
+        result.AppendLine($"stageAttemptCount : {StageAttemptCount}");
+        
+        
+        
         return result.ToString();
     }
 }
-
 public class BakendAugmentData
 {
     private string commonAugmentData;
@@ -55,10 +61,12 @@ public class BackendStageGameData
         Debug.Log("스테이지 초기화");
         stage.Currentstage = 1;
         stage.Maxstage = 1;
+        stage.StageAttemptCount = 0;
         
         Param param = new Param();
         param.Add("currentStage", stage.Currentstage);
         param.Add("maxStage", stage.Maxstage);
+        param.Add("stageAttemptCount", stage.StageAttemptCount);
         
         Debug.Log("STAGE_DATA 테이블에 새로운 데이터 행 추가");
         
@@ -89,6 +97,7 @@ public class BackendStageGameData
                 stage = new Stage();
                 stage.Currentstage = int.Parse(gameDataJson[0]["currentStage"].ToString());
                 stage.Maxstage = int.Parse(gameDataJson[0]["maxStage"].ToString());
+                stage.StageAttemptCount = int.Parse(gameDataJson[0]["stageAttemptCount"].ToString());
             }
         }
     }
@@ -98,6 +107,12 @@ public class BackendStageGameData
     {
         stage.Currentstage += 1;
         stage.Maxstage += 1;
+        // stage.StageAttemptCount += 1;
+    }
+    
+    public void ResetCurrentStage()
+    {
+        stage.Currentstage = 1;
     }
 
     // 랭킹 시스템 도입후 사용
@@ -105,6 +120,12 @@ public class BackendStageGameData
     {
         stage.Currentstage = 1;
         stage.Maxstage = 1;
+        stage.StageAttemptCount = 0;
+    }
+
+    public void PlayGame()
+    {
+        stage.StageAttemptCount += 1;
     }
 
     // 로컬에서 뒤끝으로 쏴주는 메서드
@@ -118,6 +139,7 @@ public class BackendStageGameData
         Param param = new Param();
         param.Add("currentStage", stage.Currentstage);
         param.Add("maxStage", stage.Maxstage);
+        param.Add("stageAttemptCount", stage.StageAttemptCount);
 
         BackendReturnObject bro = null;
         bro = Backend.GameData.Update("STAGE_DATA", new Where(), param);

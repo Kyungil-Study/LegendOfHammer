@@ -4,16 +4,33 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class CommonAugmentManager : GenericDictionaryResourceManager< CommonAugment,int, CommonAugmentManager>
+public class CommonAugmentManager : MonoSingleton<CommonAugmentManager>
 {
-    protected override int GetKey(CommonAugment record)
+    
+    public IReadOnlyDictionary<int,CommonAugment> Records
     {
-        return record.ID;
-    }
+        get;
+        private set;
+    } = new Dictionary<int, CommonAugment>();
 
-    public virtual void Load(Action<LoadCompleteEventArg> onComplete)
+    [SerializeField] private string resourcePath = "CommonAugmentData";
+    [SerializeField] private CommonAugmentIconTableSAO augmentIconTable;
+    
+    public Sprite GetIcon(int OptionId)
     {
-        base.Load(onComplete);
+        if (augmentIconTable == null)
+        {
+            Debug.LogError("CommonAugmentIconTableSAO is not assigned.");
+            return null;
+        }
+        
+       var icon = augmentIconTable.GetIconByOptionID(OptionId);
+        if (icon == null)
+        {
+            Debug.LogWarning($"Icon for CommonAugment with ID {OptionId} not found.");
+        }
+        
+        return icon;
     }
     
     public CommonAugment GetAugmentFiltered(AugmentRarity rarity, int optionID)
@@ -23,6 +40,13 @@ public class CommonAugmentManager : GenericDictionaryResourceManager< CommonAugm
             augment.OptionID == optionID
             );
     }
+
+    protected override void Initialize()
+    {
+        base.Initialize();
+        Records = TSVLoader.LoadTableToDictionary<int, CommonAugment>(resourcePath, augment => augment.ID);        
+    }
+
     
 }
 

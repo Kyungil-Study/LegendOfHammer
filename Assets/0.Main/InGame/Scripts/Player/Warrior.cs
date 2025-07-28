@@ -9,6 +9,7 @@ public class Warrior : Hero
     public Image cooldownIndicator;
     public float chargeDistance = 2f;
     public float chargeDuration = 0.2f;
+    public float invincibleDurationAfterCharge = 0.5f;
     [SerializeField] [Tooltip("돌진 넉백 세기")]
     public float chargeKnockbackDistance = 1f;
     private bool _isCharging = false;
@@ -27,6 +28,17 @@ public class Warrior : Hero
     }
     private Vector3 m_ChargeDirection;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        BattleEventManager.RegistEvent<StartBattleEventArgs>(OnStartBattle);
+    }
+
+    private void OnStartBattle(StartBattleEventArgs args)
+    {
+        AugmentInventory.Instance.ApplyAugmentsToWarrior(this);
+    }
+
     private void Start()
     {
         bAutoFire = false;
@@ -43,10 +55,10 @@ public class Warrior : Hero
     
     // 전사 돌진 피해량
     // [{(전사 기본 공격 피해량 x 치명타 피해량) + 타격 당 데미지} x 받는 피해량 증가] x 최종 데미지 증가
-    protected override int CalculateDamage(bool isCritical = false)
+    public override int CalculateDamage(bool isCritical = false)
     {
-        float critFactor = isCritical ? baseStats.CriticalDamage : 1f;
-        return (int)(((baseAttackDamage * critFactor) + baseStats.BonusDamagePerHit) * baseStats.FinalDamageFactor);
+        float critFactor = isCritical ? squadStats.CriticalDamage : 1f;
+        return (int)(((baseAttackDamage * critFactor) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor);
     }
     
     public void ChargeAttack(Vector3 direction)
@@ -58,7 +70,6 @@ public class Warrior : Hero
             return;
         }
         
-        IsCharging = true;
         m_ChargeDirection = direction.normalized;
         
         Vector3 endPosition = squad.transform.position + direction.normalized * (Distance.STANDARD_DISTANCE * chargeDistance);
@@ -68,6 +79,9 @@ public class Warrior : Hero
 
     private IEnumerator ChargeCoroutine(Vector3 endPosition)
     {
+        IsCharging = true;
+        squad.ApplyInvincibility("WarriorCharge", chargeDuration + invincibleDurationAfterCharge);
+        
         Vector3 startPosition = transform.position;
         float elapsedTime = 0f;
         while (elapsedTime < chargeDuration)
@@ -77,7 +91,6 @@ public class Warrior : Hero
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
         IsCharging = false;
     }
 
@@ -91,16 +104,16 @@ public class Warrior : Hero
             return;
         }
         m_HitMonsters.Add(monster);
-        TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(squad, monster, Damage);
-        BattleEventManager.Instance.CallEvent(eventArgs);
+        TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(squad, monster, CalculateDamage(Random.Range(0, 1f) <= squadStats.CriticalChance));
+        BattleEventManager.CallEvent(eventArgs);
 
-        var monsterRank = EnemyDataManager.Instance.Records[monster.EnemyID].Enemy_Rank;
+        var monsterRank = EnemyDataManager.Instance.EnemyDatas[monster.EnemyID].Enemy_Rank;
         if (monsterRank is EnemyRank.Boss or EnemyRank.Elite && tmp_AugmentFlag == false)
         {
             return;
         }
         
-        BattleEventManager.Instance.CallEvent(new ChargeCollisionArgs(squad, monster, chargeKnockbackDistance * Distance.STANDARD_DISTANCE));
+        BattleEventManager.CallEvent(new ChargeCollisionArgs(squad, monster, chargeKnockbackDistance * Distance.STANDARD_DISTANCE));
     }
 
     // 몬스터 넉백은 몬스터 쪽에서 처리하기로 함

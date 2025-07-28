@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Resources;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -20,6 +21,25 @@ public class PatternActivation
     public int DisappearStage { get; set; }
 }
 
-public class PatternActivationDataManager : GenericResourceManager<PatternActivation, PatternActivationDataManager>
+public class PatternActivationDataManager : MonoSingleton<PatternActivationDataManager>
 {
+    [SerializeField] private string resourcePath = "PatternActivationData";
+    List<PatternActivation> records = new();
+    public IReadOnlyList<PatternActivation> Records
+    {
+        get
+        {
+            if (records == null)
+            {
+                throw new InvalidOperationException("Records not initialized. Call Load() first.");
+            }
+            return records;
+        }
+    }
+
+    protected override void Initialize()
+    {
+        base.Initialize();
+        records = TSVLoader.LoadTable<PatternActivation>(resourcePath);
+    }
 }

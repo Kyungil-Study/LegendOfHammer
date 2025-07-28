@@ -262,6 +262,16 @@ public class BackendPost
         BackendGameData.Instance.GameDataUpdate();
     }
     
+    // public List<Post> GetAllPostList()
+    // {
+    //     var all = new List<Post>();
+    //     all.AddRange(rankPostList);   // 각 타입별 내부 리스트
+    //     all.AddRange(userPostList);
+    //     all.AddRange(adminPostList);
+    //     all.AddRange(couponPostList);
+    //     return all;
+    // }
+    
     public List<Post> GetPostList()
     {
         return _postList;
