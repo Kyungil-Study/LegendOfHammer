@@ -138,6 +138,7 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
 
     public void SpawnMonster(WaveRankType currentWaveWaveRank)
     {
+        Debug.Log($"[MonsterSpawner] SpawnMonster called with rank: {currentWaveWaveRank}");
         var patternList = activatedPatternByRank[currentWaveWaveRank];
         int randomIndex = UnityEngine.Random.Range(0, patternList.Count);
         SpawnPattern spawnPattern = spawnPatternTableSao.GetSpawnPattern(patternList[randomIndex]);
