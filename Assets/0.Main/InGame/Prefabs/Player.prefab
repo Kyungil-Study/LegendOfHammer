@@ -242,7 +242,12 @@ MonoBehaviour:
     <TakeDamageFactor>k__BackingField: 1
     <FinalDamageFactor>k__BackingField: 1
   warrior: {fileID: 3228702557338661824}
-  invincible: []
+  hitInvincibleDuration: 1
+  squadSprites:
+  - {fileID: 2321418139471093657}
+  - {fileID: 2371057015709172346}
+  - {fileID: 856782335946647664}
+  - {fileID: 7784057588379899713}
 --- !u!50 &8790931689560328816
 Rigidbody2D:
   serializedVersion: 4
@@ -914,7 +919,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 146912833
-  m_SortingLayer: 1
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -1834282479, guid: 915a7ed28ab8c5649add3a0c66be92f3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1222,7 +1227,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 146912833
-  m_SortingLayer: 1
+  m_SortingLayer: 3
   m_SortingOrder: -1
   m_Sprite: {fileID: 1794875009, guid: 8270d8ec8902b9c47b257e7c771aa5b4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1313,6 +1318,16 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90a9daaece4e822498c1c9db83f86597, type: 3}
+--- !u!212 &2321418139471093657 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 7435722234912389783, guid: 90a9daaece4e822498c1c9db83f86597, type: 3}
+  m_PrefabInstance: {fileID: 5118244796724389134}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &2371057015709172346 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 7484990610092631924, guid: 90a9daaece4e822498c1c9db83f86597, type: 3}
+  m_PrefabInstance: {fileID: 5118244796724389134}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4104936536418046007 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9218871192592053561, guid: 90a9daaece4e822498c1c9db83f86597, type: 3}
