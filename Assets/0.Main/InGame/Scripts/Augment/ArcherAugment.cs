@@ -99,6 +99,7 @@ public class ArcherPenetrationAugment : ArcherAugment
         if (isFinalUpgrade)
         {
             archer.pierceLimit = 1000000; // 최종 업그레이드 시 관통 횟수 무제한  
+            archer.IsFinalPenetration = true;
         }
     }
 }
