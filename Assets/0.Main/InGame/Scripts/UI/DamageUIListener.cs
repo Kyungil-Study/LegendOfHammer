@@ -6,12 +6,12 @@ public class DamageUIListener : MonoBehaviour
 
     private void OnEnable()
     {
-        BattleEventManager.Instance.Callbacks.OnSendDamage += HandleTakeDamage;
+        BattleEventManager.RegistEvent<ReceiveDamageEventArgs>(HandleTakeDamage);
     }
 
    private void OnDisable()
    {
-       BattleEventManager.Instance.Callbacks.OnSendDamage -= HandleTakeDamage;
+       BattleEventManager.UnregistEvent<ReceiveDamageEventArgs>(HandleTakeDamage);
    }
 
    private void HandleTakeDamage(ReceiveDamageEventArgs eventArgs)

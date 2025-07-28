@@ -32,7 +32,7 @@ public class Projectile : MonoBehaviour
 
         if (col.TryGetComponent<IBattleCharacter>(out var target))
         {
-            BattleEventManager.Instance.CallEvent
+            BattleEventManager.CallEvent
             (
                 new TakeDamageEventArgs(attacker, target, damage)
             );

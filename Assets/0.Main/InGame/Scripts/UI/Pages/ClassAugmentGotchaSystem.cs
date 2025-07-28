@@ -3,6 +3,27 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+public struct ProbabilityRecord<T>
+{
+    public T ID;
+    public int minProbability; // 확률
+    public int maxProbability;
+        
+    public ProbabilityRecord(T id, int min, int max)
+    {
+        ID = id;
+        minProbability = min;
+        maxProbability = max;
+    }
+        
+    public bool IsInRange(int value)
+    {
+        // Check if the value is within the range of minProbability and maxProbability
+        return value >= minProbability && value <= maxProbability;
+    }
+}
+
 public class ClassAugmentGotchaSystem : UIPage
 {
     [Space(10), Header("Class Augment")]
@@ -167,7 +188,7 @@ public class ClassAugmentGotchaSystem : UIPage
     
     private void OnSelectAugment(Augment augment)
     {
-        BattleEventManager.Instance.CallEvent(new SelectAugmentEventArgs(augment));
+        BattleEventManager.CallEvent(new SelectAugmentEventArgs(augment));
         Owner.SwapPage(UIPageType.BattlePage);
     }
 

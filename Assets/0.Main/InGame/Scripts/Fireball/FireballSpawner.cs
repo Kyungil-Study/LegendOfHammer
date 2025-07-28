@@ -19,8 +19,7 @@ public class FireballSpawner : MonoBehaviour
     
     private void Awake()
     {
-        var callbacks = BattleEventManager.Instance.Callbacks;
-        callbacks.OnStartBattle += OnStartBattle;
+        BattleEventManager.RegistEvent<StartBattleEventArgs>(OnStartBattle);
         BattleManager.Instance.ChaseGuage.Events.OnValueChanged += OnChaseGuageValueChanged;
     }
 

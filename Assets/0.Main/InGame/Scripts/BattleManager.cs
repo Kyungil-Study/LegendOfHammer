@@ -31,8 +31,8 @@ public class BattleManager : MonoSingleton<BattleManager>
         chaseGuage = new ClampedFloat(0f, chaseGuageMax, 0f);
         
         // Register event listeners
-        BattleEventManager.Instance.Callbacks.OnAliveMonster += OnAliveMonster;
-        BattleEventManager.Instance.Callbacks.OnDeath += OnDeath;
+        BattleEventManager.RegistEvent<AliveMonsterEventArgs>(OnAliveMonster);
+        BattleEventManager.RegistEvent<DeathEventArgs>(OnDeath);;
         chaseGuage.Events.OnMaxReached += (cur, max) =>
         {
             Debug.Log("[BattleManager] Chase gauge reached maximum value. Ending game.");
@@ -84,7 +84,7 @@ public class BattleManager : MonoSingleton<BattleManager>
         StageIndex = stageData.CurrentStage;
         MaxStageNumber = stageData.MaxStage;
         
-        BattleEventManager.Instance.CallEvent(new ReadyBattleEventArgs(
+        BattleEventManager.CallEvent(new ReadyBattleEventArgs(
             stageIndex: StageIndex,
             maxStageIndex: MaxStageNumber));
     }
@@ -93,7 +93,7 @@ public class BattleManager : MonoSingleton<BattleManager>
     {
         Debug.Log($"[BattleManager] Starting game for stage {StageIndex}.");
         StartBattleEventArgs startEventArgs = new StartBattleEventArgs(StageIndex);
-        BattleEventManager.Instance.CallEvent(startEventArgs);
+        BattleEventManager.CallEvent(startEventArgs);
     }
 
     // Update is called once per frame
@@ -105,7 +105,7 @@ public class BattleManager : MonoSingleton<BattleManager>
         
         // Call the end battle event
         EndBattleEventArgs endEventArgs = new EndBattleEventArgs(isVictory,isBossDead); // Assuming victory for now
-        BattleEventManager.Instance.CallEvent(endEventArgs);
+        BattleEventManager.CallEvent(endEventArgs);
     }
     
     private List<Monster> m_WholeMonsters = new List<Monster>();
@@ -114,19 +114,31 @@ public class BattleManager : MonoSingleton<BattleManager>
         return m_WholeMonsters;
     }
     
-    public void RegisterMonster(Monster monster)
+    public static void RegisterMonster(Monster monster)
     {
-        if (m_WholeMonsters.Contains(monster) == false)
+        if( Instance == null )
         {
-            m_WholeMonsters.Add(monster);
+            Debug.LogWarning("[BattleManager] Instance is null. Cannot register monster.");
+            return;
+        }
+        
+        if (Instance.m_WholeMonsters.Contains(monster) == false)
+        {
+            Instance.m_WholeMonsters.Add(monster);
         }
     }
 
-    public void UnregisterMonster(Monster monster)
+    public static void UnregisterMonster(Monster monster)
     {
-        if (m_WholeMonsters.Contains(monster))
+        if (Instance == null)
         {
-            m_WholeMonsters.Remove(monster);
+            Debug.LogWarning("[BattleManager] Instance is null. Cannot unregister monster.");
+            return;
+        }
+        
+        if (Instance.m_WholeMonsters.Contains(monster))
+        {
+            Instance.m_WholeMonsters.Remove(monster);
         }
     }
     

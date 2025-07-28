@@ -31,8 +31,7 @@ public class Warrior : Hero
     protected override void Awake()
     {
         base.Awake();
-        var callbacks = BattleEventManager.Instance.Callbacks;
-        callbacks.OnStartBattle += OnStartBattle;
+        BattleEventManager.RegistEvent<StartBattleEventArgs>(OnStartBattle);
     }
 
     private void OnStartBattle(StartBattleEventArgs args)
@@ -71,7 +70,6 @@ public class Warrior : Hero
             return;
         }
         
-        IsCharging = true;
         m_ChargeDirection = direction.normalized;
         
         Vector3 endPosition = squad.transform.position + direction.normalized * (Distance.STANDARD_DISTANCE * chargeDistance);
@@ -81,7 +79,8 @@ public class Warrior : Hero
 
     private IEnumerator ChargeCoroutine(Vector3 endPosition)
     {
-        squad.invincible.Add("WarriorCharge");
+        IsCharging = true;
+        squad.ApplyInvincibility("WarriorCharge", chargeDuration + invincibleDurationAfterCharge);
         
         Vector3 startPosition = transform.position;
         float elapsedTime = 0f;
@@ -92,12 +91,7 @@ public class Warrior : Hero
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
         IsCharging = false;
-
-        yield return new WaitForSeconds(invincibleDurationAfterCharge);
-        
-        squad.invincible.Remove("WarriorCharge");
     }
 
     private List<Monster> m_HitMonsters = new List<Monster>();
@@ -111,7 +105,7 @@ public class Warrior : Hero
         }
         m_HitMonsters.Add(monster);
         TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(squad, monster, CalculateDamage(Random.Range(0, 1f) <= squadStats.CriticalChance));
-        BattleEventManager.Instance.CallEvent(eventArgs);
+        BattleEventManager.CallEvent(eventArgs);
 
         var monsterRank = EnemyDataManager.Instance.Records[monster.EnemyID].Enemy_Rank;
         if (monsterRank is EnemyRank.Boss or EnemyRank.Elite && tmp_AugmentFlag == false)
@@ -119,7 +113,7 @@ public class Warrior : Hero
             return;
         }
         
-        BattleEventManager.Instance.CallEvent(new ChargeCollisionArgs(squad, monster, chargeKnockbackDistance * Distance.STANDARD_DISTANCE));
+        BattleEventManager.CallEvent(new ChargeCollisionArgs(squad, monster, chargeKnockbackDistance * Distance.STANDARD_DISTANCE));
     }
 
     // 몬스터 넉백은 몬스터 쪽에서 처리하기로 함
