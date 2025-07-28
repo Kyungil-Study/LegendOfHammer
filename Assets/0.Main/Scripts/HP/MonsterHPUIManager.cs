@@ -27,7 +27,7 @@ public class MonsterHPUIManager : MonoBehaviour
         if (enemyIdProp == null) return;
 
         if (enemyIdProp.GetValue(monster) is EnemyID enemyID &&
-            EnemyDataManager.Instance.Records.TryGetValue(enemyID, out var data))
+            EnemyDataManager.Instance.EnemyDatas.TryGetValue(enemyID, out var data))
         {
             // 2. 랭크 확인
             if (data.Enemy_Rank == EnemyRank.Elite || data.Enemy_Rank == EnemyRank.Boss)
@@ -84,18 +84,12 @@ public class MonsterHPUIManager : MonoBehaviour
 
     private float GetHealthRatio(MonoBehaviour monster)
     {
-        var type = monster.GetType();
+        var stat = monster.GetComponent<MonsterStat>();
 
-        FieldInfo currentHpField = type.GetField("mCurrentHP", BindingFlags.NonPublic | BindingFlags.Instance);
-        FieldInfo maxHpField     = type.GetField("mMaxHP", BindingFlags.NonPublic | BindingFlags.Instance);
-
-        if (currentHpField == null || maxHpField == null) return 1f;
-
-        int current = (int)currentHpField.GetValue(monster);
-        int max     = (int)maxHpField.GetValue(monster);
-
+        int current = stat.CurrentHP;
+        int max = stat.MaxHP;
+        
         if (max <= 0) return 1f;
         return Mathf.Clamp01((float)current / max);
     }
-
 }

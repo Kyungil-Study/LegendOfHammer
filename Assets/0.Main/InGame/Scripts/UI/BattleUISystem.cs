@@ -1,0 +1,47 @@
+using System.Collections;
+using System.Collections.Generic;
+using Sirenix.OdinInspector;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class BattleUIController : MonoSingleton<BattleUIController> ,IPageFlowManageable
+{
+    [SerializeField] private UIPage[] pages;
+    
+    Dictionary<UIPageType, UIPage> pagesDict = new Dictionary<UIPageType, UIPage>();
+    UIPage currentPage;
+    private void Awake()
+    {
+        foreach (var page in pages)
+        {
+            page.Initialize(this);
+            page.gameObject.SetActive(false);
+            
+            pagesDict[page.UIPageType] = page;
+        }
+        
+        SwapPage(UIPageType.LobbyPage);
+        
+    }
+
+    public void SwapPage(UIPageType nextPageType)
+    {
+        if (currentPage != null)
+        {
+            currentPage.Exit();
+            currentPage.gameObject.SetActive(false);
+        }
+        if (pagesDict.TryGetValue(nextPageType, out var nextPage))
+        {
+            currentPage = nextPage;
+            currentPage.gameObject.SetActive(true);
+            currentPage.Enter();
+        }
+        else
+        {
+            Debug.LogError($"Page of type {nextPageType} not found.");
+        }
+    }
+
+}

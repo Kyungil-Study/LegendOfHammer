@@ -6,21 +6,24 @@ using UnityEngine.Serialization;
 public abstract class Hero : MonoBehaviour
 {
     protected Squad squad;
-    protected Squad.SquadStats baseStats;
+    protected Squad.SquadStats squadStats;
     public int baseAttackDamage;
     public float attackPerSec;
-    protected float AttackCooldown => CalculateCooldown();
+    protected virtual float AttackCooldown => 1 / attackPerSec;
     protected float leftCooldown;
     protected bool bAutoFire = true;
-    public int Damage => CalculateDamage();
+    
+    // 위자드 디버프
+    public float DebuffDuration;
+    public float DebuffRate;
 
     protected virtual void Attack() { }
-    protected abstract int CalculateDamage(bool isCritical = false);
+    public abstract int CalculateDamage(bool isCritical = false);
 
-    private void Awake()
+    protected virtual void Awake()
     {
         squad = Squad.Instance;
-        baseStats = Squad.Instance.stats;
+        squadStats = Squad.Instance.stats;
     }
 
     protected virtual void Update()
@@ -36,10 +39,5 @@ public abstract class Hero : MonoBehaviour
     protected virtual void ApplyCooldown()
     {
         leftCooldown = AttackCooldown;
-    }
-    
-    protected virtual float CalculateCooldown()
-    {
-        return 1 / attackPerSec;
     }
 }
