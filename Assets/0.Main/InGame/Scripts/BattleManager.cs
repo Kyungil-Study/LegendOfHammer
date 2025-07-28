@@ -64,7 +64,7 @@ public class BattleManager : MonoSingleton<BattleManager>
 
     private void OnAliveMonster(AliveMonsterEventArgs args)
     {
-        var monster = args.Monster as Monster;
+        var monster = args.AliveMonster;
         Debug.Log($"[BattleManager] Monster {monster.EnemyID} is alive.");
         var data = EnemyDataManager.Instance.EnemyDatas[monster.EnemyID];
         if (data.Enemy_Rank.Equals(EnemyRank.Boss))
