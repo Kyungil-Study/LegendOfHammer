@@ -27,7 +27,7 @@ public class MonsterHPUIManager : MonoBehaviour
         if (enemyIdProp == null) return;
 
         if (enemyIdProp.GetValue(monster) is EnemyID enemyID &&
-            EnemyDataManager.Instance.Records.TryGetValue(enemyID, out var data))
+            EnemyDataManager.Instance.EnemyDatas.TryGetValue(enemyID, out var data))
         {
             // 2. 랭크 확인
             if (data.Enemy_Rank == EnemyRank.Elite || data.Enemy_Rank == EnemyRank.Boss)

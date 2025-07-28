@@ -115,7 +115,7 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
         bool isRanged = spawnAttackType.Equals(EnemySpawnAttackType.Range);
         EnemyRank rank = spawnRankType.ToEnemyRank();
 
-        var records = EnemyDataManager.Instance.Records;
+        var records = EnemyDataManager.Instance.EnemyDatas;
         List<EnemyData> filteredRecords = new List<EnemyData>();
         foreach (var record in records.Values)
         {
