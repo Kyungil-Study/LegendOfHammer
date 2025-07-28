@@ -52,7 +52,7 @@ MonoBehaviour:
   attackCollider: {fileID: 7358746754474298810}
   attackArea: {fileID: 7889352998233140523}
   endPoint: {fileID: 5834642343657000996}
-  attackDelay: 0.5
+  attackDelay: 1
   fireballAnimator: {fileID: 7047880487502340048}
   damage: 10
   moveDuration: 2
@@ -72,7 +72,7 @@ CircleCollider2D:
     m_Bits: 64
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4023
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2

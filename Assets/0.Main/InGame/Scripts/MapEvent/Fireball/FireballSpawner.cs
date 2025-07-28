@@ -4,10 +4,14 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-
-public class FireballSpawner : MonoBehaviour
+[Serializable]
+public enum FireballPointType
 {
-    [SerializeField] private LayerMask targetMask;
+    Upper,
+    Left,
+}
+public class FireballSpawner : MonoSingleton<FireballSpawner>
+{
     [SerializeField] Transform upperSpawnPoint;
     [SerializeField] Transform leftSpawnPoint;
 
@@ -17,33 +21,35 @@ public class FireballSpawner : MonoBehaviour
 
     [LabelText("이벤트 주기"), Range(0,1), SerializeField] private float fireballEventInterval = 0.5f;
     
-    private void Awake()
+    private IEnumerator SpawnFireballsCoroutine(int damage, IReadOnlyList<FireBallMapEvent.FireballSpawnJob> fireballSpawnJobs)
     {
-        BattleEventManager.RegistEvent<StartBattleEventArgs>(OnStartBattle);
-        BattleManager.Instance.ChaseGuage.Events.OnValueChanged += OnChaseGuageValueChanged;
-    }
-
-    private void OnChaseGuageValueChanged(float arg1, float arg2)
-    {
-        var ratio = arg1 / arg2;
-        if (ratio >= fireballTriggerLimit)
+        foreach (var fireballSpawnJob in fireballSpawnJobs)
         {
-            BattleManager.Instance.ChaseGuage.Events.OnValueChanged -= OnChaseGuageValueChanged;
-            StartCoroutine(SpawnFireballsCoroutine());
+            yield return new WaitForSeconds(fireballSpawnJob.attackDelay);
+            var spawnPosition = CalculatePosition(fireballSpawnJob.pointType);
+            var spawnRotation = CalculateRotation(fireballSpawnJob.pointType);
+            var fireball = Instantiate(fireballPrefab, spawnPosition, spawnRotation);
+            fireball.Setup(damage);
         }
     }
 
-    private IEnumerator SpawnFireballsCoroutine()
+    public Quaternion CalculateRotation(FireballPointType fireballPointType)
     {
-        while (gameObject.activeInHierarchy)
+        switch (fireballPointType)
         {
-            Instantiate(fireballPrefab, leftSpawnPoint.position, leftSpawnPoint.rotation);
-            yield return new WaitForSeconds(fireballEventInterval);
+            case FireballPointType.Upper:
+                return upperSpawnPoint.rotation; // 2D 상단은 회전 없음
+            case FireballPointType.Left:
+                return leftSpawnPoint.rotation; // 2D 왼쪽은 90도 회전
+            default:
+                throw new ArgumentOutOfRangeException(nameof(fireballPointType), fireballPointType, null);
+            
         }
     }
+
     
-    public Vector3 CalculatePosition(FireballPointType fireballPointType)
-    {
+    public Vector3 CalculatePosition( FireballPointType fireballPointType)
+    { 
         var targetPosition = Squad.Instance.transform.position;
         switch (fireballPointType)
         {
@@ -68,12 +74,8 @@ public class FireballSpawner : MonoBehaviour
         }
     }
 
-    private void OnStartBattle(StartBattleEventArgs obj)
+    public void ExecuteMapEvent(int damage, IReadOnlyList< FireBallMapEvent.FireballSpawnJob> fireballSpawnJobs)
     {
-    }
-
-    public void TakeDamage(TakeDamageEventArgs eventArgs)
-    {
-        //
+        StartCoroutine(SpawnFireballsCoroutine(damage, fireballSpawnJobs));
     }
 }

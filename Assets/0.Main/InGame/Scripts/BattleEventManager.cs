@@ -8,6 +8,7 @@ public class BattleEventManager : MonoSingleton<BattleEventManager>
 
     protected override void Initialize()
     {
+        Debug.Log("[BattleEventManager] Initializing BattleEventManager");
         base.Initialize();
         eventTable.Clear();
     }

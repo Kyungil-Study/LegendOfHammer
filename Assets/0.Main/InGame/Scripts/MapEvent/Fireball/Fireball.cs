@@ -26,6 +26,11 @@ public class Fireball : MonoBehaviour , IBattleCharacter
     {
         moveCoroutine = StartCoroutine(MoveCoroutine());
     }
+    
+    public void Setup(int damage)
+    {
+        this.damage = damage;
+    }
 
     IEnumerator MoveCoroutine()
     {

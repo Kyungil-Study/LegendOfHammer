@@ -9,13 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71418b5190c7dbb4d8c004fda27a378d, type: 3}
-  m_Name: Fire_ball_B
+  m_Script: {fileID: 11500000, guid: 57e6331af63a44d9b3c8fa82ffcc2d2c, type: 3}
+  m_Name: Chaser
   m_EditorClassIdentifier: 
-  patternId: 12
-  patternName: Fire_Ball_B
-  appearanceMinStage: 5
-  appearanceMaxStage: 15
-  fireballSpawnJobs:
-  - attackDelay: 0.5
-    pointType: 1
+  MapEventID: 31
+  MapEventName: Chaser
+  MapEventDamage: 10
+  FirstAppearStage: 1
+  MaxAppearStage: 999
