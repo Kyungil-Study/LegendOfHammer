@@ -78,7 +78,7 @@ public class BattlePage : UIPage
     {
         if (args.Target is Monster monster)
         {
-            var records = EnemyDataManager.Instance.Records;
+            var records = EnemyDataManager.Instance.EnemyDatas;
             var score = records[monster.EnemyID].Chasing_Increase;
             currentScore += score;
             maxScore = Mathf.Max(maxScore, currentScore);

@@ -112,7 +112,7 @@ public class Warrior : Hero
         TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(squad, monster, CalculateDamage(Random.Range(0, 1f) <= squadStats.CriticalChance));
         BattleEventManager.CallEvent(eventArgs);
 
-        var monsterRank = EnemyDataManager.Instance.Records[monster.EnemyID].Enemy_Rank;
+        var monsterRank = EnemyDataManager.Instance.EnemyDatas[monster.EnemyID].Enemy_Rank;
         if (monsterRank is EnemyRank.Boss or EnemyRank.Elite && tmp_AugmentFlag == false)
         {
             return;
