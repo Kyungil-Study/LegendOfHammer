@@ -25,9 +25,9 @@ public class MonsterScale : MonoBehaviour
     [Header("콜라이더 크기 조정 계수 : 기본값")]
     [SerializeField][Range(0.1f, 2f)] private float mHitBoxSize = 1f;
     [Header("이펙트 세팅 (피격 & 자폭)")]
-    [SerializeField] private float  hitFlashInterval = 0.2f;
+    [SerializeField] private float hitFlashInterval = 0.2f;
     [SerializeField] private Color hitFlashColor = Color.white;
-    [SerializeField] private Color suicideFlashColor = Color.red;  // 빨간색
+    [SerializeField] private Color suicideFlashColor = Color.red;
     
     private SpriteRenderer  mSpriteRenderer;
     private BoxCollider2D   mCollider;
@@ -37,17 +37,13 @@ public class MonsterScale : MonoBehaviour
     private int mAppearanceIndex;
     private float mScaleFactor;
     
-    private Coroutine damageRoutine;
-    private Color    originalColor;
+    // 피격효과 필드
+    private bool mIsSuicideMode;
+    private Coroutine mFlashRoutine;
+    private Sprite mSprite;
+    private float mHitBox;
     
-    Sprite lastSprite;
-    float  lastHitBox;
-
     public float ScaleFactor => mScaleFactor;
-    
-    // 자폭 이펙트
-    private Coroutine flashRoutine;
-    private bool      isSuicideMode;
     
     private void Awake()
     {
@@ -55,8 +51,6 @@ public class MonsterScale : MonoBehaviour
         mAnimator       = model.GetComponent<Animator>();
         mMaterial       = model.GetComponent<Renderer>().material;
         mCollider       = GetComponent<BoxCollider2D>();
-        
-        originalColor   = mSpriteRenderer.color;
     }
 
     private void Start()
@@ -81,37 +75,37 @@ public class MonsterScale : MonoBehaviour
         float currentHitBox = (appearances != null && mAppearanceIndex < appearances.Length)
             ? appearances[mAppearanceIndex].hitBoxSize : mHitBoxSize;
 
-        if (mSpriteRenderer.sprite != lastSprite || Mathf.Approximately(currentHitBox, lastHitBox) == false)
+        if (mSpriteRenderer.sprite != mSprite || Mathf.Approximately(currentHitBox, mHitBox) == false)
         {
-            lastSprite = mSpriteRenderer.sprite;
-            lastHitBox = currentHitBox;
+            mSprite = mSpriteRenderer.sprite;
+            mHitBox = currentHitBox;
             ApplyColliderFromPhysicsShape(mScaleFactor, currentHitBox);
         }
     }
 
     public void EnterSuicideMode()
     {
-        isSuicideMode = true;
+        mIsSuicideMode = true;
     }
     
     private void PlayDamageEffect(TakeDamageEventArgs eventArgs)
     {
         if ((eventArgs.Target as Monster)?.gameObject != gameObject) return;
-        if (isSuicideMode) return;               
+        if (mIsSuicideMode) return;               
         PlayHitFlash();                          
     }
     
     private void PlayHitFlash()
     {
-        if (flashRoutine != null) StopCoroutine(flashRoutine);
-        flashRoutine = StartCoroutine(FlashCoroutine(hitFlashColor, 1, hitFlashInterval));
+        if (mFlashRoutine != null) StopCoroutine(mFlashRoutine);
+        mFlashRoutine = StartCoroutine(FlashCoroutine(hitFlashColor, 1, hitFlashInterval));
     }
     
     public void StartSuicideFlash(float delay, float interval)
     {
-        if (flashRoutine != null) StopCoroutine(flashRoutine);
-        isSuicideMode = true;
-        flashRoutine = StartCoroutine(SuicideFlashCoroutine(delay, interval));
+        if (mFlashRoutine != null) StopCoroutine(mFlashRoutine);
+        mIsSuicideMode = true;
+        mFlashRoutine = StartCoroutine(SuicideFlashCoroutine(delay, interval));
     }
     
     private IEnumerator FlashCoroutine(Color color, int count, float interval)
@@ -127,7 +121,7 @@ public class MonsterScale : MonoBehaviour
             mMaterial.SetFloat("_HitEffectBlend", 0f);
             yield return new WaitForSeconds(interval * 0.5f);
         }
-        flashRoutine = null;
+        mFlashRoutine = null;
     }
 
     private IEnumerator SuicideFlashCoroutine(float delay, float interval)
@@ -146,8 +140,8 @@ public class MonsterScale : MonoBehaviour
             elapsed += interval * 2f;
         }
         
-        isSuicideMode = false;
-        flashRoutine  = null;
+        mIsSuicideMode = false;
+        mFlashRoutine  = null;
     }
     private void PickRandomSprite()
     {
@@ -177,7 +171,7 @@ public class MonsterScale : MonoBehaviour
     private float CalculateScaleFactor()
     {
         var monster = GetComponent<Monster>();
-        var data    = EnemyDataManager.Instance.Records[monster.EnemyID];
+        var data    = EnemyDataManager.Instance.EnemyDatas[monster.EnemyID];
         
         int enemyPixel = data.Enemy_Rank switch
         {
