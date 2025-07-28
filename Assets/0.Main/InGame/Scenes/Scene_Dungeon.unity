@@ -179,11 +179,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aaa160931bddeea4e9a2975bbb51a54e, type: 3}
---- !u!4 &97289898 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6555006888609643252, guid: 7d9c39f70cff99a4d854b5f86c4a3a46, type: 3}
-  m_PrefabInstance: {fileID: 6047088236605486246}
-  m_PrefabAsset: {fileID: 0}
 --- !u!20 &192030469 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
@@ -1138,11 +1133,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ce4f07790f914a4ba3a6fb1ceedc599, type: 3}
---- !u!4 &1042308455 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9216979421205706788, guid: 04545ff235f714e4d98ae095d81abc77, type: 3}
-  m_PrefabInstance: {fileID: 6548513275597281904}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1159838454
 GameObject:
   m_ObjectHideFlags: 0
@@ -2171,63 +2161,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxAugmentCount: 15
---- !u!1001 &6047088236605486246
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1042308455}
-    m_Modifications:
-    - target: {fileID: 2527248332091905580, guid: 7d9c39f70cff99a4d854b5f86c4a3a46, type: 3}
-      propertyPath: m_Name
-      value: FireballSpawner
-      objectReference: {fileID: 0}
-    - target: {fileID: 6555006888609643252, guid: 7d9c39f70cff99a4d854b5f86c4a3a46, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 9.617412
-      objectReference: {fileID: 0}
-    - target: {fileID: 6555006888609643252, guid: 7d9c39f70cff99a4d854b5f86c4a3a46, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.9169371
-      objectReference: {fileID: 0}
-    - target: {fileID: 6555006888609643252, guid: 7d9c39f70cff99a4d854b5f86c4a3a46, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.103611514
-      objectReference: {fileID: 0}
-    - target: {fileID: 6555006888609643252, guid: 7d9c39f70cff99a4d854b5f86c4a3a46, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6555006888609643252, guid: 7d9c39f70cff99a4d854b5f86c4a3a46, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6555006888609643252, guid: 7d9c39f70cff99a4d854b5f86c4a3a46, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6555006888609643252, guid: 7d9c39f70cff99a4d854b5f86c4a3a46, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6555006888609643252, guid: 7d9c39f70cff99a4d854b5f86c4a3a46, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6555006888609643252, guid: 7d9c39f70cff99a4d854b5f86c4a3a46, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6555006888609643252, guid: 7d9c39f70cff99a4d854b5f86c4a3a46, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 7d9c39f70cff99a4d854b5f86c4a3a46, type: 3}
 --- !u!1001 &6437492127328306458
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2301,14 +2234,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3837388451997089372, guid: 04545ff235f714e4d98ae095d81abc77, type: 3}
-      propertyPath: mapEventTable
-      value: 
-      objectReference: {fileID: 11400000, guid: dd2efc0a3bcfaca48aad6cee56f5e7b0, type: 2}
-    - target: {fileID: 3837388451997089372, guid: 04545ff235f714e4d98ae095d81abc77, type: 3}
-      propertyPath: mapEventInterval
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 6298750259495805545, guid: 04545ff235f714e4d98ae095d81abc77, type: 3}
       propertyPath: m_Name
       value: MapEventManager
@@ -2355,10 +2280,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 9216979421205706788, guid: 04545ff235f714e4d98ae095d81abc77, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 97289898}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 04545ff235f714e4d98ae095d81abc77, type: 3}
 --- !u!1660057539 &9223372036854775807
