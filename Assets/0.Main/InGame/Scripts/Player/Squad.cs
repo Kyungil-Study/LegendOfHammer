@@ -49,7 +49,8 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
 
     public SquadStats stats = new SquadStats();
     public Warrior warrior;
-    public List<string> invincible = new List<string>();
+    public List<object> invincible = new List<object>();
+    public float hitInvincibleDuration = 1f;
     public bool IsInvincible => invincible.Count > 0;
 
     private void Awake()
@@ -71,6 +72,29 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
         }
         stats.CurrentHealth -= eventArgs.Damage;
         BattleEventManager.CallEvent(new ReceiveDamageEventArgs(this, eventArgs.Damage));
+        ApplyInvincibility("HitInvincible", hitInvincibleDuration);
+    }
+
+    public SpriteRenderer[] squadSprites;
+    public void ApplyInvincibility(object _tag, float duration)
+    {
+        StartCoroutine(InvincibleCoroutine());
+        return;
+
+        IEnumerator InvincibleCoroutine()
+        {
+            foreach (SpriteRenderer sprite in squadSprites)
+            {
+                sprite.color = new Color(1,1,1,0.4f);
+            }
+            invincible.Add(_tag);
+            yield return new WaitForSeconds(duration);
+            invincible.Remove(_tag);
+            foreach (SpriteRenderer sprite in squadSprites)
+            {
+                sprite.color = new Color(1,1,1,1f);
+            }
+        }
     }
 
     private void Die()

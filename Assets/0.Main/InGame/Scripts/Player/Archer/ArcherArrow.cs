@@ -37,7 +37,7 @@ public class ArcherArrow : HeroProjectile
        monsters = monsters.OrderByDescending(monster =>
            {
                var id = monster.EnemyID;
-               var data = EnemyDataManager.Instance.Records[id];
+               var data = EnemyDataManager.Instance.EnemyDatas[id];
                return data.Enemy_Rank;
            })
            .ThenByDescending(monster => monster.Stat.CurrentHP)
@@ -52,9 +52,8 @@ public class ArcherArrow : HeroProjectile
         pierceLimit--;
 
         bool isSuccesHitTarget = targetMonster != null ? targetMonster.Equals(target) : false;
-        targetMonster = target;
 
-        float tagetFactor = isSuccesHitTarget ? 1 : targetAdditionalDamageFactor;
+        float tagetFactor = isSuccesHitTarget ? targetAdditionalDamageFactor : 1;
         int FinalDamage = (int)(Damage * tagetFactor);
         //Debug.Log($" [ArcherArrow] Hit {target.EnemyID} with damage: {FinalDamage} (pierce limit: {pierceLimit})");
         TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(

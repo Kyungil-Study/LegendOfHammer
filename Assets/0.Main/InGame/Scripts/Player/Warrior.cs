@@ -58,7 +58,7 @@ public class Warrior : Hero
     public override int CalculateDamage(bool isCritical = false)
     {
         float critFactor = isCritical ? squadStats.CriticalDamage : 1f;
-        return (int)(((baseAttackDamage * critFactor) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor);
+        return Mathf.RoundToInt(((baseAttackDamage * critFactor) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor);
     }
     
     public void ChargeAttack(Vector3 direction)
@@ -70,7 +70,6 @@ public class Warrior : Hero
             return;
         }
         
-        IsCharging = true;
         m_ChargeDirection = direction.normalized;
         
         Vector3 endPosition = squad.transform.position + direction.normalized * (Distance.STANDARD_DISTANCE * chargeDistance);
@@ -80,7 +79,8 @@ public class Warrior : Hero
 
     private IEnumerator ChargeCoroutine(Vector3 endPosition)
     {
-        squad.invincible.Add("WarriorCharge");
+        IsCharging = true;
+        squad.ApplyInvincibility("WarriorCharge", chargeDuration + invincibleDurationAfterCharge);
         
         Vector3 startPosition = transform.position;
         float elapsedTime = 0f;
@@ -91,12 +91,7 @@ public class Warrior : Hero
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
         IsCharging = false;
-
-        yield return new WaitForSeconds(invincibleDurationAfterCharge);
-        
-        squad.invincible.Remove("WarriorCharge");
     }
 
     private List<Monster> m_HitMonsters = new List<Monster>();
@@ -112,7 +107,7 @@ public class Warrior : Hero
         TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(squad, monster, CalculateDamage(Random.Range(0, 1f) <= squadStats.CriticalChance));
         BattleEventManager.CallEvent(eventArgs);
 
-        var monsterRank = EnemyDataManager.Instance.Records[monster.EnemyID].Enemy_Rank;
+        var monsterRank = EnemyDataManager.Instance.EnemyDatas[monster.EnemyID].Enemy_Rank;
         if (monsterRank is EnemyRank.Boss or EnemyRank.Elite && tmp_AugmentFlag == false)
         {
             return;

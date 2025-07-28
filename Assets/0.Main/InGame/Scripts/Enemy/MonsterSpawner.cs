@@ -115,7 +115,7 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
         bool isRanged = spawnAttackType.Equals(EnemySpawnAttackType.Range);
         EnemyRank rank = spawnRankType.ToEnemyRank();
 
-        var records = EnemyDataManager.Instance.Records;
+        var records = EnemyDataManager.Instance.EnemyDatas;
         List<EnemyData> filteredRecords = new List<EnemyData>();
         foreach (var record in records.Values)
         {
@@ -138,6 +138,7 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
 
     public void SpawnMonster(WaveRankType currentWaveWaveRank)
     {
+        Debug.Log($"[MonsterSpawner] SpawnMonster called with rank: {currentWaveWaveRank}");
         var patternList = activatedPatternByRank[currentWaveWaveRank];
         int randomIndex = UnityEngine.Random.Range(0, patternList.Count);
         SpawnPattern spawnPattern = spawnPatternTableSao.GetSpawnPattern(patternList[randomIndex]);

@@ -9,14 +9,23 @@ public class Projectile : MonoBehaviour
     private int     damage;
     private LayerMask targetMask;
     private IBattleCharacter attacker;
-
-    public void Initialize(Vector2 dir, float speed, int damage, LayerMask mask, IBattleCharacter attacker)
+    
+    private bool isLookingForTarget = false;
+    
+    public void Initialize(Vector2 dir, float speed, int damage, LayerMask mask, IBattleCharacter attacker, bool lookingForTarget)
     {
+        isLookingForTarget = lookingForTarget;
+        
         this.direction = dir.normalized;
         this.speed     = speed;
         this.damage    = damage;
         this.targetMask= mask;
         this.attacker  = attacker;
+        
+        if (lookingForTarget)
+        {
+            transform.up = direction;
+        }
     }
 
     void Update()
