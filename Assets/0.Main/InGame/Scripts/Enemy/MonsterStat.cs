@@ -2,28 +2,69 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 // StatComponent 책임: “스탯 로딩/오버라이드/디버프 적용/HP관리”
 // 받는 피해 증가 디버프: IDamageModifier로 구현, 리스트에서 처리
 
+[Serializable]
+public class HPScaler
+{
+    [Header("30 스테이지 이전 곱연산")]
+    [SerializeField] private float oneTo10Scale = 1.12f;
+    [SerializeField] private float tenTo20Scale = 1.12f;
+    [SerializeField] private float tewentyTo30Scale = 1.25f;
+    
+    [Header("30 스테이지 이후 합연산")]
+    [SerializeField] private long NormalMonsterAdd  = 200_000L;
+    [SerializeField] private long EliteMonsterAdd   = 500_000L;
+    [SerializeField] private long BossMonsterAdd    = 1_000_000L;
+    
+    public long ScaleHP(EnemyRank myRank, long baseHP, int stageIndex)
+    {
+        long hp = baseHP;
+
+        for (int i = 2; i <= stageIndex; i++)
+        {
+            if (i <= 10) { hp = (long)(hp * oneTo10Scale); }
+            else if (i <= 20) { hp = (long)(hp * tenTo20Scale); }
+            else if (i <= 30) { hp = (long)(hp * tewentyTo30Scale); }
+            else
+            {
+                switch (myRank)
+                {
+                    case EnemyRank.Normal: hp += NormalMonsterAdd; break;
+                    case EnemyRank.Elite:  hp += EliteMonsterAdd;  break;
+                    case EnemyRank.Boss:   hp += BossMonsterAdd;   break;
+                }
+            }
+        }
+        
+        return hp;
+    }
+}
+
 public class MonsterStat : MonoBehaviour
 {
     [Header("몬스터 기본 스탯")] [Tooltip("기본 스탯 수정용")]
-    public StatField<int>   HP;
+    public StatField<long>   HP;
     public StatField<int>   Atk;
     public StatField<float> MoveSpeed;
     
-    public StatBlock FinalStat { get; private set; }
-    public int CurrentHP { get; private set; }
-    public int MaxHP { get; private set; }
+    [Header("몬스터 스탯 스케일링")] [Tooltip("스테이지에 따라 HP를 스케일링")]
+    [SerializeField] private HPScaler hpScaler = new HPScaler();
     
     readonly List<IDamageModifier> modifiers = new();
     
+    public StatBlock FinalStat { get; private set; }
+    public long CurrentHP { get; private set; }
+    public long MaxHP { get; private set; }
+    
     public bool HasModifier<T>() where T : IDamageModifier
     {
-        return modifiers.Any(m => m is T);
+        return modifiers.Any(modifier => modifier is T);
     }
     
     public void AddModifier(IDamageModifier newModifier)
@@ -39,7 +80,7 @@ public class MonsterStat : MonoBehaviour
                 }
             }
         }
-
+        
         modifiers.Add(newModifier);
     }
     
@@ -48,7 +89,6 @@ public class MonsterStat : MonoBehaviour
         return modifiers.OfType<T>();
     }
     
-    /// <summary> TSV값 불러오기 + 변경하기 (스테이지 스케일링은 나중에 필요 시 내부에서 처리)</summary>
     public void Initialize(EnemyData data, int stageIndex)
     {
         var baseStat = new StatBlock
@@ -57,7 +97,7 @@ public class MonsterStat : MonoBehaviour
             Atk       = data.Atk_Power,
             MoveSpeed = data.Move_Speed
         };
-
+        
         FinalStat = new StatBlock
         {
             HP        = HP.Apply(baseStat.HP),
@@ -65,6 +105,10 @@ public class MonsterStat : MonoBehaviour
             MoveSpeed = MoveSpeed.Apply(baseStat.MoveSpeed)
         };
 
+        var finalStat = FinalStat;
+        finalStat.HP = hpScaler.ScaleHP(data.Enemy_Rank, baseStat.HP, stageIndex);
+        FinalStat = finalStat;
+        
         MaxHP = FinalStat.HP;
         CurrentHP = MaxHP;
     }
@@ -101,7 +145,7 @@ public class MonsterStat : MonoBehaviour
 [Serializable]
 public struct StatBlock
 {
-    public int HP;
+    public long HP;
     public int Atk;
     public float MoveSpeed;
 }
@@ -128,26 +172,24 @@ public class DamageAmpModifier : IDamageModifier
 
     public DamageAmpModifier(float value, float duration)
     {
-        this.multipleValue = value;
+        multipleValue = value;
         endTime = Time.time + duration;
     }
 
+    public float Value => multipleValue;
     public bool IsExpired => Time.time >= endTime;
     public float ModifyIncoming(float baseDamage) => baseDamage * multipleValue;
     public void ExtendDuration(float additionalTime)
     {
         endTime = Mathf.Max(endTime, Time.time + additionalTime);
     }
-
-    // 같은 종류의 디버프인지 확인용
-    public float Value => multipleValue;
 }
 
 public class DamageOverTimeModifier : IDamageModifier
 {
-    private readonly float damagePerSecond; // 초당 피해량
-    private readonly float endTime;         // 만료 시각
-    private float accumulator;              // 누적 잔여 피해
+    private readonly float damagePerSecond; 
+    private readonly float endTime;         
+    private float accumulator;              
 
     public DamageOverTimeModifier(float dps, float duration)
     {

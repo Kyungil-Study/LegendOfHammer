@@ -7,13 +7,13 @@ using UnityEngine;
 public abstract class ProjectileAttackBase : CoroutineAttackBase
 {
     protected IEnumerator FireProjectiles(int count, float interval, Func<int, Vector2> aim,
-        GameObject prefab, float speed, int damage, LayerMask mask)
+        GameObject prefab, float speed, int damage, LayerMask mask, bool isLookingForTarget)
     {
         for (int i = 0; i < count; i++)
         {
             var obj  = UnityEngine.Object.Instantiate(prefab, mMonster.transform.position, Quaternion.identity);
             var proj = obj.GetComponent<Projectile>();
-            proj.Initialize(aim(i).normalized, speed, damage, mask, mMonster);
+            proj.Initialize(aim(i).normalized, speed, damage, mask, mMonster,isLookingForTarget);
 
             if (interval > 0f)
             {

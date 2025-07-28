@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapEventPatterns:
   - {fileID: 11400000, guid: 4afe0cfa1d663e2449b355a61415e92b, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 961f04df0a6ebe743840692ce0c33c91, type: 2}
+  - {fileID: 11400000, guid: d08db13dc2d069640b268a83bafecd89, type: 2}
+  - {fileID: 11400000, guid: 5e5946dd0c551db48b3430673fa34d94, type: 2}
+  - {fileID: 11400000, guid: 60db87f8c57ed5143b1aec986eac61fb, type: 2}
   - {fileID: 11400000, guid: 3bb69a101b9536944b17f94de9e2152e, type: 2}
   - {fileID: 11400000, guid: da6be788f3127bb47a6484f86e59c0c0, type: 2}

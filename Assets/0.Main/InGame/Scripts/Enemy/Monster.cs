@@ -100,7 +100,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
     {
         if (IsTestMode) return;
         
-        var data = EnemyDataManager.Instance.Records[enemyID];
+        var data = EnemyDataManager.Instance.EnemyDatas[enemyID];
         var stage = BattleManager.Instance.StageIndex;
         
         stat.Initialize(data, stage);
@@ -140,7 +140,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
         if (col.gameObject.layer == 9)  // ClearZone
         {
-            var alivePoint = EnemyDataManager.Instance.Records[enemyID].Chasing_Increase;
+            var alivePoint = EnemyDataManager.Instance.EnemyDatas[enemyID].Chasing_Increase;
             BattleEventManager.CallEvent(new AliveMonsterEventArgs(this, alivePoint));
             Destroy(gameObject);
         }
@@ -150,8 +150,6 @@ public class Monster : MonoBehaviour, IBattleCharacter
     {
         int raw   = Mathf.RoundToInt(eventArgs.Damage * State.ShieldRate); // ShieldAttack이 계산해서 넣어줌
         int final = stat.ApplyIncomingDamage(raw);
-        var attacker = eventArgs.Attacker as MonoBehaviour;
-        //Debug.Log($"[Monster] from {attacker.name} {EnemyID} took {eventArgs.Damage} * {State.ShieldRate} => {final} damage (raw: {raw}).");
         
         BattleEventManager.CallEvent(new ReceiveDamageEventArgs(this, final));
 
@@ -212,6 +210,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
             time += Time.deltaTime;
             yield return null;
         }
+        
         rigid.velocity = Vector2.zero;
     }
 
@@ -231,7 +230,6 @@ public class Monster : MonoBehaviour, IBattleCharacter
             Gizmos.DrawWireSphere(transform.position, suicideCfg.attackRange);
         }
 
-        // Shield 방어각
         if (attack is ShieldAttack shieldAttack && shieldCfg != null)
         {
             Gizmos.color = Color.blue;

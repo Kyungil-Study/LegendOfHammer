@@ -34,7 +34,8 @@ public class SpreadAttack : ProjectileAttackBase
                 mConfig.projectilePrefab,
                 mConfig.projectileSpeed,
                 mMonster.Stat.FinalStat.Atk,
-                mMonster.PlayerLayerMask
+                mMonster.PlayerLayerMask,
+                mConfig.isLookingForTarget
             );
 
             yield return new WaitForSeconds(mConfig.burstInterval);

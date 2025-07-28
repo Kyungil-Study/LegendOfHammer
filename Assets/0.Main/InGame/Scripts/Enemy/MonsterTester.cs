@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using TMPro;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class MonsterTester : MonoBehaviour
@@ -19,16 +21,20 @@ public class MonsterTester : MonoBehaviour
     [SerializeField] private EnemyID testEnemyID = EnemyID.Straight_Normal_001;
     
     [Header("패턴 스폰 (테스트모드 체크 + 1번 키)")]
-    [SerializeField] private EnemyID  patternDefaultID    = EnemyID.Straight_Normal_001;
+    [SerializeField] private EnemyID HPTestRankID = EnemyID.Straight_Normal_001;
     [SerializeField] private EnemyMovementPattern testMovePattern = EnemyMovementPattern.Straight;
-    [SerializeField] private EnemyAttackPattern   testAttackPattern = EnemyAttackPattern.Normal;
+    [SerializeField] private EnemyAttackPattern testAttackPattern = EnemyAttackPattern.Normal;
+    
+    [Header("HP 스케일링 확인")]
+    [SerializeField] private int stageIndex = 1; // 스테이지 인덱스, 테스트용
+    [SerializeField] private TextMeshProUGUI HPText;
     
     private Camera cam;
     
-    private Monster              lastSpawned;
-    private EnemyRank            lastRank;
-    private EnemyMovementPattern lastMovePattern;
-    private EnemyAttackPattern   lastAttackPattern;
+    private Monster              spawnedMonster;
+    private EnemyRank            monsterRank;
+    private EnemyMovementPattern monsterMovePattern;
+    private EnemyAttackPattern   monsterAttackPattern;
     
     private void Awake()
     {
@@ -49,6 +55,22 @@ public class MonsterTester : MonoBehaviour
         {
             SpawnByPattern();
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+        {
+            for (int i = 0; i < EnemyDataManager.Instance.EnemyHPScalingDatas.Count; i++)
+            {
+                var enemyData = EnemyDataManager.Instance.EnemyHPScalingDatas[i];
+                Debug.Log($"HP 스케일링 테이블 연동 여부 확인 : {enemyData.Stage} / {enemyData.HP_Scaling}");
+            }
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (spawnedMonster == null) return;
+        
+        HPText.text = "HP : " + spawnedMonster.Stat.CurrentHP + " / " + spawnedMonster.Stat.FinalStat.HP;
     }
 
     private void HandlePlayerMovement()
@@ -89,35 +111,35 @@ public class MonsterTester : MonoBehaviour
         monster.SetEnemyID(testEnemyID);
         monster.SetPlayer(player);
         
-        lastSpawned       = monster;
-        var data          = EnemyDataManager.Instance.Records[testEnemyID];
-        lastRank          = data.Enemy_Rank;
-        lastMovePattern   = data.EnemyMovementPattern;
-        lastAttackPattern = data.Atk_Pattern;
+        spawnedMonster       = monster;
+        var data          = EnemyDataManager.Instance.EnemyDatas[testEnemyID];
+        monsterRank          = data.Enemy_Rank;
+        monsterMovePattern   = data.EnemyMovementPattern;
+        monsterAttackPattern = data.Atk_Pattern;
     }
 
     private void SpawnByPattern()
     {
         var monster = Instantiate(monsterPrefab, spawnPoint.position, Quaternion.identity);
-        monster.SetEnemyID(patternDefaultID);
+        monster.SetEnemyID(HPTestRankID);
 
-        if (EnemyDataManager.Instance.Records.TryGetValue(patternDefaultID, out var data))
+        if (EnemyDataManager.Instance.EnemyDatas.TryGetValue(HPTestRankID, out var data))
         {
-            monster.Stat.Initialize(data, BattleManager.Instance.StageIndex);
-            lastRank          = data.Enemy_Rank;
+            monster.Stat.Initialize(data, stageIndex);
+            monsterRank = data.Enemy_Rank;
         }
         else
         {
-            Debug.LogWarning($"[MonsterTest] EnemyID {patternDefaultID} not in table, using defaults");
+            Debug.LogWarning($"[MonsterTest] EnemyID {HPTestRankID} not in table, using defaults");
         }
 
         monster.SetPlayer(player);
         monster.IsTestMode = true;
         monster.MonsterTest(testMovePattern, testAttackPattern);
         
-        lastSpawned       = monster;
-        lastMovePattern   = testMovePattern;
-        lastAttackPattern = testAttackPattern;
+        spawnedMonster       = monster;
+        monsterMovePattern   = testMovePattern;
+        monsterAttackPattern = testAttackPattern;
     }
 
     void OnGUI()
@@ -131,22 +153,17 @@ public class MonsterTester : MonoBehaviour
 
         GUILayout.BeginArea(new Rect(x, y, width, height), "Monster Test Info", GUI.skin.window);
 
-        GUILayout.Label("마우스 클릭한 위치에 스폰 + WASD 이동 가능");
+        GUILayout.Label("마우스 클릭한 위치에 스폰 \nWASD로 캐릭터 이동 가능");
         GUILayout.Label("테이블 기반 스폰 : Space키 \n패턴별 스폰 : 1번키 ");
         GUILayout.Space(8);
 
-        if (lastSpawned != null)
+        if (spawnedMonster != null)
         {
-            GUILayout.Label($"Enemy ID           : {lastSpawned.EnemyID}");
-            GUILayout.Label($"Enemy Rank         : {lastRank}");
-            GUILayout.Label($"Movement Pattern   : {lastMovePattern}");
-            GUILayout.Label($"Attack Pattern     : {lastAttackPattern}");
+            GUILayout.Label($"Enemy ID           : {spawnedMonster.EnemyID}");
+            GUILayout.Label($"Enemy Rank         : {monsterRank}");
+            GUILayout.Label($"Movement Pattern   : {monsterMovePattern}");
+            GUILayout.Label($"Attack Pattern     : {monsterAttackPattern}");
             GUILayout.Space(4);
-
-            // var s = lastSpawned.Stat.FinalStat;
-            // GUILayout.Label($"Stat - HP          : {s.HP}");
-            // GUILayout.Label($"Stat - Atk         : {s.Atk}");
-            // GUILayout.Label($"Stat - MoveSpeed   : {s.MoveSpeed:F2}");
         }
         else
         {
