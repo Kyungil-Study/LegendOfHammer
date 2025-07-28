@@ -25,14 +25,27 @@ public class EnemyDataManager : MonoSingleton<EnemyDataManager>
             return enemyDatas;
         }
     }
+    public IReadOnlyList<EnemyHPScalingData> EnemyHPScalingDatas
+    {
+        get
+        {
+            if (enemyHPScalingDatas == null)
+            {
+                throw new InvalidOperationException("Records not initialized. Call Load() first.");
+            }
+            return enemyHPScalingDatas;
+        }
+    }
 
     protected override void Initialize()
     {
         base.Initialize();
+        
         if (string.IsNullOrEmpty(enemyDataTablePath))
         {
             throw new ArgumentNullException(nameof(enemyDataTablePath), "Resource path cannot be null or empty.");
         }
         enemyDatas = TSVLoader.LoadTableToDictionary<EnemyID, EnemyData>(enemyDataTablePath, data => data.Enemy_ID );
+        enemyHPScalingDatas = TSVLoader.LoadTable<EnemyHPScalingData>(enemyHPScalingTablePath);
     }
 }

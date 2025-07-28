@@ -269,6 +269,7 @@ MonoBehaviour:
     exlposionInverval: 0.2
     explosionPrefab: {fileID: 6111301031846871093, guid: 9a3809abee10ab54188078ab046f1168, type: 3}
   shieldCfg:
+    rate: 0.5
     radius: 1.2
     angleDeg: 90
     pivotOffset: {x: 0, y: 0}
@@ -276,7 +277,7 @@ MonoBehaviour:
     burstCount: 3
     burstInterval: 0.15
     fireInterval: 3
-    projectilePrefab: {fileID: 5122971031347301392, guid: 623e67ce00306e349ac9d084a76d79d4, type: 3}
+    projectilePrefab: {fileID: 5122971031347301392, guid: 4eaa12e29b15cb348ae5e9ba05c912e3, type: 3}
     projectileSpeed: 3
   spreadCfg:
     burstCount: 3
