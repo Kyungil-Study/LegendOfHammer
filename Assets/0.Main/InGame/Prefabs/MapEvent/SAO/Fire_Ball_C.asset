@@ -9,15 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71418b5190c7dbb4d8c004fda27a378d, type: 3}
-  m_Name: Fire_ball_D
+  m_Script: {fileID: 11500000, guid: 98642193442c4da79276d5a32cdc40d8, type: 3}
+  m_Name: Fire_Ball_C
   m_EditorClassIdentifier: 
-  patternId: 14
-  patternName: Fire_Ball_D
-  appearanceMinStage: 12
-  appearanceMaxStage: 999
+  MapEventID: 13
+  MapEventName: Fire_Ball_C
+  MapEventDamage: 25
+  FirstAppearStage: 8
+  MaxAppearStage: 999
   fireballSpawnJobs:
-  - attackDelay: 0.5
+  - attackDelay: 0
     pointType: 0
-  - attackDelay: 1
+  - attackDelay: 0.5
     pointType: 1

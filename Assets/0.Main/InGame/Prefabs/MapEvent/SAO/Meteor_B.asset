@@ -9,13 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71418b5190c7dbb4d8c004fda27a378d, type: 3}
-  m_Name: Fire_ball_A
+  m_Script: {fileID: 11500000, guid: 0c3d1d0109524dff85a4693840d8e541, type: 3}
+  m_Name: Meteor_B
   m_EditorClassIdentifier: 
-  patternId: 11
-  patternName: Fire_Ball_A
-  appearanceMinStage: 1
-  appearanceMaxStage: 15
-  fireballSpawnJobs:
-  - attackDelay: 0.5
-    pointType: 0
+  MapEventID: 22
+  MapEventName: Meteor_B
+  MapEventDamage: 30
+  FirstAppearStage: 10
+  MaxAppearStage: 999
+  spawnCount: 2
