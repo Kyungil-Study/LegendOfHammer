@@ -86,8 +86,8 @@ public class MonsterHPUIManager : MonoBehaviour
     {
         var stat = monster.GetComponent<MonsterStat>();
 
-        int current = stat.CurrentHP;
-        int max = stat.MaxHP;
+        long current = stat.CurrentHP;
+        long max = stat.MaxHP;
         
         if (max <= 0) return 1f;
         return Mathf.Clamp01((float)current / max);
