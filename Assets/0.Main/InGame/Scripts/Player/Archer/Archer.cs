@@ -95,7 +95,7 @@ public class Archer : Hero
             var monstersOrdered = monsters.OrderByDescending(monster =>
                 {
                     var id = monster.EnemyID;
-                    var data = EnemyDataManager.Instance.Records[id];
+                    var data = EnemyDataManager.Instance.EnemyDatas[id];
                     return data.Enemy_Rank;
                 })
                 .ThenByDescending(monster => monster.Stat.MaxHP)
