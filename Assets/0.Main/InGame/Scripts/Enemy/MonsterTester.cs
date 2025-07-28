@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 using TMPro;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class MonsterTester : MonoBehaviour
@@ -20,9 +21,9 @@ public class MonsterTester : MonoBehaviour
     [SerializeField] private EnemyID testEnemyID = EnemyID.Straight_Normal_001;
     
     [Header("패턴 스폰 (테스트모드 체크 + 1번 키)")]
-    [SerializeField] private EnemyID  patternDefaultID    = EnemyID.Straight_Normal_001;
+    [SerializeField] private EnemyID HPTestRankID = EnemyID.Straight_Normal_001;
     [SerializeField] private EnemyMovementPattern testMovePattern = EnemyMovementPattern.Straight;
-    [SerializeField] private EnemyAttackPattern   testAttackPattern = EnemyAttackPattern.Normal;
+    [SerializeField] private EnemyAttackPattern testAttackPattern = EnemyAttackPattern.Normal;
     
     [Header("HP 스케일링 확인")]
     [SerializeField] private int stageIndex = 1; // 스테이지 인덱스, 테스트용
@@ -120,16 +121,16 @@ public class MonsterTester : MonoBehaviour
     private void SpawnByPattern()
     {
         var monster = Instantiate(monsterPrefab, spawnPoint.position, Quaternion.identity);
-        monster.SetEnemyID(patternDefaultID);
+        monster.SetEnemyID(HPTestRankID);
 
-        if (EnemyDataManager.Instance.EnemyDatas.TryGetValue(patternDefaultID, out var data))
+        if (EnemyDataManager.Instance.EnemyDatas.TryGetValue(HPTestRankID, out var data))
         {
             monster.Stat.Initialize(data, stageIndex);
             monsterRank = data.Enemy_Rank;
         }
         else
         {
-            Debug.LogWarning($"[MonsterTest] EnemyID {patternDefaultID} not in table, using defaults");
+            Debug.LogWarning($"[MonsterTest] EnemyID {HPTestRankID} not in table, using defaults");
         }
 
         monster.SetPlayer(player);

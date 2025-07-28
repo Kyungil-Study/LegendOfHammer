@@ -18,38 +18,38 @@ public class HPScaler
     [SerializeField] private float tewentyTo30Scale = 1.25f;
     
     [Header("30 스테이지 이후 합연산")]
-    [SerializeField] private float NormalMonsterScale = 20000f;
-    [SerializeField] private float EliteMonsterScale  = 50000f;
-    [SerializeField] private float BossMonsterScale   = 1000000f;
+    [SerializeField] private long NormalMonsterAdd  = 200_000L;
+    [SerializeField] private long EliteMonsterAdd   = 500_000L;
+    [SerializeField] private long BossMonsterAdd    = 1_000_000L;
     
-    public int ScaleHP(EnemyRank myRank, int baseHP, int stageIndex)
+    public long ScaleHP(EnemyRank myRank, long baseHP, int stageIndex)
     {
-        float hp = baseHP;
+        long hp = baseHP;
 
         for (int i = 2; i <= stageIndex; i++)
         {
-            if (i <= 10) { hp *= 1.12f; }
-            else if (i <= 20) { hp *= 1.20f; }
-            else if (i <= 30) { hp *= 1.25f; }
+            if (i <= 10) { hp = (long)(hp * oneTo10Scale); }
+            else if (i <= 20) { hp = (long)(hp * tenTo20Scale); }
+            else if (i <= 30) { hp = (long)(hp * tewentyTo30Scale); }
             else
             {
                 switch (myRank)
                 {
-                    case EnemyRank.Normal: hp += 200000f; break;
-                    case EnemyRank.Elite:  hp += 500000f; break;
-                    case EnemyRank.Boss:   hp += 1000000f; break;
+                    case EnemyRank.Normal: hp += NormalMonsterAdd; break;
+                    case EnemyRank.Elite:  hp += EliteMonsterAdd;  break;
+                    case EnemyRank.Boss:   hp += BossMonsterAdd;   break;
                 }
             }
         }
         
-        return Mathf.RoundToInt(hp);
+        return hp;
     }
 }
 
 public class MonsterStat : MonoBehaviour
 {
     [Header("몬스터 기본 스탯")] [Tooltip("기본 스탯 수정용")]
-    public StatField<int>   HP;
+    public StatField<long>   HP;
     public StatField<int>   Atk;
     public StatField<float> MoveSpeed;
     
@@ -59,8 +59,8 @@ public class MonsterStat : MonoBehaviour
     readonly List<IDamageModifier> modifiers = new();
     
     public StatBlock FinalStat { get; private set; }
-    public int CurrentHP { get; private set; }
-    public int MaxHP { get; private set; }
+    public long CurrentHP { get; private set; }
+    public long MaxHP { get; private set; }
     
     public bool HasModifier<T>() where T : IDamageModifier
     {
@@ -105,9 +105,9 @@ public class MonsterStat : MonoBehaviour
             MoveSpeed = MoveSpeed.Apply(baseStat.MoveSpeed)
         };
 
-        var stat = FinalStat;
-        stat.HP = hpScaler.ScaleHP(data.Enemy_Rank, baseStat.HP, stageIndex);
-        FinalStat = stat;
+        var finalStat = FinalStat;
+        finalStat.HP = hpScaler.ScaleHP(data.Enemy_Rank, baseStat.HP, stageIndex);
+        FinalStat = finalStat;
         
         MaxHP = FinalStat.HP;
         CurrentHP = MaxHP;
@@ -145,7 +145,7 @@ public class MonsterStat : MonoBehaviour
 [Serializable]
 public struct StatBlock
 {
-    public int HP;
+    public long HP;
     public int Atk;
     public float MoveSpeed;
 }
