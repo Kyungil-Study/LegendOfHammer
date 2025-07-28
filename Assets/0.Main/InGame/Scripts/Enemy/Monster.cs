@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 using System.Collections;
-using UnityEditor;
 using UnityEngine;
 
 public class Monster : MonoBehaviour, IBattleCharacter
@@ -87,14 +86,14 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
     void OnEnable()
     {
-        BattleEventManager.Instance.Callbacks.OnChargeCollision += OnChargeCollision;
-        BattleManager.Instance.RegisterMonster(this);
+        BattleEventManager.RegistEvent<ChargeCollisionArgs>(OnChargeCollision);;
+        BattleManager.RegisterMonster(this);
     }
 
     void OnDisable()
     {
-        BattleEventManager.Instance.Callbacks.OnChargeCollision -= OnChargeCollision;
-        BattleManager.Instance.UnregisterMonster(this);
+        BattleEventManager.UnregistEvent<ChargeCollisionArgs>(OnChargeCollision);;
+        BattleManager.UnregisterMonster(this);
     }
     
     void Start()
@@ -132,7 +131,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
             int bit = 1 << col.gameObject.layer;
             if ((playerLayerMask.value & bit) != 0 && col.TryGetComponent<IBattleCharacter>(out var target))
             {
-                BattleEventManager.Instance.CallEvent
+                BattleEventManager.CallEvent
                 (
                     new TakeDamageEventArgs(this, target, Stat.FinalStat.Atk)
                 );
@@ -141,8 +140,8 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
         if (col.gameObject.layer == 9)  // ClearZone
         {
-            int alivePoint = EnemyDataManager.Instance.Records[enemyID].Chasing_Increase; 
-            BattleEventManager.Instance.CallEvent(new AliveMonsterEventArgs(this,alivePoint));
+            var alivePoint = EnemyDataManager.Instance.Records[enemyID].Chasing_Increase;
+            BattleEventManager.CallEvent(new AliveMonsterEventArgs(this, alivePoint));
             Destroy(gameObject);
         }
     }
@@ -154,7 +153,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
         var attacker = eventArgs.Attacker as MonoBehaviour;
         //Debug.Log($"[Monster] from {attacker.name} {EnemyID} took {eventArgs.Damage} * {State.ShieldRate} => {final} damage (raw: {raw}).");
         
-        BattleEventManager.Instance.CallEvent(new ReceiveDamageEventArgs(this, final));
+        BattleEventManager.CallEvent(new ReceiveDamageEventArgs(this, final));
 
         if (stat.ReduceHP(final))
         {
@@ -170,7 +169,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
             effect.transform.localScale = Vector3.one * scale.ScaleFactor;
         }
         
-        BattleEventManager.Instance.CallEvent(new DeathEventArgs(this));
+        BattleEventManager.CallEvent(new DeathEventArgs(this));
         Destroy(gameObject);
     }
 
@@ -195,7 +194,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
         if (totalDamage > 0)
         {
             var evt = new TakeDamageEventArgs(this, this, totalDamage);
-            BattleEventManager.Instance.CallEvent(evt);
+            BattleEventManager.CallEvent(evt);
         }
     }
 

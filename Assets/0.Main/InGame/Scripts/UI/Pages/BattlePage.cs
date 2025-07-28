@@ -34,9 +34,8 @@ public class BattlePage : UIPage
         currentScoreText.text = "0";
         maxScoreText.text = "0";
         
-        var callbacks = BattleEventManager.Instance.Callbacks;
-        callbacks.OnDeath += OnDeath; 
-        callbacks.OnEndBattle += OnEndBattle;
+        BattleEventManager.RegistEvent<DeathEventArgs>(OnDeath);
+        BattleEventManager.RegistEvent<EndBattleEventArgs>(OnEndBattle);
         
         BattleManager.Instance.ChaseGuage.Events.OnValueChanged += OnChaseGuageChanged;
         chasingSlider.maxValue = BattleManager.Instance.ChaseGuage.Max;

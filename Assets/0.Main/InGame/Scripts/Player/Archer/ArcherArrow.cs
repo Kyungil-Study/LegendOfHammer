@@ -62,7 +62,7 @@ public class ArcherArrow : HeroProjectile
             target,
             FinalDamage 
         );
-        BattleEventManager.Instance.CallEvent(eventArgs);
+        BattleEventManager.CallEvent(eventArgs);
         
         if (pierceLimit <= 0)
         {
