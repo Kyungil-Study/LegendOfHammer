@@ -79,6 +79,7 @@ public class Warrior : Hero
 
     private IEnumerator ChargeCoroutine(Vector3 endPosition)
     {
+        SoundManager.Instance.PlayWarriorDash();
         IsCharging = true;
         squad.ApplyInvincibility("WarriorCharge", chargeDuration + invincibleDurationAfterCharge);
         

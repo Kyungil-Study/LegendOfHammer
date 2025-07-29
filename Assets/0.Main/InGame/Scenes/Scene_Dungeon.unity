@@ -1133,6 +1133,57 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ce4f07790f914a4ba3a6fb1ceedc599, type: 3}
+--- !u!1 &1011375576
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1011375578}
+  - component: {fileID: 1011375577}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1011375577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1011375576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c422044101b14274caabb7988dc3dfac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonClick: {fileID: 8300000, guid: f1b86af752028964aa4532ba45916491, type: 3}
+  archerHit: {fileID: 8300000, guid: 736c6daac9cbd82468259cbcfe1e040d, type: 3}
+  magicianHit: {fileID: 8300000, guid: ba51fc5dcfcd591479f95c50239cb754, type: 3}
+  miss: {fileID: 8300000, guid: 30bf5c21cf710cf4d9f97d9edadc48a2, type: 3}
+  warriorDash: {fileID: 8300000, guid: 9f70b47c4208256439cc127a4c9fd708, type: 3}
+  playerDamaged: {fileID: 8300000, guid: bc50970b3db39164d9d088d588621032, type: 3}
+  warning: {fileID: 8300000, guid: 0b4d616a102b38244ae75181a18bea52, type: 3}
+--- !u!4 &1011375578
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1011375576}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 72.38103, y: 370.78677, z: -1.2390574}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1159838454
 GameObject:
   m_ObjectHideFlags: 0
@@ -2162,7 +2213,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 1
+      value: 0.9982175
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2245,3 +2296,4 @@ SceneRoots:
   - {fileID: 5616277283385043347}
   - {fileID: 337046716}
   - {fileID: 6548513275597281904}
+  - {fileID: 1011375578}

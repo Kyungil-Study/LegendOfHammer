@@ -67,6 +67,7 @@ public class ArcherArrow : HeroProjectile
         {
             Destroy(gameObject);
         }
+        SoundManager.Instance.PlayArcherHit();
     }
 
 }
