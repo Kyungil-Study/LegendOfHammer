@@ -75,6 +75,7 @@ public class ChaseCrowd : MonoSingleton<ChaseCrowd>, IBattleCharacter
 
     public void ExecuteMapEvent( int damage)
     {
+        BattlePopupSystem.Instance.ChaserAlarm.ExecuteAlarm();
         attackPower = damage;
         StopCoroutine(ChaseCoroutine());
         StartCoroutine(ChaseCoroutine());
