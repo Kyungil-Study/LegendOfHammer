@@ -84,6 +84,7 @@ public class WizardExplosiveAugment : WizardAugment
     {
         Debug.Log("마법사 폭발범위증가 선택");
         wizard.FinalExplosive = isFinalUpgrade;
+        
         wizard.CurrentExplosionRadius = wizard.ExplosionRadius * Incresed_ExplosiveRange;
     }
 
