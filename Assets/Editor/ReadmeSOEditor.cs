@@ -7,38 +7,9 @@ using UnityEngine;
 public class ReadmeSOEditor : Editor
 {
     private ReadmeSO so => (ReadmeSO)target;
-
-    SerializedProperty iconProp;
-    SerializedProperty titleProp;
-    SerializedProperty descProp;
-    SerializedProperty urlProp;
-
-    // void OnEnable()
-    // {
-    //     iconProp  = serializedObject.FindProperty("icon");
-    //     titleProp = serializedObject.FindProperty("title");
-    //     descProp  = serializedObject.FindProperty("description");
-    //     urlProp   = serializedObject.FindProperty("guideUrl");
-    // }
     
     public override void OnInspectorGUI()
     {
-        // 편집 모드
-        
-        //base.OnInspectorGUI();
-        // serializedObject.Update();
-        //
-        // EditorGUILayout.PropertyField(iconProp);
-        // EditorGUILayout.PropertyField(titleProp);
-        // EditorGUILayout.PropertyField(descProp);
-        // EditorGUILayout.PropertyField(urlProp);
-        //
-        // EditorGUILayout.Space(10);
-        // EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-        // EditorGUILayout.Space(5);
-        
-        // 미리보기 모드
-        
         GUI.skin.label.richText = true;
 
         if (so.icon != null)
@@ -74,6 +45,6 @@ public class ReadmeSOEditor : Editor
         EditorGUILayout.LabelField($"Asset Path: {AssetDatabase.GetAssetPath(so)}", EditorStyles.miniLabel);
         
         // Readme 수정하기
-        // DrawDefaultInspector();
+        DrawDefaultInspector();
     }
 }

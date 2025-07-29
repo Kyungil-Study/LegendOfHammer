@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: MonsterTestReadme
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
-  title: 
-  description: 
-  guideUrl: 
+  title: "\uBAAC\uC2A4\uD130 \uD14C\uC2A4\uD2B8 \uAC00\uC774\uB4DC"
+  description: "\r\n\uC2A4\uD3F0 \uC704\uCE58 \uBCC0\uACBD (\uC190\uAC00\uB77D \uD45C\uC2DC)
+    : \uB9C8\uC6B0\uC2A4 \uC88C\uD074\uB9AD\n\r\n\uCE90\uB9AD\uD130 \uC774\uB3D9
+    : WASD\r\n\n\uBAAC\uC2A4\uD130 \uC2A4\uD3F0(\uD14C\uC774\uBE14 \uAE30\uBC18)
+    : Space\uD0A4\r\n\n\uBAAC\uC2A4\uD130 \uC2A4\uD3F0(\uD328\uD134 \uCEE4\uC2A4\uD140
+    \uAE30\uBC18) :  1\uBC88\uD0A4\r\n\n\uC6E8\uC774\uBE0C \uC2A4\uD3F0 : 2\uBC88\uD0A4"
+  guideUrl: https://docs.google.com/document/d/1gAqx2evfgZZEH2cOWcYXfIM1Fgczos4ZvVozLjzvGOw/edit?tab=t.0
