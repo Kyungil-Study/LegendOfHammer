@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class WizardMagicBall : HeroProjectile
@@ -27,12 +28,15 @@ public class WizardMagicBall : HeroProjectile
             );
             BattleEventManager.CallEvent(eventArgs);
             enemy.Stat.AddModifier(new DamageAmpModifier(Owner.DebuffRate, Owner.DebuffDuration));
+            enemy.Stat.AddModifier(new DamageOverTimeModifier(Owner.DebuffRate, Owner.DebuffDuration));
         }
 
         var explosionEffect = Instantiate(explosionEffectPrefab, position, Quaternion.identity);
         SetExplosionEffectSize(explosionEffect, radius);
         Destroy(explosionEffect,2f);
         Destroy(gameObject);
+        
+        EditorApplication.isPaused = true;
     }
     
     private void SetExplosionEffectSize(GameObject effect, float radius)

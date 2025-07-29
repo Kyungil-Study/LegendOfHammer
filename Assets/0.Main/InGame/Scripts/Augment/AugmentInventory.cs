@@ -200,7 +200,7 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
                 }
                 else
                 {
-                    Debug.Log($"[AugmentInventory] Upgrading existing Wizard Augment: {augment.GetName()}");
+                    Debug.Log($"[AugmentInventory] Upgrading existing Wizard Augment: {augment.GetName()}, {augment.GetDescription()}");
                     var existing = wizardAugments.First(a => a.OptionID == augment.GetOptionID());
                     existing.SetLevel(classAugment.GetLevel());
                 }

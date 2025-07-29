@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
+public enum wizardAttackType
+{
+    Normal,
+    Explosive,
+    Debuff
+}
+
 public class Wizard : Hero
 {
     [field:SerializeField] public float BonusAttackSpeed { get; set; }
