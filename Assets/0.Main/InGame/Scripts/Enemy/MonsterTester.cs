@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEditor;
 using UnityEngine.Serialization;
@@ -31,6 +32,9 @@ public class MonsterTester : MonoBehaviour
     [SerializeField] private TextMeshProUGUI HPText;
     
     [Space(10),Header("웨이브 세팅")]
+    [LabelText("자동 웨이브 스폰 여부"), SerializeField] private bool autoWaveSpawnMode = false; // 자동 웨이브 스폰 여부
+    [LabelText("자동 웨이브 스폰 주기"), SerializeField] private float autoWaveSpawnInterval = 15; // 웨이브 인덱스, 테스트용
+    private float autoWaveSpawnTimer = 0f; // 자동 웨이브 스폰 타이머
     [SerializeField] private SpawnPattern spawnPatternTestSample;
     [SerializeField] private EnemyID normalMeleeID = EnemyID.Straight_Normal_001;
     [SerializeField] private EnemyID normalRangeID = EnemyID.Zigzag_Normal_002;
@@ -78,6 +82,17 @@ public class MonsterTester : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             SpawnByWavePattern();
+        }
+
+        if (autoWaveSpawnMode)
+        {
+            autoWaveSpawnTimer += Time.deltaTime;
+            if (autoWaveSpawnTimer >= autoWaveSpawnInterval)
+            {
+                autoWaveSpawnTimer = 0f;
+                SpawnByWavePattern();
+            }
+            
         }
     }
 

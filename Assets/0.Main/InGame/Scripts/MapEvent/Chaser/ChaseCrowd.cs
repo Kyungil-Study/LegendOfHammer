@@ -32,6 +32,7 @@ public class ChaseCrowd : MonoSingleton<ChaseCrowd>, IBattleCharacter
 
     private void Start()
     {
+        attackPower = 0; // 연출을 위한 초기 공격력 설정
         StartCoroutine(ChaseCoroutine());
     }
 
