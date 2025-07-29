@@ -6,6 +6,18 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
+public class ArcherDamageCalcArgs : BaseDamageCalcArgs
+{
+    public bool IsCritical { get; set; }
+    public bool IsTarget { get; set; }
+    public ArcherDamageCalcArgs() : this(false, false) { }
+    public ArcherDamageCalcArgs(bool isCritical) : this(false, isCritical) { }
+    public ArcherDamageCalcArgs(bool isTarget, bool isCritical = false)
+    {
+        IsCritical = isCritical;
+        IsTarget = isTarget;
+    }
+}
 public class Archer : Hero
 {
     [field:SerializeField] public float BonusAttackSpeed { get; set; }
@@ -156,20 +168,26 @@ public class Archer : Hero
         
     }
 
-
-    // 궁수 기본 화살 피해량
-    // [{(궁수 기본 공격 피해량 x 치명타 피해량) + 타격 당 데미지 + (궁수 기본 공격력 x 표적 대상 추가 피해 계수)} x 받는 피해량 증가] x 최종 데미지 증가
     public override int CalculateDamage(bool isCritical = false)
     {
         float critFactor = isCritical ? squadStats.CriticalDamage : 1f;
-        return Mathf.RoundToInt(((baseAttackDamage * critFactor) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor);
+        return Mathf.RoundToInt(((baseAttackDamage * critFactor) + squadStats.BonusDamagePerHit)* squadStats.FinalDamageFactor);
+    }
+
+    public override int CalculateDamage(BaseDamageCalcArgs args)
+    {
+        var calcArgs = args as ArcherDamageCalcArgs;
+        // 궁수 기본 화살 피해량
+        // [{(궁수 기본 공격 피해량 x 치명타 피해량) + 타격 당 데미지 + (궁수 기본 공격력 x 표적 대상 추가 피해 계수)} x 받는 피해량 증가] x 최종 데미지 증가
+        float critFactor = calcArgs.IsCritical ? squadStats.CriticalDamage : 1f;
+        float targetBonus = IsFinalPenetration && calcArgs.IsTarget ? targetAdditionalDamageFactor : 0f;
+        return Mathf.RoundToInt(((baseAttackDamage * critFactor) + squadStats.BonusDamagePerHit + baseAttackDamage * targetBonus)* squadStats.FinalDamageFactor);
     }
     
-    public int CalculateSubProjectileDamage(bool isCritical = false)
+    public int CalculateSubProjectileDamage(BaseDamageCalcArgs args)
     {
-        var finalDamage = Mathf.RoundToInt(CalculateDamage(isCritical) * subProjectileAttackFactor);
+        var finalDamage = Mathf.RoundToInt(CalculateDamage(args) * subProjectileAttackFactor);
         Debug.Log($"[Archer] SubProjectile Damage: {finalDamage}");
         return finalDamage;
-        
     }
 }

@@ -10,12 +10,18 @@ public class ArcherArrow : HeroProjectile
     public int pierceLimit = 0;
     public Monster targetMonster;
     public float targetAdditionalDamageFactor = 1;
+    private ArcherDamageCalcArgs m_DamageArgs;
     
-    public Func<bool,int> DamageCalculationFunc { get; set; }
+    public Func<BaseDamageCalcArgs,int> DamageCalculationFunc { get; set; }
     public override int Damage => 
         DamageCalculationFunc == null ? 
-            Owner.CalculateDamage(IsCritical) : 
-            DamageCalculationFunc.Invoke(IsCritical);
+            Owner.CalculateDamage(m_DamageArgs) : 
+            DamageCalculationFunc.Invoke(m_DamageArgs);
+
+    private void Start()
+    {
+        m_DamageArgs = new ArcherDamageCalcArgs(IsCritical);
+    }
 
     /// <summary>
     /// 등급, 최대 체력, 거리를 기준으로 정렬 후 가장 먼저 나오는 몬스터를 타겟으로 설정합니다.
@@ -56,15 +62,12 @@ public class ArcherArrow : HeroProjectile
         OnHit?.Invoke();
         pierceLimit--;
 
-        bool isSuccesHitTarget = targetMonster != null ? targetMonster.Equals(target) : false;
+        m_DamageArgs.IsTarget = targetMonster != null && targetMonster.Equals(target);
 
-        float tagetFactor = isSuccesHitTarget ? targetAdditionalDamageFactor : 1;
-        int FinalDamage = (int)(Damage * tagetFactor);
-        //Debug.Log($" [ArcherArrow] Hit {target.EnemyID} with damage: {FinalDamage} (pierce limit: {pierceLimit})");
         TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(
             Squad.Instance,
             target,
-            FinalDamage 
+            Damage 
         );
         BattleEventManager.CallEvent(eventArgs);
         
