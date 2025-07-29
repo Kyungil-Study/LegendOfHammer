@@ -32,7 +32,7 @@ public class ChaseCrowd : MonoSingleton<ChaseCrowd>, IBattleCharacter
 
     private void Start()
     {
-        StartCoroutine(ChaseCoroutine());
+        //StartCoroutine(ChaseCoroutine());
     }
 
 
