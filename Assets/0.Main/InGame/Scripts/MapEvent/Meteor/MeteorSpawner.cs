@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class MeteorSpawner : MapEventExecutor
+public class MeteorSpawner : MonoSingleton<MeteorSpawner>
 {
     [Range(0,1), SerializeField] private float spawnTrigger = 0.3f; // 스폰 트리거 값
     [SerializeField] private Meteor meteorPrefab; // 메테오 프리팹
@@ -24,12 +24,17 @@ public class MeteorSpawner : MapEventExecutor
         Gizmos.DrawWireSphere(transform.position, spawnRadius);
     }
 
-    public override void ExecuteMapEvent()
+    public void ExecuteMapEvent(int damage, int spawnCount)
     {
-        var randCircle = Random.insideUnitCircle * spawnRadius;
-        var spawnPosition = Squad.Instance.transform.position + new Vector3(randCircle.x , randCircle.y , 0); 
+        BattlePopupSystem.Instance.MeteorAlarm.ExecuteAlarm();
+        for (int i = 0; i < spawnCount; i++)
+        {
+            var randCircle = Random.insideUnitCircle * spawnRadius;
+            var spawnPosition = Squad.Instance.transform.position + new Vector3(randCircle.x , randCircle.y , 0); 
             
-        Meteor meteor = Instantiate(meteorPrefab, spawnPosition, Quaternion.identity);
-        meteor.transform.SetParent(transform);
+            Meteor meteor = Instantiate(meteorPrefab, spawnPosition, Quaternion.identity);
+            meteor.transform.SetParent(transform);
+        }
+       
     }
 }
