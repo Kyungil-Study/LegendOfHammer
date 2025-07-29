@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 using TMPro;
+using UnityEditor;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
@@ -39,7 +40,7 @@ public class MonsterTester : MonoBehaviour
     [SerializeField] private EnemyID bossRangeID = EnemyID.Zigzag_Boss_002;
     
     private Camera cam;
-    
+
     private Monster              spawnedMonster;
     private EnemyRank            monsterRank;
     private EnemyMovementPattern monsterMovePattern;
