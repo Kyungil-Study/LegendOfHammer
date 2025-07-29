@@ -151,6 +151,11 @@ public class MonsterSpawner : MonoSingleton<MonsterSpawner>
 
     void SpawnMonster(EnemyData data, Vector3 position)
     {
+        if (data.Enemy_Rank.Equals(EnemyRank.Boss))
+        {
+            BattlePopupSystem.Instance.BossAlarm.ExecuteAlarm();
+        }
+        
         Debug.Log($"[MonsterSpawner] Spawned monsters of rank {data.Enemy_Rank} and attack type {data.Atk_Pattern} at position {position}");
         // todo: 몬스터 ID 세팅을 prefab 변경으로 수정
         Monster newMonster = Instantiate(monsterPrefab, position, Quaternion.identity);
