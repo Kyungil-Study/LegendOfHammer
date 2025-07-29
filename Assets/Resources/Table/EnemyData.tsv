@@ -3,7 +3,6 @@ int	enum	bool	string	enum	string	int	int	float	int	int
 11001	Normal	FALSE	Straight	Straight	Normal	1800	10	0.8	5	1
 21001	Elite	FALSE	Straight	Straight	Normal	13000	20	0.6	20	1
 31001	Boss	FALSE	Straight	Straight	Normal	25000	30	0.4	50	1
-11002	Normal	FALSE	Zigzag	Zigzag	Normal	1950	10	0.8	5	2
 21002	Elite	FALSE	Zigzag	Zigzag	Normal	14500	20	0.6	20	2
 31002	Boss	FALSE	Zigzag	Zigzag	Normal	25000	30	0.4	50	2
 11003	Normal	FALSE	Suicide	Chase	Suicide	1500	25	1	0	7
