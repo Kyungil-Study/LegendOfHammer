@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,7 +19,13 @@ public abstract class Hero : MonoBehaviour
     public float DebuffRate;
 
     protected virtual void Attack() { }
+
     public abstract int CalculateDamage(bool isCritical = false);
+
+    public virtual int CalculateDamage(BaseDamageCalcArgs args)
+    {
+        return CalculateDamage(args.IsCritical);
+    }
 
     protected virtual void Awake()
     {
@@ -39,5 +46,17 @@ public abstract class Hero : MonoBehaviour
     protected virtual void ApplyCooldown()
     {
         leftCooldown = AttackCooldown;
+    }
+}
+
+public interface IDamageCalcArgs { }
+
+public class BaseDamageCalcArgs : IDamageCalcArgs
+{
+    public bool IsCritical { get; set; } = false;
+
+    public BaseDamageCalcArgs(bool isCritical = false)
+    {
+        IsCritical = isCritical;
     }
 }

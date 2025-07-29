@@ -72,7 +72,8 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
         }
         stats.CurrentHealth -= eventArgs.Damage;
         BattleEventManager.CallEvent(new ReceiveDamageEventArgs(this, eventArgs.Damage));
-        ApplyInvincibility("HitInvincible", hitInvincibleDuration);
+        ApplyInvincibility("HitInvincible", hitInvincibleDuration); 
+        SoundManager.Instance.PlayPlayerDamaged();
     }
 
     public SpriteRenderer[] squadSprites;
