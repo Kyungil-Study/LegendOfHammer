@@ -49,28 +49,5 @@ public class SpawnPatternTableSAO : ScriptableObject
         Debug.LogError($"[WaveTable] WaveType {key}를 찾을 수 없습니다.");
         return null;
     }
-    
-#if UNITY_EDITOR
-    [ShowInInspector, ReadOnly]
-    [PropertySpace(SpaceBefore = 10, SpaceAfter = 10)]
-    private IEnumerable<string> PreviewFilteredPatterns
-    {
-        get
-        {
-            var list = FilteredSpawnPatterns(debugStage, debugRank);
-            foreach (var pattern in list)
-            {
-                yield return $"패턴ID: {pattern.augmentTypeID}, 슬롯 수: {pattern.PatternSlots?.Length}";
-            }
-        }
-    }
-
-    [FoldoutGroup("디버그용 필터")]
-    [PropertyOrder(-1)]
-    [SerializeField] private int debugStage = 1;
-
-    [FoldoutGroup("디버그용 필터")]
-    [PropertyOrder(-1)]
-    [SerializeField] private WaveRankType debugRank = WaveRankType.Normal;
-#endif
+   
 }
