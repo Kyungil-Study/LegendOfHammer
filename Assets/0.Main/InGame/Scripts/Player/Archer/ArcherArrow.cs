@@ -9,7 +9,6 @@ public class ArcherArrow : HeroProjectile
 {
     public int pierceLimit = 0;
     public Monster targetMonster;
-    public float targetAdditionalDamageFactor = 1;
     private ArcherDamageCalcArgs m_DamageArgs;
     
     public Func<BaseDamageCalcArgs,int> DamageCalculationFunc { get; set; }
