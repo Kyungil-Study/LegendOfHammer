@@ -237,12 +237,12 @@ MonoBehaviour:
     Modify: 0
     Value: 0
   hpScaler:
-    oneto10Scale: 1.12
-    oneto20Scale: 1.12
-    oneto30Scale: 1.25
-    NormalMonsterScale: 20000
-    EliteMonsterScale: 50000
-    BossMonsterScale: 1000000
+    oneTo10Scale: 1.12
+    tenTo20Scale: 1.12
+    tewentyTo30Scale: 1.25
+    NormalMonsterAdd: 200000
+    EliteMonsterAdd: 500000
+    BossMonsterAdd: 1000000
 --- !u!114 &7494431464099580550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -264,7 +264,7 @@ MonoBehaviour:
     m_Bits: 1024
   zigzagCfg:
     amplitude: 1
-    frequency: 2
+    frequency: 1
     offsetX: 0.5
   chaseCfg:
     detectRange: 0.5
