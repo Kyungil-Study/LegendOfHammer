@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 
 [RequireComponent(typeof(BoxCollider2D))]
-public class ChaseCrowd : MapEventExecutor , IBattleCharacter
+public class ChaseCrowd : MonoSingleton<ChaseCrowd>, IBattleCharacter
 {
     Vector3 originPosition;
     [SerializeField] private Transform destination; // 추적할 대상 위치
@@ -32,6 +32,7 @@ public class ChaseCrowd : MapEventExecutor , IBattleCharacter
 
     private void Start()
     {
+        attackPower = 0; // 연출을 위한 초기 공격력 설정
         StartCoroutine(ChaseCoroutine());
     }
 
@@ -72,8 +73,10 @@ public class ChaseCrowd : MapEventExecutor , IBattleCharacter
         // 추적 크라우드가 피해를 받았을 때 처리
     }
 
-    public override void ExecuteMapEvent()
+    public void ExecuteMapEvent( int damage)
     {
+        BattlePopupSystem.Instance.ChaserAlarm.ExecuteAlarm();
+        attackPower = damage;
         StopCoroutine(ChaseCoroutine());
         StartCoroutine(ChaseCoroutine());
     }

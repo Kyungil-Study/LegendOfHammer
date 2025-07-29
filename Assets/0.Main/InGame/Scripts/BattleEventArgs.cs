@@ -77,11 +77,13 @@ public class ReceiveDamageEventArgs : BattleEventArgs
 
 public class AliveMonsterEventArgs : BattleEventArgs
 {
-    public IBattleCharacter Monster { get; private set; }
+    public Monster AliveMonster { get; set; }
+    public int AlivePoint { get; set; } = 0; // 몬스터가 살아있을 때 증가하는 포인트
 
-    public AliveMonsterEventArgs(IBattleCharacter monster)
+    public AliveMonsterEventArgs(Monster monster, int alivePoint)
     {
-        this.Monster = monster;
+        this.AliveMonster = monster;
+        this.AlivePoint = alivePoint;
     }
 }
 
