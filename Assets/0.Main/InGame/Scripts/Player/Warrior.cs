@@ -63,10 +63,8 @@ public class Warrior : Hero
     
     public void ChargeAttack(Vector3 direction)
     {
-        Debug.Log("charge");
         if(leftCooldown > 0 || IsCharging)
         {
-            Debug.Log("return");
             return;
         }
         
@@ -79,6 +77,7 @@ public class Warrior : Hero
 
     private IEnumerator ChargeCoroutine(Vector3 endPosition)
     {
+        SoundManager.Instance.PlayWarriorDash();
         IsCharging = true;
         squad.ApplyInvincibility("WarriorCharge", chargeDuration + invincibleDurationAfterCharge);
         
@@ -95,7 +94,6 @@ public class Warrior : Hero
     }
 
     private List<Monster> m_HitMonsters = new List<Monster>();
-    // TODO: 증강 구현하면 수정할 것
     private bool tmp_AugmentFlag = false;
     public void Impact(Monster monster)
     {

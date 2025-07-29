@@ -46,8 +46,7 @@ public class Wizard : Hero
         }
         // Debug.Log($"공격 개수: {AttackCount}, 공격 범위: {CurrentExplosionRadius}");
     }
-
-    // TODO: 중복 공격 시 피해 감소율
+    
     // 마법사 마법 구체 폭발 피해량
     // [[{(마법사 기본 공격 피해량 x 치명타 피해량) + 타격 당 데미지} x 받는 피해 증가] x 최종 데미지 증가] x 중복 공격 시 피해 감소율
     public override int CalculateDamage(bool isCritical = false)
@@ -74,11 +73,12 @@ public class Wizard : Hero
 
         // 주변 적 탐지
         List<Monster> enemies = BattleManager.GetAllEnemyInRadius(pos, radius);
-        var crit = Random.Range(0f, 1f) <= squadStats.CriticalChance;
+
+        var crit = Random.Range(0f,1f) <= squadStats.CriticalChance;
         foreach (var enemy in enemies)
         {
             var eventArgs = new TakeDamageEventArgs(
-                Squad.Instance, enemy, crit ? DamageType.Critical : DamageType.Normal,
+                                Squad.Instance, enemy, crit ? DamageType.Critical : DamageType.Normal,
                 CalculateDamage(crit) // 기본 공격력 기반 피해
             );
             //BattleEventManager.Instance.CallEvent(eventArgs);
