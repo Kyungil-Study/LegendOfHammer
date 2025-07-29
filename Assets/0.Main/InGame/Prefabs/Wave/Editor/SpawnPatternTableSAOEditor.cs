@@ -9,17 +9,28 @@ public class SpawnPatternTableSAOEditor : OdinEditor
 {
     private int stageFilter = 1;
     private WaveRankType rankFilter = WaveRankType.Normal;
+    
+    private int currentStage = 1;
+    private WaveRankType currentRank = WaveRankType.Normal;
+    
+    bool isInitialized = false;
 
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
+        EditorGUILayout.Space(10);
+        var refresh = GUILayout.Button("테이블 최신화");
+        var table = (SpawnPatternTableSAO)target;
+        if(refresh)
+        {
+            table.Resolve();
+        }
         EditorGUILayout.Space(10);
         EditorGUILayout.LabelField("=== 필터링된 스폰 패턴 미리보기 ===", EditorStyles.boldLabel);
 
         stageFilter = EditorGUILayout.IntField("스테이지", stageFilter);
         rankFilter = (WaveRankType)EditorGUILayout.EnumPopup("웨이브 등급", rankFilter);
 
-        var table = (SpawnPatternTableSAO)target;
         var results = table.FilteredSpawnPatterns(stageFilter, rankFilter);
 
         if (results.Count == 0)
@@ -30,7 +41,7 @@ public class SpawnPatternTableSAOEditor : OdinEditor
         foreach (var pattern in results)
         {
             EditorGUILayout.Space();
-            EditorGUILayout.LabelField($"패턴 ID: {pattern.augmentTypeID}, 타입: {pattern.PatternType}, 슬롯 개수: {pattern.PatternSlots?.Length ?? 0}");
+            EditorGUILayout.LabelField($"패턴 ID: {pattern.augmentTypeID}, 타입: {pattern.name}, 슬롯 개수: {pattern.PatternSlots?.Length ?? 0}");
             EditorGUI.indentLevel++;
             if (pattern.PatternSlots != null)
             {
