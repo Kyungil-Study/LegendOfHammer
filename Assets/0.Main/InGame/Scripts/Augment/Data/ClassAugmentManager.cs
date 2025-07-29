@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 
-public class ClassAugmentManager : SingletonBase<ClassAugmentManager>
+public class ClassAugmentManager : MonoSingleton<ClassAugmentManager>
 {
     [SerializeField] private string archerAugmentPath = "ArcherAugment";
     [SerializeField] private string warriorAugmentPath = "WarriorAugment";
     [SerializeField] private string wizardAugmentPath = "WizardAugment";
 
+    [SerializeField] private ClassAugmentIconTableSAO augmentIconTableSAO;
+    
     Dictionary<int, ArcherAugment> archerAugments = new Dictionary<int, ArcherAugment>();
     Dictionary<int, WarriorAugment> warriorAugments = new Dictionary<int, WarriorAugment>();
     Dictionary<int, WizardAugment> wizardAugments = new Dictionary<int, WizardAugment>();
@@ -31,9 +33,36 @@ public class ClassAugmentManager : SingletonBase<ClassAugmentManager>
     
     Dictionary<AugmentType , HashSet<int>> optionGroupByClass = new Dictionary<AugmentType,HashSet<int>>();
     public IReadOnlyDictionary<AugmentType, HashSet<int>> OptionGroupByClass => optionGroupByClass;
-    
-    public override void OnInitialize()
+
+    public Sprite GetIcon(int augmentID)
     {
+        if (augmentIconTableSAO == null)
+        {
+            Debug.LogError("AugmentIconTableSAO is not assigned.");
+            return null;
+        }
+        
+        var augment = GetAugment(augmentID);
+        if (augment == null)
+        {
+            Debug.LogWarning($"Augment with ID {augmentID} not found.");
+            return null;
+        }
+        
+        var icon = augmentIconTableSAO.GetIconByAugmentID(augment.GetID());
+        if (icon == null)
+        {
+            Debug.LogWarning($"Icon for augment with ID {augmentID} not found.");
+        }
+        
+        return icon;
+        
+    }
+    
+    protected override void Initialize()
+    {
+        Debug.Log("Initializing ClassAugmentManager");
+        base.Initialize();
         if (string.IsNullOrEmpty(archerAugmentPath) || 
             string.IsNullOrEmpty(warriorAugmentPath) || 
             string.IsNullOrEmpty(wizardAugmentPath))
@@ -120,17 +149,6 @@ public class ClassAugmentManager : SingletonBase<ClassAugmentManager>
             a.GetOptionID() == optionID && 
             a.GetLevel() == level);
         return result;
-        
     }
-
-
-    
-    public ClassAugment GetAugment(int id, int optionID, int level)
-    {
-        var result = allAugments.FirstOrDefault(a => 
-            a.GetID() == id && 
-            a.GetOptionID() == optionID && 
-            a.GetLevel() == level);
-        return result;
-    }
+   
 }

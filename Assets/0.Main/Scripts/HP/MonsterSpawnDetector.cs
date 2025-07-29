@@ -32,7 +32,7 @@ public class MonsterSpawnDetector : MonoBehaviour
                 var value = idProp.GetValue(mb);
                 if (value is EnemyID enemyID)
                 {
-                    if (EnemyDataManager.Instance.Records.TryGetValue(enemyID, out var data))
+                    if (EnemyDataManager.Instance.EnemyDatas.TryGetValue(enemyID, out var data))
                     {
                         if (data.Enemy_Rank == EnemyRank.Elite || data.Enemy_Rank == EnemyRank.Boss)
                         {

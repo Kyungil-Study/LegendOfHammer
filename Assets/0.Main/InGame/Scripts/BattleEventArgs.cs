@@ -43,9 +43,11 @@ public class StartBattleEventArgs : BattleEventArgs
 public class EndBattleEventArgs : BattleEventArgs
 {
     public bool IsVictory { get; private set; }
-    public EndBattleEventArgs( bool isVictory)
+    public bool IsBoosDead { get; set; }
+    public EndBattleEventArgs( bool isVictory, bool isBossDead)
     {
         this.IsVictory = isVictory;
+        this.IsBoosDead = isBossDead;
     }
 }
 
@@ -75,16 +77,19 @@ public class ReceiveDamageEventArgs : BattleEventArgs
 
 public class AliveMonsterEventArgs : BattleEventArgs
 {
-    public IBattleCharacter Monster { get; private set; }
+    public Monster AliveMonster { get; set; }
+    public int AlivePoint { get; set; } = 0; // 몬스터가 살아있을 때 증가하는 포인트
 
-    public AliveMonsterEventArgs(IBattleCharacter monster)
+    public AliveMonsterEventArgs(Monster monster, int alivePoint)
     {
-        this.Monster = monster;
+        this.AliveMonster = monster;
+        this.AlivePoint = alivePoint;
     }
 }
 
 public class DeathEventArgs : BattleEventArgs
 {
+    // 사망시 사망한 위치에 사망 이펙트 처리하도록?
     public IBattleCharacter Target { get; private set; }
 
     public DeathEventArgs(IBattleCharacter target)

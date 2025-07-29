@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -44,23 +45,43 @@ public class SquadController : MonoBehaviour
         
         inputActionAsset.Enable();
 
-        pointerPress.action.performed += StartMove;
-        pointerPress.action.canceled += context =>
-        {
-            mb_IsPointerPressed = false;
-            innerCircle.transform.position = lever.transform.position;
-            m_DisappearTime = disappearTime;
-        };
+     
+        BattleEventManager.RegistEvent<StartBattleEventArgs>(
+                (args) =>
+                {
+                    gameObject.SetActive(true);
+                    lever.SetActive(true);
+                }
+            );
+        
+        BattleEventManager.RegistEvent<EndBattleEventArgs>(
+                (args) =>
+                {
+                    gameObject.SetActive(false);
+                    lever.SetActive(false);
+                }
+            );
 
-        var callbacks = BattleEventManager.Instance.Callbacks;
-
-        callbacks.OnStartBattle += (args) =>
-        {
-            gameObject.SetActive(true);
-            lever.SetActive(true);
-        };
-        callbacks.OnEndBattle += (args) => { gameObject.SetActive(false); };
         gameObject.SetActive(false); // Initially hide the controller
+    }
+
+    private void OnCancleMove(InputAction.CallbackContext context)
+    {
+        mb_IsPointerPressed = false;
+        innerCircle.transform.position = lever.transform.position;
+        m_DisappearTime = disappearTime;
+    }
+
+    private void OnEnable()
+    {
+        pointerPress.action.performed += StartMove;
+        pointerPress.action.canceled += OnCancleMove;
+    }
+
+    private void OnDisable()
+    {
+        pointerPress.action.performed -= StartMove;
+        pointerPress.action.canceled -= OnCancleMove;
     }
 
     private void StartMove(InputAction.CallbackContext context)

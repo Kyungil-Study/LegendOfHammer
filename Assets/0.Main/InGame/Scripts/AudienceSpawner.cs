@@ -19,18 +19,22 @@ public class AudienceSpawner : MonoBehaviour
     [SerializeField] Transform spawnRangeStart;
     [SerializeField] Transform spawnRangeEnd;
     
-    [Header("Tilemap Settings")]
-    [SerializeField] private TilemapRenderer tilemapRenderer; // 타일맵 컴포넌트
 
-    private Grid grid;
-    private Tilemap tilemap;
-    // Start is called before the first frame update
+    [SerializeField] private AnimatorOverrideController audienceAOC;
+    [SerializeField] private AnimationClip[] audienceAnimations;
+    Dictionary<AnimationClip,AnimatorOverrideController> audienceAOCMap = new Dictionary<AnimationClip, AnimatorOverrideController>();
+    public Dictionary<AnimationClip, AnimatorOverrideController> AudienceAOCMap => audienceAOCMap;
+    public AnimationClip[] AudienceAnimations => audienceAnimations;
+    
     void Start()
     {
-        tilemapRenderer = GetComponent<TilemapRenderer>();
-        tilemapRenderer.enabled = false;
-        tilemap = GetComponent<Tilemap>();
-        grid = GetComponentInParent<Grid>();
+        foreach (AnimationClip audienceClip in audienceAnimations)
+        {
+            var animatorOverrideController = new AnimatorOverrideController(audienceAOC);
+            animatorOverrideController.name = $"AOC_{audienceClip.name}";
+            animatorOverrideController["Audience_Idle"] = audienceClip;
+            AudienceAOCMap[audienceClip] = animatorOverrideController;
+        }
         
         float offset = 1f / spawnCountPerTile; // 타일의 절반 크기만큼 오프셋 설정
         for(int i = 0 ;i < spawnCountPerTile; i++)
@@ -42,7 +46,7 @@ public class AudienceSpawner : MonoBehaviour
             audience.transform.position = spawnPosition;
             audience.transform.rotation = SpawRotation;
                     
-            audience.Setup();
+            audience.Setup(this);
         }
     }
 }

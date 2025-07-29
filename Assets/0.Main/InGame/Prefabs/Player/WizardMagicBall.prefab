@@ -152,10 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32e4fa2f32e133e4ca25d3512bfd7097, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
-  speed: 4
+  speed: 1.5
   explosionEffectPrefab: {fileID: 4859452286414634588, guid: aee187a5adca69a43a7ab606a2888ba8, type: 3}
-  explosionRadius: 0.5
+  explosionRadius: 0.3
 --- !u!61 &6132343659481482561
 BoxCollider2D:
   m_ObjectHideFlags: 0

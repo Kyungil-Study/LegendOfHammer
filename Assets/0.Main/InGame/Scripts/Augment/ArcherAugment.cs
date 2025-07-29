@@ -1,5 +1,7 @@
 
 
+using UnityEngine;
+
 public static class ArcherAugmentFactory
 {
     public static ArcherAugment CreateAugment(ArcherAugmentTSV tsv)
@@ -37,40 +39,42 @@ public class ArcherSpeedAugment : ArcherAugment
         MageAttackSpeedIncreased = tsv.MageAttackSpeedIncreased;
     }
 
-    public override void Apply(Archer archer)
+    public override void Apply(Archer archer, bool isFinalUpgrade)
     {
+        Debug.Log($"Applying Archer Speed Augment: {AttackSpeedIncreasedRate}, Final Upgrade: {isFinalUpgrade}");
         // 공격속도 증가 적용
         archer.BonusAttackSpeed = AttackSpeedIncreasedRate;
         archer.mageAttackSpeedFactor = MageAttackSpeedIncreased;
         archer.BonusAttackFactor = SmallArrowAttackRatio;
+        
+        archer.IsFinalProjectile = isFinalUpgrade;
+        
     }
 }
 
 public class ArcherProjectileAugment : ArcherAugment
 {
-    // 추가 투사체 공격력 계수 증가
-    public float AdditionalProjectileAttackRatioIncreased { get; set; }
-    // 추가 화살 공격력 계수 // 중복되는건지 확인 필요
+    // 추가 화살 공격력 계수
     public float AdditionalArrowAttackRatio { get; set; }
     
-    public float TargetAdditionalDamageRatio  { get; set; }
 
     public ArcherProjectileAugment(ArcherAugmentTSV tsv) : base(tsv)
     {
-        AdditionalProjectileAttackRatioIncreased = tsv.AdditionalProjectileAttackRatioIncreased;
         AdditionalArrowAttackRatio = tsv.AdditionalArrowAttackRatio;
-        TargetAdditionalDamageRatio = tsv.TargetAdditionalDamageRatio;
     }
 
-    public override void Apply(Archer archer)
+    public override void Apply(Archer archer, bool isFinalUpgrade)
     {
-        // 추가 투사체 공격력 계수 증가 적용
-        archer.subProjectileAttackFactor = AdditionalProjectileAttackRatioIncreased;
+        Debug.Log($"Applying Archer Projectile Augment: {AdditionalArrowAttackRatio}, Final Upgrade: {isFinalUpgrade}");
+        
+        archer.IsSubProjectile = true;
+        
+        archer.subProjectileCount = Level; // 서브 화살 개수 초기화
         
         // 추가 화살 공격력 계수 적용
         archer.subProjectileAttackFactor = AdditionalArrowAttackRatio;
-        // 관통 횟수 증가 적용
-        archer.targetAdditionalDamageFactor = TargetAdditionalDamageRatio;
+        
+        archer.IsFinalSubProjectile = isFinalUpgrade;
     }
 }
 
@@ -78,16 +82,24 @@ public class ArcherPenetrationAugment : ArcherAugment
 {
     // 관통 횟수 증가
     public int PenetrationCountIncreased { get; set; }
-    
+    public float TargetAdditionalDamageRatio  { get; set; }
+
     public ArcherPenetrationAugment(ArcherAugmentTSV tsv) : base(tsv)
     {
         PenetrationCountIncreased = tsv.PenetrationIncreased;
+        TargetAdditionalDamageRatio = tsv.TargetAdditionalDamageRatio;
     }
 
-    public override void Apply(Archer archer)
+    public override void Apply(Archer archer, bool isFinalUpgrade)
     {
+        Debug.Log($" Applying Archer Penetration Augment: {PenetrationCountIncreased}, Final Upgrade: {isFinalUpgrade}");
         // 관통 횟수 증가 적용
         archer.pierceLimit += PenetrationCountIncreased;
+        archer.targetAdditionalDamageFactor = TargetAdditionalDamageRatio;
+        if (isFinalUpgrade)
+        {
+            archer.pierceLimit = 1000000; // 최종 업그레이드 시 관통 횟수 무제한  
+        }
     }
 }
 
@@ -103,9 +115,9 @@ public abstract class ArcherAugment : ClassAugment
 
     public sealed override void Apply(Hero hero, bool isFinalUpgrade)
     {
-        Apply(hero as Archer);
+        Apply(hero as Archer, isFinalUpgrade);
     }
-    public abstract void Apply(Archer archer);
+    public abstract void Apply(Archer archer, bool isFinalUpgrade);
 
     public ArcherAugment(ArcherAugmentTSV tsv)
     {
