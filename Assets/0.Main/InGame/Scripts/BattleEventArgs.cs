@@ -51,26 +51,41 @@ public class EndBattleEventArgs : BattleEventArgs
     }
 }
 
+public enum DamageType
+{
+    Enemy,
+    Normal,
+    Critical,
+    Shield,
+    DoT
+}
+
 public class TakeDamageEventArgs : BattleEventArgs
 {
     public IBattleCharacter Attacker {get; set;}
     public IBattleCharacter Target {get; set; }
+    public DamageType Type { get; set; } = DamageType.Normal;
     public int Damage {get;set; }
-    public TakeDamageEventArgs(IBattleCharacter attacker, IBattleCharacter target, int damage)
+    
+    public TakeDamageEventArgs(IBattleCharacter attacker, IBattleCharacter target, DamageType type, int damage)
     {
         this.Attacker = attacker;
         this.Target = target;
+        this.Type = type;
         this.Damage = damage;
     }
 }
 
 public class ReceiveDamageEventArgs : BattleEventArgs
 {
-    public IBattleCharacter Self {get; set; }
-    public int ActualDamage {get;set; }
-    public ReceiveDamageEventArgs(IBattleCharacter self, int actualDamage)
+    public IBattleCharacter Self { get; set; }
+    public int ActualDamage { get;set; }
+    public DamageType Type { get;set; }
+    
+    public ReceiveDamageEventArgs(IBattleCharacter self, DamageType type, int actualDamage)
     {
         this.Self = self;
+        this.Type = type;
         this.ActualDamage = actualDamage;
     }
 }

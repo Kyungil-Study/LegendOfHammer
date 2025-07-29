@@ -2,6 +2,14 @@ using UnityEngine;
 
 public class DamageUIListener : MonoBehaviour
 {
+    [Header("데미지 폰트 색깔")]
+    [SerializeField] private Color EnemyColor;
+    [SerializeField] private Color ShieldColor;
+    [SerializeField] private Color NormalColor;
+    [SerializeField] private Color CriticalColor;
+    [SerializeField] private Color DoTColor;
+    
+    [Header("데미지 UI 위치 조정")]
     [SerializeField] private float verticalOffset = 1f;
 
     private void OnEnable()
@@ -16,7 +24,28 @@ public class DamageUIListener : MonoBehaviour
 
    private void HandleTakeDamage(ReceiveDamageEventArgs eventArgs)
    {
+       var damageType = eventArgs.Type;
+       Color damageColor = NormalColor;
        var mono = eventArgs.Self as MonoBehaviour;
+
+       switch (damageType)
+       {
+           case DamageType.Normal:
+               damageColor = NormalColor;
+               break;
+           case DamageType.Critical:
+               damageColor = CriticalColor;
+               break;
+           case DamageType.Enemy:
+               damageColor = EnemyColor;
+               break;
+           case DamageType.DoT:
+               damageColor = DoTColor;
+               break;
+           case DamageType.Shield:
+               damageColor = ShieldColor;
+               break;
+       }
        
        if (mono == null)
        {
@@ -34,9 +63,6 @@ public class DamageUIListener : MonoBehaviour
 
        Vector3 worldPos = mono.transform.position + Vector3.up * (halfHeight + verticalOffset);
 
-       // **로그 추가**: 월드 좌표
-       //Debug.Log($"[DamageUIListener] WorldPos: {worldPos}");
-
-       DamageUIManager.Instance.ShowDamage(eventArgs.ActualDamage, worldPos);
+       DamageUIManager.Instance.ShowDamage(eventArgs.ActualDamage, damageColor, worldPos);
    }
 }

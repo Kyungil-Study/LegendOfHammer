@@ -74,11 +74,12 @@ public class Wizard : Hero
 
         // 주변 적 탐지
         List<Monster> enemies = BattleManager.GetAllEnemyInRadius(pos, radius);
+        var crit = Random.Range(0f, 1f) <= squadStats.CriticalChance;
         foreach (var enemy in enemies)
         {
             var eventArgs = new TakeDamageEventArgs(
-                Squad.Instance, enemy,
-                CalculateDamage() // 기본 공격력 기반 피해
+                Squad.Instance, enemy, crit ? DamageType.Critical : DamageType.Normal,
+                CalculateDamage(crit) // 기본 공격력 기반 피해
             );
             //BattleEventManager.Instance.CallEvent(eventArgs);
             //enemy.Stat.AddModifier(new DamageAmpModifier(DebuffRate, DebuffDuration)); // 디버프 재적용

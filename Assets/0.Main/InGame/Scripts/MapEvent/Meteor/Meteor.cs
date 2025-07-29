@@ -69,7 +69,7 @@ public class Meteor : MonoBehaviour , IBattleCharacter
         {
             isHitted = true;
             Debug.Log($"Meteor Hit {squad.name}");
-            squad.TakeDamage(new TakeDamageEventArgs(this, squad, damage));
+            squad.TakeDamage(new TakeDamageEventArgs(this, squad, DamageType.Enemy, damage));
         }
     }
 }

@@ -1820,6 +1820,86 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: DoTColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: DoTColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: DoTColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: DoTColor.r
+      value: 0.49569845
+      objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: EnemyColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: EnemyColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: EnemyColor.g
+      value: 0.94259137
+      objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: EnemyColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: NormalColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: NormalColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: NormalColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: NormalColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: ShieldColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: ShieldColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: ShieldColor.g
+      value: 0.10499692
+      objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: ShieldColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: CriticalColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: CriticalColor.b
+      value: 0.008642197
+      objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: CriticalColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: CriticalColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7531126659306295738, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
       propertyPath: m_Name
       value: DamageUiCanvas
@@ -2215,11 +2295,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
-      value: 0.99999994
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 0.9988221
+      value: 0.99958074
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

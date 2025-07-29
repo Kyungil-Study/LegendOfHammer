@@ -49,7 +49,7 @@ public class HPScaler
 public class MonsterStat : MonoBehaviour
 {
     [Header("몬스터 기본 스탯")] [Tooltip("기본 스탯 수정용")]
-    public StatField<long>   HP;
+    public StatField<long>  HP;
     public StatField<int>   Atk;
     public StatField<float> MoveSpeed;
     
@@ -135,9 +135,9 @@ public class MonsterStat : MonoBehaviour
         }
     }
     
-    public bool ReduceHP(IBattleCharacter monster, int amount)
+    public bool ReduceHP(IBattleCharacter monster, DamageType type, int amount)
     {
-        BattleEventManager.CallEvent(new ReceiveDamageEventArgs(monster, amount));
+        BattleEventManager.CallEvent(new ReceiveDamageEventArgs(monster, type, amount));
         
         CurrentHP -= amount;
         return CurrentHP <= 0;
@@ -206,6 +206,7 @@ public class DamageOverTimeModifier : IDamageModifier
     {
         accumulator += damagePerSecond * deltaTime;
         int toDeal = Mathf.FloorToInt(accumulator);
+        
         if (toDeal > 0) { accumulator -= toDeal; }
         return toDeal;
     }
