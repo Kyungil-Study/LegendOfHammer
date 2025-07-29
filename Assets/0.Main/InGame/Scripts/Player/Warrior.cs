@@ -102,7 +102,9 @@ public class Warrior : Hero
             return;
         }
         m_HitMonsters.Add(monster);
-        TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(squad, monster, CalculateDamage(Random.Range(0, 1f) <= squadStats.CriticalChance));
+        var crit = Random.Range(0, 1f) <= squadStats.CriticalChance;
+        TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(squad, monster, 
+            crit ? DamageType.Critical : DamageType.Normal, CalculateDamage(crit));
         BattleEventManager.CallEvent(eventArgs);
 
         var monsterRank = EnemyDataManager.Instance.EnemyDatas[monster.EnemyID].Enemy_Rank;
