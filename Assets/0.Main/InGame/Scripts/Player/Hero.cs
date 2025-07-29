@@ -17,6 +17,10 @@ public abstract class Hero : MonoBehaviour
     // 위자드 디버프
     public float DebuffDuration;
     public float DebuffRate;
+    
+    // 위자드 도트딜
+    public float Dot_HP_Ratio_Duration ;
+    public float Dot_HP_Ratio;
 
     protected virtual void Attack() { }
 
