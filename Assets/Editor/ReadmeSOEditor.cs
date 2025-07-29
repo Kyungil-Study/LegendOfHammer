@@ -23,8 +23,9 @@ public class ReadmeSOEditor : Editor
     
     public override void OnInspectorGUI()
     {
-        base.OnInspectorGUI();
         // 편집 모드
+        
+        //base.OnInspectorGUI();
         // serializedObject.Update();
         //
         // EditorGUILayout.PropertyField(iconProp);
