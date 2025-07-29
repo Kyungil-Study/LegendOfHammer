@@ -59,6 +59,7 @@ public class ArcherArrow : HeroProjectile
         TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(
             Squad.Instance,
             target,
+            IsCritical ? DamageType.Critical : DamageType.Normal,
             FinalDamage 
         );
         BattleEventManager.CallEvent(eventArgs);
