@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using System.Text;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEditor;
@@ -29,7 +30,7 @@ public class MonsterTester : MonoBehaviour
     
     [Header("HP 스케일링 확인")]
     [SerializeField] private int stageIndex = 1; // 스테이지 인덱스, 테스트용
-    [SerializeField] private TextMeshProUGUI HPText;
+    [SerializeField] private TextMeshProUGUI monsterInfoText;
     
     [Space(10),Header("웨이브 세팅")]
     [LabelText("자동 웨이브 스폰 여부"), SerializeField] private bool autoWaveSpawnMode = false; // 자동 웨이브 스폰 여부
@@ -126,15 +127,33 @@ public class MonsterTester : MonoBehaviour
             var monster = Instantiate(monsterPrefab, spawnPosition, Quaternion.identity);
             monster.SetEnemyID(enemyID);
             monster.SetPlayer(player);
-                
         }
     }
 
     private void LateUpdate()
     {
-        if (spawnedMonster == null) return;
-        
-        HPText.text = "HP : " + spawnedMonster.Stat.CurrentHP + " / " + spawnedMonster.Stat.FinalStat.HP;
+        if (monsterInfoText == null) return;
+
+        var sb = new StringBuilder();
+
+        sb.AppendLine("스폰한 몬스터 정보");
+        sb.AppendLine();
+
+        if (spawnedMonster != null)
+        {
+            sb.AppendLine($"Enemy ID           : {spawnedMonster.EnemyID}");
+            sb.AppendLine($"Enemy Rank       : {monsterRank}");
+            sb.AppendLine($"이동 패턴           : {monsterMovePattern}");
+            sb.AppendLine($"공격 패턴           : {monsterAttackPattern}");
+            sb.AppendLine($"현재 스테이지        : {stageIndex}");
+            sb.AppendLine($"HP : {spawnedMonster.Stat.CurrentHP} / {spawnedMonster.Stat.FinalStat.HP}");
+        }
+        else
+        {
+            sb.AppendLine("아직 스폰된 몬스터가 없습니다.");
+        }
+
+        monsterInfoText.text = sb.ToString();
     }
 
     private void HandlePlayerMovement()
@@ -204,38 +223,5 @@ public class MonsterTester : MonoBehaviour
         spawnedMonster       = monster;
         monsterMovePattern   = testMovePattern;
         monsterAttackPattern = testAttackPattern;
-    }
-
-    void OnGUI()
-    {
-        const float width  = 260;
-        const float height = 200;
-        const float margin = 10;
-
-        float x = margin;
-        float y = Screen.height - height - margin;
-
-        GUILayout.BeginArea(new Rect(x, y, width, height), "Monster Test Info", GUI.skin.window);
-
-        GUILayout.Label("마우스 클릭한 위치에 스폰 \nWASD로 캐릭터 이동 가능");
-        GUILayout.Label("테이블 기반 스폰 : Space키 \n패턴별 스폰 : 1번키\n웨이브 기반 스폰 : 2번키");
-        
-        
-        GUILayout.Space(8);
-
-        if (spawnedMonster != null)
-        {
-            GUILayout.Label($"Enemy ID           : {spawnedMonster.EnemyID}");
-            GUILayout.Label($"Enemy Rank         : {monsterRank}");
-            GUILayout.Label($"Movement Pattern   : {monsterMovePattern}");
-            GUILayout.Label($"Attack Pattern     : {monsterAttackPattern}");
-            GUILayout.Space(4);
-        }
-        else
-        {
-            GUILayout.Label("아직 스폰된 몬스터가 없습니다.");
-        }
-
-        GUILayout.EndArea();
     }
 }
