@@ -140,7 +140,8 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
         if (col.gameObject.layer == 9)  // ClearZone
         {
-            BattleEventManager.CallEvent(new AliveMonsterEventArgs(this));
+            var alivePoint = EnemyDataManager.Instance.EnemyDatas[enemyID].Chasing_Increase;
+            BattleEventManager.CallEvent(new AliveMonsterEventArgs(this, alivePoint));
             Destroy(gameObject);
         }
     }
@@ -150,9 +151,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
         int raw   = Mathf.RoundToInt(eventArgs.Damage * State.ShieldRate); // ShieldAttack이 계산해서 넣어줌
         int final = stat.ApplyIncomingDamage(raw);
         
-        BattleEventManager.CallEvent(new ReceiveDamageEventArgs(this, final));
-
-        if (stat.ReduceHP(final))
+        if (stat.ReduceHP(this, final))
         {
             OnDeath();
         }
