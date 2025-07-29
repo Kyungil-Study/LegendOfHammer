@@ -18,9 +18,7 @@ public class SpawnPattern : MonoBehaviour
     public EnemySpawnPatternType PatternType => patternType;
     [SerializeField] SpawnPatternSlot[] patternSlots;
     public SpawnPatternSlot[] PatternSlots => patternSlots;
-    
 
-    
     public void ResolveWaveSlots()
     {
         patternSlots = GetComponentsInChildren<SpawnPatternSlot>();
