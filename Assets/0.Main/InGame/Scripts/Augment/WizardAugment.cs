@@ -88,6 +88,7 @@ public class WizardExplosiveAugment : WizardAugment
         wizard.CurrentExplosionRadius = wizard.ExplosionRadius * Incresed_ExplosiveRange;
         if (isFinalUpgrade)
         {
+            Debug.Log("폭발 최종");
             wizard.Dot_HP_Ratio = Dot_HP_Ratio;
             wizard.Dot_HP_Ratio_Duration = Dot_HP_Ratio_Duration;
         }
