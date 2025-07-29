@@ -135,8 +135,10 @@ public class MonsterStat : MonoBehaviour
         }
     }
     
-    public bool ReduceHP(int amount)
+    public bool ReduceHP(IBattleCharacter monster, int amount)
     {
+        BattleEventManager.CallEvent(new ReceiveDamageEventArgs(monster, amount));
+        
         CurrentHP -= amount;
         return CurrentHP <= 0;
     }
