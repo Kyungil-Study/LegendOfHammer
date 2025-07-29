@@ -35,8 +35,6 @@ public class WizardMagicBall : HeroProjectile
         SetExplosionEffectSize(explosionEffect, radius);
         Destroy(explosionEffect,2f);
         Destroy(gameObject);
-        
-        EditorApplication.isPaused = true;
     }
     
     private void SetExplosionEffectSize(GameObject effect, float radius)
