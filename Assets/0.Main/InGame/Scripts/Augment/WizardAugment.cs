@@ -61,6 +61,7 @@ public class WizardDotAugment : WizardAugment
     public override void Apply(Wizard wizard, bool isFinalUpgrade)
     {
         Debug.Log("마법사 디버프 선택");
+        Debug.Log($"WizardDotAugment 디버프 지속시간: {Debuff_Duration}, 디버프 비율: {Debuff_Rate}");
         wizard.FinalDebuff = isFinalUpgrade;
         wizard.DebuffDuration = Debuff_Duration;
         wizard.DebuffRate = Debuff_Rate;
