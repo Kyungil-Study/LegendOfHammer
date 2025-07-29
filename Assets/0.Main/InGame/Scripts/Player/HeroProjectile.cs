@@ -80,6 +80,14 @@ public abstract class HeroProjectile : MonoBehaviour
 
         return closestEnemy;
     }
+    
+    public void FireWithDirection(Vector3 direction)
+    {
+        m_TargetDirection = direction.normalized;
+        transform.up = m_TargetDirection;
+        mb_IsFired = true;
+    }
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {
