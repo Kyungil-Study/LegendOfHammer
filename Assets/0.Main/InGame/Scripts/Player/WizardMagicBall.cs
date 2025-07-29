@@ -22,15 +22,11 @@ public class WizardMagicBall : HeroProjectile
             TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(
                 Squad.Instance,
                 enemy, 
+                IsCritical ? DamageType.Critical : DamageType.Normal,
                 Damage
             );
             BattleEventManager.CallEvent(eventArgs);
             enemy.Stat.AddModifier(new DamageAmpModifier(Owner.DebuffRate, Owner.DebuffDuration));
-            // 도트딜 적용 (?)
-            // float rate = 0.015f; // 1.5%
-            // float duration = 3f;
-            // float dps = enemy.Stat.MaxHP * rate;
-            // enemy.Stat.AddModifier(new DamageOverTimeModifier(dps, duration));
         }
 
         var explosionEffect = Instantiate(explosionEffectPrefab, position, Quaternion.identity);
@@ -45,7 +41,6 @@ public class WizardMagicBall : HeroProjectile
         var spriteRenderer = effect.GetComponent<SpriteRenderer>();
         float currentSize = spriteRenderer.sprite.rect.size.x / spriteRenderer.sprite.pixelsPerUnit;
         float scaleFactor = targetSize / currentSize;
-        //Debug.Log($"{targetSize} / {currentSize} = {scaleFactor}");
         effect.transform.localScale = new Vector3(scaleFactor, scaleFactor, 1f);
     }
 }

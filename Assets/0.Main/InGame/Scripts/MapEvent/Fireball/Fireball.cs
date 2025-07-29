@@ -51,7 +51,7 @@ public class Fireball : MonoBehaviour , IBattleCharacter
         attackCollider.enabled = false; // 공격 범위 콜라이더 비활성화 중복 피격 방지용
         if (other.TryGetComponent<Squad>(out var target))
         {
-            target.TakeDamage(new TakeDamageEventArgs(this, target, damage));
+            target.TakeDamage(new TakeDamageEventArgs(this, target, DamageType.Enemy, damage));
         }
         StopCoroutine(moveCoroutine);
         Explode();
