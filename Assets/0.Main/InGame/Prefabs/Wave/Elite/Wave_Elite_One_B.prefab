@@ -45,10 +45,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68453877945211844a7f70aa26ec0dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  augmentTypeID: 0
+  WaveRank: 1
+  AppearMinStage: 2
+  AppearMaxStage: 5
   onlyMid: 0
   patternType: 17
   patternSlots:
-  - {fileID: 0}
+  - {fileID: 8093262495889594282}
 --- !u!1001 &4691064532681235522
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -111,3 +115,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7157513267892800382, guid: 6a6e1fb65a026e24192656dbade759e7, type: 3}
   m_PrefabInstance: {fileID: 4691064532681235522}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8093262495889594282 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3551942672847178728, guid: 6a6e1fb65a026e24192656dbade759e7, type: 3}
+  m_PrefabInstance: {fileID: 4691064532681235522}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18f66cf6a72ec03469b2a6a0afbd125c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
