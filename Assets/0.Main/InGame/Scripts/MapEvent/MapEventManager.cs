@@ -22,6 +22,7 @@ public class MapEventManager : MonoBehaviour
     void StartBattle(StartBattleEventArgs args)
     {
         filteredMapEvents = mapEventTable.FiltertedMapEventPatterns(args.StageIndex);
+        StartCoroutine(SimulateMapEvents());
     }
 
 
@@ -33,7 +34,7 @@ public class MapEventManager : MonoBehaviour
             // 추적 게이지가 시작 맵 이벤트 값 이상일 때
             Debug.Log("Chase Gauge reached the threshold for map events.");
             BattleManager.Instance.ChaseGuage.Events.OnValueChanged -= OnChaseGuageValueChanged;
-            StartCoroutine(SimulateMapEvents());
+            //StartCoroutine(SimulateMapEvents());
         }
     }
 
@@ -45,7 +46,6 @@ public class MapEventManager : MonoBehaviour
             filteredMapEvents[randomEventIndex].ExecuteEvent();
             yield return new WaitForSeconds(mapEventInterval); // 다음 이벤트까지 대기
         }
-        
     }
 }
 

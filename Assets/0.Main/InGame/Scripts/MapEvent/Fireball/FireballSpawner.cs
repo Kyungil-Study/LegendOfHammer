@@ -76,6 +76,7 @@ public class FireballSpawner : MonoSingleton<FireballSpawner>
 
     public void ExecuteMapEvent(int damage, IReadOnlyList< FireBallMapEvent.FireballSpawnJob> fireballSpawnJobs)
     {
+        BattlePopupSystem.Instance.FireballAlarm.ExecuteAlarm();
         StartCoroutine(SpawnFireballsCoroutine(damage, fireballSpawnJobs));
     }
 }
