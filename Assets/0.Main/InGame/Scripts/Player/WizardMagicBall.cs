@@ -10,6 +10,7 @@ public class WizardMagicBall : HeroProjectile
     protected override void Hit(Monster target)
     {
         Explode(target.transform.position, explosionRadius * Distance.STANDARD_DISTANCE);
+        SoundManager.Instance.PlayMagicianHit();
     }
     
     private void Explode(Vector3 position, float radius)
