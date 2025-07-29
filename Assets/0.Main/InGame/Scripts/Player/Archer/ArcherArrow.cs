@@ -66,8 +66,7 @@ public class ArcherArrow : HeroProjectile
         TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(
             Squad.Instance,
             target,
-            Damage 
-        );
+            IsCritical ? DamageType.Critical : DamageType.Normal, Damage);
         BattleEventManager.CallEvent(eventArgs);
         
         if (pierceLimit <= 0)
