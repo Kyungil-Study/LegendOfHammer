@@ -14,7 +14,7 @@ public class LobbyUI : MonoBehaviour
     public TMP_Text currentStageText;
     public TMP_Text maxStageText;
 
-    public TMP_InputField stageNameInput;
+    public TMP_Text userTryStageCount;
     public Button playButton;
 
     private void Awake()
@@ -66,10 +66,11 @@ public class LobbyUI : MonoBehaviour
         var stage = BackendStageGameData.stage;
         currentStageText.text = $"{stage.Currentstage}";
         maxStageText.text     = $"{stage.Maxstage}";
+        userTryStageCount.text = $"{stage.StageAttemptCount}";
     }
 
     public void GoDungeonScene()
-    {
+    {       
         BackendStageGameData.Instance.UpdateStage();
         SessionManager.Instance.GoToGameScene();
     }
@@ -82,6 +83,7 @@ public class LobbyUI : MonoBehaviour
     public void TestNextStage()
     {
         BackendStageGameData.Instance.NextStage();
+        BackendStageGameData.Instance.PlayGame();
     }
     // 뒤끝 연동 디버그용 메서드
     public void TestUpdateDataToBackend()

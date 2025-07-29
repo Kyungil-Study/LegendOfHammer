@@ -213,7 +213,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18f66cf6a72ec03469b2a6a0afbd125c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackType: 0
+  spawnRankType: 0
+  spawnAttackType: 0
 --- !u!1 &3302575797216775631
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,9 +262,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68453877945211844a7f70aa26ec0dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  augmentTypeID: 0
+  AppearMinStage: 2
+  AppearMaxStage: 3
   onlyMid: 0
-  waveType: 3
-  waveSlots: []
+  patternType: 3
+  patternSlots:
+  - {fileID: 3551942672847178728}
+  - {fileID: 8662688703603447318}
+  - {fileID: 621606017499002034}
 --- !u!1 &3752237966904528031
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,7 +316,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18f66cf6a72ec03469b2a6a0afbd125c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackType: 1
+  spawnRankType: 0
+  spawnAttackType: 1
 --- !u!1 &6765066553377068043
 GameObject:
   m_ObjectHideFlags: 0
@@ -355,7 +363,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18f66cf6a72ec03469b2a6a0afbd125c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackType: 1
+  spawnRankType: 0
+  spawnAttackType: 1
 --- !u!1 &8134928146086053063
 GameObject:
   m_ObjectHideFlags: 0

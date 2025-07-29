@@ -48,9 +48,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68453877945211844a7f70aa26ec0dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  augmentTypeID: 0
+  AppearMinStage: 7
+  AppearMaxStage: 9
   onlyMid: 0
-  waveType: 8
-  waveSlots:
+  patternType: 0
+  patternSlots:
   - {fileID: 7690006961961707845}
   - {fileID: 4297952172507154870}
   - {fileID: 8892313533973464523}

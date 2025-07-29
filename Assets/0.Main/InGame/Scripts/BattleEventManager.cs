@@ -1,79 +1,117 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
 public class BattleEventManager : MonoSingleton<BattleEventManager>
 {
-    public class EventCallbacks
-    {
-        public Action<StartBattleEventArgs> OnStartBattle;
-        public Action<EndBattleEventArgs> OnEndBattle;
-        public Action<TakeDamageEventArgs> OnTakeDamage;
-        public Action<ReceiveDamageEventArgs> OnSendDamage;
-        public Action<AliveMonsterEventArgs> OnAliveMonster;
-        public Action<DeathEventArgs> OnDeath;
-        public Action<NextPageEventArgs> OnNextPage;
-        public Action<ChargeCollisionArgs> OnChargeCollision; // 충돌 시 이벤트 처리하기
-        public Action<ReadyBattleEventArgs> OnReadyBattle;
-        
-        public Action<SelectAugmentEventArgs> OnSelectAugment;
-    }
-    public EventCallbacks Callbacks { get; private set; } = new EventCallbacks();
+    private static Dictionary<Type, Delegate> eventTable = new Dictionary<Type, Delegate>();
 
-    public void CallEvent(BattleEventArgs eventArgs)
+    protected override void Initialize()
     {
-        if(eventArgs is SelectAugmentEventArgs selectAugmentEvent)
+        Debug.Log("[BattleEventManager] Initializing BattleEventManager");
+        base.Initialize();
+        eventTable.Clear();
+    }
+
+    /// <summary>
+    /// 이벤트 등록
+    /// </summary>
+    public static void RegistEvent<T>(Action<T> listener) where T : BattleEventArgs
+    {
+        if (Instance == null)
         {
-            Debug.Log($"[BattleEventManager] Select Augment: {selectAugmentEvent.Data.GetID()}, Name: {selectAugmentEvent.Data.GetName()}");
-            Callbacks.OnSelectAugment?.Invoke(selectAugmentEvent);
+            Debug.LogWarning("[BattleEventManager] Instance is null");
             return;
         }
-        
-        if(eventArgs is ReadyBattleEventArgs readyEvent)
+
+        var eventType = typeof(T);
+        if (eventTable.TryGetValue(eventType, out var existingDelegate))
         {
-            Debug.Log($"[BattleEventManager] Ready for battle on stage {readyEvent.StageIndex}");
-            Callbacks.OnReadyBattle?.Invoke(readyEvent);
-        }
-        else if(eventArgs is StartBattleEventArgs startEvent)
-        {
-            Callbacks.OnStartBattle?.Invoke(startEvent);
-        }
-        else if(eventArgs is EndBattleEventArgs endEvent)
-        {
-            Callbacks.OnEndBattle?.Invoke(endEvent);
-        }
-        else if(eventArgs is TakeDamageEventArgs damageEvent)
-        {
-            damageEvent.Target.TakeDamage(damageEvent);
-            Callbacks.OnTakeDamage?.Invoke(damageEvent);
-        }
-        else if (eventArgs is ReceiveDamageEventArgs sendEvent)
-        {
-            Callbacks.OnSendDamage?.Invoke(sendEvent);
-        }
-        else if(eventArgs is AliveMonsterEventArgs aliveMonsterEvent)
-        {
-            Callbacks.OnAliveMonster?.Invoke(aliveMonsterEvent);
-        }
-        else if(eventArgs is DeathEventArgs deathEvent)
-        {
-            Callbacks.OnDeath?.Invoke(deathEvent);
-        }
-        else if (eventArgs is NextPageEventArgs nextPageEvent)
-        {
-            Callbacks.OnNextPage?.Invoke(nextPageEvent);
-        }
-        else if (eventArgs is ChargeCollisionArgs chargeCollisionEvent)
-        {
-            Callbacks.OnChargeCollision?.Invoke(chargeCollisionEvent);
+            eventTable[eventType] = Delegate.Combine(existingDelegate, listener);
+            Debug.Log($"[BattleEventManager] Registered event listener for {eventType.Name}");
         }
         else
         {
-            Debug.LogWarning($"[BattleEventManager] Unhandled event type: {eventArgs.GetType().Name}");
+            eventTable[eventType] = listener;
+            Debug.Log($"[BattleEventManager] Created new event listener for {eventType.Name}");
+        }
+    }
+
+    /// <summary>
+    /// 이벤트 해제
+    /// </summary>
+    public static void UnregistEvent<T>(Action<T> listener) where T : BattleEventArgs
+    {
+        if (Instance == null)
+        {
+            Debug.LogWarning("[BattleEventManager] Instance is null");
+            return;
+        }
+
+        var eventType = typeof(T);
+        if (eventTable.TryGetValue(eventType, out var existingDelegate))
+        {
+            var current = Delegate.Remove(existingDelegate, listener);
+            if (current == null)
+            {
+                eventTable.Remove(eventType);
+                Debug.Log($"[BattleEventManager] Unregistered all listeners for {eventType.Name}");
+            }
+            else
+            {
+                eventTable[eventType] = current;
+                Debug.Log($"[BattleEventManager] Unregistered listener for {eventType.Name}");
+            }
+        }
+    }
+
+    /// <summary>
+    /// generic 특수화 : 데미지 가하는 이벤트의 경우 타겟에게만 호출되어야하는 함수가 정해져 있음  
+    /// </summary>
+    public static void CallEvent(TakeDamageEventArgs eventArgs)
+    {
+        eventArgs.Target.TakeDamage(eventArgs);
+        BroadCastToListeners(eventArgs);
+    }
+
+    /// <summary>
+    /// 이벤트 호출
+    /// </summary>
+    public static void CallEvent<T>(T eventArgs) where T : BattleEventArgs
+    {
+        BroadCastToListeners(eventArgs);
+    }
+
+    static void BroadCastToListeners<T>(T eventArgs) where T : BattleEventArgs
+    {
+        if (Instance == null)
+        {
+            Debug.LogWarning("[BattleEventManager] Instance is null");
+            return;
+        }
+
+        var eventType = eventArgs.GetType();
+        Debug.Log($"[BattleEventManager] Calling event: {eventType.Name} with args: {eventArgs}");
+
+#if UNITY_EDITOR
+        Debug.Log($"[BattleEventManager] Dispatching event: {eventType.Name}");
+#endif
+
+        if (eventTable.TryGetValue(eventType, out var del))
+        {
+            try
+            {
+                del.DynamicInvoke(eventArgs);
+                Debug.Log($"[BattleEventManager] Successfully invoked event: {eventType.Name}");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[BattleEventManager] Error invoking event {eventType.Name}: {ex}");
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"[BattleEventManager] No listeners registered for {eventType.Name}");
         }
     }
 }
-

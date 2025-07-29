@@ -1,7 +1,7 @@
 Enemy_ID (적 유닛 ID)	Enemy_Rank (적 등급)	Is_Ranged (적 타입 원거리 여부)	Enemy_Unit_Name (적 유닛 이름)	Movement_Pattern (이동 패턴)	Atk_Pattern (공격 패턴)	HP (체력)	Atk_Power (공격력)	Move_Speed (이동속도)	Chasing_Increase (추격 게이지 증가량)	First_Appear_Stage (최초 등장 스테이지)
 int	enum	bool	string	enum	string	int	int	float	int	int
-11001	Normal	FALSE	Straight	Straight	Normal	1800	10	0.8	5	1
-21001	Elite	FALSE	Straight	Straight	Normal	13000	20	0.6	20	1
+11001	Normal	FALSE	Straight	Straight	Normal	1000	10	0.8	5	1
+21001	Elite	FALSE	Straight	Straight	Normal	15000	20	0.6	20	1
 31001	Boss	FALSE	Straight	Straight	Normal	25000	30	0.4	50	1
 11002	Normal	FALSE	Zigzag	Zigzag	Normal	1950	10	0.8	5	2
 21002	Elite	FALSE	Zigzag	Zigzag	Normal	14500	20	0.6	20	2
