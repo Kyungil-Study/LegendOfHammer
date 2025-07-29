@@ -25,11 +25,13 @@ public class ClearPage : UIPage
 
     public override void Enter()
     {
+        Time.timeScale = 0;
         gameObject.SetActive(true);
     }
 
     public override void Exit()
     {
+        Time.timeScale = 1;
         gameObject.SetActive(false);
     }
 }
