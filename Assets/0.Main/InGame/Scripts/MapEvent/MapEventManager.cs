@@ -42,9 +42,9 @@ public class MapEventManager : MonoBehaviour
     {
         while (gameObject.activeInHierarchy)
         {
+            yield return new WaitForSeconds(mapEventInterval); // 다음 이벤트까지 대기
             int randomEventIndex = UnityEngine.Random.Range(0, filteredMapEvents.Count);
             filteredMapEvents[randomEventIndex].ExecuteEvent();
-            yield return new WaitForSeconds(mapEventInterval); // 다음 이벤트까지 대기
         }
     }
 }
