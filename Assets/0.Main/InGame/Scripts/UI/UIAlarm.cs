@@ -17,6 +17,7 @@ public class UIAlarm : MonoBehaviour
 
     public void ExecuteAlarm()
     {
+        SoundManager.Instance.PlayWarning();
         gameObject.SetActive(true);
         StopCoroutine(AlarmCoroutine());
         StartCoroutine(AlarmCoroutine());
