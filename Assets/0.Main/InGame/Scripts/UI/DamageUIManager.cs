@@ -31,7 +31,7 @@ public class DamageUIManager : MonoBehaviour
         }
     }
 
-    public void ShowDamage(int damage, Vector3 worldPos)
+    public void ShowDamage(int damage, Color color, Vector3 worldPos)
     {
         // 2. 풀에서 꺼내기
         GameObject go = pool.Count > 0 
@@ -42,6 +42,7 @@ public class DamageUIManager : MonoBehaviour
         var rt  = go.GetComponent<RectTransform>();
         var tmp = go.GetComponent<TextMeshProUGUI>();
         tmp.text = damage.ToString();
+        tmp.color = color;
         go.SetActive(true);
 
         // 4. 위치 변환
