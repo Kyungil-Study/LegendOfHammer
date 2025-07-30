@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68453877945211844a7f70aa26ec0dc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  augmentTypeID: 10203
+  augmentTypeID: 20203
   WaveRank: 1
   AppearMinStage: 13
   AppearMaxStage: 999
