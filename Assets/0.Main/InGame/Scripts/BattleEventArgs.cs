@@ -55,6 +55,7 @@ public enum DamageType
 {
     Enemy,
     Normal,
+    Wizard,
     Critical,
     Shield,
     DoT
