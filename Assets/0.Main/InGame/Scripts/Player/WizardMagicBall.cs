@@ -23,7 +23,7 @@ public class WizardMagicBall : HeroProjectile
             TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(
                 Squad.Instance,
                 enemy, 
-                IsCritical ? DamageType.Critical : DamageType.Normal,
+                IsCritical ? DamageType.Critical : DamageType.Wizard,
                 Damage
             );
             BattleEventManager.CallEvent(eventArgs);
