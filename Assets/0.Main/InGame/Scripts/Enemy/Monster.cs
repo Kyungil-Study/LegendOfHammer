@@ -133,7 +133,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
             {
                 BattleEventManager.CallEvent
                 (
-                    new TakeDamageEventArgs(this, target, Stat.FinalStat.Atk)
+                    new TakeDamageEventArgs(this, target, DamageType.Enemy, Stat.FinalStat.Atk)
                 );
             }
         }
@@ -148,12 +148,12 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
     public void TakeDamage(TakeDamageEventArgs eventArgs)
     {
+        DamageType damageType = eventArgs.Type;
+        
         int raw   = Mathf.RoundToInt(eventArgs.Damage * State.ShieldRate); // ShieldAttack이 계산해서 넣어줌
         int final = stat.ApplyIncomingDamage(raw);
         
-        BattleEventManager.CallEvent(new ReceiveDamageEventArgs(this, final));
-
-        if (stat.ReduceHP(final))
+        if (stat.ReduceHP(this, damageType, final))
         {
             OnDeath();
         }
@@ -191,7 +191,8 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
         if (totalDamage > 0)
         {
-            var evt = new TakeDamageEventArgs(this, this, totalDamage);
+            Debug.Log($"도트딜 ? {totalDamage} ({gameObject.name})");
+            var evt = new TakeDamageEventArgs(this, this, DamageType.DoT, totalDamage);
             BattleEventManager.CallEvent(evt);
         }
     }
