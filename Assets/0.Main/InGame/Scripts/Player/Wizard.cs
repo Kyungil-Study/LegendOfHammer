@@ -1,15 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
-
-public enum wizardAttackType
-{
-    Normal,
-    Explosive,
-    Debuff
-}
 
 public class Wizard : Hero
 {
@@ -21,6 +15,8 @@ public class Wizard : Hero
     [field:SerializeField]public float ExplosionRadius { get; set; } = 0.5f;
 
     public int AttackCount = 1;
+    public float MaxCountDamage = 1;
+    
     public float CurrentExplosionRadius;
     
     public bool FinalDebuff; //디버프 4레벨 여부(죽으면 폭발)
@@ -64,7 +60,7 @@ public class Wizard : Hero
     public override int CalculateDamage(bool isCritical = false)
     {
         float critFactor = isCritical ? squadStats.CriticalDamage : 1f;
-        return Mathf.RoundToInt(((HeroAttackDamage * critFactor) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor);
+        return Mathf.RoundToInt((((HeroAttackDamage * MaxCountDamage) * critFactor) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor);
     }
     
     // 몬스터가 죽었을 때 폭발 처리
