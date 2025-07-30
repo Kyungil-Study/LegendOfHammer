@@ -214,12 +214,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63b4dd7d165a75247ae7661d77995944, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseAttackDamage: 500
-  attackPerSec: 0.1
+  baseAttackDamage: 1000
+  attackPerSec: 0.15
   DebuffDuration: 0
   DebuffRate: 0
+  Dot_HP_Ratio_Duration: 0
+  Dot_HP_Ratio: 0
   cooldownIndicator: {fileID: 5601146472650972066}
-  chargeDistance: 2
+  chargeDistance: 1.3
   chargeDuration: 0.2
   invincibleDurationAfterCharge: 0.5
   chargeKnockbackDistance: 1
@@ -384,7 +386,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2039
 --- !u!1 &7511207680696367698
 GameObject:
   m_ObjectHideFlags: 0
@@ -471,7 +473,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 633476da84505a948bce6507e4705c8e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -600,19 +602,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3adce5ac45099fb4babe269bc38b2cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseAttackDamage: 300
-  attackPerSec: 1
+  baseAttackDamage: 1000
+  attackPerSec: 0.7
   DebuffDuration: 0
   DebuffRate: 0
+  Dot_HP_Ratio_Duration: 0
+  Dot_HP_Ratio: 0
   <BonusAttackSpeed>k__BackingField: 0
   projectileSpawnPoint: {fileID: 2844217813709663506}
   projectilePrefab: {fileID: -9055637960358438273, guid: fcfc5c6fe3d83bb4c9aafffa60046a6b, type: 3}
-  <ExplosionRadius>k__BackingField: 0.5
+  <ExplosionRadius>k__BackingField: 0.3
   AttackCount: 1
   CurrentExplosionRadius: 0
   FinalDebuff: 0
   FinalExplosive: 0
-  deathExplosionEffectPrefab: {fileID: 0}
+  deathExplosionEffectPrefab: {fileID: 4859452286414634588, guid: ec17d51d81d872e41891be4e954175f2, type: 3}
   deathExplosionRadius: 1
 --- !u!1 &9132952128616439255
 GameObject:
@@ -667,7 +671,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 633476da84505a948bce6507e4705c8e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -865,10 +869,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1431376549722415704}
     m_Modifications:
+    - target: {fileID: 1307975614305629405, guid: 90a9daaece4e822498c1c9db83f86597, type: 3}
+      propertyPath: attackPerSec
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1307975614305629405, guid: 90a9daaece4e822498c1c9db83f86597, type: 3}
+      propertyPath: baseAttackDamage
+      value: 450
+      objectReference: {fileID: 0}
     - target: {fileID: 3002154714864497208, guid: 90a9daaece4e822498c1c9db83f86597, type: 3}
       propertyPath: m_Name
       value: Archer
       objectReference: {fileID: 0}
+    - target: {fileID: 7435722234912389783, guid: 90a9daaece4e822498c1c9db83f86597, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 633476da84505a948bce6507e4705c8e, type: 2}
     - target: {fileID: 9218871192592053561, guid: 90a9daaece4e822498c1c9db83f86597, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.289
