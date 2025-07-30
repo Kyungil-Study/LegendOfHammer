@@ -15,5 +15,5 @@ MonoBehaviour:
   MapEventID: 31
   MapEventName: Chaser
   MapEventDamage: 10
-  FirstAppearStage: 1
+  FirstAppearStage: 99
   MaxAppearStage: 999
