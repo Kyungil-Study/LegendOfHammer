@@ -16,7 +16,25 @@ MonoBehaviour:
   MapEventName: Fire_Ball_A
   MapEventDamage: 25
   FirstAppearStage: 1
-  MaxAppearStage: 15
+  MaxAppearStage: 1
   fireballSpawnJobs:
   - attackDelay: 0
-    pointType: 1
+    pointType: 0
+  - attackDelay: 0.3
+    pointType: 0
+  - attackDelay: 0.6
+    pointType: 0
+  - attackDelay: 0.9
+    pointType: 0
+  - attackDelay: 1.2
+    pointType: 0
+  - attackDelay: 1.5
+    pointType: 0
+  - attackDelay: 1.8
+    pointType: 0
+  - attackDelay: 2.1
+    pointType: 0
+  - attackDelay: 2.4
+    pointType: 0
+  - attackDelay: 2.7
+    pointType: 0

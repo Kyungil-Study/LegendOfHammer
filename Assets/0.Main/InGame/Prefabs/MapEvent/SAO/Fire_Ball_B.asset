@@ -15,8 +15,8 @@ MonoBehaviour:
   MapEventID: 12
   MapEventName: Fire_Ball_B
   MapEventDamage: 25
-  FirstAppearStage: 5
-  MaxAppearStage: 15
+  FirstAppearStage: 2
+  MaxAppearStage: 2
   fireballSpawnJobs:
   - attackDelay: 0
     pointType: 0
