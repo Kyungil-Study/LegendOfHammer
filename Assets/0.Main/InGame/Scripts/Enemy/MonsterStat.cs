@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -58,6 +59,16 @@ public class MonsterStat : MonoBehaviour
     
     readonly List<IDamageModifier> modifiers = new();
     
+    // 오딘 인스펙터 사용 방법
+    // [ShowInInspector] public int PredicatedDamage 
+    // {
+    //     get
+    //     {
+    //         int defaultDamage = 100;
+    //         return defaultDamage * 10;
+    //     }
+    // }
+
     public StatBlock FinalStat { get; private set; }
     public long CurrentHP { get; private set; }
     public long MaxHP { get; private set; }
@@ -121,6 +132,7 @@ public class MonsterStat : MonoBehaviour
         {
             damage = modifiers[i].ModifyIncoming(damage);
         }
+        
         return Mathf.RoundToInt(damage);
     }
     
@@ -180,7 +192,11 @@ public class DamageAmpModifier : IDamageModifier
 
     public float Value => multipleValue;
     public bool IsExpired => Time.time >= endTime;
-    public float ModifyIncoming(float baseDamage) => baseDamage * multipleValue;
+    public float ModifyIncoming(float baseDamage)
+    {
+        return baseDamage * multipleValue;
+    }
+
     public void ExtendDuration(float additionalTime)
     {
         endTime = Mathf.Max(endTime, Time.time + additionalTime);

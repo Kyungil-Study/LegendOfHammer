@@ -6,6 +6,7 @@ public class DamageUIListener : MonoBehaviour
     [SerializeField] private Color EnemyColor;
     [SerializeField] private Color ShieldColor;
     [SerializeField] private Color NormalColor;
+    [SerializeField] private Color WizardColor;
     [SerializeField] private Color CriticalColor;
     [SerializeField] private Color DoTColor;
     
@@ -35,6 +36,9 @@ public class DamageUIListener : MonoBehaviour
                break;
            case DamageType.Critical:
                damageColor = CriticalColor;
+               break;
+           case DamageType.Wizard:
+               damageColor = WizardColor;
                break;
            case DamageType.Enemy:
                damageColor = EnemyColor;
