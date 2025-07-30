@@ -35,8 +35,11 @@ MonoBehaviour:
     referenceMode: 2
     serializationDepthLimit: 64
     assemblyNames:
-    - Assembly-CSharp-firstpass
+    - AllIn1SpriteShaderAssembly
     - Assembly-CSharp
+    - Assembly-CSharp-firstpass
+    - BetterStreamingAssets
+    - DrawXXL
     showAdvancedSettings: 0
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1
