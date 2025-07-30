@@ -90,7 +90,7 @@ public class Wizard : Hero
         foreach (var enemy in enemies)
         {
             var eventArgs = new TakeDamageEventArgs(
-                                Squad.Instance, enemy, crit ? DamageType.Critical : DamageType.Normal,
+                                Squad.Instance, enemy, crit ? DamageType.Critical : DamageType.Wizard,
                 CalculateDamage(crit) // 기본 공격력 기반 피해
             );
             //BattleEventManager.Instance.CallEvent(eventArgs);
