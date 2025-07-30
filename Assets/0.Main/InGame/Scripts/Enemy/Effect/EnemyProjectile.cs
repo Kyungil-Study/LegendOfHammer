@@ -43,7 +43,7 @@ public class Projectile : MonoBehaviour
         {
             BattleEventManager.CallEvent
             (
-                new TakeDamageEventArgs(attacker, target, damage)
+                new TakeDamageEventArgs(attacker, target, DamageType.Enemy, damage)
             );
         }
         Destroy(gameObject);

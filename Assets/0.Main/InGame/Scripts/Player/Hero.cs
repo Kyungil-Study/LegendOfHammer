@@ -1,29 +1,62 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public abstract class Hero : MonoBehaviour
 {
-    protected Squad squad;
-    protected Squad.SquadStats squadStats;
-    public int baseAttackDamage;
-    public float attackPerSec;
-    protected virtual float AttackCooldown => 1 / attackPerSec;
+    [SerializeField] protected Squad squad;
+    protected Squad.SquadStats squadStats => squad.stats;
+    [SerializeField] private int baseAttackDamage;
+    public int BaseAttackDamage
+    {
+        get => baseAttackDamage;
+        set => baseAttackDamage = value;
+    }
+    [ShowInInspector] public int HeroAttackDamage
+    {
+        get
+        {
+            int baseAttackBonus = (int)(baseAttackDamage * squad.stats.AttackDamageFactor);
+            return baseAttackDamage + baseAttackBonus;
+        }
+    }
+    
+    [SerializeField] private float attackPerSec;
+    [ShowInInspector] public float HeroAttackPerSec
+    {
+        get
+        {
+            var heroAttackPerSec = attackPerSec * (1 - squad.stats.DecreaseAttackSpeed);
+            return Mathf.Max(heroAttackPerSec, 0.001f) ;
+        }
+       
+    }
+    [ShowInInspector] protected virtual float AttackCooldown => 1 / HeroAttackPerSec;
     protected float leftCooldown;
     protected bool bAutoFire = true;
     
     // 위자드 디버프
     public float DebuffDuration;
     public float DebuffRate;
+    
+    // 위자드 도트딜
+    public float Dot_HP_Ratio_Duration ;
+    public float Dot_HP_Ratio;
 
     protected virtual void Attack() { }
+
     public abstract int CalculateDamage(bool isCritical = false);
+
+    public virtual int CalculateDamage(BaseDamageCalcArgs args)
+    {
+        return CalculateDamage(args.IsCritical);
+    }
 
     protected virtual void Awake()
     {
-        squad = Squad.Instance;
-        squadStats = Squad.Instance.stats;
     }
 
     protected virtual void Update()
@@ -39,5 +72,17 @@ public abstract class Hero : MonoBehaviour
     protected virtual void ApplyCooldown()
     {
         leftCooldown = AttackCooldown;
+    }
+}
+
+public interface IDamageCalcArgs { }
+
+public class BaseDamageCalcArgs : IDamageCalcArgs
+{
+    public bool IsCritical { get; set; } = false;
+
+    public BaseDamageCalcArgs(bool isCritical = false)
+    {
+        IsCritical = isCritical;
     }
 }

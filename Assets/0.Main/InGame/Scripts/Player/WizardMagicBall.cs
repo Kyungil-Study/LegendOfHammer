@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class WizardMagicBall : HeroProjectile
@@ -10,6 +11,7 @@ public class WizardMagicBall : HeroProjectile
     protected override void Hit(Monster target)
     {
         Explode(target.transform.position, explosionRadius * Distance.STANDARD_DISTANCE);
+        SoundManager.Instance.PlayMagicianHit();
     }
     
     private void Explode(Vector3 position, float radius)
@@ -21,15 +23,13 @@ public class WizardMagicBall : HeroProjectile
             TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(
                 Squad.Instance,
                 enemy, 
+                IsCritical ? DamageType.Critical : DamageType.Wizard,
                 Damage
             );
             BattleEventManager.CallEvent(eventArgs);
             enemy.Stat.AddModifier(new DamageAmpModifier(Owner.DebuffRate, Owner.DebuffDuration));
-            // 도트딜 적용 (?)
-            // float rate = 0.015f; // 1.5%
-            // float duration = 3f;
-            // float dps = enemy.Stat.MaxHP * rate;
-            // enemy.Stat.AddModifier(new DamageOverTimeModifier(dps, duration));
+            enemy.Stat.AddModifier(new DamageOverTimeModifier(1f+Owner.Dot_HP_Ratio, Owner.Dot_HP_Ratio_Duration));
+            Debug.Log($"폭발 도트 {Owner.Dot_HP_Ratio}, {Owner.Dot_HP_Ratio_Duration}");
         }
 
         var explosionEffect = Instantiate(explosionEffectPrefab, position, Quaternion.identity);
@@ -44,7 +44,6 @@ public class WizardMagicBall : HeroProjectile
         var spriteRenderer = effect.GetComponent<SpriteRenderer>();
         float currentSize = spriteRenderer.sprite.rect.size.x / spriteRenderer.sprite.pixelsPerUnit;
         float scaleFactor = targetSize / currentSize;
-        //Debug.Log($"{targetSize} / {currentSize} = {scaleFactor}");
         effect.transform.localScale = new Vector3(scaleFactor, scaleFactor, 1f);
     }
 }
