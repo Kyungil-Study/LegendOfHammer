@@ -83,7 +83,7 @@ MonoBehaviour:
   stats:
     <MaxHealth>k__BackingField: 100
     <AttackDamageFactor>k__BackingField: 0
-    <AttackSpeed>k__BackingField: 1
+    <DecreaseAttackSpeed>k__BackingField: 0
     <MoveSpeed>k__BackingField: 1
     <CriticalChance>k__BackingField: 0
     <CriticalDamage>k__BackingField: 1.5
@@ -214,6 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63b4dd7d165a75247ae7661d77995944, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  squad: {fileID: 2359132699372548322}
   baseAttackDamage: 1000
   attackPerSec: 0.15
   DebuffDuration: 0
@@ -602,6 +603,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3adce5ac45099fb4babe269bc38b2cc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  squad: {fileID: 2359132699372548322}
   baseAttackDamage: 1000
   attackPerSec: 0.7
   DebuffDuration: 0
@@ -869,6 +871,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1431376549722415704}
     m_Modifications:
+    - target: {fileID: 1307975614305629405, guid: 90a9daaece4e822498c1c9db83f86597, type: 3}
+      propertyPath: squad
+      value: 
+      objectReference: {fileID: 2359132699372548322}
     - target: {fileID: 1307975614305629405, guid: 90a9daaece4e822498c1c9db83f86597, type: 3}
       propertyPath: attackPerSec
       value: 3

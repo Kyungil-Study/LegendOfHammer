@@ -289,7 +289,7 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
             var upgradeFactor = commonAugment.Count;
             status.MaxHealth += data.SquadMaxHpIncrease * upgradeFactor;
             status.AttackDamageFactor += data.AtkIncrease * upgradeFactor;
-            status.AttackSpeed += data.AtkSpeedDecrease * upgradeFactor;
+            status.DecreaseAttackSpeed += data.AtkSpeedDecrease * upgradeFactor;
             status.MoveSpeed += data.MoveSpeedIncrease * upgradeFactor;
             status.CriticalChance += data.CriticalRateIncrease * upgradeFactor;
             status.CriticalDamage += data.CriticalDamageIncrease * upgradeFactor;
