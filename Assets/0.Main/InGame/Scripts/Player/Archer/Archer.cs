@@ -21,7 +21,7 @@ public class ArcherDamageCalcArgs : BaseDamageCalcArgs
 public class Archer : Hero
 {
     [field:SerializeField] public float BonusAttackSpeed { get; set; }
-    protected override float AttackCooldown => 1 / (attackPerSec * (1 + BonusAttackSpeed));
+    protected override float AttackCooldown => 1 / (HeroAttackPerSec * (1 + BonusAttackSpeed));
     
     
 
@@ -169,7 +169,7 @@ public class Archer : Hero
     public override int CalculateDamage(bool isCritical = false)
     {
         float critFactor = isCritical ? squadStats.CriticalDamage : 1f;
-        return Mathf.RoundToInt(((baseAttackDamage * critFactor) + squadStats.BonusDamagePerHit)* squadStats.FinalDamageFactor);
+        return Mathf.RoundToInt(((HeroAttackDamage * critFactor) + squadStats.BonusDamagePerHit)* squadStats.FinalDamageFactor);
     }
 
     public override int CalculateDamage(BaseDamageCalcArgs args)
@@ -180,7 +180,7 @@ public class Archer : Hero
         float critFactor = calcArgs.IsCritical ? squadStats.CriticalDamage : 1f;
         float targetBonus = IsFinalPenetration && calcArgs.IsTarget ? targetAdditionalDamageFactor : 0f;
         float smallArrowFactor = IsFinalProjectile ? BonusAttackFactor : 1f;
-        return Mathf.RoundToInt(((baseAttackDamage * critFactor * smallArrowFactor) + squadStats.BonusDamagePerHit + baseAttackDamage * targetBonus)* squadStats.FinalDamageFactor);
+        return Mathf.RoundToInt(((HeroAttackDamage * critFactor * smallArrowFactor) + squadStats.BonusDamagePerHit + HeroAttackDamage * targetBonus)* squadStats.FinalDamageFactor);
     }
     
     public int CalculateSubProjectileDamage(BaseDamageCalcArgs args)

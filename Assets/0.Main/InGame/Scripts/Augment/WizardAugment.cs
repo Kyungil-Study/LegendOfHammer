@@ -36,7 +36,7 @@ public class WizardProjectileAugment : WizardAugment
         wizard.AttackCount = Increased_Projectiles;
         if (isFinalUpgrade)
         {
-            wizard.baseAttackDamage = (int)(wizard.baseAttackDamage * AttackRatio_ReductionRate);
+            wizard.MaxCountDamage = AttackRatio_ReductionRate;
         }
     }
 }
@@ -61,6 +61,7 @@ public class WizardDotAugment : WizardAugment
     public override void Apply(Wizard wizard, bool isFinalUpgrade)
     {
         Debug.Log("마법사 디버프 선택");
+        Debug.Log($"WizardDotAugment 디버프 지속시간: {Debuff_Duration}, 디버프 비율: {Debuff_Rate}");
         wizard.FinalDebuff = isFinalUpgrade;
         wizard.DebuffDuration = Debuff_Duration;
         wizard.DebuffRate = Debuff_Rate;
@@ -85,6 +86,12 @@ public class WizardExplosiveAugment : WizardAugment
         Debug.Log("마법사 폭발범위증가 선택");
         wizard.FinalExplosive = isFinalUpgrade;
         wizard.CurrentExplosionRadius = wizard.ExplosionRadius * Incresed_ExplosiveRange;
+        if (isFinalUpgrade)
+        {
+            Debug.Log("폭발 최종");
+            wizard.Dot_HP_Ratio = Dot_HP_Ratio;
+            wizard.Dot_HP_Ratio_Duration = Dot_HP_Ratio_Duration;
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class WizardMagicBall : HeroProjectile
@@ -22,11 +23,13 @@ public class WizardMagicBall : HeroProjectile
             TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(
                 Squad.Instance,
                 enemy, 
-                IsCritical ? DamageType.Critical : DamageType.Normal,
+                IsCritical ? DamageType.Critical : DamageType.Wizard,
                 Damage
             );
             BattleEventManager.CallEvent(eventArgs);
             enemy.Stat.AddModifier(new DamageAmpModifier(Owner.DebuffRate, Owner.DebuffDuration));
+            enemy.Stat.AddModifier(new DamageOverTimeModifier(1f+Owner.Dot_HP_Ratio, Owner.Dot_HP_Ratio_Duration));
+            Debug.Log($"폭발 도트 {Owner.Dot_HP_Ratio}, {Owner.Dot_HP_Ratio_Duration}");
         }
 
         var explosionEffect = Instantiate(explosionEffectPrefab, position, Quaternion.identity);
