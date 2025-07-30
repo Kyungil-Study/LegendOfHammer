@@ -14,7 +14,7 @@ public enum wizardAttackType
 public class Wizard : Hero
 {
     [field:SerializeField] public float BonusAttackSpeed { get; set; }
-    protected override float AttackCooldown => 1 / (attackPerSec * (1 + BonusAttackSpeed));
+    protected override float AttackCooldown => 1 / (HeroAttackPerSec * (1 + BonusAttackSpeed));
     
     public Transform projectileSpawnPoint;
     public WizardMagicBall projectilePrefab;
@@ -64,7 +64,7 @@ public class Wizard : Hero
     public override int CalculateDamage(bool isCritical = false)
     {
         float critFactor = isCritical ? squadStats.CriticalDamage : 1f;
-        return Mathf.RoundToInt(((baseAttackDamage * critFactor) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor);
+        return Mathf.RoundToInt(((HeroAttackDamage * critFactor) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor);
     }
     
     // 몬스터가 죽었을 때 폭발 처리
