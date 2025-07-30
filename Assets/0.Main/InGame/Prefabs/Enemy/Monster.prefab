@@ -264,7 +264,7 @@ MonoBehaviour:
     m_Bits: 1024
   zigzagCfg:
     amplitude: 1
-    frequency: 2
+    frequency: 1
     offsetX: 0.5
   chaseCfg:
     detectRange: 0.5
@@ -276,7 +276,7 @@ MonoBehaviour:
     exlposionInverval: 0.2
     explosionPrefab: {fileID: 6111301031846871093, guid: 9a3809abee10ab54188078ab046f1168, type: 3}
   shieldCfg:
-    rate: 0.5
+    rate: 0.33
     radius: 1.2
     angleDeg: 90
     pivotOffset: {x: 0, y: 0}
@@ -285,10 +285,10 @@ MonoBehaviour:
     burstInterval: 0.15
     fireInterval: 3
     projectilePrefab: {fileID: 5122971031347301392, guid: 4eaa12e29b15cb348ae5e9ba05c912e3, type: 3}
-    projectileSpeed: 3
+    projectileSpeed: 4
     isLookingForTarget: 1
   spreadCfg:
-    burstCount: 3
+    burstCount: 2
     burstInterval: 0.2
     leftAngles:
     - 0
@@ -300,20 +300,34 @@ MonoBehaviour:
     - 15
     - 30
     - 45
+<<<<<<< HEAD
     projectilePrefab: {fileID: 5122971031347301392, guid: 760ca34c4eb056e449112fe453d4552e, type: 3}
     projectileSpeed: 3
+=======
+    projectilePrefab: {fileID: 5122971031347301392, guid: 4eaa12e29b15cb348ae5e9ba05c912e3, type: 3}
+    projectileSpeed: 4
+>>>>>>> origin/content/monster/pattern
     isLookingForTarget: 0
   radialCfg:
     projectileCount: 12
     betweenAngle: 30
     fireInterval: 3
+<<<<<<< HEAD
     projectilePrefab: {fileID: 5122971031347301392, guid: a9ce1a426b5d89a42bd5aab0540babb2, type: 3}
     projectileSpeed: 3
+=======
+    projectilePrefab: {fileID: 5122971031347301392, guid: 4eaa12e29b15cb348ae5e9ba05c912e3, type: 3}
+    projectileSpeed: 4
+>>>>>>> origin/content/monster/pattern
     isLookingForTarget: 0
   flyingAtkCfg:
     fireInterval: 1
     projectilePrefab: {fileID: 5122971031347301392, guid: 4eaa12e29b15cb348ae5e9ba05c912e3, type: 3}
+<<<<<<< HEAD
     projectileSpeed: 3
+=======
+    projectileSpeed: 5
+>>>>>>> origin/content/monster/pattern
     isLookingForTarget: 0
   knockbackDuration: 0.2
   deathEffectPrefab: {fileID: 5101364894278023870, guid: 7deb5b3117b1a0745a129df969fae227, type: 3}
