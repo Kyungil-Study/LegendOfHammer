@@ -21,6 +21,8 @@ public class MapEventManager : MonoBehaviour
     IReadOnlyList<MapEventPatternSAO> filteredMapEvents; // 필터링된 맵 이벤트 테이블
     
     [SerializeField] private float mapEventInterval = 15f; // 맵 이벤트 간격
+    
+    Coroutine mapEventCoroutine;
     private void Awake()
     {
         BattleEventManager.RegistEvent<StartBattleEventArgs>( StartBattle);
@@ -31,7 +33,7 @@ public class MapEventManager : MonoBehaviour
     void StartBattle(StartBattleEventArgs args)
     {
         filteredMapEvents = mapEventTable.FiltertedMapEventPatterns(args.StageIndex);
-        StartCoroutine(SimulateMapEvents());
+        mapEventCoroutine = StartCoroutine(SimulateMapEvents());
     }
 
 
@@ -47,6 +49,12 @@ public class MapEventManager : MonoBehaviour
                 mapEventInterval = mapEventTriggers[0].MapEventInterval;
                 int randomEventIndex = UnityEngine.Random.Range(0, filteredMapEvents.Count);
                 filteredMapEvents[randomEventIndex].ExecuteEvent();
+                
+                // 주기 초기화
+                StopCoroutine(mapEventCoroutine);
+                mapEventCoroutine = StartCoroutine(SimulateMapEvents());
+                
+                // 활성화된 트리거 제거 
                 mapEventTriggers.RemoveAt(0);
             }
             
