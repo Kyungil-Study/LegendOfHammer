@@ -19,7 +19,6 @@ public class FireballSpawner : MonoSingleton<FireballSpawner>
     
     [LabelText("이벤트 트리거 게이지 기준"), Range(0,1), SerializeField] private float fireballTriggerLimit = 0.2f;
 
-    [LabelText("이벤트 주기"), Range(0,1), SerializeField] private float fireballEventInterval = 0.5f;
     
     private IEnumerator SpawnFireballsCoroutine(int damage, IReadOnlyList<FireBallMapEvent.FireballSpawnJob> fireballSpawnJobs)
     {
