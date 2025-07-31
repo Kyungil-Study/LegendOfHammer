@@ -36,7 +36,7 @@ public class WizardProjectileAugment : WizardAugment
         wizard.AttackCount = Increased_Projectiles;
         if (isFinalUpgrade)
         {
-            wizard.baseAttackDamage = (int)(wizard.baseAttackDamage * AttackRatio_ReductionRate);
+            wizard.MaxCountDamage = AttackRatio_ReductionRate;
         }
     }
 }
