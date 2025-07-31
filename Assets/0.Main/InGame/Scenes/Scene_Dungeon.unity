@@ -2062,6 +2062,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6134312133047931347, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
+      propertyPath: wizard
+      value: 
+      objectReference: {fileID: 3143145693073960547}
     - target: {fileID: 7511207680696367698, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_Name
       value: Player
@@ -2071,6 +2075,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
+--- !u!114 &3143145693073960547 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8187177615337158848, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
+  m_PrefabInstance: {fileID: 3143145693073960546}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3adce5ac45099fb4babe269bc38b2cc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3143145693073960549 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2359132699372548322, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
@@ -2336,11 +2351,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
-      value: 0.99999994
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 0.9988221
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
