@@ -14,6 +14,7 @@ public class AugmentSlot : MonoBehaviour
     [SerializeField] TMP_Text augmentGradeText;
     [SerializeField] TMP_Text augmentDescriptionText;
     [SerializeField] Button augmentButton;
+    Material augmentMaterial;
 
     public Augment augment;
     
@@ -28,8 +29,24 @@ public class AugmentSlot : MonoBehaviour
         
         // Initialize the button click action
         augmentButton.onClick.AddListener(() => onClickAction?.Invoke(augment));
+        augmentMaterial = augmentButton.GetComponent<Image>().material;
+
+    }
+
+    private void OnEnable()
+    {
     }
     
+    private void OnDisable()
+    {
+        // Clear the augment data when the slot is disabled
+        augment = null;
+        augmentNameText.text = string.Empty;
+        augmentGradeText.text = string.Empty;
+        augmentDescriptionText.text = string.Empty;
+        augmentIcon.sprite = null; // Assuming GetIcon() returns a Sprite
+    }
+
     public void SetAugment(Augment augment, Action<Augment> onClickAction)
     {
         this.augment = augment;
