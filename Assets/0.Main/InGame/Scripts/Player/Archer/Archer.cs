@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -54,15 +55,15 @@ public class Archer : Hero
     [Space(10),Header("Final Projectile")]
     public Transform[] finalProjectileSpawnPoints; // 최종 화살 발사 위치들
     public ArcherArrow finalProjectilePrefab;
-    public bool IsFinalProjectile { get; set; } = false; // 최종 화살 여부
+    [ReadOnly, ShowInInspector] public bool IsFinalProjectile { get; set; } = false; // 최종 화살 여부
     
     [Header("Sub Projectile Settings")]
     [SerializeField] private ArcherArrow subProjectilePrefab; // 서브 화살 프리팹
-    public int subProjectileCount { get; set; } = 0; // 서브 화살 개수
+    [ReadOnly, ShowInInspector] public int subProjectileCount { get; set; } = 0; // 서브 화살 개수
     
-    public bool IsSubProjectile { get; set; } = false;
-    public bool IsFinalSubProjectile { get; set; } = false;
-    public bool IsFinalPenetration { get; set; } = false; // 관통 증강 최종 여부
+    [ReadOnly,ShowInInspector] public bool IsSubProjectile { get; set; } = false;
+    [ReadOnly,ShowInInspector] public bool IsFinalSubProjectile { get; set; } = false;
+    [ReadOnly,ShowInInspector] public bool IsFinalPenetration { get; set; } = false; // 관통 증강 최종 여부
     
 
     protected override void Awake()
