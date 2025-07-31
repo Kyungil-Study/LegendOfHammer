@@ -25,6 +25,7 @@ public class ShieldConfig
     public float radius      = 1.2f;
     public float angleDeg    = 90f;
     public Vector2 pivotOffset;
+    public Sprite shieldSprite;
 }
 
 [Serializable]

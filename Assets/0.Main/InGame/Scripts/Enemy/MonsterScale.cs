@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = System.Random;
 
 [RequireComponent(typeof(BoxCollider2D))]
@@ -28,6 +29,9 @@ public class MonsterScale : MonoBehaviour
     [SerializeField] private float hitFlashInterval = 0.2f;
     [SerializeField] private Color hitFlashColor = Color.white;
     [SerializeField] private Color suicideFlashColor = Color.red;
+    [Header("팔로우 이펙트 설정")]
+    [SerializeField] private GameObject FollowEffect;
+    private SpriteRenderer mFollowImage;
     
     private SpriteRenderer  mSpriteRenderer;
     private BoxCollider2D   mCollider;
@@ -51,6 +55,8 @@ public class MonsterScale : MonoBehaviour
         mAnimator       = model.GetComponent<Animator>();
         mMaterial       = model.GetComponent<Renderer>().material;
         mCollider       = GetComponent<BoxCollider2D>();
+        
+        mFollowImage = FollowEffect.GetComponent<SpriteRenderer>();
     }
 
     private void Start()
@@ -81,6 +87,15 @@ public class MonsterScale : MonoBehaviour
             mHitBox = currentHitBox;
             ApplyColliderFromPhysicsShape(mScaleFactor, currentHitBox);
         }
+    }
+    
+    public void SetEnemyShield(bool isActive, Sprite sprite)
+    {
+        FollowEffect.SetActive(isActive);
+        
+        if (isActive == false) return;
+        
+        mFollowImage.sprite = sprite;
     }
 
     public void EnterSuicideMode()
