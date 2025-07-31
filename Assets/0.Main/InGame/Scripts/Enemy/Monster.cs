@@ -31,6 +31,11 @@ public class Monster : MonoBehaviour, IBattleCharacter
         move?.Init(this);
         attack?.Init(this);
         attack?.Start();
+        
+        if (attack is ShieldAttack shieldAttack)
+        {
+            scale.SetEnemyShield(true, shieldAttack.GetShieldSprite());
+        }
     }
     
     public GameObject Player => player;
@@ -75,6 +80,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
     private MonsterScale scale;
     
     public MonsterStat Stat => stat;
+    public MonsterScale Scale => scale;
 
     void Awake()
     {
@@ -111,12 +117,15 @@ public class Monster : MonoBehaviour, IBattleCharacter
         move?.Init(this);
         attack?.Init(this);
         attack?.Start();
+
+        if (attack is ShieldAttack shieldAttack)
+        {
+            scale.SetEnemyShield(true, shieldAttack.GetShieldSprite());
+        }
     }
 
     void Update()
     {
-        // ApplyDoT(Time.deltaTime);
-        // stat?.Tick(Time.deltaTime);
         move?.Tick(Time.deltaTime);
         attack?.Tick(Time.deltaTime);
     }

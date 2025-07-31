@@ -6,7 +6,12 @@ public class ShieldAttack : CoroutineAttackBase
 {
     readonly ShieldConfig mConfig;
 
-    public ShieldAttack(ShieldConfig cfg) { mConfig = cfg; }
+    public ShieldAttack(ShieldConfig cfg)
+    {
+        mConfig = cfg;
+    }
+
+    public Sprite GetShieldSprite() => mConfig.shieldSprite;
 
     public override void Tick(float time)
     {
