@@ -72,5 +72,7 @@ public class CommonAugment : Augment
     {
         return CommonAugmentManager.Instance.GetIcon(OptionID);
     }
+    
+    
 }
 
