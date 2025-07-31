@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = System.Random;
 
@@ -28,6 +30,8 @@ public class MonsterScale : MonoBehaviour
     [SerializeField] private float hitFlashInterval = 0.2f;
     [SerializeField] private Color hitFlashColor = Color.white;
     [SerializeField] private Color suicideFlashColor = Color.red;
+    
+    [SerializeField,LabelText("펀치 효과")] PunchEffctor punchEffect;
     
     private SpriteRenderer  mSpriteRenderer;
     private BoxCollider2D   mCollider;
@@ -92,7 +96,8 @@ public class MonsterScale : MonoBehaviour
     {
         if ((eventArgs.Target as Monster)?.gameObject != gameObject) return;
         if (mIsSuicideMode) return;               
-        PlayHitFlash();                          
+        PlayHitFlash();       
+        punchEffect.PlayEffect();
     }
     
     private void PlayHitFlash()
