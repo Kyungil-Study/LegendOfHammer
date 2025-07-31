@@ -28,7 +28,9 @@ public class WizardMagicBall : HeroProjectile
             );
             BattleEventManager.CallEvent(eventArgs);
             enemy.Stat.AddModifier(new DamageAmpModifier(Owner.DebuffRate, Owner.DebuffDuration));
-            enemy.Stat.AddModifier(new DamageOverTimeModifier(1f+Owner.Dot_HP_Ratio, Owner.Dot_HP_Ratio_Duration));
+            float percent = Owner.Dot_HP_Ratio;              
+            float dps     = enemy.Stat.MaxHP * percent;      
+            enemy.Stat.AddModifier(new DamageOverTimeModifier(dps, Owner.Dot_HP_Ratio_Duration));
             Debug.Log($"폭발 도트 {Owner.Dot_HP_Ratio}, {Owner.Dot_HP_Ratio_Duration}");
         }
 

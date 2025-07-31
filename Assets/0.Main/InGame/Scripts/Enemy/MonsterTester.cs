@@ -208,7 +208,7 @@ public class MonsterTester : MonoBehaviour
 
         if (EnemyDataManager.Instance.EnemyDatas.TryGetValue(HPTestRankID, out var data))
         {
-            monster.Stat.Initialize(data, stageIndex);
+            monster.Stat.Initialize(data, stageIndex, monster);
             monsterRank = data.Enemy_Rank;
         }
         else
