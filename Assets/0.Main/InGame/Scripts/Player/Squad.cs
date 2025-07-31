@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -98,9 +99,52 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
         }
     }
 
-    private void Die()
+    private TaskCompletionSource<bool> m_ReviveTcs;
+    private async void Die()
     {
-        BattleEventManager.CallEvent(new DeathEventArgs(this));
+        Time.timeScale = 0;
+        await WaitReviveChoice();
+        Time.timeScale = 1f;
+
+        if (m_ReviveTcs.Task.Result)
+        {
+            Revive();
+        }
+        else
+        {
+            BattleEventManager.CallEvent(new DeathEventArgs(this));
+        }
+    }
+
+    private Task<bool> WaitReviveChoice()
+    {
+        m_ReviveTcs = new TaskCompletionSource<bool>();
+        return m_ReviveTcs.Task;
+    }
+
+    private void Revive()
+    {
+        Instance.stats.CurrentHealth = stats.MaxHealth;
+    }
+
+    public void ChooseRevive()
+    {
+        if (m_ReviveTcs == null)
+        {
+            Debug.Log("[Squad] Revive Task Completion Source is null. Cannot set result.");
+            return;
+        }
+        m_ReviveTcs.TrySetResult(true);
+    }
+
+    public void ChooseGiveUp()
+    {
+        if (m_ReviveTcs == null)
+        {
+            Debug.Log("[Squad] Revive Task Completion Source is null. Cannot set result.");
+            return;
+        }
+        m_ReviveTcs.TrySetResult(false);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -108,6 +152,18 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
         if (warrior.IsCharging && BattleManager.TryGetMonsterBy(other, out Monster monster))
         {
             warrior.Impact(monster);
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            ChooseRevive();
+        }
+        else if (Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            ChooseGiveUp();
         }
     }
 }
