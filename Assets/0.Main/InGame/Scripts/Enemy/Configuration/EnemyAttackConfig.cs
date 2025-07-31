@@ -16,6 +16,7 @@ public class SuicideAttackConfig
     public float attackRange = 0.75f;
     public float exlposionInverval = 0.2f;
     public GameObject explosionPrefab;
+    public Sprite warningImage;
 }
 
 [Serializable]

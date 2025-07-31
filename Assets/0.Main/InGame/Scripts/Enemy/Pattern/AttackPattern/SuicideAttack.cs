@@ -20,10 +20,8 @@ public class SuicideAttack : CoroutineAttackBase
 
     IEnumerator SuicideRoutine()
     {
-        var scale = mMonster.GetComponent<MonsterScale>();
-
-        scale?.EnterSuicideMode();
-        scale?.StartSuicideFlash(mConfig.delay, mConfig.exlposionInverval);
+        mMonster.Scale?.EnterSuicideMode(mConfig.warningImage);
+        mMonster.Scale?.StartSuicideFlash(mConfig.delay, mConfig.exlposionInverval);
 
         yield return new WaitForSeconds(mConfig.delay);
 
