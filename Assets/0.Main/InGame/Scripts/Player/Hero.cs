@@ -1,16 +1,40 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public abstract class Hero : MonoBehaviour
 {
-    protected Squad squad;
-    protected Squad.SquadStats squadStats;
-    public int baseAttackDamage;
-    public float attackPerSec;
-    protected virtual float AttackCooldown => 1 / attackPerSec;
+    [SerializeField] protected Squad squad;
+    protected Squad.SquadStats squadStats => squad.stats;
+    [SerializeField] private int baseAttackDamage;
+    public int BaseAttackDamage
+    {
+        get => baseAttackDamage;
+        set => baseAttackDamage = value;
+    }
+    [ShowInInspector] public int HeroAttackDamage
+    {
+        get
+        {
+            int baseAttackBonus = (int)(baseAttackDamage * squad.stats.AttackDamageFactor);
+            return baseAttackDamage + baseAttackBonus;
+        }
+    }
+    
+    [SerializeField] private float attackPerSec;
+    [ShowInInspector] public float HeroAttackPerSec
+    {
+        get
+        {
+            var heroAttackPerSec = attackPerSec * (1 - squad.stats.DecreaseAttackSpeed);
+            return Mathf.Max(heroAttackPerSec, 0.001f) ;
+        }
+       
+    }
+    [ShowInInspector] protected virtual float AttackCooldown => 1 / HeroAttackPerSec;
     protected float leftCooldown;
     protected bool bAutoFire = true;
     
@@ -33,8 +57,6 @@ public abstract class Hero : MonoBehaviour
 
     protected virtual void Awake()
     {
-        squad = Squad.Instance;
-        squadStats = Squad.Instance.stats;
     }
 
     protected virtual void Update()

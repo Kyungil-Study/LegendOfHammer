@@ -38,7 +38,7 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
         [field:SerializeField] public int MaxHealth { get; set; }
         
         [field:SerializeField] public float AttackDamageFactor { get; set; }
-        [field:SerializeField] public float AttackSpeed { get; set; } = 1;
+        [field:SerializeField] public float DecreaseAttackSpeed { get; set; } = 1;
         [field:SerializeField] public float MoveSpeed { get; set; } = 1;
         [field:SerializeField] public float CriticalChance { get; set; } = 0;
         [field:SerializeField] public float CriticalDamage { get; set; } = 1.5f;

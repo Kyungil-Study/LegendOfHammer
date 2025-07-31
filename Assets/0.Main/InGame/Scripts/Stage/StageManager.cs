@@ -30,7 +30,7 @@ public class StageManager : MonoBehaviour
     
     private void StartGame(StartBattleEventArgs startEventArgs)
     {
-        var stageWaves = StageDataManager.Instance.Records;
+        var stageWaves = StageDataManager.Instance.Waves(startEventArgs.StageIndex);
         foreach (var wave in stageWaves)
         {
             stageWavesQueue.Enqueue(wave);
