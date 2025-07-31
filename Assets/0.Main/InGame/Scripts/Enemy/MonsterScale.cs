@@ -29,8 +29,10 @@ public class MonsterScale : MonoBehaviour
     [SerializeField] private float hitFlashInterval = 0.2f;
     [SerializeField] private Color hitFlashColor = Color.white;
     [SerializeField] private Color suicideFlashColor = Color.red;
+    
     [Header("팔로우 이펙트 설정")]
-    [SerializeField] private GameObject FollowEffect;
+    [SerializeField] private GameObject BombEffect;
+    [SerializeField] private GameObject ShieldEffect;
     private SpriteRenderer mFollowImage;
     
     private SpriteRenderer  mSpriteRenderer;
@@ -56,7 +58,7 @@ public class MonsterScale : MonoBehaviour
         mMaterial       = model.GetComponent<Renderer>().material;
         mCollider       = GetComponent<BoxCollider2D>();
         
-        mFollowImage = FollowEffect.GetComponent<SpriteRenderer>();
+        mFollowImage = ShieldEffect.GetComponent<SpriteRenderer>();
     }
 
     private void Start()
@@ -91,16 +93,18 @@ public class MonsterScale : MonoBehaviour
     
     public void SetEnemyShield(bool isActive, Sprite sprite)
     {
-        FollowEffect.SetActive(isActive);
+        ShieldEffect.SetActive(isActive);
         
         if (isActive == false) return;
         
         mFollowImage.sprite = sprite;
     }
 
-    public void EnterSuicideMode()
+    public void EnterSuicideMode(Sprite sprite)
     {
         mIsSuicideMode = true;
+        BombEffect.SetActive(true);
+        mFollowImage.sprite = sprite;
     }
     
     private void PlayDamageEffect(TakeDamageEventArgs eventArgs)
