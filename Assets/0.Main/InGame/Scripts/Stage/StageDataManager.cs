@@ -5,30 +5,71 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
+
 public class StageDataManager : MonoSingleton<StageDataManager>
 {
-    [SerializeField] private string resourcePath = "StageData";
-    private List<StageWave> records = new();
-    public IReadOnlyList<StageWave> Records
+    [SerializeField] public List<StageTable> StageTables = new List<StageTable>();
+    [Serializable]
+    public class StageTable
     {
-        get
+        [SerializeField] public string TablePath;
+        public List<StageWave> Waves { get; set; }
+        
+        [SerializeField] public int UseMinStageIndex = 0;
+        [SerializeField] public int UseMaxStageIndex = 0;
+        
+        public StageTable()
         {
-            if (records == null)
-            {
-                throw new InvalidOperationException("Records not initialized. Call LoadAsync() first.");
-            }
-            return records;
+            Waves = new List<StageWave>();
         }
+
+        public void AddWave(StageWave wave)
+        {
+            if (wave == null)
+            {
+                throw new ArgumentNullException(nameof(wave), "Wave cannot be null.");
+            }
+            Waves.Add(wave);
+        }
+
+        public override string ToString()
+        {
+            return $"StageTable with {Waves.Count} waves.";
+        }
+        
+    }
+    
+    private StageTable currentStageTable;
+    
+    
+    public IReadOnlyList<StageWave> Waves(int stageIndex)
+    {
+        foreach (var table in StageTables)
+        {
+            if (stageIndex >= table.UseMinStageIndex && stageIndex <= table.UseMaxStageIndex)
+            {
+                currentStageTable = table;
+                return table.Waves;
+            }
+        }
+        
+        throw new ArgumentOutOfRangeException(nameof(stageIndex), "Stage index is out of range for all stage tables.");
     }
 
     protected override void Initialize()
     {
         base.Initialize();
-        if (string.IsNullOrEmpty(resourcePath))
+
+        foreach (var table in StageTables)
         {
-            throw new ArgumentNullException(nameof(resourcePath), "Resource path cannot be null or empty.");
+            if (string.IsNullOrEmpty(table.TablePath))
+            {
+                throw new ArgumentNullException(nameof(table), "Resource path cannot be null or empty.");
+            }
+            table.Waves = TSVLoader.LoadTable<StageWave>(table.TablePath);
+            
         }
-        records = TSVLoader.LoadTable<StageWave>(resourcePath);
+        
     }
 
 }
