@@ -179,11 +179,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aaa160931bddeea4e9a2975bbb51a54e, type: 3}
---- !u!20 &192030469 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
-  m_PrefabInstance: {fileID: 6437492127328306458}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &207715751 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3970832559332365769, guid: cf1c8b0d30ff0be428c9353fa9e67d88, type: 3}
@@ -1196,7 +1191,7 @@ PrefabInstance:
     - target: {fileID: 2752772096657333607, guid: cf1c8b0d30ff0be428c9353fa9e67d88, type: 3}
       propertyPath: m_Camera
       value: 
-      objectReference: {fileID: 192030469}
+      objectReference: {fileID: 0}
     - target: {fileID: 3940422002704632492, guid: cf1c8b0d30ff0be428c9353fa9e67d88, type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 1
@@ -1778,7 +1773,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5540610527890641080, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5540610527890641080, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1786,7 +1781,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5540610527890641080, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5540610527890641080, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1819,18 +1814,6 @@ PrefabInstance:
     - target: {fileID: 6803538738591350387, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_Name
       value: BattleCamera
-      objectReference: {fileID: 0}
-    - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
-      propertyPath: m_NormalizedViewPortRect.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
-      propertyPath: m_NormalizedViewPortRect.width
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
-      propertyPath: m_NormalizedViewPortRect.height
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
