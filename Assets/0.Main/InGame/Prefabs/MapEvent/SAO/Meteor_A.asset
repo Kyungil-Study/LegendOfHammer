@@ -15,6 +15,6 @@ MonoBehaviour:
   MapEventID: 21
   MapEventName: Meteor_A
   MapEventDamage: 30
-  FirstAppearStage: 22
-  MaxAppearStage: 122
-  spawnCount: 6
+  FirstAppearStage: 1
+  MaxAppearStage: 9
+  spawnCount: 1

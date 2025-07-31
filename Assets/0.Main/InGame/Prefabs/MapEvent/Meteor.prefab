@@ -293,7 +293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7ef164a1a1813d4d8f0a14bb177ad5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
+  damage: 30
   fallDuration: 2
   explosion: {fileID: 9108712168569461232}
   fall: {fileID: 6139928181935728930}
