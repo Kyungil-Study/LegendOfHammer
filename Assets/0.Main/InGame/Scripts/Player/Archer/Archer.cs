@@ -35,8 +35,8 @@ public class Archer : Hero
             
         }
     }
-    
-    
+
+    [SerializeField] private Wizard wizard; // 위자드 참조, 공격 속도 버프용
 
     public float BonusAttackFactor = 1; // 추가 화살 공격력 계수
     // 법사 공속 버프용 계수
@@ -75,6 +75,11 @@ public class Archer : Hero
     private void OnStartBattle(StartBattleEventArgs args)
     {
         AugmentInventory.Instance.ApplyAugmentsToArcher(this);
+        if(wizard != null)
+        {
+            // 마법사의 공격 속도 버프 적용
+            wizard.BonusAttackSpeed += mageAttackSpeedFactor;
+        }
     }
 
 
