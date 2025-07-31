@@ -300,20 +300,34 @@ MonoBehaviour:
     - 15
     - 30
     - 45
+<<<<<<< HEAD
+    projectilePrefab: {fileID: 5122971031347301392, guid: 760ca34c4eb056e449112fe453d4552e, type: 3}
+    projectileSpeed: 3
+=======
     projectilePrefab: {fileID: 5122971031347301392, guid: 4eaa12e29b15cb348ae5e9ba05c912e3, type: 3}
     projectileSpeed: 4
+>>>>>>> origin/content/monster/pattern
     isLookingForTarget: 0
   radialCfg:
     projectileCount: 12
     betweenAngle: 30
     fireInterval: 3
+<<<<<<< HEAD
+    projectilePrefab: {fileID: 5122971031347301392, guid: a9ce1a426b5d89a42bd5aab0540babb2, type: 3}
+    projectileSpeed: 3
+=======
     projectilePrefab: {fileID: 5122971031347301392, guid: 4eaa12e29b15cb348ae5e9ba05c912e3, type: 3}
     projectileSpeed: 4
+>>>>>>> origin/content/monster/pattern
     isLookingForTarget: 0
   flyingAtkCfg:
     fireInterval: 1
     projectilePrefab: {fileID: 5122971031347301392, guid: 4eaa12e29b15cb348ae5e9ba05c912e3, type: 3}
+<<<<<<< HEAD
+    projectileSpeed: 3
+=======
     projectileSpeed: 5
+>>>>>>> origin/content/monster/pattern
     isLookingForTarget: 0
   knockbackDuration: 0.2
   deathEffectPrefab: {fileID: 5101364894278023870, guid: 7deb5b3117b1a0745a129df969fae227, type: 3}
