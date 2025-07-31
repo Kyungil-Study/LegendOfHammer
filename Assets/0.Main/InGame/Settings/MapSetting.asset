@@ -16,5 +16,5 @@ MonoBehaviour:
   MapDescription: 
   MapWidth: 0
   MapHeight: 0
-  ScrollSpeed: 1
+  ScrollSpeed: 10
   IsLooping: 0
