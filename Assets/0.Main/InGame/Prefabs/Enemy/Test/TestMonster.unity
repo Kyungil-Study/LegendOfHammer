@@ -836,11 +836,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
-      value: 0.99999994
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 0.99885446
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1302,11 +1302,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6134312133047931347, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: attackPerSec
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6134312133047931347, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: baseAttackDamage
-      value: 1
+      value: 450
       objectReference: {fileID: 0}
     - target: {fileID: 7511207680696367698, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_Name
@@ -1318,7 +1318,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8187177615337158848, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: baseAttackDamage
-      value: 1
+      value: 1000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1491,7 +1491,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8049513563462067781, guid: 1ee25f8967c05064e93f25c0adfe8a6f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.12
+      value: 4.87
       objectReference: {fileID: 0}
     - target: {fileID: 8049513563462067781, guid: 1ee25f8967c05064e93f25c0adfe8a6f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1595,12 +1595,28 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
+      propertyPath: playerSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
       propertyPath: testEnemyID
-      value: 11001
+      value: 11003
       objectReference: {fileID: 0}
     - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
       propertyPath: HPTestRankID
-      value: 12006
+      value: 31001
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
+      propertyPath: eliteRangeID
+      value: 22008
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
+      propertyPath: normalMeleeID
+      value: 11001
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
+      propertyPath: normalRangeID
+      value: 12009
       objectReference: {fileID: 0}
     - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
       propertyPath: monsterInfoText
@@ -1608,19 +1624,35 @@ PrefabInstance:
       objectReference: {fileID: 97063167}
     - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
       propertyPath: testMovePattern
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
       propertyPath: patternDefaultID
       value: 12006
       objectReference: {fileID: 0}
     - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
+      propertyPath: autoWaveSpawnMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
       propertyPath: testAttackPattern
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
+      propertyPath: autoWaveSpawnInterval
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
+      propertyPath: spawnPatternTestSample
+      value: 
+      objectReference: {fileID: 2444290805306724050, guid: 60beade136d01354da69e84851803474, type: 3}
     - target: {fileID: 5105383791860531913, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
       propertyPath: m_Name
       value: MonsterTester
+      objectReference: {fileID: 0}
+    - target: {fileID: 5105383791860531913, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

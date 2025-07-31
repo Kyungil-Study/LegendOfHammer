@@ -1690,7 +1690,7 @@ PrefabInstance:
       objectReference: {fileID: 3143145693073960549}
     - target: {fileID: 8234418459163125946, guid: 82f4e9ace469fb04fa4998df157afb82, type: 3}
       propertyPath: StageIndex
-      value: 1
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8234418459163125946, guid: 82f4e9ace469fb04fa4998df157afb82, type: 3}
       propertyPath: endGameButton
@@ -2324,7 +2324,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 0.99955374
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
