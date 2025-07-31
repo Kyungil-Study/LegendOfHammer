@@ -5,12 +5,10 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
-public class StageManager : MonoBehaviour
+public class StageManager : MonoSingleton<StageManager>
 {
-    [Header("Stage 시간 세팅")]
-    [SerializeField] private float nextPageInterval = 60f; // Time in seconds to show next page
-    
     private float stageStartTime = 0f;
+    public float StageStartTime => stageStartTime;
     Queue<StageWave> stageWavesQueue = new Queue<StageWave>();
 
     private void Awake()
@@ -34,6 +32,7 @@ public class StageManager : MonoBehaviour
         stageStartTime = Time.time;
         StartCoroutine(UpdateWave_Coroutine());
     }
+    
 
     private IEnumerator UpdateWave_Coroutine()
     {
