@@ -83,22 +83,15 @@ public class MonsterStat : MonoBehaviour
             }
         }
         
-        // ▶ 중복 DoT 방지 로직 추가
         if (newModifier is DamageOverTimeModifier newDot)
         {
             foreach (var modifier in modifiers)
             {
                 if (modifier is DamageOverTimeModifier existingDot 
-                    // 같은 DPS(초당 피해량)인지 확인
-                    && Mathf.Approximately(
-                        existingDot.DamagePerSecond, 
-                        newDot.DamagePerSecond
-                    ))
+                    && Mathf.Approximately(existingDot.DamagePerSecond, newDot.DamagePerSecond))
                 {
                     // 동일 DoT이면 지속시간 연장만
-                    existingDot.ExtendDuration(
-                        newDot.RemainingDuration    // 새로 들어온 duration
-                    );
+                    existingDot.ExtendDuration(newDot.RemainingDuration);
                     return;
                 }
             }
