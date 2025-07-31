@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class PageScroller : MonoBehaviour
 {
+    
     [SerializeField] private float nextPageInterval = 60f; // Time in seconds to show next page
     [Space(10), SerializeField] private PageSlot[] pages;
     [Space(10),SerializeField] StagePage[] stagePagePrefabs;
@@ -21,8 +22,6 @@ public class PageScroller : MonoBehaviour
         reserveNextPage = Enumerable.Repeat(false, pages.Length).ToArray();
         BattleEventManager.RegistEvent<ReadyBattleEventArgs>(OnReadyBattle);
         BattleEventManager.RegistEvent<StartBattleEventArgs>(OnStartBattle);
-        BattleEventManager.RegistEvent<NextPageEventArgs>(OnNextPage);
-        
         viewHeight = Camera.main.orthographicSize * 2f;
     }
 
@@ -44,20 +43,22 @@ public class PageScroller : MonoBehaviour
     private void OnStartBattle(StartBattleEventArgs args)
     {
         isStarted = true;
-    }
-
-    private void OnNextPage(NextPageEventArgs obj)
-    {
-        for (int i = 0; i < reserveNextPage.Length; i++)
-        {
-            reserveNextPage[i] = true;
-        }
+        StartCoroutine(NextPageTimer(nextPageInterval));
     }
 
     public int startIndex;
     public int endIndex;
     
     float viewHeight;
+    
+    private IEnumerator NextPageTimer(float time)
+    {
+        yield return new WaitForSeconds(time);
+        for (int i = 0; i < reserveNextPage.Length; i++)
+        {
+            reserveNextPage[i] = true;
+        }
+    }
 
     // Update is called once per frame
     void Update()
