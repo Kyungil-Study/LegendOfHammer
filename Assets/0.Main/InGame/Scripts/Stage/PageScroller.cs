@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class PageScroller : MonoBehaviour
@@ -10,6 +11,7 @@ public class PageScroller : MonoBehaviour
     [SerializeField] private float nextPageInterval = 60f; // Time in seconds to show next page
     [Space(10), SerializeField] private PageSlot[] pages;
     [Space(10),SerializeField] StagePage[] stagePagePrefabs;
+    [SerializeField] CinemachineCamera cinemachineVirtualCamera;
 
     [SerializeField] MapSetting mapSetting;
     public PageSlot[] Pages => pages;
@@ -22,7 +24,13 @@ public class PageScroller : MonoBehaviour
         reserveNextPage = Enumerable.Repeat(false, pages.Length).ToArray();
         BattleEventManager.RegistEvent<ReadyBattleEventArgs>(OnReadyBattle);
         BattleEventManager.RegistEvent<StartBattleEventArgs>(OnStartBattle);
-        viewHeight = Camera.main.orthographicSize * 2f;
+        BattleEventManager.RegistEvent<EndBattleEventArgs>(OnEndBattle);
+        viewHeight = cinemachineVirtualCamera.Lens.OrthographicSize * 2f;
+    }
+
+    private void OnEndBattle(EndBattleEventArgs obj)
+    {
+        isStarted = false;
     }
 
     private void OnReadyBattle(ReadyBattleEventArgs args)
@@ -67,17 +75,17 @@ public class PageScroller : MonoBehaviour
             return;
         
         Vector3 curPos = transform.position;
-        Vector3 nextPos = Vector3.down * mapSetting.ScrollSpeed * Time.unscaledDeltaTime;
+        Vector3 nextPos = Vector3.down * (mapSetting.ScrollSpeed * Time.deltaTime);
         transform.position = curPos + nextPos;
 
         var endPage = pages[endIndex];
         var endPageTransform = endPage.transform;
         if (endPageTransform.position.y < -viewHeight)
         {
-            Vector3 backSpritePos = endPageTransform.localPosition;
+            Vector3 backSpritePos = pages[startIndex].transform.localPosition;
             Vector3 frontSpritePos = endPageTransform.localPosition;
             endPageTransform.localPosition
-                = backSpritePos + Vector3.up * viewHeight;
+                = backSpritePos + Vector3.up * (viewHeight);
             
             if(reserveNextPage[endIndex])
             {
@@ -87,7 +95,7 @@ public class PageScroller : MonoBehaviour
             
             int startIndexSave = startIndex;
             startIndex = endIndex;
-            endIndex = (endIndex + 1) % pages.Length;
+            endIndex = (startIndexSave-1 == -1) ? pages.Length - 1 : startIndexSave - 1;
         }
     }
 }
