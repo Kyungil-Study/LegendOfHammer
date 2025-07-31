@@ -19,7 +19,21 @@ public class ArcherDamageCalcArgs : BaseDamageCalcArgs
 public class Archer : Hero
 {
     [field:SerializeField] public float BonusAttackSpeed { get; set; }
-    protected override float AttackCooldown => 1 / (HeroAttackPerSec * (1 + BonusAttackSpeed));
+    protected override float AttackCooldown
+    {
+        get
+        {
+            if (IsFinalProjectile)
+            {
+                return 1 / (float)BonusAttackSpeed;
+            }
+            else
+            {
+                return 1 / (HeroAttackPerSec * (1 + BonusAttackSpeed));
+            }
+            
+        }
+    }
     
     
 
