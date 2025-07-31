@@ -7,16 +7,28 @@ using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class AugmentSlot : MonoBehaviour , IPointerClickHandler
+public class AugmentSlot : MonoBehaviour 
 {
     [SerializeField] TMP_Text augmentNameText;
     [SerializeField] Image augmentIcon; // todo : icon 연동되면 사용
     [SerializeField] TMP_Text augmentGradeText;
     [SerializeField] TMP_Text augmentDescriptionText;
+    [SerializeField] Button augmentButton;
 
     public Augment augment;
     
     Action<Augment> onClickAction;
+    
+    private void Awake()
+    {
+        if (augmentNameText == null || augmentIcon == null || augmentGradeText == null || augmentDescriptionText == null || augmentButton == null)
+        {
+            Debug.LogError("AugmentSlot: Missing UI components. Please assign all required components in the inspector.");
+        }
+        
+        // Initialize the button click action
+        augmentButton.onClick.AddListener(() => onClickAction?.Invoke(augment));
+    }
     
     public void SetAugment(Augment augment, Action<Augment> onClickAction)
     {
@@ -30,8 +42,4 @@ public class AugmentSlot : MonoBehaviour , IPointerClickHandler
         this.onClickAction = onClickAction; 
     }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        onClickAction?.Invoke(augment);
-    }
 }
