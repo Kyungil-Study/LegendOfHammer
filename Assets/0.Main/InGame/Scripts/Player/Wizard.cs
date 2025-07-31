@@ -87,17 +87,23 @@ public class Wizard : Hero
         {
             var eventArgs = new TakeDamageEventArgs(
                                 Squad.Instance, enemy, crit ? DamageType.Critical : DamageType.Wizard,
-                CalculateDamage(crit) // 기본 공격력 기반 피해
+                HeroAttackDamage // 기본 공격력 기반 피해
             );
             //BattleEventManager.Instance.CallEvent(eventArgs);
             //enemy.Stat.AddModifier(new DamageAmpModifier(DebuffRate, DebuffDuration)); // 디버프 재적용
+            // 💥 Show damage text in orange
+            DamageUIManager.Instance.ShowDamage(
+                HeroAttackDamage,
+                new Color(1f, 0.5f, 0f), // 주황색
+                enemy.transform.position
+            );
         }
 
         // 폭발 이펙트
         if (deathExplosionEffectPrefab != null)
         {
             GameObject effect = Instantiate(deathExplosionEffectPrefab, pos, Quaternion.identity);
-            SetExplosionEffectSize(effect, radius);
+            SetExplosionEffectSize(effect, radius*2);
             Destroy(effect, 2f);
         }
         
