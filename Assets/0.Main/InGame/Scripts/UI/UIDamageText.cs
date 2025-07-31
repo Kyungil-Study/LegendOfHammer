@@ -12,8 +12,17 @@ public class UIDamageText : MonoBehaviour
     [SerializeField] private float TweenDurationMax = 1f;
     
     Tweener tweener;
+    
+    Vector3 originalScale;
+
+    private void Awake()
+    {
+        originalScale = transform.localScale;
+    }
+
     private void OnEnable()
     {
+        transform.localScale = originalScale; // Reset scale when enabled
         var punchScale = UnityEngine.Random.Range(TweenScaleMin, TweenScaleMin);
         
         tweener =transform.DOPunchScale(
