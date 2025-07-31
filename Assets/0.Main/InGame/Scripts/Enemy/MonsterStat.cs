@@ -58,17 +58,8 @@ public class MonsterStat : MonoBehaviour
     [SerializeField] private HPScaler hpScaler = new HPScaler();
     
     readonly List<IDamageModifier> modifiers = new();
+    private Monster monster;
     
-    // 오딘 인스펙터 사용 방법
-    // [ShowInInspector] public int PredicatedDamage 
-    // {
-    //     get
-    //     {
-    //         int defaultDamage = 100;
-    //         return defaultDamage * 10;
-    //     }
-    // }
-
     public StatBlock FinalStat { get; private set; }
     public long CurrentHP { get; private set; }
     public long MaxHP { get; private set; }
@@ -92,16 +83,34 @@ public class MonsterStat : MonoBehaviour
             }
         }
         
+        // ▶ 중복 DoT 방지 로직 추가
+        if (newModifier is DamageOverTimeModifier newDot)
+        {
+            foreach (var modifier in modifiers)
+            {
+                if (modifier is DamageOverTimeModifier existingDot 
+                    // 같은 DPS(초당 피해량)인지 확인
+                    && Mathf.Approximately(
+                        existingDot.DamagePerSecond, 
+                        newDot.DamagePerSecond
+                    ))
+                {
+                    // 동일 DoT이면 지속시간 연장만
+                    existingDot.ExtendDuration(
+                        newDot.RemainingDuration    // 새로 들어온 duration
+                    );
+                    return;
+                }
+            }
+        }
+        
         modifiers.Add(newModifier);
     }
     
-    public IEnumerable<T> GetModifiersOfType<T>() where T : IDamageModifier
+    public void Initialize(EnemyData data, int stageIndex, Monster monster)
     {
-        return modifiers.OfType<T>();
-    }
-    
-    public void Initialize(EnemyData data, int stageIndex)
-    {
+        this.monster = monster;
+        
         var baseStat = new StatBlock
         {
             HP        = data.HP,
@@ -124,16 +133,20 @@ public class MonsterStat : MonoBehaviour
         CurrentHP = MaxHP;
     }
     
-    public int ApplyIncomingDamage(int dmg)
+    private void Update()
     {
-        float damage = dmg;
+        Tick(time: Time.deltaTime);
         
-        for (int i = modifiers.Count - 1; i >= 0; i--)
+        foreach (var dot in modifiers.OfType<DamageOverTimeModifier>())
         {
-            damage = modifiers[i].ModifyIncoming(damage);
+            int damageTick = dot.DamageTick(Time.deltaTime);
+            
+            if (damageTick > 0)
+            {
+                monster.TakeDamage(new TakeDamageEventArgs(monster, monster, DamageType.DoT, damageTick));
+            }
         }
         
-        return Mathf.RoundToInt(damage);
     }
     
     public void Tick(float time)
@@ -145,6 +158,18 @@ public class MonsterStat : MonoBehaviour
                 modifiers.RemoveAt(i);
             }
         }
+    }
+    
+    public int ApplyIncomingDamage(int dmg)
+    {
+        float damage = dmg;
+        
+        for (int i = modifiers.Count - 1; i >= 0; i--)
+        {
+            damage = modifiers[i].ModifyIncoming(damage);
+        }
+        
+        return Mathf.RoundToInt(damage);
     }
     
     public bool ReduceHP(IBattleCharacter monster, DamageType type, int amount)
@@ -205,25 +230,36 @@ public class DamageAmpModifier : IDamageModifier
 
 public class DamageOverTimeModifier : IDamageModifier
 {
-    private readonly float damagePerSecond; 
-    private readonly float endTime;         
-    private float accumulator;              
+    public readonly float DamagePerSecond;
+    private float endTime;
+    private float tickTimer;
 
     public DamageOverTimeModifier(float dps, float duration)
     {
-        damagePerSecond = dps;
-        endTime         = Time.time + duration;
-        accumulator     = 0f;
+        DamagePerSecond = dps;
+        endTime = Time.time + duration;
     }
 
     public bool IsExpired => Time.time >= endTime;
     public float ModifyIncoming(float baseDamage) => baseDamage;
+
+    // 남은 지속시간 계산
+    public float RemainingDuration => Mathf.Max(0, endTime - Time.time);
+
+    // 지속시간 연장 메서드
+    public void ExtendDuration(float additionalSeconds)
+    {
+        endTime = Mathf.Max(endTime, Time.time + additionalSeconds);
+    }
+
     public int DamageTick(float deltaTime)
     {
-        accumulator += damagePerSecond * deltaTime;
-        int toDeal = Mathf.FloorToInt(accumulator);
-        
-        if (toDeal > 0) { accumulator -= toDeal; }
-        return toDeal;
+        tickTimer += deltaTime;
+        if (tickTimer >= 1f)
+        {
+            tickTimer -= 1f;
+            return Mathf.RoundToInt(DamagePerSecond);
+        }
+        return 0;
     }
 }
