@@ -37,7 +37,7 @@ public class MonsterStat : MonoBehaviour
             {
                 if (modifier is DamageAmpModifier existingAmp && Mathf.Approximately(existingAmp.Value, newAmp.Value))
                 {
-                    existingAmp.ExtendDuration(newAmp.IsExpired ? 0 : (newAmp.endTime - Time.time)); // 시간 연장
+                    existingAmp.ExtendDuration(newAmp.IsExpired ? 0 : (newAmp.endTime - Time.time));
                     return;
                 }
             }
@@ -47,17 +47,37 @@ public class MonsterStat : MonoBehaviour
         {
             foreach (var modifier in modifiers)
             {
-                if (modifier is DamageOverTimeModifier existingDot 
+                if (modifier is DamageOverTimeModifier existingDot
                     && Mathf.Approximately(existingDot.DamagePerSecond, newDot.DamagePerSecond))
                 {
-                    // 동일 DoT이면 지속시간 연장만
                     existingDot.ExtendDuration(newDot.RemainingDuration);
                     return;
                 }
             }
+
+            modifiers.Add(newDot);
+            StartCoroutine(DoTCoroutine(newDot));
+            return;
         }
         
         modifiers.Add(newModifier);
+    }
+    
+    private IEnumerator DoTCoroutine(DamageOverTimeModifier dot)
+    {
+        float elapsed = 0f;
+        
+        while (elapsed < dot.RemainingDuration)
+        {
+            yield return new WaitForSeconds(1f);
+    
+            int damage = Mathf.RoundToInt(dot.DamagePerSecond);
+            monster.TakeDamage(new TakeDamageEventArgs(monster, monster, DamageType.DoT, damage));
+    
+            elapsed += 1f;
+        }
+    
+        modifiers.Remove(dot);
     }
     
     public void Initialize(EnemyData data, int stageIndex, Monster monster)
@@ -89,17 +109,6 @@ public class MonsterStat : MonoBehaviour
     private void Update()
     {
         Tick(time: Time.deltaTime);
-        
-        foreach (var dot in modifiers.OfType<DamageOverTimeModifier>())
-        {
-            int damageTick = dot.DamageTick(Time.deltaTime);
-            
-            if (damageTick > 0)
-            {
-                monster.TakeDamage(new TakeDamageEventArgs(monster, monster, DamageType.DoT, damageTick));
-            }
-        }
-        
     }
     
     public void Tick(float time)
