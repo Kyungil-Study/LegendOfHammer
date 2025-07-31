@@ -11,6 +11,7 @@ public class PunchEffctor : MonoBehaviour
     [SerializeField] private float TweenDurationMin = 0.5f;
     [SerializeField] private float TweenDurationMax = 1f;
     
+    Vector3 originalScale = Vector3.one;
     Tweener tweener;
     public void PlayEffect()
     {
@@ -19,8 +20,11 @@ public class PunchEffctor : MonoBehaviour
         if (tweener != null)
         {
             tweener.Kill();
+            transform.localScale = originalScale; 
             tweener = null;
         }
+        
+        originalScale = transform.localScale;
         
         tweener =transform.DOPunchScale(
             new Vector3(punchScale, punchScale, punchScale),
