@@ -8,13 +8,11 @@ using Random = UnityEngine.Random;
 
 public class ArcherDamageCalcArgs : BaseDamageCalcArgs
 {
-    public bool IsCritical { get; set; }
     public bool IsTarget { get; set; }
     public ArcherDamageCalcArgs() : this(false, false) { }
     public ArcherDamageCalcArgs(bool isCritical) : this(false, isCritical) { }
-    public ArcherDamageCalcArgs(bool isTarget, bool isCritical = false)
+    public ArcherDamageCalcArgs(bool isTarget, bool isCritical = false) : base(isCritical)
     {
-        IsCritical = isCritical;
         IsTarget = isTarget;
     }
 }
