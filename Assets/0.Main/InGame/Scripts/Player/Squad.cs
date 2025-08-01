@@ -45,7 +45,7 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
         [field:LabelText("치명타 확률"),SerializeField] public float CriticalChance { get; set; } = 0;
         [field:LabelText("치명타 피해"),SerializeField] public float CriticalDamage { get; set; } = 1.5f;
         [field:LabelText("추가 타격"),SerializeField] public int BonusDamagePerHit { get; set; } = 0;
-        [field:LabelText("용사단 받는 피해 증가"),SerializeField] public float TakeDamageFactor { get; set; } = 1;
+        [field:LabelText("용사단 받는 피해 증가"),SerializeField] public float TakeDamageFactor { get; set; } = 0;
         [field:LabelText("최종 데미지 증가"),SerializeField] public float FinalDamageFactor { get; set; } = 1;
     }
 
@@ -72,7 +72,10 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
         {
             return;
         }
-        stats.CurrentHealth -= eventArgs.Damage;
+        
+        int damage = eventArgs.Damage;
+        damage += Mathf.RoundToInt(damage * stats.TakeDamageFactor);
+        stats.CurrentHealth -= damage;
         BattleEventManager.CallEvent(new ReceiveDamageEventArgs(this, DamageType.Enemy, eventArgs.Damage));
         ApplyInvincibility("HitInvincible", hitInvincibleDuration); 
         SoundManager.Instance.PlayPlayerDamaged();
