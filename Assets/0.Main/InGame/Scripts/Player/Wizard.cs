@@ -14,16 +14,19 @@ public class Wizard : Hero
     public WizardMagicBall projectilePrefab;
     [field:SerializeField]public float ExplosionRadius { get; set; } = 0.5f;
 
-    public int AttackCount = 1;
-    public float MaxCountDamage = 1;
+    public int AttackCount = 1; // 투사체 개수
+    public float CountDamage = 1; // 투사체 데미지 감소량
     
     public float CurrentExplosionRadius;
     
     public bool FinalDebuff; //디버프 4레벨 여부(죽으면 폭발)
     public bool FinalExplosive; //범위 4레벨 여부(도트딜)
     
+    public float AdditionalExplosion; // 추가 폭발 범위
+    public float AdditionalExplosion_Ratio; // 추가 폭발 계수
+    
     [SerializeField] private GameObject deathExplosionEffectPrefab;
-    [SerializeField] private float deathExplosionRadius = 1f; // 사망 폭발 반경 (월드 단위)
+    
     
     protected override void Awake()
     {
@@ -60,7 +63,7 @@ public class Wizard : Hero
     public override int CalculateDamage(bool isCritical = false)
     {
         float critFactor = isCritical ? squadStats.CriticalDamage : 1f;
-        return Mathf.RoundToInt((((HeroAttackDamage * MaxCountDamage) * critFactor) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor);
+        return Mathf.RoundToInt((((HeroAttackDamage * CountDamage) * critFactor) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor);
     }
     
     // 몬스터가 죽었을 때 폭발 처리
@@ -75,7 +78,7 @@ public class Wizard : Hero
         if (monster.Stat.HasModifier<DamageAmpModifier>() == false) return;
 
         Vector3 pos = monster.transform.position;
-        float radius = deathExplosionRadius * Distance.STANDARD_DISTANCE;
+        float radius = AdditionalExplosion * 0.5f * Distance.STANDARD_DISTANCE;
 
         DebugDrawUtil.DrawCircle(pos, radius, Color.green);
 
@@ -87,7 +90,7 @@ public class Wizard : Hero
         {
             var eventArgs = new TakeDamageEventArgs(
                                 Squad.Instance, enemy, crit ? DamageType.Critical : DamageType.Wizard,
-                HeroAttackDamage // 기본 공격력 기반 피해
+                                (int)(HeroAttackDamage*AdditionalExplosion_Ratio)// 기본 공격력 기반 피해
             );
             enemy.Stat.AddModifier(new DamageAmpModifier(DebuffRate, DebuffDuration)); // 디버프 재적용
             BattleEventManager.CallEvent(eventArgs);
