@@ -100,13 +100,26 @@ public class Wizard : Hero
                                 CalculateDamage()// 기본 공격력 기반 피해
             );
             BattleEventManager.CallEvent(eventArgs);
+
+            if (monster.Stat.HasModifier<DamageAmpModifier>() == false)
+            {
+                // 💥 Show damage text in orange
+                DamageUIManager.Instance.ShowDamage(
+                    CalculateDamage(),
+                    new Color(1f, 0.5f, 0f), // 주황색
+                    enemy.transform.position
+                );
+            }
+            else
+            {
+                // 💥 Show damage text in orange
+                DamageUIManager.Instance.ShowDamage(
+                    Mathf.RoundToInt(CalculateDamage()*DebuffRate),
+                    new Color(1f, 0.5f, 0f), // 주황색
+                    enemy.transform.position
+                );
+            }
             enemy.Stat.AddModifier(new DamageAmpModifier(DebuffRate, DebuffDuration)); // 디버프 재적용
-            // 💥 Show damage text in orange
-            DamageUIManager.Instance.ShowDamage(
-                CalculateDamage(),
-                new Color(1f, 0.5f, 0f), // 주황색
-                enemy.transform.position
-            );
         }
 
         // 폭발 이펙트
