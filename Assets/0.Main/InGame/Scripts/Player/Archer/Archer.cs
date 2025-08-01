@@ -2,16 +2,41 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
+public class ArcherDamageCalcArgs : BaseDamageCalcArgs
+{
+    public bool IsTarget { get; set; }
+    public ArcherDamageCalcArgs() : this(false, false) { }
+    public ArcherDamageCalcArgs(bool isCritical) : this(false, isCritical) { }
+    public ArcherDamageCalcArgs(bool isTarget, bool isCritical = false) : base(isCritical)
+    {
+        IsTarget = isTarget;
+    }
+}
 public class Archer : Hero
 {
     [field:SerializeField] public float BonusAttackSpeed { get; set; }
-    protected override float AttackCooldown => 1 / (attackPerSec * (1 + BonusAttackSpeed));
-    
-    
+    protected override float AttackCooldown
+    {
+        get
+        {
+            if (IsFinalProjectile)
+            {
+                return 1 / (float)BonusAttackSpeed;
+            }
+            else
+            {
+                return 1 / (HeroAttackPerSec * (1 + BonusAttackSpeed));
+            }
+            
+        }
+    }
+
+    [SerializeField] private Wizard wizard; // 위자드 참조, 공격 속도 버프용
 
     public float BonusAttackFactor = 1; // 추가 화살 공격력 계수
     // 법사 공속 버프용 계수
@@ -30,14 +55,15 @@ public class Archer : Hero
     [Space(10),Header("Final Projectile")]
     public Transform[] finalProjectileSpawnPoints; // 최종 화살 발사 위치들
     public ArcherArrow finalProjectilePrefab;
-    public bool IsFinalProjectile { get; set; } = false; // 최종 화살 여부
+    [ReadOnly, ShowInInspector] public bool IsFinalProjectile { get; set; } = false; // 최종 화살 여부
     
     [Header("Sub Projectile Settings")]
     [SerializeField] private ArcherArrow subProjectilePrefab; // 서브 화살 프리팹
-    public int subProjectileCount { get; set; } = 0; // 서브 화살 개수
+    [ReadOnly, ShowInInspector] public int subProjectileCount { get; set; } = 0; // 서브 화살 개수
     
-    public bool IsSubProjectile { get; set; } = false;
-    public bool IsFinalSubProjectile { get; set; } = false;
+    [ReadOnly,ShowInInspector] public bool IsSubProjectile { get; set; } = false;
+    [ReadOnly,ShowInInspector] public bool IsFinalSubProjectile { get; set; } = false;
+    [ReadOnly,ShowInInspector] public bool IsFinalPenetration { get; set; } = false; // 관통 증강 최종 여부
     
 
     protected override void Awake()
@@ -49,6 +75,11 @@ public class Archer : Hero
     private void OnStartBattle(StartBattleEventArgs args)
     {
         AugmentInventory.Instance.ApplyAugmentsToArcher(this);
+        if(wizard != null)
+        {
+            // 마법사의 공격 속도 버프 적용
+            wizard.BonusAttackSpeed += mageAttackSpeedFactor;
+        }
     }
 
 
@@ -70,7 +101,6 @@ public class Archer : Hero
             projectile.Owner = this;
             projectile.pierceLimit = pierceLimit;
             projectile.IsCritical = Random.Range(0f,1f) <= squadStats.CriticalChance;
-            projectile.targetAdditionalDamageFactor = targetAdditionalDamageFactor;
             projectile.Fire();
         }
     }
@@ -148,27 +178,33 @@ public class Archer : Hero
             subProjectile.IsCritical = IsFinalSubProjectile ? critical : false;
             subProjectile.FindTargetFunc = findFunc;
             subProjectile.DamageCalculationFunc = CalculateSubProjectileDamage;
-            subProjectile.targetAdditionalDamageFactor = targetAdditionalDamageFactor;
             subProjectile.Fire();
         }
         #endregion
         
     }
 
-
-    // 궁수 기본 화살 피해량
-    // [{(궁수 기본 공격 피해량 x 치명타 피해량) + 타격 당 데미지 + (궁수 기본 공격력 x 표적 대상 추가 피해 계수)} x 받는 피해량 증가] x 최종 데미지 증가
     public override int CalculateDamage(bool isCritical = false)
     {
         float critFactor = isCritical ? squadStats.CriticalDamage : 1f;
-        return Mathf.RoundToInt(((baseAttackDamage * critFactor) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor);
+        return Mathf.RoundToInt(((HeroAttackDamage * critFactor) + squadStats.BonusDamagePerHit)* squadStats.FinalDamageFactor);
+    }
+
+    public override int CalculateDamage(BaseDamageCalcArgs args)
+    {
+        var calcArgs = args as ArcherDamageCalcArgs;
+        // 궁수 기본 화살 피해량
+        // {(궁수 공격력 x 소형 화살 공격력 계수 x 치명타 피해량 치명타 적용 시) + 타격 당 대미지 + (궁수 공격력 x 표적 추가 피해 계수 피격 대상이 궁수의 표적일 경우)} x 받는 피해량 증가] x 최종 대미지 증가
+        float critFactor = calcArgs.IsCritical ? squadStats.CriticalDamage : 1f;
+        float targetBonus = IsFinalPenetration && calcArgs.IsTarget ? targetAdditionalDamageFactor : 0f;
+        float smallArrowFactor = IsFinalProjectile ? BonusAttackFactor : 1f;
+        return Mathf.RoundToInt(((HeroAttackDamage * critFactor * smallArrowFactor) + squadStats.BonusDamagePerHit + HeroAttackDamage * targetBonus)* squadStats.FinalDamageFactor);
     }
     
-    public int CalculateSubProjectileDamage(bool isCritical = false)
+    public int CalculateSubProjectileDamage(BaseDamageCalcArgs args)
     {
-        var finalDamage = Mathf.RoundToInt(CalculateDamage(isCritical) * subProjectileAttackFactor);
+        var finalDamage = Mathf.RoundToInt(CalculateDamage(args) * subProjectileAttackFactor);
         Debug.Log($"[Archer] SubProjectile Damage: {finalDamage}");
         return finalDamage;
-        
     }
 }

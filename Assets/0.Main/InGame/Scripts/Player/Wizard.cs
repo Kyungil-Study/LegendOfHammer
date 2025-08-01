@@ -1,18 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 public class Wizard : Hero
 {
     [field:SerializeField] public float BonusAttackSpeed { get; set; }
-    protected override float AttackCooldown => 1 / (attackPerSec * (1 + BonusAttackSpeed));
+    protected override float AttackCooldown => 1 / (HeroAttackPerSec * (1 + BonusAttackSpeed));
     
     public Transform projectileSpawnPoint;
     public WizardMagicBall projectilePrefab;
     [field:SerializeField]public float ExplosionRadius { get; set; } = 0.5f;
 
     public int AttackCount = 1;
+    public float MaxCountDamage = 1;
+    
     public float CurrentExplosionRadius;
     
     public bool FinalDebuff; //디버프 4레벨 여부(죽으면 폭발)
@@ -33,18 +37,21 @@ public class Wizard : Hero
     {
         AugmentInventory.Instance.ApplyAugmentsToWizard(this);
     }
-
+    
     protected override void Attack()
     {
-        for (int i = 0; i < AttackCount; i++)
+        if (AttackCount == 5)
         {
-            WizardMagicBall projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
-            projectile.Owner = this;
-            projectile.explosionRadius = CurrentExplosionRadius;
-            projectile.IsCritical = Random.Range(0f,1f) <= squadStats.CriticalChance;
-            projectile.Fire();
+            float delayBetweenWaves = 0.1f;
+            int shotsPerWave = 5;
+            int totalWaves = 2;
+
+            StartCoroutine(FireSpreadShots(shotsPerWave, totalWaves, delayBetweenWaves));
         }
-        // Debug.Log($"공격 개수: {AttackCount}, 공격 범위: {CurrentExplosionRadius}");
+        else
+        {
+            FireGuidedProjectiles();
+        }
     }
 
     // TODO: 중복 공격 시 피해 감소율
@@ -53,7 +60,7 @@ public class Wizard : Hero
     public override int CalculateDamage(bool isCritical = false)
     {
         float critFactor = isCritical ? squadStats.CriticalDamage : 1f;
-        return Mathf.RoundToInt(((baseAttackDamage * critFactor) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor);
+        return Mathf.RoundToInt((((HeroAttackDamage * MaxCountDamage) * critFactor) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor);
     }
     
     // 몬스터가 죽었을 때 폭발 처리
@@ -74,21 +81,29 @@ public class Wizard : Hero
 
         // 주변 적 탐지
         List<Monster> enemies = BattleManager.GetAllEnemyInRadius(pos, radius);
+
+        var crit = Random.Range(0f,1f) <= squadStats.CriticalChance;
         foreach (var enemy in enemies)
         {
             var eventArgs = new TakeDamageEventArgs(
-                Squad.Instance, enemy,
-                CalculateDamage() // 기본 공격력 기반 피해
+                                Squad.Instance, enemy, crit ? DamageType.Critical : DamageType.Wizard,
+                HeroAttackDamage // 기본 공격력 기반 피해
             );
             //BattleEventManager.Instance.CallEvent(eventArgs);
             //enemy.Stat.AddModifier(new DamageAmpModifier(DebuffRate, DebuffDuration)); // 디버프 재적용
+            // 💥 Show damage text in orange
+            DamageUIManager.Instance.ShowDamage(
+                HeroAttackDamage,
+                new Color(1f, 0.5f, 0f), // 주황색
+                enemy.transform.position
+            );
         }
 
         // 폭발 이펙트
         if (deathExplosionEffectPrefab != null)
         {
             GameObject effect = Instantiate(deathExplosionEffectPrefab, pos, Quaternion.identity);
-            SetExplosionEffectSize(effect, radius);
+            SetExplosionEffectSize(effect, radius*2);
             Destroy(effect, 2f);
         }
         
@@ -103,5 +118,57 @@ public class Wizard : Hero
         float currentSize = spriteRenderer.sprite.rect.size.x / spriteRenderer.sprite.pixelsPerUnit;
         float scaleFactor = targetSize / currentSize;
         effect.transform.localScale = new Vector3(scaleFactor, scaleFactor, 1f);
+    }
+    
+    private void FireGuidedProjectiles()
+    {
+        var allMonsters = BattleManager.Instance.GetAllMonsters()
+            .OrderBy(m => Vector3.Distance(transform.position, m.transform.position))
+            .Take(AttackCount)
+            .ToList();
+
+        for (int i = 0; i < AttackCount; i++)
+        {
+            WizardMagicBall projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
+            projectile.Owner = this;
+            projectile.explosionRadius = CurrentExplosionRadius;
+            projectile.IsCritical = Random.Range(0f, 1f) <= squadStats.CriticalChance;
+
+            if (i < allMonsters.Count)
+            {
+                GameObject target = allMonsters[i].gameObject;
+                projectile.FindTargetFunc = () => target;
+            }
+
+            projectile.Fire();
+        }
+    }
+    
+    private IEnumerator FireSpreadShots(int shotsPerWave, int waveCount, float delay)
+    {
+        float totalAngle = 80f;
+
+        for (int wave = 0; wave < waveCount; wave++)
+        {
+            float angleStep = shotsPerWave > 1 ? totalAngle / (shotsPerWave - 1) : 0f;
+            float startAngle = -totalAngle / 2f;
+
+            for (int i = 0; i < shotsPerWave; i++)
+            {
+                float angle = startAngle + angleStep * i;
+                Vector3 baseDirection = projectileSpawnPoint.up;
+                Vector3 rotatedDirection = Quaternion.Euler(0f, 0f, angle) * baseDirection;
+
+                WizardMagicBall projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, Quaternion.identity);
+                projectile.Owner = this;
+                projectile.explosionRadius = CurrentExplosionRadius;
+                projectile.IsCritical = Random.Range(0f, 1f) <= squadStats.CriticalChance;
+
+                projectile.FindTargetFunc = null; // 유도 비활성화
+                projectile.FireWithDirection(rotatedDirection);
+            }
+
+            yield return new WaitForSeconds(delay);
+        }
     }
 }

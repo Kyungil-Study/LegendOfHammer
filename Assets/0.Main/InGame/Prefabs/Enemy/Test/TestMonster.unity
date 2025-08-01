@@ -281,7 +281,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'HP : 00 / 00'
+  m_text: "\uBAAC\uC2A4\uD130 \uC815\uBCF4"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 679e8f93fefe4ba4faecb3bf14eedd5e, type: 2}
   m_sharedMaterial: {fileID: 573688343734881096, guid: 679e8f93fefe4ba4faecb3bf14eedd5e, type: 2}
@@ -308,8 +308,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 12
+  m_fontSizeBase: 12
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1491,7 +1491,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8049513563462067781, guid: 1ee25f8967c05064e93f25c0adfe8a6f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.87
+      value: 2.12
       objectReference: {fileID: 0}
     - target: {fileID: 8049513563462067781, guid: 1ee25f8967c05064e93f25c0adfe8a6f, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1599,6 +1599,10 @@ PrefabInstance:
       value: 11001
       objectReference: {fileID: 0}
     - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
+      propertyPath: monsterInfoText
+      value: 
+      objectReference: {fileID: 97063167}
+    - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
       propertyPath: testMovePattern
       value: 1
       objectReference: {fileID: 0}
@@ -1629,10 +1633,10 @@ SceneRoots:
   - {fileID: 241257875}
   - {fileID: 988299137}
   - {fileID: 1584204178}
+  - {fileID: 690337098121869475}
   - {fileID: 229381475}
-  - {fileID: 1740837391}
   - {fileID: 1125358354}
+  - {fileID: 1740837391}
   - {fileID: 1280451727}
   - {fileID: 4711268999041334717}
-  - {fileID: 690337098121869475}
   - {fileID: 72545817}
