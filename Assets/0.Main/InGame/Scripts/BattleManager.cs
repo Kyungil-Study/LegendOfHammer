@@ -180,4 +180,9 @@ public class BattleManager : MonoSingleton<BattleManager>
         }
     }
 
+    public void Revive()
+    {
+        isEnded = false;
+        Squad.Instance.Revive();
+    }
 }
