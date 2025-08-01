@@ -29,14 +29,14 @@ public class CommonAugmentGotchaSystem : UIPage
 
     public override void Enter()
     {
-        Time.timeScale = 0;
+        BattleEventManager.CallEvent(new PauseBattleEventArgs(true));
         gameObject.SetActive(true);
         GotchaCommonAugment();
     }
 
     public override void Exit()
     {
-        Time.timeScale = 1;
+        BattleEventManager.CallEvent(new PauseBattleEventArgs(false));
         gameObject.SetActive(false);
     }
     
