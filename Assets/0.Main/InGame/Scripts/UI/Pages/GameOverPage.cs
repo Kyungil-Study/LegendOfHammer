@@ -15,11 +15,13 @@ public class GameOverPage : UIPage
 
     private void ReviveGame()
     {
+        BattleEventManager.CallEvent(new PauseBattleEventArgs(false));
         BattleManager.Instance.Revive();
     }
 
     private void ExitGame()
     {
+        BattleEventManager.CallEvent(new PauseBattleEventArgs(false));
         SessionManager.Instance.EndGame(false);
     }
 
@@ -27,10 +29,14 @@ public class GameOverPage : UIPage
     {
         gameOverReviveButton.gameObject.SetActive(Squad.Instance.IsDead);
         gameObject.SetActive(true);
+        
+        BattleEventManager.CallEvent(new PauseBattleEventArgs(true));
     }
 
     public override void Exit()
     {
         gameObject.SetActive(false);
+        BattleEventManager.CallEvent(new PauseBattleEventArgs(false));
+
     }
 }
