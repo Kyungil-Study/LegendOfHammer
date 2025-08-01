@@ -21,12 +21,14 @@ public class BattleUIController : MonoSingleton<BattleUIController> ,IPageFlowMa
             pagesDict[page.UIPageType] = page;
         }
         
+        
         SwapPage(UIPageType.LobbyPage);
         
     }
 
     public void SwapPage(UIPageType nextPageType)
     {
+        Debug.Log($"SwapPage called with type: {nextPageType}");
         if (currentPage != null)
         {
             currentPage.Exit();

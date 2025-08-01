@@ -21,6 +21,7 @@ public class BattleManager : MonoSingleton<BattleManager>
     public ClampedFloat ChaseGuage => chaseGuage;
 
     private bool isEnded = false;
+    public bool IsEnded => isEnded;
 
     protected override void Initialize()
     {

@@ -75,8 +75,10 @@ public class ClassAugmentGotchaSystem : UIPage
     public override void Enter()
     {
         gameObject.SetActive(true);
-        
-        GotchaClassAugment( ClassAugmentManager.Instance.GetAllOption());
+        if (GotchaClassAugment(ClassAugmentManager.Instance.GetAllOption()) == false)
+        {
+            Owner.SwapPage( UIPageType.CommonAugmentSelection);
+        }
     }
     
     public override void Exit()
@@ -98,7 +100,7 @@ public class ClassAugmentGotchaSystem : UIPage
         GotchaClassAugment(options);
     }
 
-    private void GotchaClassAugment(IReadOnlyList<int> options)
+    private bool GotchaClassAugment(IReadOnlyList<int> options)
     {
         var inventory = AugmentInventory.Instance;
         Debug.Log("Gotcha class augment first.");
@@ -152,11 +154,19 @@ public class ClassAugmentGotchaSystem : UIPage
             totalProbability += probabilityInteger;
         }
         
+        if(probabilities.Count == 0)
+        {
+            Debug.Log("No valid class augments available. Please check the augment records.");
+            return false; // No valid augments to select
+        }
+        
         Debug.Log($"Total probability: {totalProbability}");
         for(int i= 0 ; i < classAugmentSlots.Length; i++)
         {
             GotchaSlot(i, totalProbability, probabilities);
         }
+
+        return true;
     }
     
     private void GotchaSlot(int slotIndex, int totalProbability, List<ProbabilityRecord<int>> probabilities)
