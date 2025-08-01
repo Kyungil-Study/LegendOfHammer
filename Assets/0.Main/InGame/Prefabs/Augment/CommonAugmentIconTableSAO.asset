@@ -14,18 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   augmentIcons:
   - OptionID: 7001
-    Icon: {fileID: 21300000, guid: 092b5883c69affb4bb19656416c0220f, type: 3}
+    Icon: {fileID: 21300000, guid: f41fc2476cdfef0479e386faf3f42edf, type: 3}
   - OptionID: 7002
-    Icon: {fileID: 21300000, guid: a873da440deab934c88fcb8b0dce040b, type: 3}
+    Icon: {fileID: 21300000, guid: 67f865e508cbaeb4c96c2630e4724c25, type: 3}
   - OptionID: 7003
-    Icon: {fileID: 21300000, guid: 0cd4f0ca427369445852cd64ec9b2ca9, type: 3}
+    Icon: {fileID: 21300000, guid: 00eabbbcef118b543af16ead34e27e60, type: 3}
   - OptionID: 7004
-    Icon: {fileID: 21300000, guid: f62723a9efa89e14a8d71fbc4f70c692, type: 3}
+    Icon: {fileID: 21300000, guid: 09e71317d58720c44b21290de766fd43, type: 3}
   - OptionID: 7005
-    Icon: {fileID: 21300000, guid: 5f90b10b764fab44ca558a09734ea1d4, type: 3}
+    Icon: {fileID: 21300000, guid: 5927459f8c99d8749aa4ca70c3b0473d, type: 3}
   - OptionID: 7006
-    Icon: {fileID: 21300000, guid: 476abde904c990b4189c83ee4d9d6f83, type: 3}
+    Icon: {fileID: 21300000, guid: fcff93c7e51fb3748bd878e3eb1658d9, type: 3}
   - OptionID: 7007
-    Icon: {fileID: 21300000, guid: 4e4db8ba11811b346aeafe1414cd92b6, type: 3}
+    Icon: {fileID: 21300000, guid: ccc55efff8fa08749ac6b4fb1b347c5c, type: 3}
   - OptionID: 7008
-    Icon: {fileID: 21300000, guid: 3221dbf45b3fd0e4fbbd3f33088491a3, type: 3}
+    Icon: {fileID: 21300000, guid: ba2bbf6fcda0c24458566f4c3d949e88, type: 3}

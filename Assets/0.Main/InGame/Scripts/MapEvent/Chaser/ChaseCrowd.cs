@@ -32,7 +32,8 @@ public class ChaseCrowd : MonoSingleton<ChaseCrowd>, IBattleCharacter
 
     private void Start()
     {
-        //StartCoroutine(ChaseCoroutine());
+        attackPower = 0; // 연출을 위한 초기 공격력 설정
+        StartCoroutine(ChaseCoroutine());
     }
 
 
@@ -61,7 +62,8 @@ public class ChaseCrowd : MonoSingleton<ChaseCrowd>, IBattleCharacter
             {
                 // 영웅이 충돌했을 때 처리
                 Debug.Log($"Hero {squad.name} has entered the crowd.");
-                TakeDamageEventArgs takeDamageArgs = new TakeDamageEventArgs(this, squad, Mathf.RoundToInt(attackPower));
+                TakeDamageEventArgs takeDamageArgs = new TakeDamageEventArgs(
+                    this, squad, DamageType.Enemy, Mathf.RoundToInt(attackPower));
                 BattleEventManager.CallEvent(takeDamageArgs);
             }
         }
@@ -74,6 +76,7 @@ public class ChaseCrowd : MonoSingleton<ChaseCrowd>, IBattleCharacter
 
     public void ExecuteMapEvent( int damage)
     {
+        BattlePopupSystem.Instance.ChaserAlarm.ExecuteAlarm();
         attackPower = damage;
         StopCoroutine(ChaseCoroutine());
         StartCoroutine(ChaseCoroutine());

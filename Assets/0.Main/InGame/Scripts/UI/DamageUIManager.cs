@@ -31,7 +31,7 @@ public class DamageUIManager : MonoBehaviour
         }
     }
 
-    public void ShowDamage(int damage, Vector3 worldPos)
+    public void ShowDamage(int damage, Color color, Vector3 worldPos)
     {
         // 2. 풀에서 꺼내기
         GameObject go = pool.Count > 0 
@@ -42,6 +42,7 @@ public class DamageUIManager : MonoBehaviour
         var rt  = go.GetComponent<RectTransform>();
         var tmp = go.GetComponent<TextMeshProUGUI>();
         tmp.text = damage.ToString();
+        tmp.color = color;
         go.SetActive(true);
 
         // 4. 위치 변환
@@ -57,6 +58,33 @@ public class DamageUIManager : MonoBehaviour
         // 5. 애니메이션 후 풀로 반납
         StartCoroutine(FloatAndReturn(rt, go));
     }
+    public void ShowText(string text, Vector3 worldPos)
+    {
+        // 풀에서 꺼내기
+        GameObject go = pool.Count > 0
+            ? pool.Pop()
+            : Instantiate(damageUITextPrefab, canvas.transform);
+
+        // 텍스트 지정
+        var rt = go.GetComponent<RectTransform>();
+        var tmp = go.GetComponent<TextMeshProUGUI>();
+        tmp.text = text;
+        go.SetActive(true);
+
+        // 위치 변환
+        Vector2 screenPt = mainCam.WorldToScreenPoint(worldPos);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            canvas.transform as RectTransform,
+            screenPt,
+            canvas.worldCamera,
+            out Vector2 localPos
+        );
+        rt.anchoredPosition = localPos;
+
+        // 애니메이션 후 반환
+        StartCoroutine(FloatAndReturn(rt, go));
+    }
+
 
     private IEnumerator FloatAndReturn(RectTransform rt, GameObject go)
     {

@@ -94,8 +94,9 @@ public class ArcherPenetrationAugment : ArcherAugment
     {
         Debug.Log($" Applying Archer Penetration Augment: {PenetrationCountIncreased}, Final Upgrade: {isFinalUpgrade}");
         // 관통 횟수 증가 적용
-        archer.pierceLimit += PenetrationCountIncreased;
+        archer.pierceLimit = PenetrationCountIncreased;
         archer.targetAdditionalDamageFactor = TargetAdditionalDamageRatio;
+        archer.IsFinalPenetration = isFinalUpgrade;
         if (isFinalUpgrade)
         {
             archer.pierceLimit = 1000000; // 최종 업그레이드 시 관통 횟수 무제한  

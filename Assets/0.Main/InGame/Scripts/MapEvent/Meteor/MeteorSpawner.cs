@@ -26,6 +26,7 @@ public class MeteorSpawner : MonoSingleton<MeteorSpawner>
 
     public void ExecuteMapEvent(int damage, int spawnCount)
     {
+        BattlePopupSystem.Instance.MeteorAlarm.ExecuteAlarm();
         for (int i = 0; i < spawnCount; i++)
         {
             var randCircle = Random.insideUnitCircle * spawnRadius;

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8212737276976261949}
   - component: {fileID: 3903098738402647018}
   - component: {fileID: 2138802484598532216}
+  - component: {fileID: 4598605010857185241}
   m_Layer: 7
   m_Name: Model
   m_TagString: Untagged
@@ -106,6 +107,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4598605010857185241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1850354591201978499}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d199432a4cc97254ba1b7fa81a2f37ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TweenScaleMin: 1
+  TweenScaleMax: 1.5
+  TweenDurationMin: 0.5
+  TweenDurationMax: 1
 --- !u!1 &8015743650478422896
 GameObject:
   m_ObjectHideFlags: 0
@@ -237,12 +254,12 @@ MonoBehaviour:
     Modify: 0
     Value: 0
   hpScaler:
-    oneto10Scale: 1.12
-    oneto20Scale: 1.12
-    oneto30Scale: 1.25
-    NormalMonsterScale: 20000
-    EliteMonsterScale: 50000
-    BossMonsterScale: 1000000
+    oneTo10Scale: 1.12
+    tenTo20Scale: 1.12
+    tewentyTo30Scale: 1.25
+    NormalMonsterAdd: 200000
+    EliteMonsterAdd: 500000
+    BossMonsterAdd: 1000000
 --- !u!114 &7494431464099580550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -264,7 +281,7 @@ MonoBehaviour:
     m_Bits: 1024
   zigzagCfg:
     amplitude: 1
-    frequency: 2
+    frequency: 1
     offsetX: 0.5
   chaseCfg:
     detectRange: 0.5
@@ -276,7 +293,7 @@ MonoBehaviour:
     exlposionInverval: 0.2
     explosionPrefab: {fileID: 6111301031846871093, guid: 9a3809abee10ab54188078ab046f1168, type: 3}
   shieldCfg:
-    rate: 0.5
+    rate: 0.33
     radius: 1.2
     angleDeg: 90
     pivotOffset: {x: 0, y: 0}
@@ -285,10 +302,10 @@ MonoBehaviour:
     burstInterval: 0.15
     fireInterval: 3
     projectilePrefab: {fileID: 5122971031347301392, guid: 4eaa12e29b15cb348ae5e9ba05c912e3, type: 3}
-    projectileSpeed: 3
+    projectileSpeed: 4
     isLookingForTarget: 1
   spreadCfg:
-    burstCount: 3
+    burstCount: 2
     burstInterval: 0.2
     leftAngles:
     - 0
@@ -300,19 +317,19 @@ MonoBehaviour:
     - 15
     - 30
     - 45
-    projectilePrefab: {fileID: 5122971031347301392, guid: 623e67ce00306e349ac9d084a76d79d4, type: 3}
-    projectileSpeed: 5
+    projectilePrefab: {fileID: 5122971031347301392, guid: 4eaa12e29b15cb348ae5e9ba05c912e3, type: 3}
+    projectileSpeed: 4
     isLookingForTarget: 0
   radialCfg:
     projectileCount: 12
     betweenAngle: 30
     fireInterval: 3
-    projectilePrefab: {fileID: 5122971031347301392, guid: 623e67ce00306e349ac9d084a76d79d4, type: 3}
-    projectileSpeed: 5
+    projectilePrefab: {fileID: 5122971031347301392, guid: 4eaa12e29b15cb348ae5e9ba05c912e3, type: 3}
+    projectileSpeed: 4
     isLookingForTarget: 0
   flyingAtkCfg:
     fireInterval: 1
-    projectilePrefab: {fileID: 5122971031347301392, guid: 623e67ce00306e349ac9d084a76d79d4, type: 3}
+    projectilePrefab: {fileID: 5122971031347301392, guid: 4eaa12e29b15cb348ae5e9ba05c912e3, type: 3}
     projectileSpeed: 5
     isLookingForTarget: 0
   knockbackDuration: 0.2
@@ -353,3 +370,4 @@ MonoBehaviour:
   hitFlashInterval: 0.2
   hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
   suicideFlashColor: {r: 1, g: 0, b: 0, a: 1}
+  punchEffect: {fileID: 4598605010857185241}

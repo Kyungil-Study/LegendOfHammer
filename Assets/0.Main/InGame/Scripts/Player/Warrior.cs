@@ -58,15 +58,13 @@ public class Warrior : Hero
     public override int CalculateDamage(bool isCritical = false)
     {
         float critFactor = isCritical ? squadStats.CriticalDamage : 1f;
-        return Mathf.RoundToInt(((baseAttackDamage * critFactor) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor);
+        return Mathf.RoundToInt(((HeroAttackDamage * critFactor) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor);
     }
     
     public void ChargeAttack(Vector3 direction)
     {
-        Debug.Log("charge");
         if(leftCooldown > 0 || IsCharging)
         {
-            Debug.Log("return");
             return;
         }
         
@@ -79,6 +77,7 @@ public class Warrior : Hero
 
     private IEnumerator ChargeCoroutine(Vector3 endPosition)
     {
+        SoundManager.Instance.PlayWarriorDash();
         IsCharging = true;
         squad.ApplyInvincibility("WarriorCharge", chargeDuration + invincibleDurationAfterCharge);
         
@@ -95,7 +94,6 @@ public class Warrior : Hero
     }
 
     private List<Monster> m_HitMonsters = new List<Monster>();
-    // TODO: 증강 구현하면 수정할 것
     private bool tmp_AugmentFlag = false;
     public void Impact(Monster monster)
     {
@@ -104,7 +102,9 @@ public class Warrior : Hero
             return;
         }
         m_HitMonsters.Add(monster);
-        TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(squad, monster, CalculateDamage(Random.Range(0, 1f) <= squadStats.CriticalChance));
+        var crit = Random.Range(0, 1f) <= squadStats.CriticalChance;
+        TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(squad, monster, 
+            crit ? DamageType.Critical : DamageType.Normal, CalculateDamage(crit));
         BattleEventManager.CallEvent(eventArgs);
 
         var monsterRank = EnemyDataManager.Instance.EnemyDatas[monster.EnemyID].Enemy_Rank;

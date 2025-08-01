@@ -12,7 +12,7 @@ public abstract class HeroProjectile : MonoBehaviour
     public Hero Owner { get; set; }
     private bool mb_IsFired = false;
     public bool IsCritical { get; set; } = false;
-    public virtual int Damage => Owner.CalculateDamage(IsCritical);
+    public virtual int Damage => Owner.CalculateDamage(new BaseDamageCalcArgs(IsCritical));
     public Func<GameObject> FindTargetFunc { get; set; }
     private Vector3 m_TargetDirection;
     [Range(0,10)] public float speed;
@@ -80,6 +80,14 @@ public abstract class HeroProjectile : MonoBehaviour
 
         return closestEnemy;
     }
+    
+    public void FireWithDirection(Vector3 direction)
+    {
+        m_TargetDirection = direction.normalized;
+        transform.up = m_TargetDirection;
+        mb_IsFired = true;
+    }
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {

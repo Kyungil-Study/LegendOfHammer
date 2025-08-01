@@ -103,7 +103,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
         var data = EnemyDataManager.Instance.EnemyDatas[enemyID];
         var stage = BattleManager.Instance.StageIndex;
         
-        stat.Initialize(data, stage);
+        stat.Initialize(data, stage, this);
 
         move   = MovementFactory.Create(data.EnemyMovementPattern, this);
         attack = AttackFactory.Create(data.Atk_Pattern, this);
@@ -115,8 +115,8 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
     void Update()
     {
-        ApplyDoT(Time.deltaTime);
-        stat?.Tick(Time.deltaTime);
+        // ApplyDoT(Time.deltaTime);
+        // stat?.Tick(Time.deltaTime);
         move?.Tick(Time.deltaTime);
         attack?.Tick(Time.deltaTime);
     }
@@ -133,7 +133,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
             {
                 BattleEventManager.CallEvent
                 (
-                    new TakeDamageEventArgs(this, target, Stat.FinalStat.Atk)
+                    new TakeDamageEventArgs(this, target, DamageType.Enemy, Stat.FinalStat.Atk)
                 );
             }
         }
@@ -148,12 +148,12 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
     public void TakeDamage(TakeDamageEventArgs eventArgs)
     {
+        DamageType damageType = eventArgs.Type;
+        
         int raw   = Mathf.RoundToInt(eventArgs.Damage * State.ShieldRate); // ShieldAttack이 계산해서 넣어줌
         int final = stat.ApplyIncomingDamage(raw);
         
-        BattleEventManager.CallEvent(new ReceiveDamageEventArgs(this, final));
-
-        if (stat.ReduceHP(final))
+        if (stat.ReduceHP(this, damageType, final))
         {
             OnDeath();
         }
@@ -180,22 +180,6 @@ public class Monster : MonoBehaviour, IBattleCharacter
         StartCoroutine(ApplyKnockback(args));
     }
     
-    private void ApplyDoT(float time)
-    {
-        int totalDamage = 0;
-        
-        foreach (var dot in stat.GetModifiersOfType<DamageOverTimeModifier>())
-        {
-            totalDamage += dot.DamageTick(time);
-        }
-
-        if (totalDamage > 0)
-        {
-            var evt = new TakeDamageEventArgs(this, this, totalDamage);
-            BattleEventManager.CallEvent(evt);
-        }
-    }
-
     IEnumerator ApplyKnockback(ChargeCollisionArgs args)
     {
         if ((args.Attacker is MonoBehaviour attackerMono) == false) yield break;
