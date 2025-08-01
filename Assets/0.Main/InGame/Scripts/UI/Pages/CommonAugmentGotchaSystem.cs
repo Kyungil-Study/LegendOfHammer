@@ -36,7 +36,7 @@ public class CommonAugmentGotchaSystem : UIPage
 
     public override void Exit()
     {
-        Time.timeScale = 0;
+        Time.timeScale = 1;
         gameObject.SetActive(false);
     }
     
@@ -133,6 +133,13 @@ public class CommonAugmentGotchaSystem : UIPage
     private void OnSelectAugment(Augment augment)
     {
         BattleEventManager.CallEvent(new SelectAugmentEventArgs(augment));
-        Owner.SwapPage(UIPageType.ClearPage);
+        if (BattleManager.Instance.IsEnded)
+        {
+            Owner.SwapPage(UIPageType.ClearPage);
+        }
+        else
+        {
+            Owner.SwapPage(UIPageType.BattlePage);
+        }
     }
 }
