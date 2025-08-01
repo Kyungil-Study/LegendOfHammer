@@ -27,7 +27,7 @@ public class UIDamageText : MonoBehaviour
     {
         damageTxt.enabled  = true;  
         transform.localScale = originalScale; // Reset scale when enabled
-        var punchScale = UnityEngine.Random.Range(TweenScaleMin, TweenScaleMin);
+        var punchScale = UnityEngine.Random.Range(TweenScaleMin, TweenScaleMax);
         
         tweener =transform.DOPunchScale(
             new Vector3(punchScale, punchScale, punchScale),

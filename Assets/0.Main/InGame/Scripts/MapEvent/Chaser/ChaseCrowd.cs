@@ -13,9 +13,7 @@ public class ChaseCrowd : MonoSingleton<ChaseCrowd>, IBattleCharacter
     [SerializeField] private Transform destination; // 추적할 대상 위치
     [SerializeField] private float attackDelay = 0.5f; // 추적 공격 딜레이
     [SerializeField] private float chaseSpeed = 5f; // 추적 속도
-    [Range(0,1), SerializeField] private float normalizedTriggerGauge = 0.3f; // 추적 게이지가 이 값 이상일 때 추적 시작
-    [SerializeField] private float chaseAttackInterval = 1f; // 추적 공격 간격
-    [SerializeField] bool isChasing = false;
+    
     [SerializeField] private Ease chaseEase = Ease.Linear; // 추적 속도 계수
     
     [FormerlySerializedAs("attackSignal")] [SerializeField] private AttackAlertSignal attackAlertSignal; // 추적 공격 시그널
@@ -23,8 +21,9 @@ public class ChaseCrowd : MonoSingleton<ChaseCrowd>, IBattleCharacter
     
     [SerializeField] private float attackPower = 10f; // 추적 공격력
     
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         originPosition = transform.position;
         attackCollider = GetComponent<BoxCollider2D>();
         attackCollider.enabled = false;

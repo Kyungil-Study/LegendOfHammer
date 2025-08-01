@@ -11,7 +11,6 @@ public class Audience : MonoBehaviour
     [SerializeField] private int SortingOrderMin = 1000; // 초기화 시간
     [SerializeField] private int SortingOrderMax = 2000; // 초기화 시간
     
-    private float normalizedInitTime = 0f;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
 
