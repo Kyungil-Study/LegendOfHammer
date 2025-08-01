@@ -68,12 +68,12 @@ public class ArcherArrow : HeroProjectile
             target,
             IsCritical ? DamageType.Critical : DamageType.Normal, Damage);
         BattleEventManager.CallEvent(eventArgs);
+        SoundManager.Instance.PlayArcherHit();
         
-        if (pierceLimit <= 0)
+        if (pierceLimit <= -1)
         {
             Destroy(gameObject);
         }
-        SoundManager.Instance.PlayArcherHit();
     }
 
 }

@@ -115,13 +115,6 @@ public class DeathEventArgs : BattleEventArgs
 }
 
 
-public class NextPageEventArgs : BattleEventArgs
-{
-    public NextPageEventArgs()
-    {
-    }
-}
-
 public class ChargeCollisionArgs : BattleEventArgs
 {
     public IBattleCharacter Attacker { get; private set; }

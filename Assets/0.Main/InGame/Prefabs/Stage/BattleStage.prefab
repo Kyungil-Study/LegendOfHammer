@@ -1329,12 +1329,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb5a3509807dcf43a589a1da18a1f1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollSpeed: 4.5
-  scrollDistance: 5.5
+  nextPageInterval: 60
   pages:
   - {fileID: 5225817140991804007}
   - {fileID: 1347866081060535736}
   - {fileID: 1078755946292769435}
+  stagePagePrefabs:
+  - {fileID: 1627550704381949331, guid: 6397cec2793e6434b81823a8c3bc9954, type: 3}
+  - {fileID: 1627550704381949331, guid: c0c54d8cf73a1b6479c70b182dba9faa, type: 3}
+  - {fileID: 1627550704381949331, guid: a791f450d1228d749ab3c611847b6644, type: 3}
+  mapSetting: {fileID: 11400000, guid: 4f51aed61a353fc40880926e7cdd4131, type: 2}
+  startIndex: 2
+  endIndex: 0
 --- !u!1 &5732551948682201126
 GameObject:
   m_ObjectHideFlags: 0
@@ -1417,11 +1423,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextPageInterval: 10
-  pageScroller: {fileID: 2256202022838734569}
-  stagePagePrefabs:
-  - {fileID: 1627550704381949331, guid: 6397cec2793e6434b81823a8c3bc9954, type: 3}
-  - {fileID: 1627550704381949331, guid: c0c54d8cf73a1b6479c70b182dba9faa, type: 3}
-  - {fileID: 1627550704381949331, guid: a791f450d1228d749ab3c611847b6644, type: 3}
 --- !u!156049354 &4712667767818319902
 Grid:
   m_ObjectHideFlags: 0
