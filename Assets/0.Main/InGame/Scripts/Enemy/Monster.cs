@@ -158,9 +158,15 @@ public class Monster : MonoBehaviour, IBattleCharacter
             OnDeath();
         }
     }
-    
+    bool isDead = false;
     public void OnDeath()
     {
+        if (isDead)
+        {
+            return;
+        }
+        isDead = true;
+        
         if (deathEffectPrefab != null)
         {
             var effect = Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
