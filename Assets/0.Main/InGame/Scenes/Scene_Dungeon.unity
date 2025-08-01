@@ -1547,27 +1547,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1233561482328023060, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1255644770709702320, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1551595810802837731, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1621592672588377826, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3181873841737127137, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3582951158701685546, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3802666634613209644, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1611,15 +1611,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4551633579179940966, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4633528461996462776, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4941956588561111797, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6134312133047931347, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: wizard
@@ -1631,15 +1631,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7587548992418412902, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8239980830418619212, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9111148218310751794, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
