@@ -41,7 +41,7 @@ public class PausePage : UIPage
             if (i < inventory.CommonAugments.Count)
             {
                 commonAugmentSlots[i].gameObject.SetActive(true);
-                commonAugmentSlots[i].Initialize(inventory.CommonAugments[i].GetData());
+                commonAugmentSlots[i].Initialize(inventory.CommonAugments[i]);
             }
             else
             {
@@ -54,7 +54,7 @@ public class PausePage : UIPage
             if (i < inventory.WarriorAugments.Count)
             {
                 warriorAugmentSlots[i].gameObject.SetActive(true);
-                warriorAugmentSlots[i].Initialize(inventory.WarriorAugments[i].GetData());
+                warriorAugmentSlots[i].Initialize(inventory.WarriorAugments[i]);
             }
             else
             {
@@ -67,7 +67,7 @@ public class PausePage : UIPage
             if (i < inventory.WizardAugments.Count)
             {
                 wizardAugmentSlots[i].gameObject.SetActive(true);
-                wizardAugmentSlots[i].Initialize(inventory.WizardAugments[i].GetData());
+                wizardAugmentSlots[i].Initialize(inventory.WizardAugments[i]);
             }
             else
             {
@@ -80,7 +80,7 @@ public class PausePage : UIPage
             if (i < inventory.ArcherAugments.Count)
             {
                 archerAugmentSlots[i].gameObject.SetActive(true);
-                archerAugmentSlots[i].Initialize(inventory.ArcherAugments[i].GetData());
+                archerAugmentSlots[i].Initialize(inventory.ArcherAugments[i]);
             }
             else
             {

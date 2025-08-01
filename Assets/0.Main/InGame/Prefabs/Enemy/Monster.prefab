@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8212737276976261949}
   - component: {fileID: 3903098738402647018}
   - component: {fileID: 2138802484598532216}
+  - component: {fileID: 4598605010857185241}
   m_Layer: 7
   m_Name: Model
   m_TagString: Untagged
@@ -106,6 +107,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4598605010857185241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1850354591201978499}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d199432a4cc97254ba1b7fa81a2f37ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TweenScaleMin: 1
+  TweenScaleMax: 1.5
+  TweenDurationMin: 0.5
+  TweenDurationMax: 1
 --- !u!1 &8015743650478422896
 GameObject:
   m_ObjectHideFlags: 0
@@ -353,3 +370,4 @@ MonoBehaviour:
   hitFlashInterval: 0.2
   hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
   suicideFlashColor: {r: 1, g: 0, b: 0, a: 1}
+  punchEffect: {fileID: 4598605010857185241}
