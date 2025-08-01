@@ -16,6 +16,16 @@ public class SelectAugmentEventArgs : BattleEventArgs
     }
 }
 
+public class PauseBattleEventArgs : BattleEventArgs
+{
+    public bool IsPaused { get; private set; }
+    
+    public PauseBattleEventArgs(bool isPaused)
+    {
+        this.IsPaused = isPaused;
+    }
+}
+
 
 
 public class ReadyBattleEventArgs : BattleEventArgs

@@ -33,14 +33,27 @@ public class BattleManager : MonoSingleton<BattleManager>
         
         // Register event listeners
         BattleEventManager.RegistEvent<AliveMonsterEventArgs>(OnAliveMonster);
-        BattleEventManager.RegistEvent<DeathEventArgs>(OnDeath);;
+        BattleEventManager.RegistEvent<DeathEventArgs>(OnDeath);
+        BattleEventManager.RegistEvent<PauseBattleEventArgs>(OnPauseBattle );
         chaseGuage.Events.OnMaxReached += (cur, max) =>
         {
             Debug.Log("[BattleManager] Chase gauge reached maximum value. Ending game.");
             EndGame(false, false); // Game over if chase gauge is full
         };
     }
-    
+
+    private void OnPauseBattle(PauseBattleEventArgs obj)
+    {
+        if (obj.IsPaused)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
+    }
+
 
     private void OnDeath(DeathEventArgs args)
     {

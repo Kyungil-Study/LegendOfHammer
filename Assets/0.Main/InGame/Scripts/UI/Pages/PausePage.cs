@@ -33,7 +33,7 @@ public class PausePage : UIPage
     public override void Enter()
     {
         // PausePage에 진입할 때 필요한 초기화 작업을 수행합니다.
-        Time.timeScale = 0;
+        BattleEventManager.CallEvent(new PauseBattleEventArgs(true));
         
         var inventory = AugmentInventory.Instance;
         for (int i = 0;i < commonAugmentSlots.Length; i++)
@@ -94,7 +94,6 @@ public class PausePage : UIPage
 
     public override void Exit()
     {
-        // PausePage에서 나갈 때 필요한 정리 작업을 수행합니다.
-        Time.timeScale = 1;
+        BattleEventManager.CallEvent(new PauseBattleEventArgs(false));
     }
 }
