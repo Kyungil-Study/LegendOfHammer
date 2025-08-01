@@ -11,8 +11,9 @@ public class StageManager : MonoSingleton<StageManager>
     public float StageStartTime => stageStartTime;
     Queue<StageWave> stageWavesQueue = new Queue<StageWave>();
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         BattleEventManager.RegistEvent<StartBattleEventArgs>(StartGame);
         BattleEventManager.RegistEvent<EndBattleEventArgs>(EndGame);
     }

@@ -182,7 +182,8 @@ public class MonsterScale : MonoBehaviour
         {
             EnemyRank.Elite  => 160,
             EnemyRank.Boss   => 240,
-            EnemyRank.Normal =>  72
+            EnemyRank.Normal =>  72,
+            _ => throw new ArgumentOutOfRangeException()
         };
         
         float originPixel = mSpriteRenderer.sprite.rect.width;

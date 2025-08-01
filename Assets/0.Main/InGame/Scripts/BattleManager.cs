@@ -14,8 +14,6 @@ public class BattleManager : MonoSingleton<BattleManager>
     public int MaxStageNumber = 0;
     
     [Header("추격 게이지 세팅")]
-    [SerializeField] private float chaseGuageDecreaseRate = 0.5f; // Increase rate per second
-    [SerializeField] private float chaseIncreaseRate = 1f; // Increase rate when monster is through clear zone
     [SerializeField] private float chaseGuageMax = 100f; // Maximum value for chase gauge
     private ClampedFloat chaseGuage;
     public ClampedFloat ChaseGuage => chaseGuage;

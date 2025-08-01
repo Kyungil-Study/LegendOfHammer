@@ -57,8 +57,9 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
     [LabelText("피격 무적 시간")] public float hitInvincibleDuration = 1f;
     [LabelText("무적인가요?"),ShowInInspector] public bool IsInvincible => invincible.Count > 0;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         stats.CurrentHealth = stats.MaxHealth;
         BattleEventManager.RegistEvent<StartBattleEventArgs>(OnStartBattle);
     }

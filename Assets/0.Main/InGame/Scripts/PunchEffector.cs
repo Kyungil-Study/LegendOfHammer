@@ -15,7 +15,7 @@ public class PunchEffctor : MonoBehaviour
     Tweener tweener;
     public void PlayEffect()
     {
-        var punchScale = UnityEngine.Random.Range(TweenScaleMin, TweenScaleMin);
+        var punchScale = UnityEngine.Random.Range(TweenScaleMin, TweenScaleMax);
         
         if (tweener != null)
         {

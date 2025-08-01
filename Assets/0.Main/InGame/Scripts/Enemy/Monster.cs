@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
-using System.Collections;
-using UnityEngine;
 
 public class Monster : MonoBehaviour, IBattleCharacter
 {
