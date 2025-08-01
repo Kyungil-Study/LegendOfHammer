@@ -37,6 +37,8 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
                 }
             }
         }
+        
+        
         [field:LabelText("용사단 체력"),SerializeField] public int MaxHealth { get; set; }
         
         [field:LabelText("용사단 추가 공격력 계수"),SerializeField] public float AttackDamageFactor { get; set; }
@@ -103,21 +105,18 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
         }
     }
 
+    [ShowInInspector] public bool IsDead { get; private set; } = false;
+    
     private TaskCompletionSource<bool> m_ReviveTcs;
-    private async void Die()
+    private void Die()
     {
-        Time.timeScale = 0;
-        await WaitReviveChoice();
-        Time.timeScale = 1f;
-
-        if (m_ReviveTcs.Task.Result)
+        if (IsDead)
         {
-            Revive();
+            return;
         }
-        else
-        {
-            BattleEventManager.CallEvent(new DeathEventArgs(this));
-        }
+       
+        IsDead = true;
+        BattleEventManager.CallEvent(new DeathEventArgs(this));
     }
 
     private Task<bool> WaitReviveChoice()
@@ -126,8 +125,9 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
         return m_ReviveTcs.Task;
     }
 
-    private void Revive()
+    public void Revive()
     {
+        IsDead = false;
         Instance.stats.CurrentHealth = stats.MaxHealth;
     }
 
