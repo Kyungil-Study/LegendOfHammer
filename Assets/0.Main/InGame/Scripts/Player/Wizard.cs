@@ -101,7 +101,7 @@ public class Wizard : Hero
             );
             BattleEventManager.CallEvent(eventArgs);
 
-            if (monster.Stat.HasModifier<DamageAmpModifier>() == false)
+            if (enemy.Stat.HasModifier<DamageAmpModifier>() == false)
             {
                 // 💥 Show damage text in orange
                 DamageUIManager.Instance.ShowDamage(
