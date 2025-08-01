@@ -38,14 +38,17 @@ public class Archer : Hero
 
     [SerializeField] private Wizard wizard; // 위자드 참조, 공격 속도 버프용
 
-    public float BonusAttackFactor = 1; // 추가 화살 공격력 계수
+    [Space(16),Header("공속 증강")]
+    [LabelText("공속 증강 공격력 계수")] public float BonusAttackFactor = 1; // 추가 화살 공격력 계수
     // 법사 공속 버프용 계수
-    public float mageAttackSpeedFactor = 0f; // 마법사 화살의 공격 속도 계수
+    [LabelText("마법사 공속 버프용 계수")] public float mageAttackSpeedFactor = 0f; // 마법사 화살의 공격 속도 계수
     
-    public float subProjectileAttackFactor = 0; // 서브 화살의 공격력 계수
-    public float targetAdditionalDamageFactor = 0; // 표적 대상 추가 피해 계수
+    [Space(16),Header("추가 투사체 증강")]
+    [LabelText("추가 투사체 증강 공격력 계수")] public float subProjectileAttackFactor = 0; // 서브 화살의 공격력 계수
     
-    public int pierceLimit = 0; // 관통횟수
+    [Space(16),Header("관통 증강")]
+    [LabelText("표적 적중 공격력 계수")] public float targetAdditionalDamageFactor = 0; // 표적 대상 추가 피해 계수
+    [LabelText("관통 추가 횟수")]public int pierceLimit = 0; // 관통횟수
     
     [Header("Projectile Settings")]
     
