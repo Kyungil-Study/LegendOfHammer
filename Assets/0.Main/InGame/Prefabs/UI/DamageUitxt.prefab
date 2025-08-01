@@ -147,3 +147,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62f25064cd42f7440a24570f7d8b3949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TweenScaleMin: 1
+  TweenScaleMax: 1.5
+  TweenDurationMin: 0.5
+  TweenDurationMax: 1
+  damageTxt: {fileID: 3775353957699668985}
