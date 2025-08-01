@@ -92,8 +92,8 @@ public class Wizard : Hero
                                 Squad.Instance, enemy, crit ? DamageType.Critical : DamageType.Wizard,
                                 (int)(HeroAttackDamage*AdditionalExplosion_Ratio * (1f + squadStats.FinalDamageFactor))// 기본 공격력 기반 피해
             );
-            enemy.Stat.AddModifier(new DamageAmpModifier(DebuffRate, DebuffDuration)); // 디버프 재적용
             BattleEventManager.CallEvent(eventArgs);
+            enemy.Stat.AddModifier(new DamageAmpModifier(DebuffRate, DebuffDuration)); // 디버프 재적용
             // 💥 Show damage text in orange
             DamageUIManager.Instance.ShowDamage(
                 (int)(HeroAttackDamage*AdditionalExplosion_Ratio * (1f + squadStats.FinalDamageFactor)),
