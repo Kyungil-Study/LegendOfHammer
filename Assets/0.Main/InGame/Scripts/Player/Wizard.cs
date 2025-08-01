@@ -97,7 +97,7 @@ public class Wizard : Hero
         {
             var eventArgs = new TakeDamageEventArgs(
                                 Squad.Instance, enemy, crit ? DamageType.Critical : DamageType.Wizard,
-                                CalculateDamage()// 기본 공격력 기반 피해
+                                Mathf.RoundToInt((((HeroAttackDamage * AdditionalExplosion_Ratio)) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor)// 기본 공격력 기반 피해
             );
             BattleEventManager.CallEvent(eventArgs);
 
@@ -105,7 +105,7 @@ public class Wizard : Hero
             {
                 // 💥 Show damage text in orange
                 DamageUIManager.Instance.ShowDamage(
-                    CalculateDamage(),
+                    Mathf.RoundToInt((((HeroAttackDamage * AdditionalExplosion_Ratio)) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor),
                     new Color(1f, 0.5f, 0f), // 주황색
                     enemy.transform.position
                 );
@@ -114,7 +114,7 @@ public class Wizard : Hero
             {
                 // 💥 Show damage text in orange
                 DamageUIManager.Instance.ShowDamage(
-                    Mathf.RoundToInt(CalculateDamage()*DebuffRate),
+                    Mathf.RoundToInt((HeroAttackDamage * AdditionalExplosion_Ratio + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor * DebuffRate),
                     new Color(1f, 0.5f, 0f), // 주황색
                     enemy.transform.position
                 );
