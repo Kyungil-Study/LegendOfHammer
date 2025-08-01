@@ -90,13 +90,13 @@ public class Wizard : Hero
         {
             var eventArgs = new TakeDamageEventArgs(
                                 Squad.Instance, enemy, crit ? DamageType.Critical : DamageType.Wizard,
-                                (int)((HeroAttackDamage*AdditionalExplosion_Ratio) * squadStats.FinalDamageFactor)// 기본 공격력 기반 피해
+                                (int)(HeroAttackDamage*AdditionalExplosion_Ratio * (1f + squadStats.FinalDamageFactor))// 기본 공격력 기반 피해
             );
             enemy.Stat.AddModifier(new DamageAmpModifier(DebuffRate, DebuffDuration)); // 디버프 재적용
             BattleEventManager.CallEvent(eventArgs);
             // 💥 Show damage text in orange
             DamageUIManager.Instance.ShowDamage(
-                HeroAttackDamage,
+                (int)(HeroAttackDamage*AdditionalExplosion_Ratio * (1f + squadStats.FinalDamageFactor)),
                 new Color(1f, 0.5f, 0f), // 주황색
                 enemy.transform.position
             );
