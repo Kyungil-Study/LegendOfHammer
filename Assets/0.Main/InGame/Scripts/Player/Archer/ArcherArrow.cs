@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class ArcherArrow : HeroProjectile
+public class ArcherArrow : HeroProjectile<Archer>
 {
     public int pierceLimit = 0;
     public Monster targetMonster;

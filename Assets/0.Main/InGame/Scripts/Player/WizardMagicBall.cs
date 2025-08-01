@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class WizardMagicBall : HeroProjectile
+public class WizardMagicBall : HeroProjectile<Wizard>
 {
     public GameObject explosionEffectPrefab;
     public float explosionRadius = 0.5f;

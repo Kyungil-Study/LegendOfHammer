@@ -5,7 +5,7 @@ public class GameOverPage : UIPage
 {
     [SerializeField] Button gameOverReviveButton;
     [SerializeField] Button gameOverExitButton;
-    
+
     public override UIPageType UIPageType => UIPageType.GameOverPage;
     public override void Initialize(IPageFlowManageable owner)
     {
@@ -15,6 +15,7 @@ public class GameOverPage : UIPage
 
     private void ReviveGame()
     {
+        BattleManager.Instance.Revive();
     }
 
     private void ExitGame()
@@ -24,6 +25,7 @@ public class GameOverPage : UIPage
 
     public override void Enter()
     {
+        gameOverReviveButton.gameObject.SetActive(Squad.Instance.IsDead);
         gameObject.SetActive(true);
     }
 

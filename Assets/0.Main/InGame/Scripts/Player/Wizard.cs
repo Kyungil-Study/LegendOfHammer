@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -14,20 +15,26 @@ public class Wizard : Hero
     public WizardMagicBall projectilePrefab;
     [field:SerializeField]public float ExplosionRadius { get; set; } = 0.5f;
 
-    public int AttackCount = 1; // 투사체 개수
-    public float CountDamage = 1; // 투사체 데미지 감소량
+    [LabelText("투사체 개수")] public int AttackCount = 1; // 투사체 개수
+    [LabelText("투사체 데미지 감소량")]public float CountDamage = 1; // 투사체 데미지 감소량
     
-    public float CurrentExplosionRadius;
+    [LabelText("투사체 폭발 범위")]public float CurrentExplosionRadius;
     
-    public bool FinalDebuff; //디버프 4레벨 여부(죽으면 폭발)
-    public bool FinalExplosive; //범위 4레벨 여부(도트딜)
+    [LabelText("디버프 최종 증강인가요?")]public bool FinalDebuff; //디버프 4레벨 여부(죽으면 폭발)
+    [LabelText("폭발 최종 증강인가요?")]public bool FinalExplosive; //범위 4레벨 여부(도트딜)
     
     public float AdditionalExplosion; // 추가 폭발 범위
     public float AdditionalExplosion_Ratio; // 추가 폭발 계수
     
     [SerializeField] private GameObject deathExplosionEffectPrefab;
     
+    // 위자드 디버프
+    [LabelText("디버프 시간")] public float DebuffDuration;
+    public float DebuffRate;
     
+    // 위자드 도트딜
+    [LabelText("도트뎀 체력 비율")] public float Dot_HP_Ratio_Duration ;
+    public float Dot_HP_Ratio;
     protected override void Awake()
     {
         base.Awake();
