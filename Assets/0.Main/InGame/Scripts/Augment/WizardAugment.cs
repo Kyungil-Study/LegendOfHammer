@@ -33,11 +33,8 @@ public class WizardProjectileAugment : WizardAugment
     public override void Apply(Wizard wizard, bool isFinalUpgrade)
     {
         Debug.Log("마법사 개수 증가 선택");
-        wizard.AttackCount = Increased_Projectiles;
-        if (isFinalUpgrade)
-        {
-            wizard.MaxCountDamage = AttackRatio_ReductionRate;
-        }
+        wizard.AttackCount = Increased_Projectiles; 
+        wizard.CountDamage = AttackRatio_ReductionRate;
     }
 }
 
@@ -63,8 +60,11 @@ public class WizardDotAugment : WizardAugment
         Debug.Log("마법사 디버프 선택");
         Debug.Log($"WizardDotAugment 디버프 지속시간: {Debuff_Duration}, 디버프 비율: {Debuff_Rate}");
         wizard.FinalDebuff = isFinalUpgrade;
+        
         wizard.DebuffDuration = Debuff_Duration;
         wizard.DebuffRate = Debuff_Rate;
+        wizard.AdditionalExplosion = AdditionalExplosion;
+        wizard.AdditionalExplosion_Ratio = AdditionalExplosion_Ratio;
     }
 }
 
