@@ -17,7 +17,7 @@ public class PunchEffctor : MonoBehaviour
     {
         var punchScale = UnityEngine.Random.Range(TweenScaleMin, TweenScaleMax);
         
-        if (tweener != null)
+        if (tweener != null && tweener.IsActive())
         {
             tweener.Kill();
             transform.localScale = originalScale; 
@@ -31,13 +31,27 @@ public class PunchEffctor : MonoBehaviour
             UnityEngine.Random.Range(TweenDurationMin, TweenDurationMax),
             vibrato: 10,
             elasticity: 0.1f
-        );
+        ).SetLink(gameObject).OnKill(() =>
+            {
+                Debug.Log("Punch Effect finished");
+            }
+            );
+    }
+
+    private void OnDestroy()
+    {
+        if (tweener != null&& tweener.IsActive())
+        {
+            tweener.Kill();
+            tweener = null;
+        }
     }
 
     private void OnDisable()
     {
-        if (tweener != null)
+        if (tweener != null&& tweener.IsActive())
         {
+            Debug.Log("Punch Effect Kill on Disable");
             tweener.Kill();
             tweener = null;
         }
