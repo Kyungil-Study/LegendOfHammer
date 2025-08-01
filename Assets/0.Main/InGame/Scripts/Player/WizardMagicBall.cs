@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class WizardMagicBall : HeroProjectile
+public class WizardMagicBall : HeroProjectile<Wizard>
 {
     public GameObject explosionEffectPrefab;
     public float explosionRadius = 0.5f;
@@ -18,8 +18,6 @@ public class WizardMagicBall : HeroProjectile
     {
         DebugDrawUtil.DrawCircle(position, radius, Color.red);
         List<Monster> enemies = BattleManager.GetAllEnemyInRadius(position, radius);
-        
-        var wizard = Owner as Wizard;     
         foreach (var enemy in enemies)
         {
             TakeDamageEventArgs eventArgs = new TakeDamageEventArgs(
@@ -28,12 +26,12 @@ public class WizardMagicBall : HeroProjectile
                 IsCritical ? DamageType.Critical : DamageType.Wizard,
                 Damage
             );
-            enemy.Stat.AddModifier(new DamageAmpModifier(wizard.DebuffRate, wizard.DebuffDuration));
-            float percent = wizard.Dot_HP_Ratio;              
-            float dps     = enemy.Stat.MaxHP * percent;      
-            enemy.Stat.AddModifier(new DamageOverTimeModifier(dps, wizard.Dot_HP_Ratio_Duration));
             BattleEventManager.CallEvent(eventArgs);
-            Debug.Log($"폭발 도트 {wizard.Dot_HP_Ratio}, {wizard.Dot_HP_Ratio_Duration}");
+            enemy.Stat.AddModifier(new DamageAmpModifier(Owner.DebuffRate, Owner.DebuffDuration));
+            float percent = Owner.Dot_HP_Ratio;              
+            float dps     = enemy.Stat.MaxHP * percent;      
+            enemy.Stat.AddModifier(new DamageOverTimeModifier(dps, Owner.Dot_HP_Ratio_Duration));
+            Debug.Log($"폭발 도트 {Owner.Dot_HP_Ratio}, {Owner.Dot_HP_Ratio_Duration}");
         }
 
         var explosionEffect = Instantiate(explosionEffectPrefab, position, Quaternion.identity);
