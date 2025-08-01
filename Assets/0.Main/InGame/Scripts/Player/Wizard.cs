@@ -97,16 +97,29 @@ public class Wizard : Hero
         {
             var eventArgs = new TakeDamageEventArgs(
                                 Squad.Instance, enemy, crit ? DamageType.Critical : DamageType.Wizard,
-                                CalculateDamage()// 기본 공격력 기반 피해
+                                Mathf.RoundToInt((((HeroAttackDamage * AdditionalExplosion_Ratio)) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor)// 기본 공격력 기반 피해
             );
             BattleEventManager.CallEvent(eventArgs);
+
+            if (enemy.Stat.HasModifier<DamageAmpModifier>() == false)
+            {
+                // 💥 Show damage text in orange
+                DamageUIManager.Instance.ShowDamage(
+                    Mathf.RoundToInt((((HeroAttackDamage * AdditionalExplosion_Ratio)) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor),
+                    new Color(1f, 0.5f, 0f), // 주황색
+                    enemy.transform.position
+                );
+            }
+            else
+            {
+                // 💥 Show damage text in orange
+                DamageUIManager.Instance.ShowDamage(
+                    Mathf.RoundToInt((HeroAttackDamage * AdditionalExplosion_Ratio + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor * DebuffRate),
+                    new Color(1f, 0.5f, 0f), // 주황색
+                    enemy.transform.position
+                );
+            }
             enemy.Stat.AddModifier(new DamageAmpModifier(DebuffRate, DebuffDuration)); // 디버프 재적용
-            // 💥 Show damage text in orange
-            DamageUIManager.Instance.ShowDamage(
-                CalculateDamage(),
-                new Color(1f, 0.5f, 0f), // 주황색
-                enemy.transform.position
-            );
         }
 
         // 폭발 이펙트
