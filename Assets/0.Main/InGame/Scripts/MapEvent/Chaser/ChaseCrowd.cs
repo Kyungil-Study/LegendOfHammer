@@ -21,6 +21,8 @@ public class ChaseCrowd : MonoSingleton<ChaseCrowd>, IBattleCharacter
     
     [SerializeField] private float attackPower = 10f; // 추적 공격력
     
+    Tweener moveTweener;
+    
     protected override void Awake()
     {
         base.Awake();
@@ -41,15 +43,26 @@ public class ChaseCrowd : MonoSingleton<ChaseCrowd>, IBattleCharacter
         transform.position = originPosition;
         attackAlertSignal.gameObject.SetActive(true);
         yield return new WaitForSeconds(attackDelay);
-        attackCollider.enabled = true;
-        var gotoDestination = transform.DOMove(destination.position, chaseSpeed)
-            .SetEase(chaseEase);
-        //.OnComplete(() => Debug.Log($"Chased to {destination.name} at position {destination.position}"));
-        yield return gotoDestination.WaitForCompletion();
+        
+        
+        // 전조 증상 끄기
         attackAlertSignal.gameObject.SetActive(false);
-        var gotoOrigin = transform.DOMove(originPosition, chaseSpeed).SetEase(Ease.Linear);
+        // 공격 활성화
+        attackCollider.enabled = true;
+        // 추적 대상 위치로 이동
+        moveTweener = transform.DOMove(destination.position, chaseSpeed)
+            .SetEase(chaseEase).SetLink(gameObject);
+        yield return moveTweener.WaitForCompletion();
+        
+        
+        // 원래 자리로 되돌아오기
+        var gotoOrigin = 
+            transform.DOMove(originPosition, chaseSpeed).SetEase(Ease.Linear).SetLink(gameObject);
         yield return gotoOrigin.WaitForCompletion();
+
+        // 공격 비활성화
         attackCollider.enabled = false;
+
     }
 
 
