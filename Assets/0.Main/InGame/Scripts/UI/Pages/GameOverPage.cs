@@ -7,7 +7,7 @@ public class GameOverPage : UIPage
     [SerializeField] Button gameOverExitButton;
 
     public override UIPageType UIPageType => UIPageType.GameOverPage;
-    public override void Initialize(IPageFlowManageable owner)
+    protected override void Initialize(IPageFlowManageable owner)
     {
         gameOverExitButton.onClick.AddListener(ExitGame);
         gameOverReviveButton.onClick.AddListener(ReviveGame);

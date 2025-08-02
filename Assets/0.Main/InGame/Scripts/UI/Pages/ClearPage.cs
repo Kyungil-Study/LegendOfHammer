@@ -7,7 +7,7 @@ public class ClearPage : UIPage
     [SerializeField] Button clearExitButton;
     
     public override UIPageType UIPageType => UIPageType.ClearPage;
-    public override void Initialize(IPageFlowManageable owner)
+    protected override void Initialize(IPageFlowManageable owner)
     {
         clearNextButton.onClick.AddListener(NextGame);
         clearExitButton.onClick.AddListener(ExitGame);
@@ -25,13 +25,13 @@ public class ClearPage : UIPage
 
     public override void Enter()
     {
-        Time.timeScale = 0;
+        BattleEventManager.CallEvent(new PauseBattleEventArgs(true));
         gameObject.SetActive(true);
     }
 
     public override void Exit()
     {
-        Time.timeScale = 1;
+        BattleEventManager.CallEvent(new PauseBattleEventArgs(false));  
         gameObject.SetActive(false);
     }
 }

@@ -14,13 +14,10 @@ public class PausePage : UIPage
     [SerializeField] private AugmentInventorySlot[] wizardAugmentSlots;
     [SerializeField] private AugmentInventorySlot[] archerAugmentSlots;
     
-    private IPageFlowManageable owner;
-    
     public override UIPageType UIPageType => UIPageType.PausePage;
     
-    public override void Initialize(IPageFlowManageable owner)
+    protected override void Initialize(IPageFlowManageable owner)
     {
-        this.owner = owner;
         resumeButton.onClick.AddListener(()=>{owner.SwapPage(UIPageType.BattlePage);});
         quitButton.onClick.AddListener(OnQuitGame);
     }

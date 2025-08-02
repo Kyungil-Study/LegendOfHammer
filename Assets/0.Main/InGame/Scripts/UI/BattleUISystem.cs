@@ -16,7 +16,7 @@ public class BattleUIController : MonoSingleton<BattleUIController> ,IPageFlowMa
         base.Awake();
         foreach (var page in pages)
         {
-            page.Initialize(this);
+            page.Setup(this);
             page.gameObject.SetActive(false);
             
             pagesDict[page.UIPageType] = page;

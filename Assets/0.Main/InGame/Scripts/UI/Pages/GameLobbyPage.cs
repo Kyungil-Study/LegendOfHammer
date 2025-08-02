@@ -37,10 +37,8 @@ public class GameLobbyPage : UIPage
     
     public override UIPageType UIPageType => UIPageType.LobbyPage;
     
-    private IPageFlowManageable Owner;
-    public override void Initialize(IPageFlowManageable owner)
+    protected override void Initialize(IPageFlowManageable owner)
     {
-        Owner = owner ?? throw new System.ArgumentNullException(nameof(owner), "Owner cannot be null.");
         gameBeginButton.onClick.AddListener(OnGameBegin);
         userTryStageButton.onClick.AddListener(OnUserTryStage);
         
