@@ -101,16 +101,24 @@ public class MonsterScale : MonoBehaviour
         ShieldEffect.transform.localScale = Vector3.one;
 
         float halfShield = shieldEffectRenderer.sprite.bounds.size.y * 0.5f;
-        Vector3 localOffset = new Vector3(0f, (mCollider.offset.y - 0.75f)* halfShield, 0f);
+        Vector2 localOffset = new Vector2(0f, (mCollider.offset.y - 0.75f)* halfShield);
 
         ShieldEffect.transform.localPosition = localOffset;
     }
 
-    public void EnterSuicideMode(Sprite sprite)
+    public void EnterSuicideMode(Sprite warningSprite, float AttackRange)
     {
-        mIsSuicideMode = true;
+        BombEffect.transform.SetParent(transform, false);
+        bombEffectRenderer.sprite = warningSprite;
+        
+        BombEffect.transform.localScale = Vector3.one * AttackRange;
+
+        float bottomY = mCollider.offset.y - (mCollider.size.y * 0.5f);
+        
+        BombEffect.transform.localPosition = new Vector3(0f, bottomY, 0f);
         BombEffect.SetActive(true);
     }
+
     
     private void PlayDamageEffect(TakeDamageEventArgs eventArgs)
     {
@@ -206,6 +214,14 @@ public class MonsterScale : MonoBehaviour
         
         float originPixel = mSpriteRenderer.sprite.rect.width;
         return enemyPixel / originPixel;
+    }
+    
+    private const float NormalPixel = 72f;
+    public float GetRelativeScale()
+    {
+        float originPixel = mSpriteRenderer.sprite.rect.width;
+        float normalScaleFactor = NormalPixel / originPixel;
+        return mScaleFactor / normalScaleFactor;
     }
 
     private void ApplyModelScale(float scaleFactor)
