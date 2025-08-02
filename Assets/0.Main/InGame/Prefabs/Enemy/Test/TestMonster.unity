@@ -463,6 +463,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1339056028}
     - target: {fileID: 2752772096657333607, guid: cf1c8b0d30ff0be428c9353fa9e67d88, type: 3}
+      propertyPath: m_SortingOrder
+      value: 2500
+      objectReference: {fileID: 0}
+    - target: {fileID: 2752772096657333607, guid: cf1c8b0d30ff0be428c9353fa9e67d88, type: 3}
       propertyPath: m_AdditionalShaderChannelsFlag
       value: 25
       objectReference: {fileID: 0}
@@ -836,7 +840,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
-      value: 0.9993506
+      value: 0.9991259
       objectReference: {fileID: 0}
     - target: {fileID: 8640218140982623031, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_NormalizedViewPortRect.height

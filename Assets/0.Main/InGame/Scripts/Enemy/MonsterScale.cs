@@ -98,16 +98,12 @@ public class MonsterScale : MonoBehaviour
         ShieldEffect.SetActive(isActive);
         shieldEffectRenderer.sprite = sprite;
         
-        // 사이즈 조절
-        ShieldEffect.transform.localScale = Vector3.one * mScaleFactor;
+        ShieldEffect.transform.localScale = Vector3.one;
 
-        float bottomY = mCollider.offset.y - (mCollider.size.y * 0.5f);
-        float halfShieldLocal = shieldEffectRenderer.sprite.bounds.size.y * 0.5f;  
-        float halfShieldWorld = halfShieldLocal * mScaleFactor;
-        float offsetY = bottomY - halfShieldWorld;
-        
-        // 오프셋 조절
-        ShieldEffect.transform.localPosition = new Vector3(0f, offsetY, 0f);
+        float halfShield = shieldEffectRenderer.sprite.bounds.size.y * 0.5f;
+        Vector3 localOffset = new Vector3(0f, (mCollider.offset.y - 0.75f)* halfShield, 0f);
+
+        ShieldEffect.transform.localPosition = localOffset;
     }
 
     public void EnterSuicideMode(Sprite sprite)
