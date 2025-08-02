@@ -20,6 +20,7 @@ public class ClearPage : UIPage
 
     private void NextGame()
     {
+        AugmentInventory.Instance.SaveData();
         SessionManager.Instance.NextGame();
     }
 
