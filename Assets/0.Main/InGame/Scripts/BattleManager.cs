@@ -78,14 +78,13 @@ public class BattleManager : MonoSingleton<BattleManager>
     {
         var monster = args.AliveMonster;
         Debug.Log($"[BattleManager] Monster {monster.EnemyID} is alive.");
+        var enemyData = EnemyDataManager.Instance.EnemyDatas[monster.EnemyID];
+        chaseGuage.Increase(enemyData.Chasing_Increase);    
         var data = EnemyDataManager.Instance.EnemyDatas[monster.EnemyID];
         if (data.Enemy_Rank.Equals(EnemyRank.Boss))
         {
             EndGame(true, false);
         }
-        // todo: UI 완료되면 활성화
-        var enemyData = EnemyDataManager.Instance.EnemyDatas[monster.EnemyID];
-        chaseGuage.Increase(enemyData.Chasing_Increase);
     }
 
 
@@ -113,6 +112,11 @@ public class BattleManager : MonoSingleton<BattleManager>
     // Update is called once per frame
     void EndGame(bool isVictory,bool isBossDead)
     {
+        if (isEnded)
+        {
+            return;
+        }
+        
         isEnded = true;
         // Here you can handle the end of the game, such as showing a UI or transitioning to another scene
         Debug.Log(isVictory ? "Battle ended with victory!" : "Battle ended with defeat!");
