@@ -17,6 +17,7 @@ public class GameOverPage : UIPage
     {
         BattleEventManager.CallEvent(new PauseBattleEventArgs(false));
         BattleManager.Instance.Revive();
+        Owner.SwapPage(UIPageType.BattlePage);
     }
 
     private void ExitGame()
