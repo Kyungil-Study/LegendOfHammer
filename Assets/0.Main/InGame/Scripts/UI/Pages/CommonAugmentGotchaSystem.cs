@@ -14,11 +14,8 @@ public class CommonAugmentGotchaSystem : UIPage
 
     public override UIPageType UIPageType => UIPageType.CommonAugmentSelection;
 
-    private IPageFlowManageable Owner;
-    public override void Initialize(IPageFlowManageable owner)
+    protected override void Initialize(IPageFlowManageable owner)
     {
-        Owner = owner ?? throw new System.ArgumentNullException(nameof(owner), "Owner cannot be null.");
-        
         commonRerollAugmentButton.onClick.AddListener(() =>
         {
             Debug.Log("Reroll common augment button clicked.");

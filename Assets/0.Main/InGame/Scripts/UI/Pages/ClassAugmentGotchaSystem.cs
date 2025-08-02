@@ -20,13 +20,11 @@ public class ClassAugmentGotchaSystem : UIPage
     
     public override UIPageType UIPageType => UIPageType.ClassAumgentSelection;
 
-    private IPageFlowManageable Owner;
     private bool IsRerollClassSelected = false;
     AugmentType rerollAugmentType = AugmentType.Warrior;
     
-    public override void Initialize(IPageFlowManageable owner)
+    protected override void Initialize(IPageFlowManageable owner)
     {
-        Owner = owner ?? throw new System.ArgumentNullException(nameof(owner), "Owner cannot be null.");
         classRerollAugmentButton.onClick.AddListener(() => {
             Debug.Log("Reroll augment button clicked.");
             // Handle reroll logic here
