@@ -33,7 +33,8 @@ public class MonsterScale : MonoBehaviour
     [Header("팔로우 이펙트 설정")]
     [SerializeField] private GameObject BombEffect;
     [SerializeField] private GameObject ShieldEffect;
-    private SpriteRenderer mFollowImage;
+    private SpriteRenderer shieldEffectRenderer;
+    private SpriteRenderer bombEffectRenderer;
     
     private SpriteRenderer  mSpriteRenderer;
     private BoxCollider2D   mCollider;
@@ -54,18 +55,19 @@ public class MonsterScale : MonoBehaviour
     private void Awake()
     {
         mSpriteRenderer = model.GetComponent<SpriteRenderer>();
+        mSprite = mSpriteRenderer.sprite;
+        
         mAnimator       = model.GetComponent<Animator>();
         mMaterial       = model.GetComponent<Renderer>().material;
         mCollider       = GetComponent<BoxCollider2D>();
         
-        mFollowImage = ShieldEffect.GetComponent<SpriteRenderer>();
+        shieldEffectRenderer = ShieldEffect.GetComponent<SpriteRenderer>();
+        bombEffectRenderer = BombEffect.GetComponent<SpriteRenderer>();
     }
 
     private void Start()
     {
         PickRandomSprite();
-        mScaleFactor = CalculateScaleFactor();
-        ApplyModelScale(mScaleFactor);
     }
 
     private void OnEnable()
@@ -94,17 +96,24 @@ public class MonsterScale : MonoBehaviour
     public void SetEnemyShield(bool isActive, Sprite sprite)
     {
         ShieldEffect.SetActive(isActive);
+        shieldEffectRenderer.sprite = sprite;
         
-        if (isActive == false) return;
+        // 사이즈 조절
+        ShieldEffect.transform.localScale = Vector3.one * mScaleFactor;
+
+        float bottomY = mCollider.offset.y - (mCollider.size.y * 0.5f);
+        float halfShieldLocal = shieldEffectRenderer.sprite.bounds.size.y * 0.5f;  
+        float halfShieldWorld = halfShieldLocal * mScaleFactor;
+        float offsetY = bottomY - halfShieldWorld;
         
-        mFollowImage.sprite = sprite;
+        // 오프셋 조절
+        ShieldEffect.transform.localPosition = new Vector3(0f, offsetY, 0f);
     }
 
     public void EnterSuicideMode(Sprite sprite)
     {
         mIsSuicideMode = true;
         BombEffect.SetActive(true);
-        mFollowImage.sprite = sprite;
     }
     
     private void PlayDamageEffect(TakeDamageEventArgs eventArgs)
