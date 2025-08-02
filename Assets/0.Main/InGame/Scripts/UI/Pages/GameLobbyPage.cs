@@ -14,7 +14,10 @@ public class GameLobbyPage : UIPage
     [Space(10),Header("유저 정보")]
     [SerializeField] private TMP_Text currentStageText;
     [SerializeField] private TMP_Text maxStageText;
-    
+
+    // todo: 이 부분은 출시때 제거할 것
+    #region  Deprecate On Release 
+
     [Space(10),Header("유저 스테이지 시도")]
     [SerializeField] private TMP_InputField userTryStageInputField;
     [SerializeField] private Button userTryStageButton;
@@ -29,6 +32,9 @@ public class GameLobbyPage : UIPage
     [SerializeField] private Button classAugmentSetButton;
     
     [SerializeField] private Button clearAugmentButton;
+
+    #endregion
+    
     public override UIPageType UIPageType => UIPageType.LobbyPage;
     
     private IPageFlowManageable Owner;
@@ -111,7 +117,14 @@ public class GameLobbyPage : UIPage
     {
         Debug.Log("Game Begin Button Clicked");
         // Notify the owner to start the game
-        Owner.SwapPage( UIPageType.ClassAumgentSelection); // Assuming the next page is ClassAugmentSelection
+        if(AugmentInventory.Instance.IsFullClassAugment())
+        {
+            Owner.SwapPage(UIPageType.CommonAugmentSelection);
+        }
+        else
+        {
+            Owner.SwapPage( UIPageType.ClassAumgentSelection); // Assuming the next page is ClassAugmentSelection
+        }
         BattleManager.Instance.ReadyGame();
     }
 
