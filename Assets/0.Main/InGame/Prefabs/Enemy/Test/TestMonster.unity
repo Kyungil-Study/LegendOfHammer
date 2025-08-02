@@ -1665,7 +1665,7 @@ PrefabInstance:
       objectReference: {fileID: 97063167}
     - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
       propertyPath: testMovePattern
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
       propertyPath: patternDefaultID
@@ -1673,7 +1673,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
       propertyPath: testAttackPattern
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5105383791860531913, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
       propertyPath: m_Name
