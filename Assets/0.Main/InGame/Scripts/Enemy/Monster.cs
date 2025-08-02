@@ -31,11 +31,6 @@ public class Monster : MonoBehaviour, IBattleCharacter
         move?.Init(this);
         attack?.Init(this);
         attack?.Start();
-        
-        if (attack is ShieldAttack shieldAttack)
-        {
-            scale.SetEnemyShield(true, shieldAttack.GetShieldSprite());
-        }
     }
     
     public GameObject Player => player;
@@ -117,11 +112,6 @@ public class Monster : MonoBehaviour, IBattleCharacter
         move?.Init(this);
         attack?.Init(this);
         attack?.Start();
-
-        if (attack is ShieldAttack shieldAttack)
-        {
-            scale.SetEnemyShield(true, shieldAttack.GetShieldSprite());
-        }
     }
 
     void Update()
@@ -219,7 +209,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
         
         if (attack is SuicideAttack suicideAttack && suicideCfg != null)
         {
-            Gizmos.color = Color.red;
+            Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(transform.position, suicideCfg.attackRange);
         }
 
