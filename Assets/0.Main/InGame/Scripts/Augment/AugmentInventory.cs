@@ -189,7 +189,6 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        SaveData();
     }
 
     private void OnSelectAugment(SelectAugmentEventArgs args)
