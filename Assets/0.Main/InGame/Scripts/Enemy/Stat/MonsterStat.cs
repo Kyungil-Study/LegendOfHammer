@@ -17,6 +17,8 @@ public class MonsterStat : MonoBehaviour
     [Header("몬스터 스탯 스케일링")] [Tooltip("스테이지에 따라 HP를 스케일링")]
     [SerializeField] private HPScaler hpScaler = new HPScaler();
     
+    [SerializeField] MapSetting mapSetting;
+    
     readonly List<IDamageModifier> modifiers = new();
     private Monster monster;
     
@@ -88,7 +90,7 @@ public class MonsterStat : MonoBehaviour
         {
             HP        = data.HP,
             Atk       = data.Atk_Power,
-            MoveSpeed = data.Move_Speed
+            MoveSpeed = data.Move_Speed * mapSetting.MonsterScrollSpeed
         };
         
         FinalStat = new StatBlock

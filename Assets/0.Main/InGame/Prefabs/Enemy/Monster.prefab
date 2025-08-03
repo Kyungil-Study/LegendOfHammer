@@ -260,6 +260,7 @@ MonoBehaviour:
     NormalMonsterAdd: 200000
     EliteMonsterAdd: 500000
     BossMonsterAdd: 1000000
+  mapSetting: {fileID: 11400000, guid: 4f51aed61a353fc40880926e7cdd4131, type: 2}
 --- !u!114 &7494431464099580550
 MonoBehaviour:
   m_ObjectHideFlags: 0
