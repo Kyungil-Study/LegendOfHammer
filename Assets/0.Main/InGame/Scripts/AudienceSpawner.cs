@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
 
 public class AudienceSpawner : MonoBehaviour
 {
@@ -43,10 +44,7 @@ public class AudienceSpawner : MonoBehaviour
             var spawnPosition = Vector3.Lerp(spawnRangeStart.position, spawnRangeEnd.position, range);
             var audience = Instantiate(audiencePrefab, transform);
                     
-            audience.transform.position = spawnPosition;
-            audience.transform.rotation = SpawRotation;
-                    
-            audience.Setup(this);
+            audience.Setup(this, spawnPosition, SpawRotation);
         }
     }
 }
