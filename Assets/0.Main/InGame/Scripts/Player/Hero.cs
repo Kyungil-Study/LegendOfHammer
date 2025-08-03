@@ -8,6 +8,7 @@ using UnityEngine.Serialization;
 public abstract class Hero : MonoBehaviour
 {
     [SerializeField] protected Squad squad;
+    [SerializeField] protected MapSetting mapSetting;
     [ShowInInspector] protected Squad.SquadStats squadStats => squad.stats;
 
     
@@ -31,7 +32,8 @@ public abstract class Hero : MonoBehaviour
     {
         get
         {
-            var heroAttackPerSec = attackPerSec * (1 - squad.stats.DecreaseAttackSpeed);
+            var mapScroll = mapSetting != null ? mapSetting.ScrollAttackSpeed : 1; 
+            var heroAttackPerSec = attackPerSec * (1 - squad.stats.DecreaseAttackSpeed) * mapScroll;
             return Mathf.Max(heroAttackPerSec, 0.001f) ;
         }
        

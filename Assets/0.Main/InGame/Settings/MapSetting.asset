@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MapName: 
   MapDescription: 
-  MapWidth: 0
-  MapHeight: 0
-  ScrollSpeed: 10
-  IsLooping: 0
+  ScrollSpeed: 7
+  monsterScrollSpeed: 3
+  scrollAttackSpeed: 2
