@@ -18,6 +18,8 @@ public class ClassAugmentGotchaSystem : UIPage
     [Space(10), Header("Reroll Button")]
     [SerializeField] private Button classRerollAugmentButton;
     
+    [SerializeField] PageCinematic cinematicPanel;
+    
     public override UIPageType UIPageType => UIPageType.ClassAumgentSelection;
 
     private bool IsRerollClassSelected = false;
@@ -29,6 +31,7 @@ public class ClassAugmentGotchaSystem : UIPage
             Debug.Log("Reroll augment button clicked.");
             // Handle reroll logic here
             RerollClassAugment();
+            cinematicPanel.gameObject.SetActive(true);
         });
         
         warriorSlot.onClick.AddListener(() => {

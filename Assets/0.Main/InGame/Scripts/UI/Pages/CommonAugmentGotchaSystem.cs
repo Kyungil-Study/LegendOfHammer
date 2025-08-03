@@ -9,7 +9,8 @@ public class CommonAugmentGotchaSystem : UIPage
     [Header("Common Augment")]
     [SerializeField] private AugmentSlot[] commonAugmentSlots;
     [SerializeField] private Button commonRerollAugmentButton;
-
+    
+    [SerializeField] PageCinematic cinematicPanel;
     private AugmentRarity minRarity = AugmentRarity.None;
 
     public override UIPageType UIPageType => UIPageType.CommonAugmentSelection;
@@ -21,6 +22,7 @@ public class CommonAugmentGotchaSystem : UIPage
             Debug.Log("Reroll common augment button clicked.");
             // Handle reroll logic here
             GotchaCommonAugment();
+            cinematicPanel.gameObject.SetActive(true);
         });
     }
 
