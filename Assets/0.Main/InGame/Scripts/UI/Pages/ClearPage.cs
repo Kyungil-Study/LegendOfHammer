@@ -20,12 +20,12 @@ public class ClearPage : UIPage
 
     private void NextGame()
     {
-        AugmentInventory.Instance.SaveData();
         SessionManager.Instance.NextGame();
     }
 
     public override void Enter()
     {
+        AugmentInventory.Instance.SaveData();
         BattleEventManager.CallEvent(new PauseBattleEventArgs(true));
         gameObject.SetActive(true);
     }
