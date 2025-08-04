@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
-using System.Collections;
-using UnityEngine;
 
 public class Monster : MonoBehaviour, IBattleCharacter
 {
@@ -157,9 +155,15 @@ public class Monster : MonoBehaviour, IBattleCharacter
             OnDeath();
         }
     }
-    
+    bool isDead = false;
     public void OnDeath()
     {
+        if (isDead)
+        {
+            return;
+        }
+        isDead = true;
+        
         if (deathEffectPrefab != null)
         {
             var effect = Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);

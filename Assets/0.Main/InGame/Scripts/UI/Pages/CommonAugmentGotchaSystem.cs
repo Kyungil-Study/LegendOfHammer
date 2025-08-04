@@ -9,34 +9,33 @@ public class CommonAugmentGotchaSystem : UIPage
     [Header("Common Augment")]
     [SerializeField] private AugmentSlot[] commonAugmentSlots;
     [SerializeField] private Button commonRerollAugmentButton;
-
+    
+    [SerializeField] PageCinematic cinematicPanel;
     private AugmentRarity minRarity = AugmentRarity.None;
 
     public override UIPageType UIPageType => UIPageType.CommonAugmentSelection;
 
-    private IPageFlowManageable Owner;
-    public override void Initialize(IPageFlowManageable owner)
+    protected override void Initialize(IPageFlowManageable owner)
     {
-        Owner = owner ?? throw new System.ArgumentNullException(nameof(owner), "Owner cannot be null.");
-        
         commonRerollAugmentButton.onClick.AddListener(() =>
         {
             Debug.Log("Reroll common augment button clicked.");
             // Handle reroll logic here
             GotchaCommonAugment();
+            cinematicPanel.gameObject.SetActive(true);
         });
     }
 
     public override void Enter()
     {
-        Time.timeScale = 0;
+        BattleEventManager.CallEvent(new PauseBattleEventArgs(true));
         gameObject.SetActive(true);
         GotchaCommonAugment();
     }
 
     public override void Exit()
     {
-        Time.timeScale = 0;
+        BattleEventManager.CallEvent(new PauseBattleEventArgs(false));
         gameObject.SetActive(false);
     }
     
@@ -133,6 +132,13 @@ public class CommonAugmentGotchaSystem : UIPage
     private void OnSelectAugment(Augment augment)
     {
         BattleEventManager.CallEvent(new SelectAugmentEventArgs(augment));
-        Owner.SwapPage(UIPageType.ClearPage);
+        if (BattleManager.Instance.IsEnded)
+        {
+            Owner.SwapPage(UIPageType.ClearPage);
+        }
+        else
+        {
+            Owner.SwapPage(UIPageType.BattlePage);
+        }
     }
 }

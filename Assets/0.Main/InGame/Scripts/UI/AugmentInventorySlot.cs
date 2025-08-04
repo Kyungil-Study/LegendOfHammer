@@ -21,8 +21,30 @@ public class AugmentInventorySlot : MonoBehaviour
         
     }
 
-    public void Initialize(Augment augment)
+    public void Initialize(CommonAugmentUserData userData)
     {
-        augmentIcon.sprite = augment.GetIcon();
+        if (userData == null)
+        {
+            Debug.LogError("CommonAugmentUserData is null");
+            return;
+        }
+
+        var data =userData.GetData();
+        augmentIcon.sprite = data.GetIcon();
+        augmentText.text = $"{data.GetGrade()}:{userData.Count}";
     }
+    
+    public void Initialize(ClassAugmentUserData userData)
+    {
+        if (userData == null)
+        {
+            Debug.LogError("WarriorAugmentUserData is null");
+            return;
+        }
+
+        var data = userData.GetData();
+        augmentIcon.sprite = data.GetIcon();
+        augmentText.text = $"Level.{userData.Level}";
+    }
+    
 }

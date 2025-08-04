@@ -45,6 +45,9 @@ TagManager:
   - name: Alert
     uniqueID: 1536309827
     locked: 0
+  - name: Fx
+    uniqueID: 481386323
+    locked: 0
   - name: MapEvent
     uniqueID: 3327020695
     locked: 0
