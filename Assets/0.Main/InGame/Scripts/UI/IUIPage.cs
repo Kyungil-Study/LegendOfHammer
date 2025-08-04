@@ -20,8 +20,18 @@ public enum UIPageType
 
 public abstract class UIPage : MonoBehaviour
 {
+    public IPageFlowManageable Owner { get; private set; }
     public abstract UIPageType UIPageType { get; }
-    public abstract void Initialize(IPageFlowManageable owner);
+    
+    [RuleTile.DontOverride]
+    public void Setup(IPageFlowManageable owner)
+    {
+        Owner = owner;
+        Initialize(owner); // Initialize the page with the owner
+    }
+
+    protected abstract void Initialize(IPageFlowManageable owner);
+    
     public abstract void Enter();
     public abstract void Exit();
 }

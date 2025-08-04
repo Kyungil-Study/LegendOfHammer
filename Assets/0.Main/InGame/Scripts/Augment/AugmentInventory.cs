@@ -91,20 +91,16 @@ public class CommonAugmentUserData
 public class AugmentInventory : MonoSingleton<AugmentInventory>
 {
     [SerializeField] private int maxAugmentCount = 15; // Maximum number of augments that can be held
-    public bool IsFull => (commonAugments.Count + warriorAugments.Count + archerAugments.Count + wizardAugments.Count) >= maxAugmentCount;
+    public bool IsFull => (commonAugments.Count + WarriorAugments.Count + ArcherAugments.Count + WizardAugments.Count) >= maxAugmentCount;
     
     List<CommonAugmentUserData> commonAugments = new List<CommonAugmentUserData>();
     public IReadOnlyList<CommonAugmentUserData> CommonAugments => commonAugments;
     
-    List<ClassAugmentUserData> warriorAugments => classAugments[AugmentType.Warrior];
-    public IReadOnlyList<ClassAugmentUserData> WarriorAugments => warriorAugments;
+    public IReadOnlyList<ClassAugmentUserData> WarriorAugments => classAugments[AugmentType.Warrior];
     
-    List<ClassAugmentUserData> archerAugments => classAugments[AugmentType.Archer];
-    public IReadOnlyList<ClassAugmentUserData> ArcherAugments => archerAugments;
+    public IReadOnlyList<ClassAugmentUserData> ArcherAugments => classAugments[AugmentType.Archer];
     
-    List<ClassAugmentUserData> wizardAugments => classAugments[AugmentType.Wizard];
-    
-    public IReadOnlyList<ClassAugmentUserData> WizardAugments => wizardAugments;
+    public IReadOnlyList<ClassAugmentUserData> WizardAugments => classAugments[AugmentType.Wizard];
     
     Dictionary<AugmentType,List<ClassAugmentUserData>> classAugments = new Dictionary<AugmentType, List<ClassAugmentUserData>>()
     {
@@ -121,15 +117,32 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
     public void ClearInventory()
     {
         commonAugments.Clear();
-        warriorAugments.Clear();
-        archerAugments.Clear();
-        wizardAugments.Clear();
         classAugments[AugmentType.Warrior].Clear();
         classAugments[AugmentType.Archer].Clear();
         classAugments[AugmentType.Wizard].Clear();
         
         Debug.Log("[AugmentInventory] Inventory cleared.");
         SaveData();
+    }
+    
+    public bool IsFullClassAugment()
+    {
+        foreach (var option in ClassAugmentManager.Instance.AugmentGroupByOption.Keys)
+        {
+            if (classAugments[AugmentType.Warrior].Any(a => a.OptionID == option && a.IsMaxLevel()) ||
+                classAugments[AugmentType.Archer].Any(a => a.OptionID == option && a.IsMaxLevel()) ||
+                classAugments[AugmentType.Wizard].Any(a => a.OptionID == option && a.IsMaxLevel()))
+            {
+                continue;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
+
+
     }
     
     public void UpdateAugumetToInventory(Augment augment)
@@ -153,55 +166,22 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
                 }
                 break;
             case AugmentType.Warrior:
+            case AugmentType.Archer:
+            case AugmentType.Wizard:
             {
-                var exist = warriorAugments.Any(a => a.OptionID == augment.GetOptionID());
+                var augments = classAugments[augment.GetAugmentType()];
+                var exist = augments.Any(a => a.OptionID == augment.GetOptionID());
                 var classAugment = augment as ClassAugment;
                 if (exist == false)
                 {
                     Debug.Log($"[AugmentInventory] Adding new Warrior Augment: {augment.GetName()}");
-                    var warriorData = new ClassAugmentUserData(augment.GetOptionID(), classAugment.GetLevel());
-                    warriorAugments.Add(warriorData);
+                    var data = new ClassAugmentUserData(augment.GetOptionID(), classAugment.GetLevel());
+                    augments.Add(data);
                 }
                 else
                 {
                     Debug.Log($"[AugmentInventory] Upgrading existing Warrior Augment: {augment.GetName()}");
-                    var existing = warriorAugments.First(a => a.OptionID == augment.GetOptionID());
-                    existing.SetLevel(classAugment.GetLevel());
-                }
-                break;
-            }
-            case AugmentType.Archer:
-            {
-                var archerExist = archerAugments.Any(a => a.OptionID == augment.GetOptionID());
-                var classAugment = augment as ClassAugment;
-                if (archerExist == false)
-                {
-                    Debug.Log($"[AugmentInventory] Adding new Archer Augment: {augment.GetName()}");
-                    var archerData = new ClassAugmentUserData(augment.GetOptionID(), classAugment.GetLevel());
-                    archerAugments.Add(archerData);
-                }
-                else
-                {
-                    Debug.Log($"[AugmentInventory] Upgrading existing Archer Augment: {augment.GetName()}");
-                    var existing = archerAugments.First(a => a.OptionID == augment.GetOptionID());
-                    existing.SetLevel(classAugment.GetLevel());
-                }
-                break;
-            }
-            case AugmentType.Wizard:
-            {
-                var wizardExist = wizardAugments.Any(a => a.OptionID == augment.GetOptionID());
-                var classAugment = augment as ClassAugment;
-                if (wizardExist == false)
-                {
-                    Debug.Log($"[AugmentInventory] Adding new Wizard Augment: {augment.GetName()}");
-                    var wizardData = new ClassAugmentUserData( augment.GetOptionID(), classAugment.GetLevel());
-                    wizardAugments.Add(wizardData);
-                }
-                else
-                {
-                    Debug.Log($"[AugmentInventory] Upgrading existing Wizard Augment: {augment.GetName()}, {augment.GetDescription()}");
-                    var existing = wizardAugments.First(a => a.OptionID == augment.GetOptionID());
+                    var existing = augments.First(a => a.OptionID == augment.GetOptionID());
                     existing.SetLevel(classAugment.GetLevel());
                 }
                 break;
@@ -209,7 +189,6 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        SaveData();
     }
 
     private void OnSelectAugment(SelectAugmentEventArgs args)
@@ -220,9 +199,9 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
         
         Debug.Log($"Inventory Updated: " +
                   $"Common Augments: {commonAugments.Count}, " +
-                  $"Warrior Augments: {warriorAugments.Count}, " +
-                  $"Archer Augments: {archerAugments.Count}, " +
-                  $"Wizard Augments: {wizardAugments.Count}");
+                  $"Warrior Augments: {WarriorAugments.Count}, " +
+                  $"Archer Augments: {ArcherAugments.Count}, " +
+                  $"Wizard Augments: {WizardAugments.Count}");
 
         if (IsFull)
         {
@@ -247,9 +226,9 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
         
         var es3Manager = ES3Manager.Instance;
         var es3UserAugmentData = es3Manager.AugmentData;
-        RegistUserData(es3UserAugmentData.ArcherAugment, archerAugments);
-        RegistUserData(es3UserAugmentData.WarriorAugment, warriorAugments);
-        RegistUserData(es3UserAugmentData.WizardAugment, wizardAugments);
+        RegistUserData(es3UserAugmentData.ArcherAugment, classAugments[AugmentType.Archer]);
+        RegistUserData(es3UserAugmentData.WarriorAugment, classAugments[AugmentType.Warrior]);
+        RegistUserData(es3UserAugmentData.WizardAugment, classAugments[AugmentType.Wizard]);
         RegistUserData(es3UserAugmentData.CommonAugment, commonAugments);
     }
 
@@ -259,20 +238,20 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
         
         var es3Manager = ES3Manager.Instance;
         var backendAugmentData = es3Manager.AugmentData;
-        backendAugmentData.ArcherAugment = JsonWriter.Write(archerAugments);
-        backendAugmentData.WarriorAugment = JsonWriter.Write(warriorAugments);
-        backendAugmentData.WizardAugment = JsonWriter.Write(wizardAugments);
+        backendAugmentData.ArcherAugment = JsonWriter.Write(classAugments[AugmentType.Archer]);
+        backendAugmentData.WarriorAugment = JsonWriter.Write(classAugments[AugmentType.Warrior]);
+        backendAugmentData.WizardAugment = JsonWriter.Write(classAugments[AugmentType.Wizard]);
         backendAugmentData.CommonAugment = JsonWriter.Write(commonAugments);
         es3Manager.SaveAumgents();
     }
 
     public List<ClassAugmentUserData> GetAllClassAugments()
     {
-        List<ClassAugmentUserData> classAugments = new List<ClassAugmentUserData>();
-        classAugments.AddRange(wizardAugments);
-        classAugments.AddRange(archerAugments);
-        classAugments.AddRange(warriorAugments);
-        return classAugments;
+        List<ClassAugmentUserData> allaugments = new List<ClassAugmentUserData>();
+        allaugments.AddRange(classAugments[AugmentType.Archer]);
+        allaugments.AddRange(classAugments[AugmentType.Warrior]);
+        allaugments.AddRange(classAugments[AugmentType.Wizard]);
+        return allaugments;
     }
 
     public void ApplyAugmentsToSquad(Squad squad)
@@ -304,8 +283,8 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
 
     public void ApplyAugmentsToArcher(Archer archer)
     {
-        Debug.Log($"[AugmentInventory] Applying Augments {archerAugments.Count} to Archer...");
-        foreach (var archerAugment in archerAugments)
+        Debug.Log($"[AugmentInventory] Applying Augments {ArcherAugments.Count} to Archer...");
+        foreach (var archerAugment in ArcherAugments)
         {
             var data = archerAugment.GetData() as ArcherAugment;
             if (data == null)
@@ -322,7 +301,7 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
 
     public void ApplyAugmentsToWarrior(Warrior warrior)
     {
-        foreach (var warriorAugment in warriorAugments)
+        foreach (var warriorAugment in WarriorAugments)
         {
             var data = warriorAugment.GetData() as WarriorAugment;
             if (data == null)
@@ -338,7 +317,7 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
 
     public void ApplyAugmentsToWizard(Wizard wizard)
     {
-        foreach (var wizardAugment in wizardAugments)
+        foreach (var wizardAugment in WizardAugments)
         {
             var data = wizardAugment.GetData() as WizardAugment;
             if (data == null)

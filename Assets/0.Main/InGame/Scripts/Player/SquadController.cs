@@ -50,7 +50,6 @@ public class SquadController : MonoBehaviour
                 (args) =>
                 {
                     gameObject.SetActive(true);
-                    lever.SetActive(true);
                 }
             );
         
@@ -59,6 +58,21 @@ public class SquadController : MonoBehaviour
                 {
                     gameObject.SetActive(false);
                     lever.SetActive(false);
+                }
+            );
+        
+        BattleEventManager.RegistEvent<PauseBattleEventArgs>(
+                (args) =>
+                {
+                    if (args.IsPaused)
+                    {
+                        gameObject.SetActive(false);
+                        lever.SetActive(false);
+                    }
+                    else
+                    {
+                        gameObject.SetActive(true);
+                    }
                 }
             );
 

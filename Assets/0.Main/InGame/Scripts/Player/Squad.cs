@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -35,26 +37,29 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
                 }
             }
         }
-        [field:SerializeField] public int MaxHealth { get; set; }
         
-        [field:SerializeField] public float AttackDamageFactor { get; set; }
-        [field:SerializeField] public float DecreaseAttackSpeed { get; set; } = 1;
-        [field:SerializeField] public float MoveSpeed { get; set; } = 1;
-        [field:SerializeField] public float CriticalChance { get; set; } = 0;
-        [field:SerializeField] public float CriticalDamage { get; set; } = 1.5f;
-        [field:SerializeField] public int BonusDamagePerHit { get; set; } = 0;
-        [field:SerializeField] public float TakeDamageFactor { get; set; } = 1;
-        [field:SerializeField] public float FinalDamageFactor { get; set; } = 1;
+        
+        [field:LabelText("용사단 체력"),SerializeField] public int MaxHealth { get; set; }
+        
+        [field:LabelText("용사단 추가 공격력 계수"),SerializeField] public float AttackDamageFactor { get; set; }
+        [field:LabelText("용사단 추가 공속 감소 계수"),SerializeField] public float DecreaseAttackSpeed { get; set; } = 1;
+        [field:LabelText("용사단 이동 속도"),SerializeField] public float MoveSpeed { get; set; } = 1;
+        [field:LabelText("치명타 확률"),SerializeField] public float CriticalChance { get; set; } = 0;
+        [field:LabelText("치명타 피해"),SerializeField] public float CriticalDamage { get; set; } = 1.5f;
+        [field:LabelText("추가 타격"),SerializeField] public int BonusDamagePerHit { get; set; } = 0;
+        [field:LabelText("용사단 받는 피해 증가"),SerializeField] public float TakeDamageFactor { get; set; } = 0;
+        [field:LabelText("최종 데미지 증가"),SerializeField] public float FinalDamageFactor { get; set; } = 1;
     }
 
     public SquadStats stats = new SquadStats();
     public Warrior warrior;
     public List<object> invincible = new List<object>();
-    public float hitInvincibleDuration = 1f;
-    public bool IsInvincible => invincible.Count > 0;
+    [LabelText("피격 무적 시간")] public float hitInvincibleDuration = 1f;
+    [LabelText("무적인가요?"),ShowInInspector] public bool IsInvincible => invincible.Count > 0;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         stats.CurrentHealth = stats.MaxHealth;
         BattleEventManager.RegistEvent<StartBattleEventArgs>(OnStartBattle);
     }
@@ -70,7 +75,10 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
         {
             return;
         }
-        stats.CurrentHealth -= eventArgs.Damage;
+        
+        int damage = eventArgs.Damage;
+        damage += Mathf.RoundToInt(damage * stats.TakeDamageFactor);
+        stats.CurrentHealth -= damage;
         BattleEventManager.CallEvent(new ReceiveDamageEventArgs(this, DamageType.Enemy, eventArgs.Damage));
         ApplyInvincibility("HitInvincible", hitInvincibleDuration); 
         SoundManager.Instance.PlayPlayerDamaged();
@@ -98,9 +106,50 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
         }
     }
 
+    [ShowInInspector] public bool IsDead { get; private set; } = false;
+    
+    private TaskCompletionSource<bool> m_ReviveTcs;
     private void Die()
     {
+        if (IsDead)
+        {
+            return;
+        }
+       
+        IsDead = true;
         BattleEventManager.CallEvent(new DeathEventArgs(this));
+    }
+
+    private Task<bool> WaitReviveChoice()
+    {
+        m_ReviveTcs = new TaskCompletionSource<bool>();
+        return m_ReviveTcs.Task;
+    }
+
+    public void Revive()
+    {
+        IsDead = false;
+        Instance.stats.CurrentHealth = stats.MaxHealth;
+    }
+
+    public void ChooseRevive()
+    {
+        if (m_ReviveTcs == null)
+        {
+            Debug.Log("[Squad] Revive Task Completion Source is null. Cannot set result.");
+            return;
+        }
+        m_ReviveTcs.TrySetResult(true);
+    }
+
+    public void ChooseGiveUp()
+    {
+        if (m_ReviveTcs == null)
+        {
+            Debug.Log("[Squad] Revive Task Completion Source is null. Cannot set result.");
+            return;
+        }
+        m_ReviveTcs.TrySetResult(false);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -108,6 +157,18 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
         if (warrior.IsCharging && BattleManager.TryGetMonsterBy(other, out Monster monster))
         {
             warrior.Impact(monster);
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            ChooseRevive();
+        }
+        else if (Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            ChooseGiveUp();
         }
     }
 }

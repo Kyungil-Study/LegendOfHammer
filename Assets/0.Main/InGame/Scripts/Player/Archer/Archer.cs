@@ -2,37 +2,53 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class ArcherDamageCalcArgs : BaseDamageCalcArgs
 {
-    public bool IsCritical { get; set; }
     public bool IsTarget { get; set; }
     public ArcherDamageCalcArgs() : this(false, false) { }
     public ArcherDamageCalcArgs(bool isCritical) : this(false, isCritical) { }
-    public ArcherDamageCalcArgs(bool isTarget, bool isCritical = false)
+    public ArcherDamageCalcArgs(bool isTarget, bool isCritical = false) : base(isCritical)
     {
-        IsCritical = isCritical;
         IsTarget = isTarget;
     }
 }
 public class Archer : Hero
 {
     [field:SerializeField] public float BonusAttackSpeed { get; set; }
-    protected override float AttackCooldown => 1 / (HeroAttackPerSec * (1 + BonusAttackSpeed));
-    
-    
+    protected override float AttackCooldown
+    {
+        get
+        {
+            if (IsFinalProjectile)
+            {
+                return 1 / (float)BonusAttackSpeed;
+            }
+            else
+            {
+                return 1 / (HeroAttackPerSec * (1 + BonusAttackSpeed));
+            }
+            
+        }
+    }
 
-    public float BonusAttackFactor = 1; // 추가 화살 공격력 계수
+    [SerializeField] private Wizard wizard; // 위자드 참조, 공격 속도 버프용
+
+    [Space(16),Header("공속 증강")]
+    [LabelText("공속 증강 공격력 계수")] public float BonusAttackFactor = 1; // 추가 화살 공격력 계수
     // 법사 공속 버프용 계수
-    public float mageAttackSpeedFactor = 0f; // 마법사 화살의 공격 속도 계수
+    [LabelText("마법사 공속 버프용 계수")] public float mageAttackSpeedFactor = 0f; // 마법사 화살의 공격 속도 계수
     
-    public float subProjectileAttackFactor = 0; // 서브 화살의 공격력 계수
-    public float targetAdditionalDamageFactor = 0; // 표적 대상 추가 피해 계수
+    [Space(16),Header("추가 투사체 증강")]
+    [LabelText("추가 투사체 증강 공격력 계수")] public float subProjectileAttackFactor = 0; // 서브 화살의 공격력 계수
     
-    public int pierceLimit = 0; // 관통횟수
+    [Space(16),Header("관통 증강")]
+    [LabelText("표적 적중 공격력 계수")] public float targetAdditionalDamageFactor = 0; // 표적 대상 추가 피해 계수
+    [LabelText("관통 추가 횟수")]public int pierceLimit = 0; // 관통횟수
     
     [Header("Projectile Settings")]
     
@@ -42,15 +58,15 @@ public class Archer : Hero
     [Space(10),Header("Final Projectile")]
     public Transform[] finalProjectileSpawnPoints; // 최종 화살 발사 위치들
     public ArcherArrow finalProjectilePrefab;
-    public bool IsFinalProjectile { get; set; } = false; // 최종 화살 여부
+    [ReadOnly, ShowInInspector] public bool IsFinalProjectile { get; set; } = false; // 최종 화살 여부
     
     [Header("Sub Projectile Settings")]
     [SerializeField] private ArcherArrow subProjectilePrefab; // 서브 화살 프리팹
-    public int subProjectileCount { get; set; } = 0; // 서브 화살 개수
+    [ReadOnly, ShowInInspector] public int subProjectileCount { get; set; } = 0; // 서브 화살 개수
     
-    public bool IsSubProjectile { get; set; } = false;
-    public bool IsFinalSubProjectile { get; set; } = false;
-    public bool IsFinalPenetration { get; set; } = false; // 관통 증강 최종 여부
+    [ReadOnly,ShowInInspector] public bool IsSubProjectile { get; set; } = false;
+    [ReadOnly,ShowInInspector] public bool IsFinalSubProjectile { get; set; } = false;
+    [ReadOnly,ShowInInspector] public bool IsFinalPenetration { get; set; } = false; // 관통 증강 최종 여부
     
 
     protected override void Awake()
@@ -62,6 +78,11 @@ public class Archer : Hero
     private void OnStartBattle(StartBattleEventArgs args)
     {
         AugmentInventory.Instance.ApplyAugmentsToArcher(this);
+        if(wizard != null)
+        {
+            // 마법사의 공격 속도 버프 적용
+            wizard.BonusAttackSpeed += mageAttackSpeedFactor;
+        }
     }
 
 

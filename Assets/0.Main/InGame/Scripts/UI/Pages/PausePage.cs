@@ -14,13 +14,10 @@ public class PausePage : UIPage
     [SerializeField] private AugmentInventorySlot[] wizardAugmentSlots;
     [SerializeField] private AugmentInventorySlot[] archerAugmentSlots;
     
-    private IPageFlowManageable owner;
-    
     public override UIPageType UIPageType => UIPageType.PausePage;
     
-    public override void Initialize(IPageFlowManageable owner)
+    protected override void Initialize(IPageFlowManageable owner)
     {
-        this.owner = owner;
         resumeButton.onClick.AddListener(()=>{owner.SwapPage(UIPageType.BattlePage);});
         quitButton.onClick.AddListener(OnQuitGame);
     }
@@ -33,7 +30,7 @@ public class PausePage : UIPage
     public override void Enter()
     {
         // PausePage에 진입할 때 필요한 초기화 작업을 수행합니다.
-        Time.timeScale = 0;
+        BattleEventManager.CallEvent(new PauseBattleEventArgs(true));
         
         var inventory = AugmentInventory.Instance;
         for (int i = 0;i < commonAugmentSlots.Length; i++)
@@ -41,7 +38,7 @@ public class PausePage : UIPage
             if (i < inventory.CommonAugments.Count)
             {
                 commonAugmentSlots[i].gameObject.SetActive(true);
-                commonAugmentSlots[i].Initialize(inventory.CommonAugments[i].GetData());
+                commonAugmentSlots[i].Initialize(inventory.CommonAugments[i]);
             }
             else
             {
@@ -54,7 +51,7 @@ public class PausePage : UIPage
             if (i < inventory.WarriorAugments.Count)
             {
                 warriorAugmentSlots[i].gameObject.SetActive(true);
-                warriorAugmentSlots[i].Initialize(inventory.WarriorAugments[i].GetData());
+                warriorAugmentSlots[i].Initialize(inventory.WarriorAugments[i]);
             }
             else
             {
@@ -67,7 +64,7 @@ public class PausePage : UIPage
             if (i < inventory.WizardAugments.Count)
             {
                 wizardAugmentSlots[i].gameObject.SetActive(true);
-                wizardAugmentSlots[i].Initialize(inventory.WizardAugments[i].GetData());
+                wizardAugmentSlots[i].Initialize(inventory.WizardAugments[i]);
             }
             else
             {
@@ -80,7 +77,7 @@ public class PausePage : UIPage
             if (i < inventory.ArcherAugments.Count)
             {
                 archerAugmentSlots[i].gameObject.SetActive(true);
-                archerAugmentSlots[i].Initialize(inventory.ArcherAugments[i].GetData());
+                archerAugmentSlots[i].Initialize(inventory.ArcherAugments[i]);
             }
             else
             {
@@ -94,7 +91,6 @@ public class PausePage : UIPage
 
     public override void Exit()
     {
-        // PausePage에서 나갈 때 필요한 정리 작업을 수행합니다.
-        Time.timeScale = 1;
+        BattleEventManager.CallEvent(new PauseBattleEventArgs(false));
     }
 }

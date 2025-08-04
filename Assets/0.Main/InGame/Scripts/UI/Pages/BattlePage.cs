@@ -25,12 +25,9 @@ public class BattlePage : UIPage
     private int maxScore = 0;
     
     public override UIPageType UIPageType => UIPageType.BattlePage;
-    private IPageFlowManageable owner;
     
-    public override void Initialize(IPageFlowManageable owner)
+    protected override void Initialize(IPageFlowManageable owner)
     {
-        this.owner = owner;
-        
         currentScoreText.text = "0";
         maxScoreText.text = "0";
         
@@ -45,7 +42,7 @@ public class BattlePage : UIPage
 
     private void OnPause()
     {
-        owner.SwapPage(UIPageType.PausePage);
+        Owner.SwapPage(UIPageType.PausePage);
     }
 
     private void OnChaseGuageChanged(float arg1, float arg2)
@@ -60,16 +57,16 @@ public class BattlePage : UIPage
         {
             if (args.IsBoosDead)
             {
-                owner.SwapPage(UIPageType.CommonAugmentSelection);
+                Owner.SwapPage(UIPageType.CommonAugmentSelection);
             }
             else
             {
-                owner.SwapPage(UIPageType.ClearPage);
+                Owner.SwapPage(UIPageType.ClearPage);
             }
         }
         else
         {
-            owner.SwapPage(UIPageType.GameOverPage);
+            Owner.SwapPage(UIPageType.GameOverPage);
         }
         
     }
