@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = System.Random;
@@ -35,6 +37,8 @@ public class MonsterScale : MonoBehaviour
     [SerializeField] private GameObject ShieldEffect;
     private SpriteRenderer shieldEffectRenderer;
     private SpriteRenderer bombEffectRenderer;
+    
+    [SerializeField,LabelText("펀치 효과")] PunchEffctor punchEffect;
     
     private SpriteRenderer  mSpriteRenderer;
     private BoxCollider2D   mCollider;
@@ -124,7 +128,8 @@ public class MonsterScale : MonoBehaviour
     {
         if ((eventArgs.Target as Monster)?.gameObject != gameObject) return;
         if (mIsSuicideMode) return;               
-        PlayHitFlash();                          
+        PlayHitFlash();       
+        punchEffect.PlayEffect();
     }
     
     private void PlayHitFlash()
@@ -209,7 +214,8 @@ public class MonsterScale : MonoBehaviour
         {
             EnemyRank.Elite  => 160,
             EnemyRank.Boss   => 240,
-            EnemyRank.Normal =>  72
+            EnemyRank.Normal =>  72,
+            _ => throw new ArgumentOutOfRangeException()
         };
         
         float originPixel = mSpriteRenderer.sprite.rect.width;

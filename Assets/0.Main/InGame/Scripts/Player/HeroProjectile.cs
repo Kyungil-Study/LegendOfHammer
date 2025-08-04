@@ -5,11 +5,11 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public abstract class HeroProjectile : MonoBehaviour
+public abstract class HeroProjectile<T> : MonoBehaviour where T : Hero
 {
     public Action OnHit { get; set; }
     
-    public Hero Owner { get; set; }
+    public T Owner { get; set; }
     private bool mb_IsFired = false;
     public bool IsCritical { get; set; } = false;
     public virtual int Damage => Owner.CalculateDamage(new BaseDamageCalcArgs(IsCritical));

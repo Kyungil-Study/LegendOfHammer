@@ -41,7 +41,7 @@ public class Meteor : MonoBehaviour , IBattleCharacter
                     fall.gameObject.SetActive(false);
                     explosion.gameObject.SetActive(true);
                 }
-            );
+            ).SetLink(gameObject);
         yield return tween.WaitForCompletion();
         
         // 폭발하는 동안 공격 콜라이더 활성화

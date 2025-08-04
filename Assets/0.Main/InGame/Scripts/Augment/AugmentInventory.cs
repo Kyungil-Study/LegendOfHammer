@@ -125,6 +125,26 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
         SaveData();
     }
     
+    public bool IsFullClassAugment()
+    {
+        foreach (var option in ClassAugmentManager.Instance.AugmentGroupByOption.Keys)
+        {
+            if (classAugments[AugmentType.Warrior].Any(a => a.OptionID == option && a.IsMaxLevel()) ||
+                classAugments[AugmentType.Archer].Any(a => a.OptionID == option && a.IsMaxLevel()) ||
+                classAugments[AugmentType.Wizard].Any(a => a.OptionID == option && a.IsMaxLevel()))
+            {
+                continue;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
+
+
+    }
+    
     public void UpdateAugumetToInventory(Augment augment)
     {
         switch (augment.GetAugmentType())
@@ -169,7 +189,6 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        SaveData();
     }
 
     private void OnSelectAugment(SelectAugmentEventArgs args)

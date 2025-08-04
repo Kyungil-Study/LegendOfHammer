@@ -21,7 +21,6 @@ public class FireballSpawner : MonoSingleton<FireballSpawner>
     
     [SerializeField] Fireball fireballPrefab;
     
-    [LabelText("이벤트 트리거 게이지 기준"), Range(0,1), SerializeField] private float fireballTriggerLimit = 0.2f;
 
     
     private IEnumerator SpawnFireballsCoroutine(int damage, IReadOnlyList<FireBallMapEvent.FireballSpawnJob> fireballSpawnJobs)
