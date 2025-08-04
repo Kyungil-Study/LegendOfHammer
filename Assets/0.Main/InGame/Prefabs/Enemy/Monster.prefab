@@ -255,9 +255,9 @@ MonoBehaviour:
     Modify: 0
     Value: 0
   hpScaler:
-    oneTo10Scale: 1.12
-    tenTo20Scale: 1.12
-    tewentyTo30Scale: 1.25
+    oneTo10Scale: 1.3
+    tenTo20Scale: 1.2
+    tewentyTo30Scale: 1.15
     NormalMonsterAdd: 200000
     EliteMonsterAdd: 500000
     BossMonsterAdd: 1000000
