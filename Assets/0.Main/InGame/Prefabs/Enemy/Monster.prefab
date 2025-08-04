@@ -426,7 +426,7 @@ MonoBehaviour:
     Value: 0
   hpScaler:
     oneTo10Scale: 1.3
-    tenTo20Scale: 1.2
+    tenTo20Scale: 1.17
     tewentyTo30Scale: 1.15
     NormalMonsterAdd: 200000
     EliteMonsterAdd: 500000
