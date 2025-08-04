@@ -11,15 +11,17 @@ public class BattleUIController : MonoSingleton<BattleUIController> ,IPageFlowMa
     
     Dictionary<UIPageType, UIPage> pagesDict = new Dictionary<UIPageType, UIPage>();
     UIPage currentPage;
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         foreach (var page in pages)
         {
-            page.Initialize(this);
+            page.Setup(this);
             page.gameObject.SetActive(false);
             
             pagesDict[page.UIPageType] = page;
         }
+        
         
         SwapPage(UIPageType.LobbyPage);
         
@@ -27,6 +29,7 @@ public class BattleUIController : MonoSingleton<BattleUIController> ,IPageFlowMa
 
     public void SwapPage(UIPageType nextPageType)
     {
+        Debug.Log($"SwapPage called with type: {nextPageType}");
         if (currentPage != null)
         {
             currentPage.Exit();

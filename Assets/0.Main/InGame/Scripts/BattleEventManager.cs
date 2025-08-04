@@ -111,7 +111,7 @@ public class BattleEventManager : MonoSingleton<BattleEventManager>
         }
         else
         {
-            Debug.LogWarning($"[BattleEventManager] No listeners registered for {eventType.Name}");
+            //Debug.LogWarning($"[BattleEventManager] No listeners registered for {eventType.Name}");
         }
     }
 }

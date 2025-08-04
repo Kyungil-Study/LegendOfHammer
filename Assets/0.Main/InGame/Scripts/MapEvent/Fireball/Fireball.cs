@@ -36,7 +36,7 @@ public class Fireball : MonoBehaviour , IBattleCharacter
         yield return new WaitForSeconds(attackDelay);
         attackArea.gameObject.SetActive(false);
         attackCollider.enabled = true; // 공격 범위 콜라이더 활성화
-        moveTween = transform.DOMove(destination, moveDuration);
+        moveTween = transform.DOMove(destination, moveDuration).SetLink(gameObject);
         yield return moveTween.WaitForCompletion();
         Explode();
     }
@@ -59,7 +59,7 @@ public class Fireball : MonoBehaviour , IBattleCharacter
 
     private void Explode()
     {
-        if (moveTween != null)
+        if (moveTween != null && moveTween.IsActive())
         {
             moveTween.Kill();
         }

@@ -9,17 +9,19 @@ public enum FireballPointType
 {
     Upper,
     Left,
+    Right, // 현재 사용하지 않지만, 추후 확장성을 위해 남겨둠
+    Bottom // 현재 사용하지 않지만, 추후 확장성을 위해 남겨둠
 }
 public class FireballSpawner : MonoSingleton<FireballSpawner>
 {
     [SerializeField] Transform upperSpawnPoint;
     [SerializeField] Transform leftSpawnPoint;
-
+    [SerializeField] Transform rightSpawnPoint; // 현재 사용하지 않지만, 추후 확장성을 위해 남겨둠
+    [SerializeField] Transform bottomSpawnPoint; // 현재 사용하지 않지만, 추후 확장성을 위해 남겨둠
+    
     [SerializeField] Fireball fireballPrefab;
     
-    [LabelText("이벤트 트리거 게이지 기준"), Range(0,1), SerializeField] private float fireballTriggerLimit = 0.2f;
 
-    [LabelText("이벤트 주기"), Range(0,1), SerializeField] private float fireballEventInterval = 0.5f;
     
     private IEnumerator SpawnFireballsCoroutine(int damage, IReadOnlyList<FireBallMapEvent.FireballSpawnJob> fireballSpawnJobs)
     {
@@ -41,6 +43,10 @@ public class FireballSpawner : MonoSingleton<FireballSpawner>
                 return upperSpawnPoint.rotation; // 2D 상단은 회전 없음
             case FireballPointType.Left:
                 return leftSpawnPoint.rotation; // 2D 왼쪽은 90도 회전
+            case FireballPointType.Right:
+                return rightSpawnPoint.rotation; // 2D 오른쪽은 90도 회전
+            case FireballPointType.Bottom:
+                return bottomSpawnPoint.rotation; // 2D 하단은 회전 없음
             default:
                 throw new ArgumentOutOfRangeException(nameof(fireballPointType), fireballPointType, null);
             
@@ -68,6 +74,22 @@ public class FireballSpawner : MonoSingleton<FireballSpawner>
                     throw new NullReferenceException("Left spawn point is not assigned.");
                 }
                 return new Vector3(leftSpawnPoint.position.x , targetPosition.y, 0); // 2d
+            }
+            case FireballPointType.Right:
+            {
+                if (rightSpawnPoint == null)
+                {
+                    throw new NullReferenceException("Right spawn point is not assigned.");
+                }
+                return new Vector3(rightSpawnPoint.position.x , targetPosition.y, 0); // 2d
+            }
+            case FireballPointType.Bottom:
+            {
+                if (bottomSpawnPoint == null)
+                {
+                    throw new NullReferenceException("Bottom spawn point is not assigned.");
+                }
+                return new Vector3(targetPosition.x , bottomSpawnPoint.position.y, 0); // 2d
             }
             default:
                 throw new ArgumentOutOfRangeException(nameof(fireballPointType), fireballPointType, null);
