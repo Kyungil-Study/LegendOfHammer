@@ -73,6 +73,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
     private MonsterScale scale;
     
     public MonsterStat Stat => stat;
+    public MonsterScale Scale => scale;
 
     void Awake()
     {
@@ -113,8 +114,6 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
     void Update()
     {
-        // ApplyDoT(Time.deltaTime);
-        // stat?.Tick(Time.deltaTime);
         move?.Tick(Time.deltaTime);
         attack?.Tick(Time.deltaTime);
     }
@@ -214,7 +213,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
         
         if (attack is SuicideAttack suicideAttack && suicideCfg != null)
         {
-            Gizmos.color = Color.red;
+            Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(transform.position, suicideCfg.attackRange);
         }
 
