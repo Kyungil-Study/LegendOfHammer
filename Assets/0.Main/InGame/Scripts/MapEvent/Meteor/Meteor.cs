@@ -48,7 +48,7 @@ public class Meteor : MonoBehaviour , IBattleCharacter
         
         // 폭발하는 동안 공격 콜라이더 활성화
         attackCollider.enabled = true;
-        yield return new WaitForSeconds(fallDuration);
+        yield return new WaitForSeconds(attackDuration);
         attackCollider.enabled = false;
         
         yield return new WaitUntil(() =>
