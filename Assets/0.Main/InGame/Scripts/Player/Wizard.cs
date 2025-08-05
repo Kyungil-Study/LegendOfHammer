@@ -100,6 +100,7 @@ public class Wizard : Hero
                                 Mathf.RoundToInt((((HeroAttackDamage * AdditionalExplosion_Ratio)) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor)// 기본 공격력 기반 피해
             );
             BattleEventManager.CallEvent(eventArgs);
+
             enemy.Stat.AddModifier(new DamageAmpModifier(DebuffRate, DebuffDuration)); // 디버프 재적용
         }
 
