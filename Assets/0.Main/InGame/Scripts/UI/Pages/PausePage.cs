@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using Sirenix.Utilities;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class PausePage : UIPage
 {
     [SerializeField] private Button resumeButton;
     [SerializeField] private Button quitButton;
+    [SerializeField] private AugumentDisplayPanel augmentDisplyPanel;
     
     [SerializeField] private AugmentInventorySlot[] commonAugmentSlots;
     [SerializeField] private AugmentInventorySlot[] warriorAugmentSlots;
@@ -38,7 +40,7 @@ public class PausePage : UIPage
             if (i < inventory.CommonAugments.Count)
             {
                 commonAugmentSlots[i].gameObject.SetActive(true);
-                commonAugmentSlots[i].Initialize(inventory.CommonAugments[i]);
+                commonAugmentSlots[i].Initialize(inventory.CommonAugments[i], augmentDisplyPanel);
             }
             else
             {
@@ -51,7 +53,7 @@ public class PausePage : UIPage
             if (i < inventory.WarriorAugments.Count)
             {
                 warriorAugmentSlots[i].gameObject.SetActive(true);
-                warriorAugmentSlots[i].Initialize(inventory.WarriorAugments[i]);
+                warriorAugmentSlots[i].Initialize(inventory.WarriorAugments[i], augmentDisplyPanel);
             }
             else
             {
@@ -64,7 +66,7 @@ public class PausePage : UIPage
             if (i < inventory.WizardAugments.Count)
             {
                 wizardAugmentSlots[i].gameObject.SetActive(true);
-                wizardAugmentSlots[i].Initialize(inventory.WizardAugments[i]);
+                wizardAugmentSlots[i].Initialize(inventory.WizardAugments[i], augmentDisplyPanel);
             }
             else
             {
@@ -77,7 +79,7 @@ public class PausePage : UIPage
             if (i < inventory.ArcherAugments.Count)
             {
                 archerAugmentSlots[i].gameObject.SetActive(true);
-                archerAugmentSlots[i].Initialize(inventory.ArcherAugments[i]);
+                archerAugmentSlots[i].Initialize(inventory.ArcherAugments[i], augmentDisplyPanel);
             }
             else
             {
