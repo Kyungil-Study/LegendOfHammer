@@ -77,7 +77,7 @@ public class ClassAugmentGotchaSystem : UIPage
             Debug.Log("Reroll class augment not selected yet. Please select a class first.");
             return;
         }
-        
+        IsRerollClassSelected = false; // Reset selection after reroll
         Debug.Log("Reroll class augment.");
         var options = ClassAugmentManager.Instance.GetOptionsByClass(rerollAugmentType);
         GotchaClassAugment(options);
