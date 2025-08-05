@@ -477,6 +477,8 @@ MonoBehaviour:
   wizardSlot: {fileID: 3666956212681690668}
   archerSlot: {fileID: 7598042925680622988}
   classRerollAugmentButton: {fileID: 3984330103360881737}
+  classRerollEnterButton: {fileID: 0}
+  cinematicPanel: {fileID: 0}
 --- !u!1 &6345171595758156028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1624,9 +1626,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3862472667950010822, guid: ed8e09f894c1eef4d9ff2b1201b4c374, type: 3}
+      propertyPath: m_Color.a
+      value: 0.48235294
+      objectReference: {fileID: 0}
     - target: {fileID: 4050002528925426413, guid: ed8e09f894c1eef4d9ff2b1201b4c374, type: 3}
       propertyPath: m_Name
       value: SetCharacterSelect
+      objectReference: {fileID: 0}
+    - target: {fileID: 6258389140664658367, guid: ed8e09f894c1eef4d9ff2b1201b4c374, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1639,7 +1649,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 8639456984924678138}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 

@@ -73,8 +73,8 @@ public class ClassAugmentManager : MonoSingleton<ClassAugmentManager>
         var archerTsvList = TSVLoader.LoadTable<ArcherAugmentTSV>(archerAugmentPath);
         archerAugments = archerTsvList.ToDictionary(a => a.ID, ArcherAugmentFactory.CreateAugment);
         
-        var warriorTsvList = TSVLoader.LoadTable<WarriorAugmentTSV>(warriorAugmentPath);
-        warriorAugments = warriorTsvList.ToDictionary(a => a.ID, WarriorAugmentFactory.CreateAugment);
+        //var warriorTsvList = TSVLoader.LoadTable<WarriorAugmentTSV>(warriorAugmentPath);
+        //warriorAugments = warriorTsvList.ToDictionary(a => a.ID, WarriorAugmentFactory.CreateAugment);
         
         var wizardTsvList = TSVLoader.LoadTable<WizardAugmentTSV>(wizardAugmentPath);
         wizardAugments = wizardTsvList.ToDictionary(a => a.ID, WizardAugmentFactory.CreateAugment);
