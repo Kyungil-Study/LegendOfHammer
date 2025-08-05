@@ -104,6 +104,7 @@ public class FireballSpawner : MonoSingleton<FireballSpawner>
         StartCoroutine(SpawnFireballsCoroutine(damage, fireballSpawnJobs));
     }
     
+#if UNITY_EDITOR
     [PropertySpace(20),Title("Test Settings")]
     [SerializeField] private FireBallMapEvent TestFireBallMapEvent;
     [Button] public void TestSpawn()
@@ -116,4 +117,5 @@ public class FireballSpawner : MonoSingleton<FireballSpawner>
         {
         }
     }
+#endif
 }
