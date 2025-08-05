@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -21,9 +22,12 @@ public class MeteorSpawner : MonoSingleton<MeteorSpawner>
         Gizmos.DrawWireSphere(transform.position, spawnRadius);
     }
 
+       
     public void ExecuteMapEvent(int damage, int spawnCount)
     {
-        BattlePopupSystem.Instance.MeteorAlarm.ExecuteAlarm();
+        if(BattlePopupSystem.Instance != null)
+            BattlePopupSystem.Instance.MeteorAlarm.ExecuteAlarm();
+        
         for (int i = 0; i < spawnCount; i++)
         {
             var randCircle = Random.insideUnitCircle * spawnRadius;
@@ -34,4 +38,17 @@ public class MeteorSpawner : MonoSingleton<MeteorSpawner>
         }
        
     }
+    
+#if UNITY_EDITOR
+    [PropertySpace(20),Title("Test Settings")]
+    [SerializeField] int testSpawnCount = 5;
+    [Button]
+    public void TestSpawn()
+    {
+        if (EditorApplication.isPlaying == false)
+            return;
+        
+        ExecuteMapEvent(0, testSpawnCount);
+    }
+#endif
 }

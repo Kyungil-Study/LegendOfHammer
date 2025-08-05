@@ -96,30 +96,11 @@ public class Wizard : Hero
         foreach (var enemy in enemies)
         {
             var eventArgs = new TakeDamageEventArgs(
-                                Squad.Instance, enemy, crit ? DamageType.Critical : DamageType.Wizard,
+                                Squad.Instance, enemy, DamageType.Explode,
                                 Mathf.RoundToInt((((HeroAttackDamage * AdditionalExplosion_Ratio)) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor)// 기본 공격력 기반 피해
             );
             BattleEventManager.CallEvent(eventArgs);
 
-            if (enemy.Stat.HasModifier<DamageAmpModifier>() == false)
-            {
-                // 💥 Show damage text in orange
-                DamageUIManager.Instance.ShowDamage(
-                    Mathf.RoundToInt((((HeroAttackDamage * AdditionalExplosion_Ratio)) + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor),
-                    new Color(1f, 0.5f, 0f), // 주황색
-                    enemy.transform.position
-                );
-            }
-            else
-            {
-                // 💥 Show damage text in orange
-                DamageUIManager.Instance.ShowDamage(
-                    Mathf.RoundToInt((HeroAttackDamage * AdditionalExplosion_Ratio + squadStats.BonusDamagePerHit) * squadStats.FinalDamageFactor * DebuffRate),
-                    new Color(1f, 0.5f, 0f), // 주황색
-                    enemy.transform.position
-                );
-            }
-            
             enemy.Stat.AddModifier(new DamageAmpModifier(DebuffRate, DebuffDuration)); // 디버프 재적용
         }
 
