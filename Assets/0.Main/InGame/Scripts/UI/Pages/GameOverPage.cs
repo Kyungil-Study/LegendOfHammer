@@ -28,9 +28,7 @@ public class GameOverPage : UIPage
 
     public override void Enter()
     {
-        gameOverReviveButton.gameObject.SetActive(Squad.Instance.IsDead);
         gameObject.SetActive(true);
-        
         BattleEventManager.CallEvent(new PauseBattleEventArgs(true));
     }
 

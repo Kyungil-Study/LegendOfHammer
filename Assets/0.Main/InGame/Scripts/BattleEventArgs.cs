@@ -7,6 +7,13 @@ public class BattleEventArgs : System.EventArgs
     
 }
 
+public class ReviveEventArgs : BattleEventArgs
+{
+    public ReviveEventArgs()
+    {
+    }
+}
+
 public class SelectAugmentEventArgs : BattleEventArgs
 { 
     public Augment Data { get; private set; }

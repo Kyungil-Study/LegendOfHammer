@@ -198,6 +198,7 @@ public class BattleManager : MonoSingleton<BattleManager>
     public void Revive()
     {
         isEnded = false;
-        Squad.Instance.Revive();
+        chaseGuage.ResetToMin();
+        BattleEventManager.CallEvent<ReviveEventArgs>(new ReviveEventArgs());
     }
 }
