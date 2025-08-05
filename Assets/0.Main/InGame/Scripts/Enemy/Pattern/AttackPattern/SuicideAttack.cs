@@ -20,16 +20,16 @@ public class SuicideAttack : CoroutineAttackBase
 
     IEnumerator SuicideRoutine()
     {
-        var scale = mMonster.GetComponent<MonsterScale>();
-
-        scale?.EnterSuicideMode();
-        scale?.StartSuicideFlash(mConfig.delay, mConfig.exlposionInverval);
+        var scaledRange = mConfig.attackRange * mMonster.Scale.GetRelativeScale();
+        
+        mMonster.Scale?.EnterSuicideMode(mConfig.warningImage, scaledRange);
+        mMonster.Scale?.StartSuicideFlash(mConfig.delay, mConfig.exlposionInverval);
 
         yield return new WaitForSeconds(mConfig.delay);
 
         var obj = Object.Instantiate(mConfig.explosionPrefab, mMonster.transform.position, Quaternion.identity);
         var explosion = obj.GetComponent<EnemyExplosion>();
-        explosion.Initialize(mMonster, mMonster.Stat.FinalStat.Atk, mConfig.attackRange, mMonster.PlayerLayerMask);
+        explosion.Initialize(mMonster, mMonster.Stat.FinalStat.Atk, scaledRange, mMonster.PlayerLayerMask);
         
         Object.Destroy(mMonster.gameObject);
     }

@@ -62,6 +62,7 @@ Material:
     m_Ints: []
     m_Floats:
     - PixelSnap: 0
+    - _AlphaFactor: 0.75
     - _BlendOp: 0
     - _BumpScale: 1
     - _CameraFadingEnabled: 0
