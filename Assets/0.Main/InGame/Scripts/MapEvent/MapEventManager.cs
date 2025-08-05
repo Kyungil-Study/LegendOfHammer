@@ -39,9 +39,11 @@ public class MapEventManager : MonoBehaviour
 
     private void OnChaseGuageValueChanged(float arg1, float arg2)
     {
-        var ratio = arg1 / arg2;
+        var max = BattleManager.Instance.ChaseGuage.Max;
+        var ratio = arg2 / max;
         if (mapEventTriggers.Count > 0)
         {
+            Debug.Log($" Chase Gauge Ratio: {arg2}/{max} {ratio}, Trigger Time: {mapEventTriggers[0].TriggerTime}");
             if (ratio >= mapEventTriggers[0].TriggerTime)
             {
                 // 추적 게이지가 시작 맵 이벤트 값 이상일 때
