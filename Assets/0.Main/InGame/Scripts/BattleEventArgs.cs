@@ -68,7 +68,8 @@ public enum DamageType
     Wizard,
     Critical,
     Shield,
-    DoT
+    DoT,
+    Explode,
 }
 
 public class TakeDamageEventArgs : BattleEventArgs

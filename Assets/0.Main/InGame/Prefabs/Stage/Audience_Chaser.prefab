@@ -117,7 +117,7 @@ GameObject:
   - component: {fileID: 7838968057148336630}
   - component: {fileID: 1187494819796112319}
   m_Layer: 0
-  m_Name: Audience
+  m_Name: Audience_Chaser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

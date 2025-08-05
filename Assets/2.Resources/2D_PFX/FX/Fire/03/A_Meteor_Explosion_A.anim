@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: 03_fire
+  m_Name: A_Meteor_Explosion_A
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -58,6 +58,10 @@ AnimationClip:
       value: {fileID: -5745848161470795188, guid: b5b55fbfae67048a5908a5ae73b6cdc2, type: 3}
     - time: 1.4233335
       value: {fileID: -5745848161470795188, guid: b5b55fbfae67048a5908a5ae73b6cdc2, type: 3}
+    - time: 1.4666667
+      value: {fileID: 1362507079, guid: b5b55fbfae67048a5908a5ae73b6cdc2, type: 3}
+    - time: 1.5
+      value: {fileID: 822006380, guid: b5b55fbfae67048a5908a5ae73b6cdc2, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -99,12 +103,14 @@ AnimationClip:
     - {fileID: -683702622829951546, guid: b5b55fbfae67048a5908a5ae73b6cdc2, type: 3}
     - {fileID: -5745848161470795188, guid: b5b55fbfae67048a5908a5ae73b6cdc2, type: 3}
     - {fileID: -5745848161470795188, guid: b5b55fbfae67048a5908a5ae73b6cdc2, type: 3}
+    - {fileID: 1362507079, guid: b5b55fbfae67048a5908a5ae73b6cdc2, type: 3}
+    - {fileID: 822006380, guid: b5b55fbfae67048a5908a5ae73b6cdc2, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1.4400002
+    m_StopTime: 1.5166667
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0

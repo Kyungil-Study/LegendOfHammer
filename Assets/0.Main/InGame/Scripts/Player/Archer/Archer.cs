@@ -206,7 +206,7 @@ public class Archer : Hero
     
     public int CalculateSubProjectileDamage(BaseDamageCalcArgs args)
     {
-        var finalDamage = Mathf.RoundToInt(CalculateDamage(args) * subProjectileAttackFactor);
+        var finalDamage = Mathf.RoundToInt((HeroAttackDamage * squadStats.FinalDamageFactor * subProjectileAttackFactor));
         Debug.Log($"[Archer] SubProjectile Damage: {finalDamage}");
         return finalDamage;
     }
