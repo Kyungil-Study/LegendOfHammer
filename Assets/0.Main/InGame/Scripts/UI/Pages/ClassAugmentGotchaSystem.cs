@@ -17,6 +17,7 @@ public class ClassAugmentGotchaSystem : UIPage
     
     [Space(10), Header("Reroll Button")]
     [SerializeField] private Button classRerollAugmentButton;
+    [SerializeField] private Button classRerollEnterButton;
     
     [SerializeField] PageCinematic cinematicPanel;
     
@@ -37,18 +38,21 @@ public class ClassAugmentGotchaSystem : UIPage
         warriorSlot.onClick.AddListener(() => {
             Debug.Log("Warrior slot selected.");
             IsRerollClassSelected = true;
+            classRerollEnterButton.interactable = true;
             rerollAugmentType = AugmentType.Warrior;
             // Handle warrior slot selection logic here
         });
         wizardSlot.onClick.AddListener(() => {
             Debug.Log("Wizard slot selected.");
             IsRerollClassSelected = true;
+            classRerollEnterButton.interactable = true;
             rerollAugmentType = AugmentType.Wizard;
             // Handle wizard slot selection logic here
         });
         archerSlot.onClick.AddListener(() => {
             Debug.Log("Archer slot selected.");
             IsRerollClassSelected = true;
+            classRerollEnterButton.interactable = true;
             rerollAugmentType = AugmentType.Archer;
             // Handle archer slot selection logic here
         });
@@ -184,6 +188,7 @@ public class ClassAugmentGotchaSystem : UIPage
     private void OnEnable()
     {
         Time.timeScale = 0;
+        classRerollEnterButton.interactable = false;
     }
     
     private void OnDisable()
