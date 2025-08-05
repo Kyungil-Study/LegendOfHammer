@@ -2328,6 +2328,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: ExplodeColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: ExplodeColor.g
+      value: 0.49019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 7355447966446692511, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
+      propertyPath: ExplodeColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7531126659306295738, guid: 8b0313cf7c7c9e34fabd658aa713ddf3, type: 3}
       propertyPath: m_Name
       value: DamageUiCanvas
