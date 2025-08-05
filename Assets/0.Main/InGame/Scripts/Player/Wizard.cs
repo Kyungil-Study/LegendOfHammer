@@ -119,6 +119,7 @@ public class Wizard : Hero
                     enemy.transform.position
                 );
             }
+            
             enemy.Stat.AddModifier(new DamageAmpModifier(DebuffRate, DebuffDuration)); // 디버프 재적용
         }
 
