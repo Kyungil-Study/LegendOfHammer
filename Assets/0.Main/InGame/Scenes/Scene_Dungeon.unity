@@ -823,8 +823,7 @@ PrefabInstance:
       value: -135
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 6529254433043967814, guid: 96e35bc987d8f96469f79f67ad3c13fb, type: 3}
+    m_RemovedGameObjects: [{fileID: 6529254433043967814, guid: 96e35bc987d8f96469f79f67ad3c13fb, type: 3}]
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 6654038260134909058, guid: 96e35bc987d8f96469f79f67ad3c13fb, type: 3}
       insertIndex: -1
@@ -2433,6 +2432,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5427063375397176144, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.8
+      objectReference: {fileID: 0}
     - target: {fileID: 6134312133047931347, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: wizard
       value: 
@@ -2448,6 +2451,10 @@ PrefabInstance:
     - target: {fileID: 7587548992418412902, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8070707938485047432, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.75
       objectReference: {fileID: 0}
     - target: {fileID: 8187177615337158848, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
       propertyPath: attackPerSec
@@ -2725,6 +2732,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3497773961361313080, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
+      propertyPath: m_NormalizedViewPortRect.width
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3497773961361313080, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
       value: 0.9988118
