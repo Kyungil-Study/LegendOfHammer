@@ -295,6 +295,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 10
   fallDuration: 2
+  explosionClip: {fileID: 0}
   explosion: {fileID: 9108712168569461232}
   fall: {fileID: 6139928181935728930}
   startPoint: {fileID: 6807004976145823811}
@@ -542,7 +543,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -967946601
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 4176396959002274154, guid: b5b55fbfae67048a5908a5ae73b6cdc2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -565,7 +566,7 @@ Animator:
   m_GameObject: {fileID: 9108712168569461232}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 931509f4820234c23b94d30584782553, type: 2}
+  m_Controller: {fileID: 22100000, guid: 7a2a8f88ac5393a4d9ade53128cd0d3e, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -22,6 +23,7 @@ public class FireBallMapEvent : MapEventPatternSAO
         }
     }
     [SerializeField] List<FireballSpawnJob> fireballSpawnJobs = new List<FireballSpawnJob>(); 
+    public IReadOnlyList<FireballSpawnJob> FireballSpawnJobs => fireballSpawnJobs;
     
     public override void ExecuteEvent()
     {
