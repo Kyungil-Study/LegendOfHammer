@@ -227,7 +227,7 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
         var es3Manager = ES3Manager.Instance;
         var es3UserAugmentData = es3Manager.AugmentData;
         RegistUserData(es3UserAugmentData.ArcherAugment, classAugments[AugmentType.Archer]);
-        RegistUserData(es3UserAugmentData.WarriorAugment, classAugments[AugmentType.Warrior]);
+        //RegistUserData(es3UserAugmentData.WarriorAugment, classAugments[AugmentType.Warrior]);
         RegistUserData(es3UserAugmentData.WizardAugment, classAugments[AugmentType.Wizard]);
         RegistUserData(es3UserAugmentData.CommonAugment, commonAugments);
     }
@@ -239,7 +239,7 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
         var es3Manager = ES3Manager.Instance;
         var backendAugmentData = es3Manager.AugmentData;
         backendAugmentData.ArcherAugment = JsonWriter.Write(classAugments[AugmentType.Archer]);
-        backendAugmentData.WarriorAugment = JsonWriter.Write(classAugments[AugmentType.Warrior]);
+        //backendAugmentData.WarriorAugment = JsonWriter.Write(classAugments[AugmentType.Warrior]);
         backendAugmentData.WizardAugment = JsonWriter.Write(classAugments[AugmentType.Wizard]);
         backendAugmentData.CommonAugment = JsonWriter.Write(commonAugments);
         es3Manager.SaveAumgents();
