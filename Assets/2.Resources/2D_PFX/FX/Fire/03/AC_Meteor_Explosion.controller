@@ -20,7 +20,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: a5edc96058c704f13831297323df4007, type: 2}
+  m_Motion: {fileID: 7400000, guid: 60a7d850f501f73488ebd8e921846327, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -112,7 +112,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: 03
+  m_Name: AC_Meteor_Explosion
   serializedVersion: 5
   m_AnimatorParameters: []
   m_AnimatorLayers:

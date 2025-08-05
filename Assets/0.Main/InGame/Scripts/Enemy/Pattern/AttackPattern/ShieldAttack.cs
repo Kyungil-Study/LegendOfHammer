@@ -6,7 +6,21 @@ public class ShieldAttack : CoroutineAttackBase
 {
     readonly ShieldConfig mConfig;
 
-    public ShieldAttack(ShieldConfig cfg) { mConfig = cfg; }
+    public ShieldAttack(ShieldConfig cfg)
+    {
+        mConfig = cfg;
+    }
+
+    public override void Start()
+    {
+        mMonster.StartCoroutine(InitShieldNextFrame());
+    }
+
+    private IEnumerator InitShieldNextFrame()
+    {
+        yield return null;                                
+        mMonster.Scale.SetEnemyShield(true, mConfig.shieldSprite);
+    }
 
     public override void Tick(float time)
     {
