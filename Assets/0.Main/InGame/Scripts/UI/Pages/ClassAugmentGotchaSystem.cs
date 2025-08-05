@@ -78,6 +78,7 @@ public class ClassAugmentGotchaSystem : UIPage
             return;
         }
         IsRerollClassSelected = false; // Reset selection after reroll
+        classRerollEnterButton.interactable = false;
         Debug.Log("Reroll class augment.");
         var options = ClassAugmentManager.Instance.GetOptionsByClass(rerollAugmentType);
         GotchaClassAugment(options);
