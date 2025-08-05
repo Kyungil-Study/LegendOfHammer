@@ -9,6 +9,8 @@ public abstract class Hero : MonoBehaviour
 {
     [SerializeField] protected Squad squad;
     [ShowInInspector] protected Squad.SquadStats squadStats => squad.stats;
+    
+    public Squad.SquadStats SquadStats => squadStats;
 
     
     [LabelText("기본 공격력"), SerializeField] private int baseAttackDamage;
