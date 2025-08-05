@@ -38,7 +38,8 @@ public class MeteorSpawner : MonoSingleton<MeteorSpawner>
         }
        
     }
-
+    
+#if UNITY_EDITOR
     [PropertySpace(20),Title("Test Settings")]
     [SerializeField] int testSpawnCount = 5;
     [Button]
@@ -49,4 +50,5 @@ public class MeteorSpawner : MonoSingleton<MeteorSpawner>
         
         ExecuteMapEvent(0, testSpawnCount);
     }
+#endif
 }
