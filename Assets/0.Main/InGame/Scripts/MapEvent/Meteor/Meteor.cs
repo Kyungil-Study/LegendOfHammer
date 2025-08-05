@@ -9,7 +9,9 @@ public class Meteor : MonoBehaviour , IBattleCharacter
 {
     [SerializeField] private int damage = 10;
     [SerializeField] private float fallDuration = 2f;
+    [SerializeField] private float attackDuration = 1f; // 공격 지속 시간
     
+    [SerializeField] private AnimationClip explosionClip;
     [SerializeField] private GameObject explosion;
     [SerializeField] private GameObject fall;
     
@@ -46,16 +48,19 @@ public class Meteor : MonoBehaviour , IBattleCharacter
         
         // 폭발하는 동안 공격 콜라이더 활성화
         attackCollider.enabled = true;
+        yield return new WaitForSeconds(attackDuration);
+        attackCollider.enabled = false;
+        
         yield return new WaitUntil(() =>
         {
             return explosionAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f;
         });
-        attackCollider.enabled = false;
         
         Debug.Log($"Meteor Attack Finished {endPoint.position}");
         Destroy(gameObject);
         
     }
+    
     
     public void TakeDamage(TakeDamageEventArgs eventArgs)
     {
