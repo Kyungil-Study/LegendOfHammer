@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +12,7 @@ public class CommonAugmentGotchaSystem : UIPage
     [SerializeField] private Button commonRerollAugmentButton;
     
     [SerializeField] PageCinematic cinematicPanel;
-    private AugmentRarity minRarity = AugmentRarity.None;
+    private AugmentRarity curRarity = AugmentRarity.None;
 
     public override UIPageType UIPageType => UIPageType.CommonAugmentSelection;
 
@@ -42,10 +43,10 @@ public class CommonAugmentGotchaSystem : UIPage
             BattleManager.Instance.StartGame();
         }
     }
-    
-    private void GotchaCommonAugment()
+
+    private AugmentRarity GotchaRarity()
     {
-        Debug.Log("Gotcha common augment.");
+        Debug.Log("Gotcha common augment rarity.");
         List<ProbabilityRecord<AugmentRarity>> rarityRecords = new List<ProbabilityRecord<AugmentRarity>>();
         // Initialize augment slots
         // 등급 가챠
@@ -54,7 +55,7 @@ public class CommonAugmentGotchaSystem : UIPage
         foreach (var item in probability)
         {
             //Debug.Log($"Rarity: {item.Rarity}, Probability: {item.Probability}");
-            if (item.Rarity < minRarity)
+            if (item.Rarity < curRarity)
             {
                 //Debug.Log($"Skipping rarity {item.Rarity} as it is lower than the minimum rarity {minRarity}");
                 continue; // Skip if the rarity is lower than the minimum rarity
@@ -79,15 +80,19 @@ public class CommonAugmentGotchaSystem : UIPage
         if (rarityRecord.ID == AugmentRarity.None)
         {
             Debug.LogError($"No valid rarity found. Please check the rarity records. {rarityRecord.ID}");
-            return;
+            return AugmentRarity.None;
         }
-        minRarity = rarityRecord.ID;
-        //Debug.Log($"Selected rarity {rarityIndex}: {rarityRecord.ID} with probability range {rarityRecord.minProbability} - {rarityRecord.maxProbability}");
+        curRarity = rarityRecord.ID;
 
-        
+        return rarityRecord.ID;
+        //Debug.Log($"Selected rarity {rarityIndex}: {rarityRecord.ID} with probability range {rarityRecord.minProbability} - {rarityRecord.maxProbability}");
+    }
+
+    private bool TryGotchaOption(out int totalProbability,out List<ProbabilityRecord<int>> commonOptionRecords)
+    {
         // 옵션 가챠
         var commonProbability = AugmentProbability.Instance.commonOptionRecords.Values.ToList();
-        List<ProbabilityRecord<int>> commonOptionRecords = new List<ProbabilityRecord<int>>();
+        commonOptionRecords = new List<ProbabilityRecord<int>>();
         totalProbability = 0;
         
         foreach (var item in commonProbability)
@@ -109,28 +114,59 @@ public class CommonAugmentGotchaSystem : UIPage
         commonOptionRecords.Remove(optionRecord);
         Debug.Log($"Selected option {optionIndex}: {optionRecord.ID} with probability range {optionRecord.minProbability} - {optionRecord.maxProbability}");
         
-        do // 중복 예방 처리
+        if(commonOptionRecords.Count == 0)
         {
-            optionIndex = Random.Range(0, totalProbability);
-        } while ((commonOptionRecords.Exists(r => r.IsInRange(optionIndex)) == false));
+            Debug.Log("No valid class augments available. Please check the augment records.");
+            return false; // No valid augments to select
+        }
+
+        return true;
+    }
+    
+    private void GotchaCommonAugment()
+    {
+        Debug.Log("Gotcha common augment.");
         
-        var optionRecord2 = commonOptionRecords.FirstOrDefault( r => r.IsInRange(optionIndex));
-        Debug.Log($"Selected option2 {optionIndex} : {optionRecord2.ID} with probability range {optionRecord2.minProbability} - {optionRecord2.maxProbability}");
+        GotchaRarity();
         
-        var slot1 = CommonAugmentManager.Instance.GetAugmentFiltered(rarityRecord.ID, optionRecord.ID);
-        if (slot1 == null)
+        if(TryGotchaOption(out int totalProbability, out List<ProbabilityRecord<int>> commonOptionRecords) == false)
         {
-            Debug.LogError($"Failed to get augment for rarity {rarityRecord.ID} and option {optionRecord.ID}");
+            Debug.LogError("Failed to get common augment options. Please check the augment records.");
             return;
         }
-        var slot2 = CommonAugmentManager.Instance.GetAugmentFiltered(rarityRecord.ID, optionRecord2.ID);
-        if (slot2 == null)
+        
+        Debug.Log($"Total probability: {totalProbability}");
+        for(int i= 0 ; i < commonAugmentSlots.Length; i++)
         {
-            Debug.LogError($"Failed to get augment for rarity {rarityRecord.ID} and option {optionRecord2.ID}");
+            GotchaSlot(i, totalProbability, commonOptionRecords);
+        }
+    }
+    
+    private void GotchaSlot(int slotIndex, int totalProbability, List<ProbabilityRecord<int>> probabilities)
+    {
+        if (probabilities.Count == 0) // 더이상 뽑을 증강이 없다.
+        {
+            commonAugmentSlots[slotIndex].gameObject.SetActive(false);
+            Debug.Log("No probabilities available for the selected slot. Please check the augment records.");
             return;
         }
-        commonAugmentSlots[0].SetAugment(slot1,OnSelectAugment);
-        commonAugmentSlots[1].SetAugment(slot2,OnSelectAugment);
+        
+        int randomIndex = UnityEngine.Random.Range(0, totalProbability);
+        do
+        {
+            randomIndex = UnityEngine.Random.Range(0, totalProbability);
+        } while (probabilities.Any( r => r.IsInRange(randomIndex)) == false);
+        
+        var selectedID = probabilities.FirstOrDefault(r => r.IsInRange(randomIndex));
+        if (selectedID.ID == 0)
+        {
+            Debug.LogError("No valid augment found. Please check the augment records.");
+            return;
+        }
+        probabilities.Remove(selectedID); // 중복 방지를 위해 제거
+        Debug.Log($"Selected Slot{slotIndex} augment IDs: {selectedID.ID}");
+        commonAugmentSlots[slotIndex].gameObject.SetActive(true);
+        commonAugmentSlots[slotIndex].SetAugment(CommonAugmentManager.Instance.GetAugmentFiltered(curRarity, selectedID.ID), OnSelectAugment);
     }
 
     private void OnSelectAugment(Augment augment)
