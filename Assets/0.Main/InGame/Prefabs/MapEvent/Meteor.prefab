@@ -295,6 +295,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 30
   fallDuration: 2
+  attackDuration: 0.9
   explosionClip: {fileID: 0}
   explosion: {fileID: 9108712168569461232}
   fall: {fileID: 6139928181935728930}
