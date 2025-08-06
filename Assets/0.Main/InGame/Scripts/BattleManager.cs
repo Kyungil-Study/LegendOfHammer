@@ -20,6 +20,9 @@ public class BattleManager : MonoSingleton<BattleManager>
 
     private bool isEnded = false;
     public bool IsEnded => isEnded;
+    
+    private bool isBossAlived = false;
+    public bool IsBossAlived => isBossAlived;
 
     protected override void Initialize()
     {
@@ -83,8 +86,11 @@ public class BattleManager : MonoSingleton<BattleManager>
         var data = EnemyDataManager.Instance.EnemyDatas[monster.EnemyID];
         if (data.Enemy_Rank.Equals(EnemyRank.Boss))
         {
+            isBossAlived = true;
             EndGame(true, false);
         }
+        
+        
     }
 
 
