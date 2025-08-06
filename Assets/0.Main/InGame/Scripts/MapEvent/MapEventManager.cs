@@ -26,6 +26,7 @@ public class MapEventManager : MonoBehaviour
     private void Awake()
     {
         BattleEventManager.RegistEvent<StartBattleEventArgs>( StartBattle);
+        BattleEventManager.RegistEvent<ReviveEventArgs>(Revive);
         BattleManager.Instance.ChaseGuage.Events.OnValueChanged += OnChaseGuageValueChanged;
         mapEventTriggers.Sort( (a, b) => a.TriggerTime.CompareTo(b.TriggerTime));
     }
@@ -35,6 +36,14 @@ public class MapEventManager : MonoBehaviour
         filteredMapEvents = mapEventTable.FiltertedMapEventPatterns(args.StageIndex);
         mapEventCoroutine = StartCoroutine(SimulateMapEvents());
     }
+
+    public void Revive(ReviveEventArgs args)
+    {
+        filteredMapEvents = mapEventTable.FiltertedMapEventPatterns(BattleManager.Instance.StageIndex);
+        StopCoroutine(mapEventCoroutine);
+        mapEventCoroutine = StartCoroutine(SimulateMapEvents());
+    }
+    
 
 
     private void OnChaseGuageValueChanged(float arg1, float arg2)

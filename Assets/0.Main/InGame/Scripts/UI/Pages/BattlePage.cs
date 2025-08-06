@@ -31,13 +31,20 @@ public class BattlePage : UIPage
         currentScoreText.text = "0";
         maxScoreText.text = "0";
         
+        
         BattleEventManager.RegistEvent<DeathEventArgs>(OnDeath);
         BattleEventManager.RegistEvent<EndBattleEventArgs>(OnEndBattle);
+        BattleEventManager.RegistEvent<ReviveEventArgs>(OnRevive);
         
         BattleManager.Instance.ChaseGuage.Events.OnValueChanged += OnChaseGuageChanged;
         chasingSlider.maxValue = BattleManager.Instance.ChaseGuage.Max;
         
         pauseButton.onClick.AddListener(OnPause);
+    }
+
+    private void OnRevive(ReviveEventArgs obj)
+    {
+        chasingSlider.value = 0;
     }
 
     private void OnPause()

@@ -10,6 +10,7 @@ public class PageScroller : MonoBehaviour
 {
     
     [SerializeField] private float nextPageInterval = 60f; // Time in seconds to show next page
+    [SerializeField] private float scrollSpeed = 1f; // Speed of scrolling
     [Space(10), SerializeField] private PageSlot[] pages;
     [Space(10),SerializeField] StagePage[] stagePagePrefabs;
 
@@ -77,7 +78,8 @@ public class PageScroller : MonoBehaviour
             return;
         
         Vector3 curPos = transform.position;
-        Vector3 nextPos = Vector3.down * (mapSetting.ScrollSpeed * Time.deltaTime);
+        //Vector3 nextPos = Vector3.down * (mapSetting.ScrollSpeed * Time.deltaTime);
+        Vector3 nextPos = Vector3.down * (scrollSpeed * Time.deltaTime);
         transform.position = curPos + nextPos;
 
         var endPage = pages[endIndex];
