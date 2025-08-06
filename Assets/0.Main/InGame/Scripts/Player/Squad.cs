@@ -62,6 +62,7 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
         base.Awake();
         stats.CurrentHealth = stats.MaxHealth;
         BattleEventManager.RegistEvent<StartBattleEventArgs>(OnStartBattle);
+        BattleEventManager.RegistEvent<ReviveEventArgs>(Revive);
     }
 
     private void OnStartBattle(StartBattleEventArgs args)
@@ -126,7 +127,7 @@ public class Squad : MonoSingleton<Squad>, IBattleCharacter
         return m_ReviveTcs.Task;
     }
 
-    public void Revive()
+    public void Revive(ReviveEventArgs args)
     {
         IsDead = false;
         Instance.stats.CurrentHealth = stats.MaxHealth;
