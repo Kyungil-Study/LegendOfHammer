@@ -791,6 +791,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3497773961361313080, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
+      propertyPath: m_NormalizedViewPortRect.width
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3497773961361313080, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
+      propertyPath: m_NormalizedViewPortRect.height
+      value: 0.9998101
+      objectReference: {fileID: 0}
+    - target: {fileID: 3497773961361313080, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
       value: 0.9988731
       objectReference: {fileID: 0}
@@ -1341,6 +1349,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4760136607414832719, guid: 2fe8960c96c8cf146901ef2045ee8780, type: 3}
+      propertyPath: testSpawnCount
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 5500105434682169488, guid: 2fe8960c96c8cf146901ef2045ee8780, type: 3}
       propertyPath: m_Name
       value: MeteorSpawner
@@ -1405,7 +1417,7 @@ PrefabInstance:
     - target: {fileID: 3477467033466403269, guid: 7d9c39f70cff99a4d854b5f86c4a3a46, type: 3}
       propertyPath: TestFireBallMapEvent
       value: 
-      objectReference: {fileID: 11400000, guid: 961f04df0a6ebe743840692ce0c33c91, type: 2}
+      objectReference: {fileID: 11400000, guid: fb158bd32a672e34d83d95491652c73c, type: 2}
     - target: {fileID: 6555006888609643252, guid: 7d9c39f70cff99a4d854b5f86c4a3a46, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1771,6 +1783,10 @@ PrefabInstance:
     - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
       propertyPath: stageIndex
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
+      propertyPath: playerSpeed
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
       propertyPath: testEnemyID
