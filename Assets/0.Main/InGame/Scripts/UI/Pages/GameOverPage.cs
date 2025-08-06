@@ -15,9 +15,16 @@ public class GameOverPage : UIPage
 
     private void ReviveGame()
     {
-        BattleEventManager.CallEvent(new PauseBattleEventArgs(false));
-        BattleManager.Instance.Revive();
-        Owner.SwapPage(UIPageType.BattlePage);
+        if (BattleManager.Instance.IsBossAlived)
+        {
+            Owner.SwapPage(UIPageType.ClearPage);
+        }
+        else
+        {
+            BattleEventManager.CallEvent(new PauseBattleEventArgs(false));
+            BattleManager.Instance.Revive();
+            Owner.SwapPage(UIPageType.BattlePage);
+        }
     }
 
     private void ExitGame()
