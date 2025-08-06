@@ -14,6 +14,7 @@ public class StageManager : MonoSingleton<StageManager>
     protected override void Awake()
     {
         base.Awake();
+        Debug.Log($" [StageManager] Awake called. Initializing stage waves queue.");
         BattleEventManager.RegistEvent<StartBattleEventArgs>(StartGame);
         BattleEventManager.RegistEvent<EndBattleEventArgs>(EndGame);
     }
@@ -26,6 +27,8 @@ public class StageManager : MonoSingleton<StageManager>
     private void StartGame(StartBattleEventArgs startEventArgs)
     {
         var stageWaves = StageDataManager.Instance.Waves(startEventArgs.StageIndex);
+        
+        Debug.Log($"[StageManager] StartGame called. Stage Index: {startEventArgs.StageIndex}, Waves Count: {stageWaves.Count}");
         foreach (var wave in stageWaves)
         {
             stageWavesQueue.Enqueue(wave);

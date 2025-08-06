@@ -37,6 +37,10 @@ public class CommonAugmentGotchaSystem : UIPage
     {
         BattleEventManager.CallEvent(new PauseBattleEventArgs(false));
         gameObject.SetActive(false);
+        if (BattleManager.Instance.IsEnded == false)
+        {
+            BattleManager.Instance.StartGame();
+        }
     }
     
     private void GotchaCommonAugment()
