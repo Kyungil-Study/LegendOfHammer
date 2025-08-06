@@ -123,9 +123,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -967946601
+  m_SortingLayer: 4
+  m_SortingOrder: 5
   m_Sprite: {fileID: -49266856252912819, guid: 025ee44033f41465997c496215474c5a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -208,8 +208,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -967946601
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 3605835103500832990, guid: 67d4ee24701e743e0a5c869246449bde, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -293,8 +293,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7ef164a1a1813d4d8f0a14bb177ad5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
+  damage: 30
   fallDuration: 2
+  attackDuration: 0.9
   explosionClip: {fileID: 0}
   explosion: {fileID: 9108712168569461232}
   fall: {fileID: 6139928181935728930}
@@ -543,7 +544,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -967946601
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 4176396959002274154, guid: b5b55fbfae67048a5908a5ae73b6cdc2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
