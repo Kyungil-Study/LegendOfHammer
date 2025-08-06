@@ -19,4 +19,4 @@ MonoBehaviour:
   MaxAppearStage: 15
   fireballSpawnJobs:
   - attackDelay: 0
-    pointType: 1
+    pointType: 0

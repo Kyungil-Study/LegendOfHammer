@@ -52,11 +52,11 @@ MonoBehaviour:
   attackCollider: {fileID: 7358746754474298810}
   attackArea: {fileID: 7889352998233140523}
   endPoint: {fileID: 5834642343657000996}
-  attackDelay: 1
+  attackDelay: 1.1
   fireballAnimator: {fileID: 7047880487502340048}
-  damage: 10
-  moveDuration: 2
-  destroyDelay: 2
+  damage: 25
+  moveDuration: 2.5
+  destroyDelay: 0.8
 --- !u!58 &7358746754474298810
 CircleCollider2D:
   m_ObjectHideFlags: 0
