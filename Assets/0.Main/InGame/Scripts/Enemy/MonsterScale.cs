@@ -149,7 +149,6 @@ public class MonsterScale : MonoBehaviour
     {
         for (int i = 0; i < count; i++)
         {
-            mMaterial.EnableKeyword("HITEFFECT_ON");
             mMaterial.SetColor ("_HitEffectColor", color);
             mMaterial.SetFloat("_HitEffectBlend", 1f);
 
@@ -166,7 +165,6 @@ public class MonsterScale : MonoBehaviour
         float elapsed = 0f;
         while (elapsed < delay)
         {
-            mMaterial.EnableKeyword("HITEFFECT_ON");
             mMaterial.SetColor ("_HitEffectColor", suicideFlashColor);
             mMaterial.SetFloat("_HitEffectBlend", 1f);
             yield return new WaitForSeconds(interval);
