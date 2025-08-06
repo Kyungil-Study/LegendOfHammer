@@ -47,8 +47,19 @@ MonoBehaviour:
   monsterPrefab: {fileID: 7494431464099580550, guid: cb7f568d296739141874983fa6d2c03d, type: 3}
   player: {fileID: 0}
   spawnPoint: {fileID: 0}
-  playerSpeed: 5
+  playerSpeed: 2
   testEnemyID: 11001
-  patternDefaultID: 11001
-  testMovePattern: 3
+  HPTestRankID: 11003
+  testMovePattern: 2
   testAttackPattern: 1
+  stageIndex: 1
+  monsterInfoText: {fileID: 0}
+  autoWaveSpawnMode: 0
+  autoWaveSpawnInterval: 15
+  spawnPatternTestSample: {fileID: 0}
+  normalMeleeID: 11001
+  normalRangeID: 11002
+  eliteMeleeID: 21001
+  eliteRangeID: 21002
+  bossMeleeID: 31001
+  bossRangeID: 31002
