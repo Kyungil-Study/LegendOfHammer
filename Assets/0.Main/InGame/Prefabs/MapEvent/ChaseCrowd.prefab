@@ -63,13 +63,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destination: {fileID: 0}
-  attackDelay: 0.5
-  chaseSpeed: 1
+  attackDelay: 1.3
+  chaseSpeed: 0.7
   normalizedTriggerGauge: 0.3
   chaseAttackInterval: 1
   isChasing: 1
   chaseEase: 30
-  easeInt: 0
+  attackAlertSignal: {fileID: 0}
+  attackCollider: {fileID: 0}
+  attackPower: 20
 --- !u!61 &2387352142236993139
 BoxCollider2D:
   m_ObjectHideFlags: 0
