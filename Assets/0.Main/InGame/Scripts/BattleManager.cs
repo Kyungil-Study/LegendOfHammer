@@ -86,7 +86,7 @@ public class BattleManager : MonoSingleton<BattleManager>
         var data = EnemyDataManager.Instance.EnemyDatas[monster.EnemyID];
         if (data.Enemy_Rank.Equals(EnemyRank.Boss))
         {
-            
+            isBossAlived = true;
             EndGame(true, false);
         }
         
