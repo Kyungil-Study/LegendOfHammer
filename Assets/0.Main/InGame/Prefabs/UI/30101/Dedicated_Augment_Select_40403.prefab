@@ -476,7 +476,7 @@ MonoBehaviour:
   warriorSlot: {fileID: 2395852987899137605}
   wizardSlot: {fileID: 3666956212681690668}
   archerSlot: {fileID: 7598042925680622988}
-  classRerollAugmentButton: {fileID: 0}
+  classRerollAugmentButton: {fileID: 6276759155681576816}
   classRerollEnterButton: {fileID: 3984330103360881737}
   cinematicPanel: {fileID: 0}
 --- !u!1 &6345171595758156028
@@ -819,6 +819,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 874932869778101854, guid: cc76d719ba817cc4b8c8a8310a16db28, type: 3}
   m_PrefabInstance: {fileID: 1192541498948703164}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6276759155681576816 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5158667895737881804, guid: cc76d719ba817cc4b8c8a8310a16db28, type: 3}
+  m_PrefabInstance: {fileID: 1192541498948703164}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4588015780391965747
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1265,6 +1276,10 @@ PrefabInstance:
     - target: {fileID: 8890132473299779678, guid: ee095885f57e20b4091b30456b4e698c, type: 3}
       propertyPath: m_Name
       value: Reroll
+      objectReference: {fileID: 0}
+    - target: {fileID: 8979470080074528343, guid: ee095885f57e20b4091b30456b4e698c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
