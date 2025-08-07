@@ -792,11 +792,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3497773961361313080, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
-      value: 1
+      value: 0.99999994
       objectReference: {fileID: 0}
     - target: {fileID: 3497773961361313080, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 0.9998101
+      value: 0.99941623
       objectReference: {fileID: 0}
     - target: {fileID: 5540610527890641080, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1789,6 +1789,10 @@ PrefabInstance:
       value: 11001
       objectReference: {fileID: 0}
     - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
+      propertyPath: normalRangeID
+      value: 12007
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
       propertyPath: monsterInfoText
       value: 
       objectReference: {fileID: 97063167}
@@ -1801,9 +1805,21 @@ PrefabInstance:
       value: 12006
       objectReference: {fileID: 0}
     - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
+      propertyPath: autoWaveSpawnMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
       propertyPath: testAttackPattern
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
+      propertyPath: autoWaveSpawnInterval
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4438208200334526374, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
+      propertyPath: spawnPatternTestSample
+      value: 
+      objectReference: {fileID: 162840070042477916, guid: 11ca67558ed902a468ac63db75b82c94, type: 3}
     - target: {fileID: 5105383791860531913, guid: 82a3ead1395e32849b1ba1aa387cb471, type: 3}
       propertyPath: m_Name
       value: MonsterTester
