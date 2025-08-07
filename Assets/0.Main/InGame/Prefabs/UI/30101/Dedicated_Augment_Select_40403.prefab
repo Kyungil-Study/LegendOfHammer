@@ -809,6 +809,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RerollPopup
       objectReference: {fileID: 0}
+    - target: {fileID: 1355706829877734241, guid: cc76d719ba817cc4b8c8a8310a16db28, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5158667895737881804, guid: cc76d719ba817cc4b8c8a8310a16db28, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
       value: 0
