@@ -4,25 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public struct ProbabilityRecord<T>
-{
-    public T ID;
-    public int minProbability; // 확률
-    public int maxProbability;
-        
-    public ProbabilityRecord(T id, int min, int max)
-    {
-        ID = id;
-        minProbability = min;
-        maxProbability = max;
-    }
-        
-    public bool IsInRange(int value)
-    {
-        // Check if the value is within the range of minProbability and maxProbability
-        return value >= minProbability && value <= maxProbability;
-    }
-}
 
 public class ClassAugmentGotchaSystem : UIPage
 {
@@ -36,37 +17,42 @@ public class ClassAugmentGotchaSystem : UIPage
     
     [Space(10), Header("Reroll Button")]
     [SerializeField] private Button classRerollAugmentButton;
+    [SerializeField] private Button classRerollEnterButton;
+    
+    [SerializeField] PageCinematic cinematicPanel;
     
     public override UIPageType UIPageType => UIPageType.ClassAumgentSelection;
 
-    private IPageFlowManageable Owner;
     private bool IsRerollClassSelected = false;
     AugmentType rerollAugmentType = AugmentType.Warrior;
     
-    public override void Initialize(IPageFlowManageable owner)
+    protected override void Initialize(IPageFlowManageable owner)
     {
-        Owner = owner ?? throw new System.ArgumentNullException(nameof(owner), "Owner cannot be null.");
         classRerollAugmentButton.onClick.AddListener(() => {
             Debug.Log("Reroll augment button clicked.");
             // Handle reroll logic here
             RerollClassAugment();
+            cinematicPanel.gameObject.SetActive(true);
         });
         
         warriorSlot.onClick.AddListener(() => {
             Debug.Log("Warrior slot selected.");
             IsRerollClassSelected = true;
+            classRerollEnterButton.interactable = true;
             rerollAugmentType = AugmentType.Warrior;
             // Handle warrior slot selection logic here
         });
         wizardSlot.onClick.AddListener(() => {
             Debug.Log("Wizard slot selected.");
             IsRerollClassSelected = true;
+            classRerollEnterButton.interactable = true;
             rerollAugmentType = AugmentType.Wizard;
             // Handle wizard slot selection logic here
         });
         archerSlot.onClick.AddListener(() => {
             Debug.Log("Archer slot selected.");
             IsRerollClassSelected = true;
+            classRerollEnterButton.interactable = true;
             rerollAugmentType = AugmentType.Archer;
             // Handle archer slot selection logic here
         });
@@ -75,8 +61,7 @@ public class ClassAugmentGotchaSystem : UIPage
     public override void Enter()
     {
         gameObject.SetActive(true);
-        
-        GotchaClassAugment( ClassAugmentManager.Instance.GetAllOption());
+        GotchaClassAugment(ClassAugmentManager.Instance.GetAllOption());
     }
     
     public override void Exit()
@@ -92,13 +77,14 @@ public class ClassAugmentGotchaSystem : UIPage
             Debug.Log("Reroll class augment not selected yet. Please select a class first.");
             return;
         }
-        
+        IsRerollClassSelected = false; // Reset selection after reroll
+        classRerollEnterButton.interactable = false;
         Debug.Log("Reroll class augment.");
         var options = ClassAugmentManager.Instance.GetOptionsByClass(rerollAugmentType);
         GotchaClassAugment(options);
     }
 
-    private void GotchaClassAugment(IReadOnlyList<int> options)
+    private bool GotchaClassAugment(IReadOnlyList<int> options)
     {
         var inventory = AugmentInventory.Instance;
         Debug.Log("Gotcha class augment first.");
@@ -152,11 +138,19 @@ public class ClassAugmentGotchaSystem : UIPage
             totalProbability += probabilityInteger;
         }
         
+        if(probabilities.Count == 0)
+        {
+            Debug.Log("No valid class augments available. Please check the augment records.");
+            return false; // No valid augments to select
+        }
+        
         Debug.Log($"Total probability: {totalProbability}");
         for(int i= 0 ; i < classAugmentSlots.Length; i++)
         {
             GotchaSlot(i, totalProbability, probabilities);
         }
+
+        return true;
     }
     
     private void GotchaSlot(int slotIndex, int totalProbability, List<ProbabilityRecord<int>> probabilities)
@@ -195,6 +189,7 @@ public class ClassAugmentGotchaSystem : UIPage
     private void OnEnable()
     {
         Time.timeScale = 0;
+        classRerollEnterButton.interactable = false;
     }
     
     private void OnDisable()

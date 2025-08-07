@@ -68,8 +68,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 1338c3027f89a7641a27d8a66d1c2f32, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: d7337712386a90f44a96a800bdf12b49, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_enableWordWrapping: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -147,3 +147,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62f25064cd42f7440a24570f7d8b3949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TweenScaleMin: 1
+  TweenScaleMax: 1.5
+  TweenDurationMin: 0.5
+  TweenDurationMax: 1
+  damageTxt: {fileID: 3775353957699668985}

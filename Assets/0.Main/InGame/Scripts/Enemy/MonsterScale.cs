@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = System.Random;
 
 [RequireComponent(typeof(BoxCollider2D))]
@@ -31,6 +32,12 @@ public class MonsterScale : MonoBehaviour
     [SerializeField] private Color hitFlashColor = Color.white;
     [SerializeField] private Color suicideFlashColor = Color.red;
     
+    [Header("팔로우 이펙트 설정")]
+    [SerializeField] private GameObject BombEffect;
+    [SerializeField] private GameObject ShieldEffect;
+    private SpriteRenderer shieldEffectRenderer;
+    private SpriteRenderer bombEffectRenderer;
+    
     [SerializeField,LabelText("펀치 효과")] PunchEffctor punchEffect;
     
     private SpriteRenderer  mSpriteRenderer;
@@ -52,16 +59,19 @@ public class MonsterScale : MonoBehaviour
     private void Awake()
     {
         mSpriteRenderer = model.GetComponent<SpriteRenderer>();
+        mSprite = mSpriteRenderer.sprite;
+        
         mAnimator       = model.GetComponent<Animator>();
         mMaterial       = model.GetComponent<Renderer>().material;
         mCollider       = GetComponent<BoxCollider2D>();
+        
+        shieldEffectRenderer = ShieldEffect.GetComponent<SpriteRenderer>();
+        bombEffectRenderer = BombEffect.GetComponent<SpriteRenderer>();
     }
 
     private void Start()
     {
         PickRandomSprite();
-        mScaleFactor = CalculateScaleFactor();
-        ApplyModelScale(mScaleFactor);
     }
 
     private void OnEnable()
@@ -86,11 +96,33 @@ public class MonsterScale : MonoBehaviour
             ApplyColliderFromPhysicsShape(mScaleFactor, currentHitBox);
         }
     }
-
-    public void EnterSuicideMode()
+    
+    public void SetEnemyShield(bool isActive, Sprite sprite)
     {
-        mIsSuicideMode = true;
+        ShieldEffect.SetActive(isActive);
+        shieldEffectRenderer.sprite = sprite;
+        
+        ShieldEffect.transform.localScale = Vector3.one;
+
+        float halfShield = shieldEffectRenderer.sprite.bounds.size.y * 0.5f;
+        Vector2 localOffset = new Vector2(0f, (mCollider.offset.y - 0.75f)* halfShield);
+
+        ShieldEffect.transform.localPosition = localOffset;
     }
+
+    public void EnterSuicideMode(Sprite warningSprite, float AttackRange)
+    {
+        BombEffect.transform.SetParent(transform, false);
+        bombEffectRenderer.sprite = warningSprite;
+        
+        BombEffect.transform.localScale = Vector3.one * AttackRange;
+
+        float bottomY = mCollider.offset.y - (mCollider.size.y * 0.5f);
+        
+        BombEffect.transform.localPosition = new Vector3(0f, bottomY, 0f);
+        BombEffect.SetActive(true);
+    }
+
     
     private void PlayDamageEffect(TakeDamageEventArgs eventArgs)
     {
@@ -117,7 +149,6 @@ public class MonsterScale : MonoBehaviour
     {
         for (int i = 0; i < count; i++)
         {
-            mMaterial.EnableKeyword("HITEFFECT_ON");
             mMaterial.SetColor ("_HitEffectColor", color);
             mMaterial.SetFloat("_HitEffectBlend", 1f);
 
@@ -134,7 +165,6 @@ public class MonsterScale : MonoBehaviour
         float elapsed = 0f;
         while (elapsed < delay)
         {
-            mMaterial.EnableKeyword("HITEFFECT_ON");
             mMaterial.SetColor ("_HitEffectColor", suicideFlashColor);
             mMaterial.SetFloat("_HitEffectBlend", 1f);
             yield return new WaitForSeconds(interval);
@@ -182,11 +212,20 @@ public class MonsterScale : MonoBehaviour
         {
             EnemyRank.Elite  => 160,
             EnemyRank.Boss   => 240,
-            EnemyRank.Normal =>  72
+            EnemyRank.Normal =>  72,
+            _ => throw new ArgumentOutOfRangeException()
         };
         
         float originPixel = mSpriteRenderer.sprite.rect.width;
         return enemyPixel / originPixel;
+    }
+    
+    private const float NormalPixel = 72f;
+    public float GetRelativeScale()
+    {
+        float originPixel = mSpriteRenderer.sprite.rect.width;
+        float normalScaleFactor = NormalPixel / originPixel;
+        return mScaleFactor / normalScaleFactor;
     }
 
     private void ApplyModelScale(float scaleFactor)

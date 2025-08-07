@@ -8,8 +8,12 @@ using UnityEngine.Serialization;
 public abstract class Hero : MonoBehaviour
 {
     [SerializeField] protected Squad squad;
-    protected Squad.SquadStats squadStats => squad.stats;
-    [SerializeField] private int baseAttackDamage;
+    [ShowInInspector] protected Squad.SquadStats squadStats => squad.stats;
+    
+    public Squad.SquadStats SquadStats => squadStats;
+
+    
+    [LabelText("기본 공격력"), SerializeField] private int baseAttackDamage;
     public int BaseAttackDamage
     {
         get => baseAttackDamage;
@@ -24,7 +28,7 @@ public abstract class Hero : MonoBehaviour
         }
     }
     
-    [SerializeField] private float attackPerSec;
+    [LabelText("초당 공격 횟수"),SerializeField] private float attackPerSec;
     [ShowInInspector] public float HeroAttackPerSec
     {
         get
@@ -38,13 +42,7 @@ public abstract class Hero : MonoBehaviour
     protected float leftCooldown;
     protected bool bAutoFire = true;
     
-    // 위자드 디버프
-    public float DebuffDuration;
-    public float DebuffRate;
-    
-    // 위자드 도트딜
-    public float Dot_HP_Ratio_Duration ;
-    public float Dot_HP_Ratio;
+   
 
     protected virtual void Attack() { }
 

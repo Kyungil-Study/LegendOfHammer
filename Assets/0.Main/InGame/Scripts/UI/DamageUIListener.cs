@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DamageUIListener : MonoBehaviour
@@ -9,6 +10,7 @@ public class DamageUIListener : MonoBehaviour
     [SerializeField] private Color WizardColor;
     [SerializeField] private Color CriticalColor;
     [SerializeField] private Color DoTColor;
+    [SerializeField] private Color ExplodeColor;
     
     [Header("데미지 UI 위치 조정")]
     [SerializeField] private float verticalOffset = 1f;
@@ -48,6 +50,9 @@ public class DamageUIListener : MonoBehaviour
                break;
            case DamageType.Shield:
                damageColor = ShieldColor;
+               break;
+           case DamageType.Explode:
+               damageColor = ExplodeColor;
                break;
        }
        

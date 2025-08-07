@@ -16,6 +16,7 @@ public class SuicideAttackConfig
     public float attackRange = 0.75f;
     public float exlposionInverval = 0.2f;
     public GameObject explosionPrefab;
+    public Sprite warningImage;
 }
 
 [Serializable]
@@ -25,6 +26,7 @@ public class ShieldConfig
     public float radius      = 1.2f;
     public float angleDeg    = 90f;
     public Vector2 pivotOffset;
+    public Sprite shieldSprite;
 }
 
 [Serializable]

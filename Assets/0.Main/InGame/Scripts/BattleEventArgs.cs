@@ -7,12 +7,29 @@ public class BattleEventArgs : System.EventArgs
     
 }
 
+public class ReviveEventArgs : BattleEventArgs
+{
+    public ReviveEventArgs()
+    {
+    }
+}
+
 public class SelectAugmentEventArgs : BattleEventArgs
 { 
     public Augment Data { get; private set; }
     public SelectAugmentEventArgs(Augment data)
     {
         this.Data = data;
+    }
+}
+
+public class PauseBattleEventArgs : BattleEventArgs
+{
+    public bool IsPaused { get; private set; }
+    
+    public PauseBattleEventArgs(bool isPaused)
+    {
+        this.IsPaused = isPaused;
     }
 }
 
@@ -58,7 +75,8 @@ public enum DamageType
     Wizard,
     Critical,
     Shield,
-    DoT
+    DoT,
+    Explode,
 }
 
 public class TakeDamageEventArgs : BattleEventArgs

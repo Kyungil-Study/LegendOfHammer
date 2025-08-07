@@ -15,8 +15,9 @@ public class ChaseMove : IMoveBehaviour
     {
         if (mMonster.State.Detected) return;
 
+        var detectRange = mConfig.detectRange * mMonster.Scale.GetRelativeScale();
         var hits = Physics2D.OverlapCircleAll
-            (mMonster.transform.position, mConfig.detectRange, mMonster.PlayerLayerMask);
+            (mMonster.transform.position, detectRange, mMonster.PlayerLayerMask);
         
         if (hits.Length > 0)
         {

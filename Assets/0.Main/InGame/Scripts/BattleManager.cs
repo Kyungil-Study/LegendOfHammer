@@ -14,13 +14,15 @@ public class BattleManager : MonoSingleton<BattleManager>
     public int MaxStageNumber = 0;
     
     [Header("추격 게이지 세팅")]
-    [SerializeField] private float chaseGuageDecreaseRate = 0.5f; // Increase rate per second
-    [SerializeField] private float chaseIncreaseRate = 1f; // Increase rate when monster is through clear zone
     [SerializeField] private float chaseGuageMax = 100f; // Maximum value for chase gauge
     private ClampedFloat chaseGuage;
     public ClampedFloat ChaseGuage => chaseGuage;
 
     private bool isEnded = false;
+    public bool IsEnded => isEnded;
+    
+    private bool isBossAlived = false;
+    public bool IsBossAlived => isBossAlived;
 
     protected override void Initialize()
     {
@@ -32,14 +34,27 @@ public class BattleManager : MonoSingleton<BattleManager>
         
         // Register event listeners
         BattleEventManager.RegistEvent<AliveMonsterEventArgs>(OnAliveMonster);
-        BattleEventManager.RegistEvent<DeathEventArgs>(OnDeath);;
+        BattleEventManager.RegistEvent<DeathEventArgs>(OnDeath);
+        BattleEventManager.RegistEvent<PauseBattleEventArgs>(OnPauseBattle );
         chaseGuage.Events.OnMaxReached += (cur, max) =>
         {
             Debug.Log("[BattleManager] Chase gauge reached maximum value. Ending game.");
             EndGame(false, false); // Game over if chase gauge is full
         };
     }
-    
+
+    private void OnPauseBattle(PauseBattleEventArgs obj)
+    {
+        if (obj.IsPaused)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
+    }
+
 
     private void OnDeath(DeathEventArgs args)
     {
@@ -66,14 +81,16 @@ public class BattleManager : MonoSingleton<BattleManager>
     {
         var monster = args.AliveMonster;
         Debug.Log($"[BattleManager] Monster {monster.EnemyID} is alive.");
+        var enemyData = EnemyDataManager.Instance.EnemyDatas[monster.EnemyID];
+        chaseGuage.Increase(enemyData.Chasing_Increase);    
         var data = EnemyDataManager.Instance.EnemyDatas[monster.EnemyID];
         if (data.Enemy_Rank.Equals(EnemyRank.Boss))
         {
+            isBossAlived = true;
             EndGame(true, false);
         }
-        // todo: UI 완료되면 활성화
-        var enemyData = EnemyDataManager.Instance.EnemyDatas[monster.EnemyID];
-        chaseGuage.Increase(enemyData.Chasing_Increase);
+        
+        
     }
 
 
@@ -101,6 +118,11 @@ public class BattleManager : MonoSingleton<BattleManager>
     // Update is called once per frame
     void EndGame(bool isVictory,bool isBossDead)
     {
+        if (isEnded)
+        {
+            return;
+        }
+        
         isEnded = true;
         // Here you can handle the end of the game, such as showing a UI or transitioning to another scene
         Debug.Log(isVictory ? "Battle ended with victory!" : "Battle ended with defeat!");
@@ -179,4 +201,10 @@ public class BattleManager : MonoSingleton<BattleManager>
         }
     }
 
+    public void Revive()
+    {
+        isEnded = false;
+        chaseGuage.ResetToMin();
+        BattleEventManager.CallEvent<ReviveEventArgs>(new ReviveEventArgs());
+    }
 }

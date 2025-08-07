@@ -13,9 +13,7 @@ public class ChaseCrowd : MonoSingleton<ChaseCrowd>, IBattleCharacter
     [SerializeField] private Transform destination; // 추적할 대상 위치
     [SerializeField] private float attackDelay = 0.5f; // 추적 공격 딜레이
     [SerializeField] private float chaseSpeed = 5f; // 추적 속도
-    [Range(0,1), SerializeField] private float normalizedTriggerGauge = 0.3f; // 추적 게이지가 이 값 이상일 때 추적 시작
-    [SerializeField] private float chaseAttackInterval = 1f; // 추적 공격 간격
-    [SerializeField] bool isChasing = false;
+    
     [SerializeField] private Ease chaseEase = Ease.Linear; // 추적 속도 계수
     
     [FormerlySerializedAs("attackSignal")] [SerializeField] private AttackAlertSignal attackAlertSignal; // 추적 공격 시그널
@@ -23,8 +21,11 @@ public class ChaseCrowd : MonoSingleton<ChaseCrowd>, IBattleCharacter
     
     [SerializeField] private float attackPower = 10f; // 추적 공격력
     
-    private void Awake()
+    Tweener moveTweener;
+    
+    protected override void Awake()
     {
+        base.Awake();
         originPosition = transform.position;
         attackCollider = GetComponent<BoxCollider2D>();
         attackCollider.enabled = false;
@@ -42,15 +43,26 @@ public class ChaseCrowd : MonoSingleton<ChaseCrowd>, IBattleCharacter
         transform.position = originPosition;
         attackAlertSignal.gameObject.SetActive(true);
         yield return new WaitForSeconds(attackDelay);
-        attackCollider.enabled = true;
-        var gotoDestination = transform.DOMove(destination.position, chaseSpeed)
-            .SetEase(chaseEase);
-        //.OnComplete(() => Debug.Log($"Chased to {destination.name} at position {destination.position}"));
-        yield return gotoDestination.WaitForCompletion();
+        
+        
+        // 전조 증상 끄기
         attackAlertSignal.gameObject.SetActive(false);
-        var gotoOrigin = transform.DOMove(originPosition, chaseSpeed).SetEase(Ease.Linear);
+        // 공격 활성화
+        attackCollider.enabled = true;
+        // 추적 대상 위치로 이동
+        moveTweener = transform.DOMove(destination.position, chaseSpeed)
+            .SetEase(chaseEase).SetLink(gameObject);
+        yield return moveTweener.WaitForCompletion();
+        
+        
+        // 원래 자리로 되돌아오기
+        var gotoOrigin = 
+            transform.DOMove(originPosition, chaseSpeed).SetEase(Ease.Linear).SetLink(gameObject);
         yield return gotoOrigin.WaitForCompletion();
+
+        // 공격 비활성화
         attackCollider.enabled = false;
+
     }
 
 
