@@ -114,6 +114,7 @@ public class GameLobbyPage : UIPage
             
             currentStageText.text = stageNumber.ToString();
             maxStageText.text = stageData.MaxStage.ToString();
+            SessionManager.Instance.QuitGame();
             Debug.Log($"User try stage set to: {stageNumber}");
         }
         else
@@ -138,6 +139,7 @@ public class GameLobbyPage : UIPage
 
     public override void Enter()
     {
+        BattleEventManager.CallEvent( new PauseBattleEventArgs(true)); 
         SoundManager.Instance.PauseRandomGameBgm();
         gameObject.SetActive(true);
         // Set current stage and max stage text
@@ -151,15 +153,7 @@ public class GameLobbyPage : UIPage
 
     public override void Exit()
     {
+        BattleEventManager.CallEvent( new PauseBattleEventArgs(false)); 
     }
 
-    private void OnEnable()
-    {
-        Time.timeScale = 0;
-    }
-    
-    private void OnDisable()
-    {
-        Time.timeScale = 1;
-    }
 }
