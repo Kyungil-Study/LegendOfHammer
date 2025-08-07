@@ -113,6 +113,7 @@ public class BattleManager : MonoSingleton<BattleManager>
         Debug.Log($"[BattleManager] Starting game for stage {StageIndex}.");
         StartBattleEventArgs startEventArgs = new StartBattleEventArgs(StageIndex);
         BattleEventManager.CallEvent(startEventArgs);
+        SoundManager.Instance.PlayRandomGameBgm();
     }
 
     // Update is called once per frame
