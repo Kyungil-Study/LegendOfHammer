@@ -3,7 +3,7 @@ int	enum	bool	string	enum	string	int	int	float	int	int
 11001	Normal	FALSE	Straight	Straight	Normal	1500	10	0.8	5	1
 21001	Elite	FALSE	Straight	Straight	Normal	13000	15	0.6	20	1
 31001	Boss	FALSE	Straight	Straight	Normal	25000	20	0.4	50	1
-21002	Elite	FALSE	Zigzag	Zigzag	Normal	12000	15	0.6	20	2
+21002	Elite	FALSE	Zigzag	Zigzag	Normal	13000	15	0.6	20	2
 31002	Boss	FALSE	Zigzag	Zigzag	Normal	25000	20	0.4	50	2
 11003	Normal	FALSE	Suicide	Chase	Suicide	2400	25	2.3	0	7
 11005	Normal	FALSE	Runner	Straight	Normal	500	5	3	4	4
@@ -13,11 +13,11 @@ int	enum	bool	string	enum	string	int	int	float	int	int
 21004	Elite	FALSE	Shield	Straight	Shield	10000	15	0.6	20	11
 31004	Boss	FALSE	Shield	Straight	Shield	20000	20	0.4	50	11
 12006	Normal	TRUE	Sniper	Straight	Sniper	1000	10	0.8	5	2
-22006	Elite	TRUE	Sniper	Straight	Sniper	12000	15	0.6	20	2
+22006	Elite	TRUE	Sniper	Straight	Sniper	13000	15	0.6	20	2
 32006	Boss	TRUE	Sniper	Straight	Sniper	25000	20	0.4	50	2
 12007	Normal	TRUE	Spread	Straight	Spread	1000	10	0.8	5	5
-22007	Elite	TRUE	Spread	Straight	Spread	12000	15	0.6	20	5
+22007	Elite	TRUE	Spread	Straight	Spread	13000	15	0.6	20	5
 32007	Boss	TRUE	Spread	Straight	Spread	25000	20	0.4	50	5
-22008	Elite	TRUE	Radial	Straight	Radial	12000	15	0.6	20	12
+22008	Elite	TRUE	Radial	Straight	Radial	13000	15	0.6	20	12
 32008	Boss	TRUE	Radial	Straight	Radial	25000	20	0.4	50	12
 12009	Normal	TRUE	Flying	Flying	Flying	1200	10	0.8	5	8
