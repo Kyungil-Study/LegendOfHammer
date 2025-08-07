@@ -43,6 +43,10 @@ public class BattleManager : MonoSingleton<BattleManager>
             Debug.Log("[BattleManager] Chase gauge reached maximum value. Ending game.");
             EndGame(false, false); // Game over if chase gauge is full
         };
+        
+        StartCoroutine(ReadyGameCoroutine());
+
+        
     }
 
     private void OnPauseBattle(PauseBattleEventArgs obj)
@@ -102,18 +106,37 @@ public class BattleManager : MonoSingleton<BattleManager>
     }
 
 
-    public void ReadyGame()
+    IEnumerator ReadyGameCoroutine()
     {
+        yield return new WaitForEndOfFrame();
+        
         Debug.Log("[BattleManager] ReadyGame called.");
         var es3Manager = ES3Manager.Instance;
         var stageData = es3Manager.StageData;
-        
+        ES3Manager.Instance.SetAttemptCount(stageData.StageAttemptCount + 1);
         StageIndex = stageData.CurrentStage;
         MaxStageNumber = stageData.MaxStage;
         
         BattleEventManager.CallEvent(new ReadyBattleEventArgs(
             stageIndex: StageIndex,
             maxStageIndex: MaxStageNumber));
+        
+        if (SessionManager.Instance.IsContinueGame)
+        {
+            if(AugmentInventory.Instance.IsFullClassAugment())
+            {
+                BattleUIController.Instance.SwapPage(UIPageType.CommonAugmentSelection);
+            }
+            else
+            {
+                BattleUIController.Instance.SwapPage( UIPageType.ClassAumgentSelection); // Assuming the next page is ClassAugmentSelection
+            }
+        }
+        else
+        {
+            BattleUIController.Instance.SwapPage(UIPageType.LobbyPage);
+        }
+        
     }
 
     public void StartGame() // todo: 로딩 연동 필요

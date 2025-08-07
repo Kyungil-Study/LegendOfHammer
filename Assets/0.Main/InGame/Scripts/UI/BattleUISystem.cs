@@ -11,9 +11,9 @@ public class BattleUIController : MonoSingleton<BattleUIController> ,IPageFlowMa
     
     Dictionary<UIPageType, UIPage> pagesDict = new Dictionary<UIPageType, UIPage>();
     UIPage currentPage;
-    protected override void Awake()
+    protected override void Initialize()
     {
-        base.Awake();
+        base.Initialize();
         foreach (var page in pages)
         {
             page.Setup(this);
@@ -21,10 +21,6 @@ public class BattleUIController : MonoSingleton<BattleUIController> ,IPageFlowMa
             
             pagesDict[page.UIPageType] = page;
         }
-        
-        
-        SwapPage(UIPageType.LobbyPage);
-        
     }
 
     public void SwapPage(UIPageType nextPageType)

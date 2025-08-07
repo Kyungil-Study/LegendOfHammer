@@ -115,19 +115,15 @@ public class GameLobbyPage : UIPage
     private void OnGameBegin()
     {
         Debug.Log("Game Begin Button Clicked");
-        var stageData = ES3Manager.Instance.StageData;
-        ES3Manager.Instance.SetAttemptCount(stageData.StageAttemptCount + 1);
-
         // Notify the owner to start the game
         if(AugmentInventory.Instance.IsFullClassAugment())
         {
-            Owner.SwapPage(UIPageType.CommonAugmentSelection);
+            BattleUIController.Instance.SwapPage(UIPageType.CommonAugmentSelection);
         }
         else
         {
-            Owner.SwapPage( UIPageType.ClassAumgentSelection); // Assuming the next page is ClassAugmentSelection
+            BattleUIController.Instance.SwapPage( UIPageType.ClassAumgentSelection); // Assuming the next page is ClassAugmentSelection
         }
-        BattleManager.Instance.ReadyGame();
     }
 
     public override void Enter()
