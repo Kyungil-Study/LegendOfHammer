@@ -14,7 +14,6 @@ public class AugmentSlot : MonoBehaviour
     [SerializeField] TMP_Text augmentGradeText;
     [SerializeField] TMP_Text augmentDescriptionText;
     [SerializeField] Button augmentButton;
-    Material augmentMaterial;
 
     public Augment augment;
     
@@ -29,7 +28,6 @@ public class AugmentSlot : MonoBehaviour
         
         // Initialize the button click action
         augmentButton.onClick.AddListener(() => onClickAction?.Invoke(augment));
-        augmentMaterial = augmentButton.GetComponent<Image>().material;
 
     }
 
@@ -41,19 +39,49 @@ public class AugmentSlot : MonoBehaviour
     {
         // Clear the augment data when the slot is disabled
         augment = null;
-        augmentNameText.text = string.Empty;
-        augmentGradeText.text = string.Empty;
-        augmentDescriptionText.text = string.Empty;
-        augmentIcon.sprite = null; // Assuming GetIcon() returns a Sprite
+        if( augmentNameText != null)
+        {
+            augmentNameText.text = string.Empty;
+        }
+        
+        if( augmentGradeText != null)
+        {
+            augmentGradeText.text = string.Empty;
+        }
+        
+        if( augmentDescriptionText != null)
+        {
+            augmentDescriptionText.text = string.Empty;
+        }
+        
+        if( augmentIcon != null)
+        {
+            augmentIcon.sprite = null; // Clear the icon sprite
+        }
     }
 
     public void SetAugment(Augment augment, Action<Augment> onClickAction)
     {
         this.augment = augment;
-        augmentNameText.text = augment.GetName();
-        augmentGradeText.text = augment.GetGrade(); // Assuming ID is used as level for simplicity
-        augmentDescriptionText.text = augment.GetDescription(); // Assuming GetAugmentType() returns a string representation
-        augmentIcon.sprite = augment.GetIcon(); // Assuming GetIcon() returns a Sprite
+        if (augmentNameText != null)
+        {
+            augmentNameText.text = augment.GetName();
+        }
+        
+        if (augmentGradeText != null)
+        {
+            augmentGradeText.text = augment.GetGrade(); // Assuming ID is used as level for simplicity
+        }
+
+        if (augmentDescriptionText != null)
+        {
+            augmentDescriptionText.text = augment.GetDescription(); // Assuming GetAugmentType() returns a string representation
+        }
+
+        if (augmentIcon != null)
+        {
+            augmentIcon.sprite = augment.GetIcon(); // Assuming GetIcon() returns a Sprite
+        }
         
         // Set the augment icon if available
         this.onClickAction = onClickAction; 
