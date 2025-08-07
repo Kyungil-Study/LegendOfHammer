@@ -101,6 +101,7 @@ public class GameLobbyPage : UIPage
         if (int.TryParse(userTryStageInputField.text, out int stageNumber))
         {
             ES3Manager.Instance.SetStage(stageNumber);
+            
             currentStageText.text = stageNumber.ToString();
             maxStageText.text = stageData.MaxStage.ToString();
             Debug.Log($"User try stage set to: {stageNumber}");
@@ -114,6 +115,9 @@ public class GameLobbyPage : UIPage
     private void OnGameBegin()
     {
         Debug.Log("Game Begin Button Clicked");
+        var stageData = ES3Manager.Instance.StageData;
+        ES3Manager.Instance.SetAttemptCount(stageData.StageAttemptCount + 1);
+
         // Notify the owner to start the game
         if(AugmentInventory.Instance.IsFullClassAugment())
         {
@@ -128,6 +132,7 @@ public class GameLobbyPage : UIPage
 
     public override void Enter()
     {
+        SoundManager.Instance.PauseRandomGameBgm();
         gameObject.SetActive(true);
         // Set current stage and max stage text
         var stageData = ES3Manager.Instance.StageData;

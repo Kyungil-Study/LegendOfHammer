@@ -1,8 +1,7 @@
 using UnityEngine;
 
-public class SoundManager : MonoBehaviour
+public class SoundManager : SingletonBase<SoundManager>
 {
-    public static SoundManager Instance { get; private set; }
 
     [Header("효과음 오디오 소스")]
     private AudioSource sfxSource;
@@ -23,16 +22,9 @@ public class SoundManager : MonoBehaviour
     public AudioClip gameBgm2;
     public AudioClip gameBgm3;
     
-    private void Awake()
+    public override void OnInitialize()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-
+        base.OnInitialize();
         // 효과음용 AudioSource
         sfxSource = gameObject.AddComponent<AudioSource>();
         sfxSource.playOnAwake = false;
@@ -64,6 +56,19 @@ public class SoundManager : MonoBehaviour
     public void PlayWarriorDash() => PlaySFX(warriorDash); // DD
     public void PlayPlayerDamaged() => PlaySFX(playerDamaged);
     public void PlayMiss() => PlaySFX(miss);
+    
+    public void PauseRandomGameBgm()
+    {
+        if (bgmSource.isPlaying)
+        {
+            bgmSource.Pause();
+        }
+        else
+        {
+            Debug.LogWarning("SoundManager: 현재 BGM이 재생 중이 아닙니다.");
+        }
+    }
+    
     
     public void PlayRandomGameBgm()
     {

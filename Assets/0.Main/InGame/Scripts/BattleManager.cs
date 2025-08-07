@@ -15,8 +15,10 @@ public class BattleManager : MonoSingleton<BattleManager>
     
     [Header("추격 게이지 세팅")]
     [SerializeField] private float chaseGuageMax = 100f; // Maximum value for chase gauge
+    private ClampedInt score = new ClampedInt(0, Int32.MaxValue, 0); // Clamped value for chase gauge max
     private ClampedFloat chaseGuage;
     public ClampedFloat ChaseGuage => chaseGuage;
+    public int Score => score.Current;
 
     private bool isEnded = false;
     public bool IsEnded => isEnded;
@@ -74,6 +76,12 @@ public class BattleManager : MonoSingleton<BattleManager>
                 Debug.Log($"Boss Monster has died.");
                 EndGame(true, true);
             }
+            
+            {
+                var monsterBonus = data.Chasing_Increase;
+                score.Increase(monsterBonus);
+            }
+
         }
     }
 
