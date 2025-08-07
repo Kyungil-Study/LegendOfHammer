@@ -1722,6 +1722,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1332700999462216682, guid: a2a1763a7e123f14b8cfd1b9cbe64c81, type: 3}
+      propertyPath: gameBgm1
+      value: 
+      objectReference: {fileID: 8300000, guid: 42eca95eca33c464b93c6797d20a673c, type: 3}
+    - target: {fileID: 1332700999462216682, guid: a2a1763a7e123f14b8cfd1b9cbe64c81, type: 3}
+      propertyPath: gameBgm2
+      value: 
+      objectReference: {fileID: 8300000, guid: 42a6e4e230cce4646953a0dd33a9d75a, type: 3}
+    - target: {fileID: 1332700999462216682, guid: a2a1763a7e123f14b8cfd1b9cbe64c81, type: 3}
+      propertyPath: gameBgm3
+      value: 
+      objectReference: {fileID: 8300000, guid: 0ba0fe5080f00ce47aee7a253ae7f7af, type: 3}
     - target: {fileID: 4292329351130735011, guid: a2a1763a7e123f14b8cfd1b9cbe64c81, type: 3}
       propertyPath: m_Name
       value: SoundManager
@@ -3340,11 +3352,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3497773961361313080, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
-      value: 1
+      value: 0.99977916
       objectReference: {fileID: 0}
     - target: {fileID: 3497773961361313080, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
-      value: 1
+      value: 0.99999994
       objectReference: {fileID: 0}
     - target: {fileID: 5540610527890641080, guid: a34346e8a5c7ae64c9afd1e30e13a110, type: 3}
       propertyPath: m_LocalPosition.x
