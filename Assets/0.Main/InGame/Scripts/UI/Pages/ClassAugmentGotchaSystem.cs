@@ -62,6 +62,7 @@ public class ClassAugmentGotchaSystem : UIPage
 
     public override void Enter()
     {
+        BattleEventManager.CallEvent(new PauseBattleEventArgs(true));
         gameObject.SetActive(true);
         classRerollEnterButton.interactable = false;
         
@@ -87,6 +88,7 @@ public class ClassAugmentGotchaSystem : UIPage
     
     public override void Exit()
     {
+        BattleEventManager.CallEvent(new PauseBattleEventArgs(false));
         gameObject.SetActive(false);
         BattleManager.Instance.StartGame();
     }
