@@ -814,6 +814,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc76d719ba817cc4b8c8a8310a16db28, type: 3}
+--- !u!1 &170206603412322525 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1355706829877734241, guid: cc76d719ba817cc4b8c8a8310a16db28, type: 3}
+  m_PrefabInstance: {fileID: 1192541498948703164}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &2065077330024334818 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 874932869778101854, guid: cc76d719ba817cc4b8c8a8310a16db28, type: 3}
@@ -1277,6 +1282,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Reroll
       objectReference: {fileID: 0}
+    - target: {fileID: 8979470080074528343, guid: ee095885f57e20b4091b30456b4e698c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 170206603412322525}
     - target: {fileID: 8979470080074528343, guid: ee095885f57e20b4091b30456b4e698c, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: 
