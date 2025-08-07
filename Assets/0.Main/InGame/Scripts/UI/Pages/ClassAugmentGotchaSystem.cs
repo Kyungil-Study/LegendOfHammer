@@ -63,6 +63,25 @@ public class ClassAugmentGotchaSystem : UIPage
     public override void Enter()
     {
         gameObject.SetActive(true);
+        classRerollEnterButton.interactable = false;
+        
+        var inventory = AugmentInventory.Instance;
+
+        if (inventory.IsFullSpecificClassAugment(AugmentType.Archer))
+        {
+            archerSlot.interactable = false;
+        }
+        
+        if (inventory.IsFullSpecificClassAugment(AugmentType.Warrior))
+        {
+            warriorSlot.interactable = false;
+        }
+        
+        if (inventory.IsFullSpecificClassAugment(AugmentType.Wizard))
+        {
+            wizardSlot.interactable = false;
+        }
+        
         GotchaClassAugment(ClassAugmentManager.Instance.GetAllOption());
     }
     
@@ -195,14 +214,5 @@ public class ClassAugmentGotchaSystem : UIPage
         Owner.SwapPage(UIPageType.BattlePage);
     }
 
-    private void OnEnable()
-    {
-        Time.timeScale = 0;
-        classRerollEnterButton.interactable = false;
-    }
-    
-    private void OnDisable()
-    {
-        Time.timeScale = 1;
-    }
+ 
 }
