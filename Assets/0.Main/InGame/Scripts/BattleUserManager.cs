@@ -82,6 +82,13 @@ public class ES3Manager : SingletonBase<ES3Manager>
     {
         ES3.DeleteFile(UserDataSettings.path);
     }
+    
+    public void SetAttemptCount(int count)
+    {
+        StageData.StageAttemptCount = count;
+        ES3Manager.Instance.SaveBuffered("stage", StageData);
+        CommitBuffered();
+    }
 
     public void SetStage(int stage)
     {

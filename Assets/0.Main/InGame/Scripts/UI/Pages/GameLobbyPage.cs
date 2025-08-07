@@ -10,6 +10,7 @@ public class GameLobbyPage : UIPage
 {
     [Header("게임시작")]
     [SerializeField] private Button gameBeginButton;
+    [SerializeField] private Button gameCloseButton;
     
     [Space(10),Header("유저 정보")]
     [SerializeField] private TMP_Text currentStageText;
@@ -46,6 +47,15 @@ public class GameLobbyPage : UIPage
         commonAugmentAddButton.onClick.AddListener(OnCommonAugmentAdd);
         classAugmentSetButton.onClick.AddListener(OnClassAugmentSet);
         clearAugmentButton.onClick.AddListener(OnClearAugment);
+        
+        gameCloseButton.onClick.AddListener(OnGameClose);
+    }
+
+    private void OnGameClose()
+    {
+        Debug.Log("Game Close Button Clicked");
+        // Notify the owner to close the game
+        Application.Quit();
     }
 
     private void OnClearAugment()
@@ -101,6 +111,7 @@ public class GameLobbyPage : UIPage
         if (int.TryParse(userTryStageInputField.text, out int stageNumber))
         {
             ES3Manager.Instance.SetStage(stageNumber);
+            
             currentStageText.text = stageNumber.ToString();
             maxStageText.text = stageData.MaxStage.ToString();
             Debug.Log($"User try stage set to: {stageNumber}");
@@ -117,17 +128,17 @@ public class GameLobbyPage : UIPage
         // Notify the owner to start the game
         if(AugmentInventory.Instance.IsFullClassAugment())
         {
-            Owner.SwapPage(UIPageType.CommonAugmentSelection);
+            BattleUIController.Instance.SwapPage(UIPageType.CommonAugmentSelection);
         }
         else
         {
-            Owner.SwapPage( UIPageType.ClassAumgentSelection); // Assuming the next page is ClassAugmentSelection
+            BattleUIController.Instance.SwapPage( UIPageType.ClassAumgentSelection); // Assuming the next page is ClassAugmentSelection
         }
-        BattleManager.Instance.ReadyGame();
     }
 
     public override void Enter()
     {
+        SoundManager.Instance.PauseRandomGameBgm();
         gameObject.SetActive(true);
         // Set current stage and max stage text
         var stageData = ES3Manager.Instance.StageData;
