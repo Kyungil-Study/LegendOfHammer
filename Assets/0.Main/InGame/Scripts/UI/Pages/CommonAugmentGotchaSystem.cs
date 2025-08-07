@@ -9,21 +9,31 @@ public class CommonAugmentGotchaSystem : UIPage
     [Header("Common Augment")]
     [SerializeField] private AugmentSlot[] commonAugmentSlots;
     [SerializeField] private Button commonRerollAugmentButton;
-    
+    [SerializeField] private Button commonRerollEnterButton;
     [SerializeField] PageCinematic cinematicPanel;
+    
+    [SerializeField] private int rerollCost = 1000; // 현재 리롤 횟수
     private AugmentRarity curRarity = AugmentRarity.None;
 
     public override UIPageType UIPageType => UIPageType.CommonAugmentSelection;
 
     protected override void Initialize(IPageFlowManageable owner)
     {
-        commonRerollAugmentButton.onClick.AddListener(() =>
+        commonRerollAugmentButton.onClick.AddListener(RerollAugment);
+    }
+
+    private void RerollAugment()
+    {
+        Debug.Log("Reroll common augment button clicked.");
+        // Handle reroll logic here
+        GotchaCommonAugment();
+        cinematicPanel.gameObject.SetActive(true);
+        
+        rerollCost -= 1;
+        if (rerollCost <= 0)
         {
-            Debug.Log("Reroll common augment button clicked.");
-            // Handle reroll logic here
-            GotchaCommonAugment();
-            cinematicPanel.gameObject.SetActive(true);
-        });
+            commonRerollEnterButton.gameObject.SetActive(false);
+        }
     }
 
     public override void Enter()

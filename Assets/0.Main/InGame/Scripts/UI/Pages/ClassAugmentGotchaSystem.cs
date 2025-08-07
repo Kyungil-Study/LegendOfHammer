@@ -21,6 +21,8 @@ public class ClassAugmentGotchaSystem : UIPage
     
     [SerializeField] PageCinematic cinematicPanel;
     
+    [SerializeField] private int rerollCost = 1000; // Cost for rerolling class augment
+    
     public override UIPageType UIPageType => UIPageType.ClassAumgentSelection;
 
     private bool IsRerollClassSelected = false;
@@ -82,6 +84,13 @@ public class ClassAugmentGotchaSystem : UIPage
         Debug.Log("Reroll class augment.");
         var options = ClassAugmentManager.Instance.GetOptionsByClass(rerollAugmentType);
         GotchaClassAugment(options);
+        
+        rerollCost -= 1; // Decrease the reroll cost
+        if(rerollCost <= 0)
+        {
+            classRerollEnterButton.gameObject.SetActive(false); // Disable reroll button if cost is zero
+            Debug.Log("Reroll cost has reached zero. Reroll button disabled.");
+        }
     }
 
     private bool GotchaClassAugment(IReadOnlyList<int> options)
