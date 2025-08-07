@@ -286,39 +286,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8011467005408590655, guid: 96e35bc987d8f96469f79f67ad3c13fb, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 337046717}
-    - target: {fileID: 8011467005408590655, guid: 96e35bc987d8f96469f79f67ad3c13fb, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8756841789091672329, guid: 96e35bc987d8f96469f79f67ad3c13fb, type: 3}
-      propertyPath: classRerollAugmentButton
-      value: 
-      objectReference: {fileID: 337046718}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96e35bc987d8f96469f79f67ad3c13fb, type: 3}
---- !u!1 &337046717 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5894058869589193246, guid: 96e35bc987d8f96469f79f67ad3c13fb, type: 3}
-  m_PrefabInstance: {fileID: 337046716}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &337046718 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 327868195918532019, guid: 96e35bc987d8f96469f79f67ad3c13fb, type: 3}
-  m_PrefabInstance: {fileID: 337046716}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &634876930 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3212400191206542055, guid: 72d5d20d13e44464db96fb9889884515, type: 3}
