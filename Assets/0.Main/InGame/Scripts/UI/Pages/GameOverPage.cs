@@ -10,6 +10,8 @@ public class GameOverPage : UIPage
     [SerializeField] TMP_Text attemptCountText;
     [SerializeField] TMP_Text stageText;
     [SerializeField] TMP_Text scoreText;
+    
+    [SerializeField] int reviveCost = 1000; // Example revive cost, can be adjusted
     public override UIPageType UIPageType => UIPageType.GameOverPage;
     protected override void Initialize(IPageFlowManageable owner)
     {
@@ -28,6 +30,12 @@ public class GameOverPage : UIPage
             BattleEventManager.CallEvent(new PauseBattleEventArgs(false));
             BattleManager.Instance.Revive();
             Owner.SwapPage(UIPageType.BattlePage);
+        }
+
+        reviveCost -= 1;
+        if (reviveCost <= 0)
+        {
+            gameOverReviveButton.gameObject.SetActive(false);
         }
     }
 

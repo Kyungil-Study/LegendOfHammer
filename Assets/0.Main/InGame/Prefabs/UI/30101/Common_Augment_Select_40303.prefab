@@ -98,7 +98,9 @@ MonoBehaviour:
   - {fileID: 7471212176307880085}
   - {fileID: 5849187789778342816}
   commonRerollAugmentButton: {fileID: 3830513998148088869}
+  commonRerollEnterButton: {fileID: 6543313204221625477}
   cinematicPanel: {fileID: 0}
+  rerollCost: 1000
 --- !u!1 &2498677888917646636
 GameObject:
   m_ObjectHideFlags: 0
@@ -820,6 +822,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 985359399285697823, guid: ee095885f57e20b4091b30456b4e698c, type: 3}
   m_PrefabInstance: {fileID: 2761824528443634386}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6543313204221625477 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8979470080074528343, guid: ee095885f57e20b4091b30456b4e698c, type: 3}
+  m_PrefabInstance: {fileID: 2761824528443634386}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3025423245098500654
 PrefabInstance:
   m_ObjectHideFlags: 0
