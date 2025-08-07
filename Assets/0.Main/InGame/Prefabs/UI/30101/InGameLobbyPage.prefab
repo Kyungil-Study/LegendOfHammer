@@ -2281,8 +2281,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4279637526
-  m_fontColor: {r: 0.08627451, g: 0.08627451, b: 0.08627451, a: 1}
+    rgba: 4294638330
+  m_fontColor: {r: 0.98039216, g: 0.98039216, b: 0.98039216, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2965,7 +2965,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: -1583762815, guid: 9119d7f5ca22a8f49b1214f96cdf3a0d, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2974,7 +2974,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 0.55
 --- !u!114 &7943045282521708290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4147,7 +4147,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 0.5
 --- !u!1 &6431120263954204831
 GameObject:
   m_ObjectHideFlags: 0
@@ -6209,6 +6209,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameBeginButton: {fileID: 7943045282521708290}
+  gameCloseButton: {fileID: 6049919068020982250}
   currentStageText: {fileID: 6470030325926132063}
   maxStageText: {fileID: 4694234095607066978}
   userTryStageInputField: {fileID: 2379286347920678200}
@@ -6253,11 +6254,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7811393056068913732, guid: f20e74b78f16ea94386d6af8f2beda49, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 90.5747
+      value: 75.6669
       objectReference: {fileID: 0}
     - target: {fileID: 7811393056068913732, guid: f20e74b78f16ea94386d6af8f2beda49, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 90.5747
+      value: 75.6669
       objectReference: {fileID: 0}
     - target: {fileID: 7811393056068913732, guid: f20e74b78f16ea94386d6af8f2beda49, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6289,11 +6290,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7811393056068913732, guid: f20e74b78f16ea94386d6af8f2beda49, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -235.47833
+      value: -242.93225
       objectReference: {fileID: 0}
     - target: {fileID: 7811393056068913732, guid: f20e74b78f16ea94386d6af8f2beda49, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 464.71265
+      value: 472.1665
       objectReference: {fileID: 0}
     - target: {fileID: 7811393056068913732, guid: f20e74b78f16ea94386d6af8f2beda49, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -6423,3 +6424,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8202347087004969918, guid: 4275a647b9a178e4e824a5f3c2666ae7, type: 3}
   m_PrefabInstance: {fileID: 6597745191305096621}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6049919068020982250 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 610878889996643399, guid: 4275a647b9a178e4e824a5f3c2666ae7, type: 3}
+  m_PrefabInstance: {fileID: 6597745191305096621}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

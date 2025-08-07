@@ -1,11 +1,13 @@
 using UnityEngine;
 
-public class SoundManager : MonoBehaviour
+public class SoundManager : SingletonBase<SoundManager>
 {
-    public static SoundManager Instance { get; private set; }
 
     [Header("효과음 오디오 소스")]
     private AudioSource sfxSource;
+    [Header("BGM 오디오 소스")]
+    private AudioSource bgmSource;
+
 
     [Header("효과음 리스트")]
     public AudioClip buttonClick;
@@ -16,20 +18,22 @@ public class SoundManager : MonoBehaviour
     public AudioClip playerDamaged;
     public AudioClip warning;
 
-    private void Awake()
+    public AudioClip gameBgm1;
+    public AudioClip gameBgm2;
+    public AudioClip gameBgm3;
+    
+    public override void OnInitialize()
     {
-        // 싱글톤 패턴
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-
-        // AudioSource 컴포넌트 추가 (효과음용)
+        base.OnInitialize();
+        // 효과음용 AudioSource
         sfxSource = gameObject.AddComponent<AudioSource>();
         sfxSource.playOnAwake = false;
+
+        // 배경음악용 AudioSource
+        bgmSource = gameObject.AddComponent<AudioSource>();
+        bgmSource.playOnAwake = false;
+        bgmSource.loop = true;
+        bgmSource.volume = 0.5f;
     }
 
     public void PlaySFX(AudioClip clip)
@@ -53,4 +57,33 @@ public class SoundManager : MonoBehaviour
     public void PlayPlayerDamaged() => PlaySFX(playerDamaged);
     public void PlayMiss() => PlaySFX(miss);
     
+    public void PauseRandomGameBgm()
+    {
+        if (bgmSource.isPlaying)
+        {
+            bgmSource.Pause();
+        }
+        else
+        {
+            Debug.LogWarning("SoundManager: 현재 BGM이 재생 중이 아닙니다.");
+        }
+    }
+    
+    
+    public void PlayRandomGameBgm()
+    {
+        AudioClip[] bgmList = new AudioClip[] { gameBgm1, gameBgm2, gameBgm3 };
+        int index = Random.Range(0, bgmList.Length);
+        AudioClip selectedBgm = bgmList[index];
+
+        if (selectedBgm != null)
+        {
+            bgmSource.clip = selectedBgm;
+            bgmSource.Play();
+        }
+        else
+        {
+            Debug.LogWarning("SoundManager: 선택된 BGM이 null입니다.");
+        }
+    }
 }

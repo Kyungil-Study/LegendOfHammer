@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,6 +7,9 @@ public class GameOverPage : UIPage
     [SerializeField] Button gameOverReviveButton;
     [SerializeField] Button gameOverExitButton;
 
+    [SerializeField] TMP_Text attemptCountText;
+    [SerializeField] TMP_Text stageText;
+    [SerializeField] TMP_Text scoreText;
     public override UIPageType UIPageType => UIPageType.GameOverPage;
     protected override void Initialize(IPageFlowManageable owner)
     {
@@ -36,6 +40,10 @@ public class GameOverPage : UIPage
     public override void Enter()
     {
         gameObject.SetActive(true);
+        var stageData = ES3Manager.Instance.StageData;
+        stageText.text = stageData.CurrentStage.ToString();
+        scoreText.text = BattleManager.Instance.Score.ToString();
+        attemptCountText.text = stageData.StageAttemptCount.ToString();
         BattleEventManager.CallEvent(new PauseBattleEventArgs(true));
     }
 

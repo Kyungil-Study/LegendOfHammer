@@ -9,6 +9,8 @@ using UnityEngine.SceneManagement;
 
 public class SessionManager : SingletonBase<SessionManager>
 {
+    public bool IsContinueGame { get; set; } = false;
+    
     protected override void Awake()
     {
         base.Awake();
@@ -36,6 +38,7 @@ public class SessionManager : SingletonBase<SessionManager>
 
     public void NextGame()
     {
+        IsContinueGame = true;
         ES3Manager.Instance.NextStage();
         Debug.Log($"[SessionManager] Proceeding to next game stage");
         SceneManager.LoadScene("Scene_Dungeon", LoadSceneMode.Single);
@@ -43,11 +46,13 @@ public class SessionManager : SingletonBase<SessionManager>
     
     public void QuitGame()
     {
+        IsContinueGame = false;
         SceneManager.LoadScene("Scene_Dungeon", LoadSceneMode.Single);
     }
     
     public void EndGame(bool success)
     {
+        IsContinueGame = false;
         if (success)
         {
             Debug.Log("Game completed successfully.");
