@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 
 [Serializable]
@@ -21,7 +22,6 @@ public class FireballSpawner : MonoSingleton<FireballSpawner>
     
     [SerializeField] Fireball fireballPrefab;
     
-    [LabelText("이벤트 트리거 게이지 기준"), Range(0,1), SerializeField] private float fireballTriggerLimit = 0.2f;
 
     
     private IEnumerator SpawnFireballsCoroutine(int damage, IReadOnlyList<FireBallMapEvent.FireballSpawnJob> fireballSpawnJobs)
@@ -99,7 +99,23 @@ public class FireballSpawner : MonoSingleton<FireballSpawner>
 
     public void ExecuteMapEvent(int damage, IReadOnlyList< FireBallMapEvent.FireballSpawnJob> fireballSpawnJobs)
     {
-        BattlePopupSystem.Instance.FireballAlarm.ExecuteAlarm();
+        if(BattlePopupSystem.Instance != null)
+            BattlePopupSystem.Instance.FireballAlarm.ExecuteAlarm();
         StartCoroutine(SpawnFireballsCoroutine(damage, fireballSpawnJobs));
     }
+    
+#if UNITY_EDITOR
+    [PropertySpace(20),Title("Test Settings")]
+    [SerializeField] private FireBallMapEvent TestFireBallMapEvent;
+    [Button] public void TestSpawn()
+    {
+        if (EditorApplication.isPlaying == false)
+            return;
+        
+        ExecuteMapEvent(100, TestFireBallMapEvent.FireballSpawnJobs);
+        foreach (var job in TestFireBallMapEvent.FireballSpawnJobs)
+        {
+        }
+    }
+#endif
 }

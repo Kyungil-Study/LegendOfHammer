@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
-using System.Collections;
-using UnityEngine;
 
 public class Monster : MonoBehaviour, IBattleCharacter
 {
@@ -75,6 +73,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
     private MonsterScale scale;
     
     public MonsterStat Stat => stat;
+    public MonsterScale Scale => scale;
 
     void Awake()
     {
@@ -115,8 +114,6 @@ public class Monster : MonoBehaviour, IBattleCharacter
 
     void Update()
     {
-        // ApplyDoT(Time.deltaTime);
-        // stat?.Tick(Time.deltaTime);
         move?.Tick(Time.deltaTime);
         attack?.Tick(Time.deltaTime);
     }
@@ -158,9 +155,15 @@ public class Monster : MonoBehaviour, IBattleCharacter
             OnDeath();
         }
     }
-    
+    bool isDead = false;
     public void OnDeath()
     {
+        if (isDead)
+        {
+            return;
+        }
+        isDead = true;
+        
         if (deathEffectPrefab != null)
         {
             var effect = Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
@@ -210,7 +213,7 @@ public class Monster : MonoBehaviour, IBattleCharacter
         
         if (attack is SuicideAttack suicideAttack && suicideCfg != null)
         {
-            Gizmos.color = Color.red;
+            Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(transform.position, suicideCfg.attackRange);
         }
 

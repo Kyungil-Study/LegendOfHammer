@@ -25,17 +25,16 @@ public class BattlePage : UIPage
     private int maxScore = 0;
     
     public override UIPageType UIPageType => UIPageType.BattlePage;
-    private IPageFlowManageable owner;
     
-    public override void Initialize(IPageFlowManageable owner)
+    protected override void Initialize(IPageFlowManageable owner)
     {
-        this.owner = owner;
-        
         currentScoreText.text = "0";
         maxScoreText.text = "0";
         
+        
         BattleEventManager.RegistEvent<DeathEventArgs>(OnDeath);
         BattleEventManager.RegistEvent<EndBattleEventArgs>(OnEndBattle);
+        BattleEventManager.RegistEvent<ReviveEventArgs>(OnRevive);
         
         BattleManager.Instance.ChaseGuage.Events.OnValueChanged += OnChaseGuageChanged;
         chasingSlider.maxValue = BattleManager.Instance.ChaseGuage.Max;
@@ -43,9 +42,14 @@ public class BattlePage : UIPage
         pauseButton.onClick.AddListener(OnPause);
     }
 
+    private void OnRevive(ReviveEventArgs obj)
+    {
+        chasingSlider.value = 0;
+    }
+
     private void OnPause()
     {
-        owner.SwapPage(UIPageType.PausePage);
+        Owner.SwapPage(UIPageType.PausePage);
     }
 
     private void OnChaseGuageChanged(float arg1, float arg2)
@@ -60,16 +64,16 @@ public class BattlePage : UIPage
         {
             if (args.IsBoosDead)
             {
-                owner.SwapPage(UIPageType.CommonAugmentSelection);
+                Owner.SwapPage(UIPageType.CommonAugmentSelection);
             }
             else
             {
-                owner.SwapPage(UIPageType.ClearPage);
+                Owner.SwapPage(UIPageType.ClearPage);
             }
         }
         else
         {
-            owner.SwapPage(UIPageType.GameOverPage);
+            Owner.SwapPage(UIPageType.GameOverPage);
         }
         
     }

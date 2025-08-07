@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Sirenix.OdinInspector;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ public class PageScroller : MonoBehaviour
 {
     
     [SerializeField] private float nextPageInterval = 60f; // Time in seconds to show next page
+    [SerializeField] private float scrollSpeed = 1f; // Speed of scrolling
     [Space(10), SerializeField] private PageSlot[] pages;
     [Space(10),SerializeField] StagePage[] stagePagePrefabs;
 
@@ -16,21 +18,23 @@ public class PageScroller : MonoBehaviour
     public PageSlot[] Pages => pages;
     bool[] reserveNextPage;
     
-    bool isStarted = false;
+    [ShowInInspector] bool isPaused = true;
 
     private void Awake()
     {
         reserveNextPage = Enumerable.Repeat(false, pages.Length).ToArray();
         BattleEventManager.RegistEvent<ReadyBattleEventArgs>(OnReadyBattle);
         BattleEventManager.RegistEvent<StartBattleEventArgs>(OnStartBattle);
-        BattleEventManager.RegistEvent<EndBattleEventArgs>(OnEndBattle);
+        
+        BattleEventManager.RegistEvent<PauseBattleEventArgs>(OnPauseBattle);
         viewHeight = Camera.main.orthographicSize * 2f;
     }
 
-    private void OnEndBattle(EndBattleEventArgs obj)
+    private void OnPauseBattle(PauseBattleEventArgs args)
     {
-        isStarted = false;
+        isPaused = args.IsPaused;
     }
+
 
     private void OnReadyBattle(ReadyBattleEventArgs args)
     {
@@ -49,7 +53,7 @@ public class PageScroller : MonoBehaviour
 
     private void OnStartBattle(StartBattleEventArgs args)
     {
-        isStarted = true;
+        isPaused = false;
         StartCoroutine(NextPageTimer(nextPageInterval));
     }
 
@@ -70,11 +74,12 @@ public class PageScroller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isStarted)
+        if (isPaused)
             return;
         
         Vector3 curPos = transform.position;
-        Vector3 nextPos = Vector3.down * (mapSetting.ScrollSpeed * Time.deltaTime);
+        //Vector3 nextPos = Vector3.down * (mapSetting.ScrollSpeed * Time.deltaTime);
+        Vector3 nextPos = Vector3.down * (scrollSpeed * Time.deltaTime);
         transform.position = curPos + nextPos;
 
         var endPage = pages[endIndex];

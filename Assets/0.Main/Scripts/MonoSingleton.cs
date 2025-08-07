@@ -8,7 +8,7 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;
     private static bool applicationIsQuitting = false;
-    private bool isInitialized = false;
+    //private bool isInitialized = false;
 
     public static T Instance
     {
@@ -53,7 +53,7 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
 
     protected virtual void Initialize()
     {
-        isInitialized = true;
+        //isInitialized = true;
     }
     
     protected virtual void Awake()

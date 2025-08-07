@@ -45,6 +45,12 @@ TagManager:
   - name: Alert
     uniqueID: 1536309827
     locked: 0
+  - name: Fx
+    uniqueID: 481386323
+    locked: 0
+  - name: Mid
+    uniqueID: 2987215057
+    locked: 0
   - name: MapEvent
     uniqueID: 3327020695
     locked: 0
@@ -53,4 +59,7 @@ TagManager:
     locked: 0
   - name: Projectile
     uniqueID: 3777063909
+    locked: 0
+  - name: Top
+    uniqueID: 1316001559
     locked: 0
