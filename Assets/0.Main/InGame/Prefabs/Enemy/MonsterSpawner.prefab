@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 947774683552868182}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.01, y: 5.99, z: 0}
+  m_LocalPosition: {x: -2.01, y: 6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -76,16 +76,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: befdaa2a0050e5b439e9b57a3393ded3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  testSpawnID: 22008
   spawnPatternTableSao: {fileID: 11400000, guid: 89d96262c07931d4b9a3698716afb265, type: 2}
   monsterPrefabs: []
   monsterPrefab: {fileID: 7494431464099580550, guid: cb7f568d296739141874983fa6d2c03d, type: 3}
-  TestPlayer: {fileID: 0}
+  player: {fileID: 0}
   spawnPoints:
   - {fileID: 57902397338766103}
   - {fileID: 229348489126502845}
   - {fileID: 4562884616346416316}
   midSpawnPoints: {fileID: 229348489126502845}
-  isTestMode: 0
   TestEnemyPrefab: {fileID: 7494431464099580550, guid: cb7f568d296739141874983fa6d2c03d, type: 3}
 --- !u!1 &3430082036272000575
 GameObject:
@@ -112,7 +112,7 @@ Transform:
   m_GameObject: {fileID: 3430082036272000575}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.03, y: 6.01, z: 0}
+  m_LocalPosition: {x: 1.03, y: 6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -143,7 +143,7 @@ Transform:
   m_GameObject: {fileID: 5041294341715359169}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.46, y: 6.03, z: 0}
+  m_LocalPosition: {x: -0.46, y: 6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -174,7 +174,7 @@ Transform:
   m_GameObject: {fileID: 6760005866518348373}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

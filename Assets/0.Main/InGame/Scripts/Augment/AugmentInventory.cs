@@ -125,6 +125,28 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
         SaveData();
     }
     
+    public bool IsFullSpecificClassAugment(AugmentType type)
+    {
+        if (type.Equals(AugmentType.Warrior))
+            return true;
+        
+        var augments = classAugments[type];
+        foreach (var option in ClassAugmentManager.Instance.OptionGroupByClass[type])
+        {
+            if (augments.Any(a => a.OptionID == option && a.IsMaxLevel()) )
+            {
+                continue;
+            }
+            else
+            {
+                Debug.Log($"[AugmentInventory] Not all {type} class augments are at max level for option {option}.");
+                return false;
+            }
+        }
+        Debug.Log($"[AugmentInventory] All {type} class augments are at max level.");
+        return true;
+    }
+    
     public bool IsFullClassAugment()
     {
         foreach (var option in ClassAugmentManager.Instance.AugmentGroupByOption.Keys)
@@ -174,13 +196,13 @@ public class AugmentInventory : MonoSingleton<AugmentInventory>
                 var classAugment = augment as ClassAugment;
                 if (exist == false)
                 {
-                    Debug.Log($"[AugmentInventory] Adding new Warrior Augment: {augment.GetName()}");
+                    Debug.Log($"[AugmentInventory] Adding new {augment.GetAugmentType()} Augment: {augment.GetName()}");
                     var data = new ClassAugmentUserData(augment.GetOptionID(), classAugment.GetLevel());
                     augments.Add(data);
                 }
                 else
                 {
-                    Debug.Log($"[AugmentInventory] Upgrading existing Warrior Augment: {augment.GetName()}");
+                    Debug.Log($"[AugmentInventory] Upgrading existing {augment.GetAugmentType()} Augment: {augment.GetName()}");
                     var existing = augments.First(a => a.OptionID == augment.GetOptionID());
                     existing.SetLevel(classAugment.GetLevel());
                 }

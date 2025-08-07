@@ -1362,41 +1362,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 57902397338766103, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 229348489126502845, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 1912313772269553298, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 634876930}
-    - target: {fileID: 1912313772269553298, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
-      propertyPath: TestPlayer
-      value: 
-      objectReference: {fileID: 634876930}
-    - target: {fileID: 1912313772269553298, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
-      propertyPath: testSpawnID
-      value: 22008
-      objectReference: {fileID: 0}
-    - target: {fileID: 1912313772269553298, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
-      propertyPath: TestEnemyPrefab
-      value: 
-      objectReference: {fileID: 7494431464099580550, guid: cb7f568d296739141874983fa6d2c03d, type: 3}
     - target: {fileID: 2057616619765667853, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
       propertyPath: m_Name
       value: MonsterSpawner
-      objectReference: {fileID: 0}
-    - target: {fileID: 4562884616346416316, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4585920493827420069, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4804347391342857170, guid: b436eca6d5675264f88ded0ef7112932, type: 3}
       propertyPath: m_LocalPosition.x
