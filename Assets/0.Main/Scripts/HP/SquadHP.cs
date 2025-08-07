@@ -8,7 +8,7 @@ public class SquadHP : MonoBehaviour
     [SerializeField] private Vector3 offset = new Vector3(0, -0.7f, 0);
     [SerializeField] private Camera mainCamera;
     [SerializeField] private Squad squad;
-
+    [SerializeField] private Slider healthSlider;
     private RectTransform rectTransform;
 
     private void Start()
@@ -56,7 +56,8 @@ public class SquadHP : MonoBehaviour
 
         // 체력 비율 적용
         float ratio = (float)squad.stats.CurrentHealth / squad.stats.MaxHealth;
-        fillImage.fillAmount = Mathf.Clamp01(ratio);
+        healthSlider.value = Mathf.Clamp01(ratio);
+        //fillImage.fillAmount = Mathf.Clamp01(ratio);
     }
 
 }
