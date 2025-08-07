@@ -10,6 +10,7 @@ public class GameLobbyPage : UIPage
 {
     [Header("게임시작")]
     [SerializeField] private Button gameBeginButton;
+    [SerializeField] private Button gameCloseButton;
     
     [Space(10),Header("유저 정보")]
     [SerializeField] private TMP_Text currentStageText;
@@ -46,6 +47,15 @@ public class GameLobbyPage : UIPage
         commonAugmentAddButton.onClick.AddListener(OnCommonAugmentAdd);
         classAugmentSetButton.onClick.AddListener(OnClassAugmentSet);
         clearAugmentButton.onClick.AddListener(OnClearAugment);
+        
+        gameCloseButton.onClick.AddListener(OnGameClose);
+    }
+
+    private void OnGameClose()
+    {
+        Debug.Log("Game Close Button Clicked");
+        // Notify the owner to close the game
+        Application.Quit();
     }
 
     private void OnClearAugment()
