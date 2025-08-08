@@ -428,9 +428,9 @@ MonoBehaviour:
     oneTo10Scale: 1.3
     tenTo20Scale: 1.17
     tewentyTo30Scale: 1.15
-    NormalMonsterAdd: 40000
-    EliteMonsterAdd: 400000
-    BossMonsterAdd: 700000
+    NormalMonsterAdd: 100000
+    EliteMonsterAdd: 600000
+    BossMonsterAdd: 1200000
 --- !u!114 &7494431464099580550
 MonoBehaviour:
   m_ObjectHideFlags: 0
